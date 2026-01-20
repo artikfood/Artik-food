@@ -2,158 +2,216 @@
 <html lang="ru">
 <head>
   <meta charset="UTF-8" />
-  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
-  <title>Artik Food</title>
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Artik Food — Доставка продуктов в Артике</title>
   <style>
-    body { font-family: Arial, sans-serif; margin: 0; background: #f7f7f7; }
-    header { background: #ff7a18; color: white; padding: 15px; text-align: center; }
-    .categories, .subcategories { display: flex; overflow-x: auto; gap: 10px; padding: 10px; background: #fff; }
-    .categories button, .subcategories button {
-      border: none; background: #eee; padding: 8px 14px; border-radius: 20px; cursor: pointer;
-    }
-    .categories button.active, .subcategories button.active {
-      background: #ff7a18; color: white;
-    }
-    .products { display: grid; grid-template-columns: repeat(auto-fit, minmax(160px, 1fr)); gap: 12px; padding: 12px; }
-    .product-card {
-      background: white; border-radius: 12px; padding: 10px;
-      box-shadow: 0 2px 8px rgba(0,0,0,0.08); text-align: center;
-    }
-    .product-card img { width: 100%; height: 130px; object-fit: cover; border-radius: 8px; }
-    .product-card h4 { margin: 8px 0 4px; font-size: 14px; }
-    .product-card p { margin: 2px 0; font-size: 13px; }
-    .product-card .price { font-weight: bold; color: #d35400; }
-    .product-card button {
-      margin-top: 6px; width: 100%; background: #ff7a18; color: white;
-      border: none; padding: 8px; border-radius: 20px; cursor: pointer;
-    }
-    .cart {
-      position: fixed; bottom: 0; left: 0; right: 0;
-      background: white; border-top: 1px solid #ddd; padding: 10px;
-      box-shadow: 0 -2px 10px rgba(0,0,0,0.1);
-    }
-    .cart-items { max-height: 120px; overflow-y: auto; font-size: 14px; }
-    .cart-total { font-weight: bold; margin-top: 6px; }
-    .checkout-btn {
-      width: 100%; background: #25D366; color: white;
-      border: none; padding: 12px; border-radius: 25px; font-size: 16px; margin-top: 8px;
-      cursor: pointer;
+    body { font-family: Arial, sans-serif; margin: 0; background: #f8f8f8; color: #333; }
+    header { background: #2ecc71; color: white; padding: 12px 16px; display: flex; justify-content: space-between; align-items: center; flex-wrap: wrap; }
+    header h1 { margin: 0; font-size: 22px; }
+    nav { display: flex; flex-wrap: wrap; align-items: center; }
+    nav a { color: white; margin-left: 12px; text-decoration: none; font-weight: bold; font-size: 14px; }
+
+    .lang-switch { margin-left: 12px; background: white; color: #27ae60; border: none; border-radius: 5px; padding: 5px 8px; font-weight: bold; cursor: pointer; }
+
+    .hero { background: #27ae60; color: white; padding: 50px 16px; text-align: center; }
+    .hero h2 { font-size: 32px; margin-bottom: 10px; }
+    .hero p { font-size: 17px; margin-bottom: 20px; }
+    .hero button { background: white; color: #27ae60; border: none; padding: 12px 20px; font-size: 16px; border-radius: 6px; cursor: pointer; }
+
+    .section { padding: 32px 16px; max-width: 1100px; margin: auto; }
+    .section h3 { text-align: center; margin-bottom: 24px; }
+
+    .features, .shops, .categories { display: grid; grid-template-columns: repeat(auto-fit, minmax(160px, 1fr)); gap: 16px; }
+    .card { background: white; padding: 16px; border-radius: 10px; box-shadow: 0 2px 6px rgba(0,0,0,0.1); text-align: center; }
+    .card h4 { margin-top: 0; }
+
+    .products { display: grid; grid-template-columns: repeat(auto-fit, minmax(160px, 1fr)); gap: 16px; }
+    .product { background: white; padding: 14px; border-radius: 10px; box-shadow: 0 2px 6px rgba(0,0,0,0.1); text-align: center; }
+    .product button { background: #2ecc71; color: white; border: none; padding: 8px 12px; border-radius: 6px; cursor: pointer; margin-top: 10px; font-size: 14px; }
+
+    .cart { background: white; padding: 16px; border-radius: 10px; max-width: 500px; margin: 20px auto; box-shadow: 0 2px 6px rgba(0,0,0,0.1); }
+    .cart h4 { margin-top: 0; }
+    .cart-item { display: flex; justify-content: space-between; margin-bottom: 8px; font-size: 14px; }
+    .cart-total { font-weight: bold; margin-top: 10px; }
+    .cart button { width: 100%; background: #27ae60; color: white; border: none; padding: 10px; font-size: 15px; border-radius: 6px; cursor: pointer; margin-top: 10px; }
+
+    .order-form { background: white; padding: 20px; border-radius: 10px; max-width: 500px; margin: auto; box-shadow: 0 2px 6px rgba(0,0,0,0.1); }
+    .order-form input, .order-form textarea { width: 100%; padding: 10px; margin-bottom: 12px; border-radius: 6px; border: 1px solid #ccc; font-size: 14px; }
+    .order-form button { width: 100%; background: #27ae60; color: white; border: none; padding: 12px; font-size: 16px; border-radius: 6px; cursor: pointer; }
+
+    .whatsapp-btn { position: fixed; bottom: 16px; right: 16px; background: #25D366; color: white; padding: 14px 18px; border-radius: 50px; text-decoration: none; font-weight: bold; box-shadow: 0 4px 10px rgba(0,0,0,0.2); font-size: 15px; }
+
+    footer { background: #2ecc71; color: white; text-align: center; padding: 16px; margin-top: 40px; font-size: 14px; }
+
+    @media (max-width: 600px) {
+      .hero h2 { font-size: 24px; }
+      .hero p { font-size: 15px; }
+      header h1 { font-size: 18px; }
+      nav a { font-size: 13px; margin-left: 8px; }
     }
   </style>
 </head>
 <body>
 
 <header>
-  <h1>🛒 Artik Food</h1>
-  <p>Заказы с доставкой по городу</p>
+  <h1 id="logo-text">Artik Food</h1>
+  <nav>
+    <a href="#shops" id="nav-shops">Магазины</a>
+    <a href="#catalog" id="nav-catalog">Каталог</a>
+    <a href="#order" id="nav-order">Заказать</a>
+    <a href="#contacts" id="nav-contacts">Контакты</a>
+    <button class="lang-switch" onclick="setLang('ru')">RU</button>
+    <button class="lang-switch" onclick="setLang('am')">AM</button>
+  </nav>
 </header>
 
-<div class="categories" id="categories"></div>
-<div class="subcategories" id="subcategories"></div>
-<div class="products" id="products"></div>
+<section class="hero">
+  <h2 id="hero-title">Доставка продуктов в Артике</h2>
+  <p id="hero-text">Свежие продукты из супермаркетов — прямо к вашей двери</p>
+  <button onclick="document.getElementById('order').scrollIntoView({behavior:'smooth'});" id="hero-btn">Заказать сейчас</button>
+</section>
 
-<div class="cart" id="cart">
-  <div class="cart-items" id="cartItems"></div>
-  <div class="cart-total" id="cartTotal">Итого: 0 AMD</div>
-  <button class="checkout-btn" onclick="checkout()">📲 Заказать в WhatsApp</button>
-</div>
+<section class="section">
+  <h3 id="how-title">Как это работает</h3>
+  <div class="features">
+    <div class="card">
+      <h4 id="how-1-title">1. Выбираете магазин</h4>
+      <p id="how-1-text">Выберите нужный супермаркет или рынок.</p>
+    </div>
+    <div class="card">
+      <h4 id="how-2-title">2. Добавляете товары</h4>
+      <p id="how-2-text">Соберите корзину из нужных продуктов.</p>
+    </div>
+    <div class="card">
+      <h4 id="how-3-title">3. Мы доставляем</h4>
+      <p id="how-3-text">Курьер привезёт заказ за 60–90 минут.</p>
+    </div>
+  </div>
+</section>
+
+<section class="section" id="shops">
+  <h3 id="shops-title">Магазины</h3>
+  <div class="shops">
+    <div class="card">
+      <h4 id="shop-1">Супермаркет №1</h4>
+      <p id="shop-1-text">Продукты, напитки, бытовая химия.</p>
+    </div>
+    <div class="card">
+      <h4 id="shop-2">Супермаркет №2</h4>
+      <p id="shop-2-text">Свежие овощи, мясо, молочка.</p>
+    </div>
+    <div class="card">
+      <h4 id="shop-3">Рынок / Лавки</h4>
+      <p id="shop-3-text">Домашние продукты и фермерские товары.</p>
+    </div>
+  </div>
+</section>
+
+<section class="section" id="catalog">
+  <h3 id="catalog-title">Категории товаров</h3>
+  <div class="categories">
+    <div class="card" id="cat-1">🥦 Овощи и фрукты</div>
+    <div class="card" id="cat-2">🥩 Мясо и рыба</div>
+    <div class="card" id="cat-3">🧀 Молочные продукты</div>
+    <div class="card" id="cat-4">🍞 Хлеб и выпечка</div>
+    <div class="card" id="cat-5">🥫 Бакалея</div>
+    <div class="card" id="cat-6">🧃 Напитки</div>
+    <div class="card" id="cat-7">🧼 Бытовая химия</div>
+    <div class="card" id="cat-8">🍰 Danielyan Sweet</div>
+  </div>
+</section>
+
+<section class="section">
+  <h3 id="popular-title">Популярные товары</h3>
+  <div class="products">
+    <div class="product">
+      <h4 id="prod-1-name">Молоко 1л</h4>
+      <p id="prod-1-price">Цена: 500 AMD</p>
+      <button onclick="addToCart('Молоко 1л', 500)">В корзину</button>
+    </div>
+    <div class="product">
+      <h4 id="prod-2-name">Хлеб</h4>
+      <p id="prod-2-price">Цена: 250 AMD</p>
+      <button onclick="addToCart('Хлеб', 250)">В корзину</button>
+    </div>
+    <div class="product">
+      <h4 id="prod-3-name">Яблоки 1кг</h4>
+      <p id="prod-3-price">Цена: 600 AMD</p>
+      <button onclick="addToCart('Яблоки 1кг', 600)">В корзину</button>
+    </div>
+    <div class="product">
+      <h4 id="prod-4-name">Курица 1кг</h4>
+      <p id="prod-4-price">Цена: 1,800 AMD</p>
+      <button onclick="addToCart('Курица 1кг', 1800)">В корзину</button>
+    </div>
+
+    <!-- Danielyan Sweet -->
+    <div class="product">
+      <h4>Էկլեր</h4>
+      <p>Цена: 200 AMD</p>
+      <button onclick="addToCart('Էկլեր', 200)">В корзину</button>
+    </div>
+    <div class="product">
+      <h4>Մաֆին շոկոլադե</h4>
+      <p>Цена: 320 AMD</p>
+      <button onclick="addToCart('Մաֆին շոկոլադե', 320)">В корзину</button>
+    </div>
+    <div class="product">
+      <h4>Նապոլեոն</h4>
+      <p>Цена: 350 AMD</p>
+      <button onclick="addToCart('Նապոլեոն', 350)">В корзину</button>
+    </div>
+    <div class="product">
+      <h4>Չիզքեյք Նյու Յորք</h4>
+      <p>Цена: 1000 AMD</p>
+      <button onclick="addToCart('Չիզքեյք Նյու Յորք', 1000)">В корзину</button>
+    </div>
+    <div class="product">
+      <h4>Միկադո</h4>
+      <p>Цена: 600 AMD</p>
+      <button onclick="addToCart('Միկադո', 600)">В корзину</button>
+    </div>
+  </div>
+</section>
+
+<section class="section">
+  <div class="cart" id="cart">
+    <h4 id="cart-title">Корзина</h4>
+    <div id="cart-items"></div>
+    <div class="cart-total" id="cart-total">Итого: 0 AMD</div>
+    <button onclick="sendToWhatsApp()" id="cart-order-btn">Заказать через WhatsApp</button>
+    <button onclick="clearCart()" style="background:#e74c3c; margin-top:8px;" id="cart-clear-btn">Очистить корзину</button>
+  </div>
+</section>
+
+<section class="section" id="order">
+  <h3 id="order-title">Оформление заказа</h3>
+  <form class="order-form" onsubmit="event.preventDefault(); sendFormToWhatsApp();">
+    <input type="text" id="name" placeholder="Ваше имя" required />
+    <input type="tel" id="phone" placeholder="Телефон" required />
+    <input type="text" id="address" placeholder="Адрес доставки" required />
+    <textarea rows="3" id="comment" placeholder="Комментарий к заказу"></textarea>
+    <button type="submit" id="order-btn">Отправить заказ</button>
+  </form>
+</section>
+
+<section class="section" id="contacts">
+  <h3 id="contacts-title">Контакты</h3>
+  <div class="card" style="max-width:400px; margin:auto;">
+    <p>📞 Телефон / WhatsApp: <a href="tel:+37443797727" style="color:#27ae60; font-weight:bold;">+374 43 79 77 27</a></p>
+    <p>📸 Instagram: @artikfood</p>
+    <p>📍 Артик, Армения</p>
+  </div>
+</section>
+
+<a class="whatsapp-btn" href="https://wa.me/37443797727" target="_blank">💬 WhatsApp</a>
+
+<footer>
+  <p id="footer-text">© 2026 Artik Food — Доставка продуктов в Артике</p>
+</footer>
 
 <script>
-  const phoneNumber = "37443797727";
-
-  const products = [
-    // ===== DANIELYAN SWEETS =====
-    { name: "Թխվածքաբլիթ չամիչով", weight: "25գ", price: 200, category: "Danielyan Sweets", subcategory: "Թխվածքաբլիթներ", image: "https://images.unsplash.com/photo-1589308078053-6fa6c7e94a42?auto=format&fit=crop&w=400&q=80" },
-    { name: "Էկլեր", weight: "75գ", price: 200, category: "Danielyan Sweets", subcategory: "Դեսերտներ", image: "https://images.unsplash.com/photo-1612198790812-1b5c5c58c52c?auto=format&fit=crop&w=400&q=80" },
-    { name: "Մաֆին", weight: "80գ", price: 290, category: "Danielyan Sweets", subcategory: "Մաֆիններ", image: "https://images.unsplash.com/photo-1612198790791-04c2a7d9d8a3?auto=format&fit=crop&w=400&q=80" },
-    { name: "Մաֆին շոկոլադե", weight: "80գ", price: 320, category: "Danielyan Sweets", subcategory: "Մաֆիններ", image: "https://images.unsplash.com/photo-1605478449469-8b7e0bb0b3cc?auto=format&fit=crop&w=400&q=80" },
-    { name: "Նապոլեոն", weight: "70գ", price: 350, category: "Danielyan Sweets", subcategory: "Տորթեր", image: "https://images.unsplash.com/photo-1622737133809-d95047b9e673?auto=format&fit=crop&w=400&q=80" },
-    { name: "Ռաֆայելլո գունդ", weight: "50գ", price: 400, category: "Danielyan Sweets", subcategory: "Քաղցրավենիք", image: "https://images.unsplash.com/photo-1588195538578-dfd0c6f3c38d?auto=format&fit=crop&w=400&q=80" },
-    { name: "Ժելե", weight: "160գ", price: 500, category: "Danielyan Sweets", subcategory: "Դեսերտներ", image: "https://images.unsplash.com/photo-1589308078053-6fa6c7e94a42?auto=format&fit=crop&w=400&q=80" },
-    { name: "Էսկիմո", weight: "160գ", price: 500, category: "Danielyan Sweets", subcategory: "Դեսերտներ", image: "https://images.unsplash.com/photo-1622737133809-d95047b9e673?auto=format&fit=crop&w=400&q=80" },
-    { name: "Կիևյան տորթ", weight: "115գ", price: 500, category: "Danielyan Sweets", subcategory: "Տորթեր", image: "https://images.unsplash.com/photo-1563805042-7684c019e1cb?auto=format&fit=crop&w=400&q=80" },
-    { name: "Շոկո դեսերտ", weight: "120գ", price: 570, category: "Danielyan Sweets", subcategory: "Դեսերտներ", image: "https://images.unsplash.com/photo-1588195538326-c5b1e9f80a1b?auto=format&fit=crop&w=400&q=80" },
-    { name: "Կարամել դեսերտ", weight: "110գ", price: 580, category: "Danielyan Sweets", subcategory: "Դեսերտներ", image: "https://images.unsplash.com/photo-1589308078053-f2e6b9f7b89b?auto=format&fit=crop&w=400&q=80" },
-    { name: "Պավլովա", weight: "60գ", price: 590, category: "Danielyan Sweets", subcategory: "Տորթեր", image: "https://images.unsplash.com/photo-1588195538326-c5b1e9f80a1b?auto=format&fit=crop&w=400&q=80" },
-    { name: "Միկադո", weight: "100գ", price: 600, category: "Danielyan Sweets", subcategory: "Տորթեր", image: "https://images.unsplash.com/photo-1589308078053-f2e6b9f7b89b?auto=format&fit=crop&w=400&q=80" },
-    { name: "Բաունտի", weight: "120գ", price: 600, category: "Danielyan Sweets", subcategory: "Դեսերտներ", image: "https://images.unsplash.com/photo-1588195538578-dfd0c6f3c38d?auto=format&fit=crop&w=400&q=80" },
-    { name: "Ֆրանսուհի", weight: "140գ", price: 650, category: "Danielyan Sweets", subcategory: "Տորթեր", image: "https://images.unsplash.com/photo-1563805042-7684c019e1cb?auto=format&fit=crop&w=400&q=80" },
-    { name: "Սնիկերս դեսերտ", weight: "130գ", price: 650, category: "Danielyan Sweets", subcategory: "Դեսերտներ", image: "https://images.unsplash.com/photo-1588195538326-c5b1e9f80a1b?auto=format&fit=crop&w=400&q=80" },
-    { name: "Իրիսկա", weight: "125գ", price: 550, category: "Danielyan Sweets", subcategory: "Քաղցրավենիք", image: "https://images.unsplash.com/photo-1589308078053-6fa6c7e94a42?auto=format&fit=crop&w=400&q=80" },
-    { name: "Ցիտրուս ֆեսթ", weight: "110գ", price: 850, category: "Danielyan Sweets", subcategory: "Դեսերտներ", image: "https://images.unsplash.com/photo-1589302168068-964664d93dc0?auto=format&fit=crop&w=400&q=80" },
-    { name: "Ելակի դեսերտ", weight: "100գ", price: 780, category: "Danielyan Sweets", subcategory: "Դեսերտներ", image: "https://images.unsplash.com/photo-1613145993481-93b6c1b3bbf7?auto=format&fit=crop&w=400&q=80" },
-    { name: "Սուֆլե ելակով", weight: "100գ", price: 850, category: "Danielyan Sweets", subcategory: "Դեսերտներ", image: "https://images.unsplash.com/photo-1613145993481-93b6c1b3bbf7?auto=format&fit=crop&w=400&q=80" },
-    { name: "Տարտ պիստակով", weight: "80գ", price: 720, category: "Danielyan Sweets", subcategory: "Տարտեր", image: "https://images.unsplash.com/photo-1589308078053-f2e6b9f7b89b?auto=format&fit=crop&w=400&q=80" },
-    { name: "Տարտ մրգային", weight: "90գ", price: 700, category: "Danielyan Sweets", subcategory: "Տարտեր", image: "https://images.unsplash.com/photo-1589308078053-f2e6b9f7b89b?auto=format&fit=crop&w=400&q=80" },
-    { name: "Տարտ շոկոլադե", weight: "90գ", price: 720, category: "Danielyan Sweets", subcategory: "Տարտեր", image: "https://images.unsplash.com/photo-1589308078053-f2e6b9f7b89b?auto=format&fit=crop&w=400&q=80" },
-    { name: "Դեսերտ Տրիո", weight: "200գ", price: 1050, category: "Danielyan Sweets", subcategory: "Դեսերտներ", image: "https://images.unsplash.com/photo-1605478449549-8f6e0c6c9b9c?auto=format&fit=crop&w=400&q=80" },
-    { name: "Չիզքեյք Նյու Յորք", weight: "130գ", price: 1000, category: "Danielyan Sweets", subcategory: "Չիզքեյքեր", image: "https://images.unsplash.com/photo-1563805042-7684c019e1cb?auto=format&fit=crop&w=400&q=80" },
-    { name: "Չիզքեյք մանգո և մարակույա", weight: "140գ", price: 1400, category: "Danielyan Sweets", subcategory: "Չիզքեյքեր", image: "https://images.unsplash.com/photo-1605478449469-8b7e0bb0b3cc?auto=format&fit=crop&w=400&q=80" },
-    { name: "Լիմոնչելո դեսերտ", weight: "190գ", price: 1300, category: "Danielyan Sweets", subcategory: "Դեսերտներ", image: "https://images.unsplash.com/photo-1605478449469-8b7e0bb0b3cc?auto=format&fit=crop&w=400&q=80" },
-    { name: "Մրգային դոնդող", weight: "160գ", price: 500, category: "Danielyan Sweets", subcategory: "Դեսերտներ", image: "https://images.unsplash.com/photo-1589308078053-6fa6c7e94a42?auto=format&fit=crop&w=400&q=80" },
-    { name: "Ժելե ընկույզով", weight: "58գ", price: 700, category: "Danielyan Sweets", subcategory: "Դեսերտներ", image: "https://images.unsplash.com/photo-1589308078053-6fa6c7e94a42?auto=format&fit=crop&w=400&q=80" },
-  ];
-
   let cart = [];
-  let currentCategory = null;
-  let currentSubcategory = null;
-
-  function renderCategories() {
-    const cats = [...new Set(products.map(p => p.category))];
-    const container = document.getElementById("categories");
-    container.innerHTML = "";
-    cats.forEach(cat => {
-      const btn = document.createElement("button");
-      btn.textContent = cat;
-      btn.onclick = () => {
-        currentCategory = cat;
-        currentSubcategory = null;
-        document.querySelectorAll(".categories button").forEach(b => b.classList.remove("active"));
-        btn.classList.add("active");
-        renderSubcategories();
-        renderProducts();
-      };
-      container.appendChild(btn);
-    });
-  }
-
-  function renderSubcategories() {
-    const container = document.getElementById("subcategories");
-    container.innerHTML = "";
-    if (!currentCategory) return;
-    const subs = [...new Set(products.filter(p => p.category === currentCategory).map(p => p.subcategory))];
-    subs.forEach(sub => {
-      const btn = document.createElement("button");
-      btn.textContent = sub;
-      btn.onclick = () => {
-        currentSubcategory = sub;
-        document.querySelectorAll(".subcategories button").forEach(b => b.classList.remove("active"));
-        btn.classList.add("active");
-        renderProducts();
-      };
-      container.appendChild(btn);
-    });
-  }
-
-  function renderProducts() {
-    const container = document.getElementById("products");
-    container.innerHTML = "";
-    let filtered = products;
-    if (currentCategory) filtered = filtered.filter(p => p.category === currentCategory);
-    if (currentSubcategory) filtered = filtered.filter(p => p.subcategory === currentSubcategory);
-    filtered.forEach(product => {
-      const card = document.createElement("div");
-      card.className = "product-card";
-      card.innerHTML = `
-        <img src="${product.image}" alt="${product.name}">
-        <h4>${product.name}</h4>
-        <p>${product.weight}</p>
-        <p class="price">${product.price} AMD</p>
-        <button onclick="addToCart('${product.name}', ${product.price})">Добавить</button>
-      `;
-      container.appendChild(card);
-    });
-  }
 
   function addToCart(name, price) {
     cart.push({ name, price });
@@ -161,38 +219,204 @@
   }
 
   function renderCart() {
-    const itemsContainer = document.getElementById("cartItems");
-    const totalContainer = document.getElementById("cartTotal");
-    itemsContainer.innerHTML = "";
+    const cartItems = document.getElementById('cart-items');
+    cartItems.innerHTML = '';
     let total = 0;
-    cart.forEach((item, index) => {
+
+    cart.forEach((item) => {
       total += item.price;
-      const div = document.createElement("div");
-      div.textContent = `${item.name} — ${item.price} AMD`;
-      itemsContainer.appendChild(div);
+      const div = document.createElement('div');
+      div.className = 'cart-item';
+      div.innerHTML = `<span>${item.name}</span><span>${item.price} AMD</span>`;
+      cartItems.appendChild(div);
     });
-    totalContainer.textContent = `Итого: ${total} AMD`;
+
+    document.getElementById('cart-total').innerText = `Итого: ${total} AMD`;
   }
 
-  function checkout() {
+  function clearCart() {
+    cart = [];
+    renderCart();
+  }
+
+  function sendToWhatsApp() {
     if (cart.length === 0) {
-      alert("Корзина пуста");
+      alert('Корзина пуста');
       return;
     }
-    let message = "Здравствуйте! Хочу заказать:%0A";
+
+    let message = 'Здравствуйте! Хочу заказать:%0A';
     let total = 0;
+
     cart.forEach(item => {
-      message += `- ${item.name} — ${item.price} AMD%0A`;
+      message += `- ${item.name}: ${item.price} AMD%0A`;
       total += item.price;
     });
+
     message += `%0AИтого: ${total} AMD`;
-    const url = `https://wa.me/${phoneNumber}?text=${message}`;
-    window.open(url, "_blank");
+
+    window.open(`https://wa.me/37443797727?text=${message}`, '_blank');
   }
 
-  // Init
-  renderCategories();
-  renderProducts();
+  function sendFormToWhatsApp() {
+    const name = document.getElementById('name').value;
+    const phone = document.getElementById('phone').value;
+    const address = document.getElementById('address').value;
+    const comment = document.getElementById('comment').value;
+
+    let message = `Здравствуйте!%0AИмя: ${name}%0AТелефон: ${phone}%0AАдрес: ${address}`;
+    if (comment) message += `%0AКомментарий: ${comment}`;
+
+    window.open(`https://wa.me/37443797727?text=${message}`, '_blank');
+  }
+
+  const translations = {
+    ru: {
+      logo: 'Artik Food',
+      heroTitle: 'Доставка продуктов в Артике',
+      heroText: 'Свежие продукты из супермаркетов — прямо к вашей двери',
+      heroBtn: 'Заказать сейчас',
+      howTitle: 'Как это работает',
+      how1Title: '1. Выбираете магазин',
+      how1Text: 'Выберите нужный супермаркет или рынок.',
+      how2Title: '2. Добавляете товары',
+      how2Text: 'Соберите корзину из нужных продуктов.',
+      how3Title: '3. Мы доставляем',
+      how3Text: 'Курьер привезёт заказ за 60–90 минут.',
+      shopsTitle: 'Магазины',
+      shop1: 'Супермаркет №1',
+      shop1Text: 'Продукты, напитки, бытовая химия.',
+      shop2: 'Супермаркет №2',
+      shop2Text: 'Свежие овощи, мясо, молочка.',
+      shop3: 'Рынок / Лавки',
+      shop3Text: 'Домашние продукты и фермерские товары.',
+      catalogTitle: 'Категории товаров',
+      cat1: '🥦 Овощи и фрукты',
+      cat2: '🥩 Мясо и рыба',
+      cat3: '🧀 Молочные продукты',
+      cat4: '🍞 Хлеб и выпечка',
+      cat5: '🥫 Бакалея',
+      cat6: '🧃 Напитки',
+      cat7: '🧼 Бытовая химия',
+      cat8: '🍰 Danielyan Sweet',
+      popularTitle: 'Популярные товары',
+      prod1Name: 'Молоко 1л',
+      prod1Price: 'Цена: 500 AMD',
+      prod2Name: 'Хлеб',
+      prod2Price: 'Цена: 250 AMD',
+      prod3Name: 'Яблоки 1кг',
+      prod3Price: 'Цена: 600 AMD',
+      prod4Name: 'Курица 1кг',
+      prod4Price: 'Цена: 1,800 AMD',
+      cartTitle: 'Корзина',
+      cartOrderBtn: 'Заказать через WhatsApp',
+      cartClearBtn: 'Очистить корзину',
+      orderTitle: 'Оформление заказа',
+      orderBtn: 'Отправить заказ',
+      contactsTitle: 'Контакты',
+      footer: '© 2026 Artik Food — Доставка продуктов в Артике'
+    },
+    am: {
+      logo: 'Artik Food',
+      heroTitle: 'Մթերքի առաքում Արթիկում',
+      heroText: 'Թարմ մթերք սուպերմարկետներից՝ ուղիղ Ձեր տուն',
+      heroBtn: 'Պատվիրել հիմա',
+      howTitle: 'Ինչպես է աշխատում',
+      how1Title: '1. Ընտրում եք խանութը',
+      how1Text: 'Ընտրեք Ձեզ անհրաժեշտ սուպերմարկետը կամ շուկան։',
+      how2Title: '2. Ավելացնում եք ապրանքները',
+      how2Text: 'Լցրեք զամբյուղը անհրաժեշտ մթերքներով։',
+      how3Title: '3. Մենք առաքում ենք',
+      how3Text: 'Սուրհանդակը կհասցնի պատվերը 60–90 րոպեում։',
+      shopsTitle: 'Խանութներ',
+      shop1: 'Սուպերմարկետ №1',
+      shop1Text: 'Մթերք, խմիչք, կենցաղային քիմիա։',
+      shop2: 'Սուպերմարկետ №2',
+      shop2Text: 'Թարմ բանջարեղեն, միս, կաթնամթերք։',
+      shop3: 'Շուկա / Տաղավարներ',
+      shop3Text: 'Տնական և ֆերմերային ապրանքներ։',
+      catalogTitle: 'Ապրանքների կատեգորիաներ',
+      cat1: '🥦 Բանջարեղեն և մրգեր',
+      cat2: '🥩 Միս և ձուկ',
+      cat3: '🧀 Կաթնամթերք',
+      cat4: '🍞 Հաց և խմորեղեն',
+      cat5: '🥫 Մթերքաբաժին',
+      cat6: '🧃 Խմիչքներ',
+      cat7: '🧼 Կենցաղային քիմիա',
+      cat8: '🍰 Danielyan Sweet',
+      popularTitle: 'Հայտնի ապրանքներ',
+      prod1Name: 'Կաթ 1լ',
+      prod1Price: 'Գին: 500 AMD',
+      prod2Name: 'Հաց',
+      prod2Price: 'Գին: 250 AMD',
+      prod3Name: 'Խնձոր 1կգ',
+      prod3Price: 'Գին: 600 AMD',
+      prod4Name: 'Հավ 1կգ',
+      prod4Price: 'Գին: 1,800 AMD',
+      cartTitle: 'Զամբյուղ',
+      cartOrderBtn: 'Պատվիրել WhatsApp-ով',
+      cartClearBtn: 'Մաքրել զամբյուղը',
+      orderTitle: 'Պատվերի ձևակերպում',
+      orderBtn: 'Ուղարկել պատվերը',
+      contactsTitle: 'Կապ',
+      footer: '© 2026 Artik Food — Մթերքի առաքում Արթիկում'
+    }
+  };
+
+  function setLang(lang) {
+    const t = translations[lang];
+
+    document.getElementById('logo-text').innerText = t.logo;
+    document.getElementById('hero-title').innerText = t.heroTitle;
+    document.getElementById('hero-text').innerText = t.heroText;
+    document.getElementById('hero-btn').innerText = t.heroBtn;
+
+    document.getElementById('how-title').innerText = t.howTitle;
+    document.getElementById('how-1-title').innerText = t.how1Title;
+    document.getElementById('how-1-text').innerText = t.how1Text;
+    document.getElementById('how-2-title').innerText = t.how2Title;
+    document.getElementById('how-2-text').innerText = t.how2Text;
+    document.getElementById('how-3-title').innerText = t.how3Title;
+    document.getElementById('how-3-text').innerText = t.how3Text;
+
+    document.getElementById('shops-title').innerText = t.shopsTitle;
+    document.getElementById('shop-1').innerText = t.shop1;
+    document.getElementById('shop-1-text').innerText = t.shop1Text;
+    document.getElementById('shop-2').innerText = t.shop2;
+    document.getElementById('shop-2-text').innerText = t.shop2Text;
+    document.getElementById('shop-3').innerText = t.shop3;
+    document.getElementById('shop-3-text').innerText = t.shop3Text;
+
+    document.getElementById('catalog-title').innerText = t.catalogTitle;
+    document.getElementById('cat-1').innerText = t.cat1;
+    document.getElementById('cat-2').innerText = t.cat2;
+    document.getElementById('cat-3').innerText = t.cat3;
+    document.getElementById('cat-4').innerText = t.cat4;
+    document.getElementById('cat-5').innerText = t.cat5;
+    document.getElementById('cat-6').innerText = t.cat6;
+    document.getElementById('cat-7').innerText = t.cat7;
+    document.getElementById('cat-8').innerText = t.cat8;
+
+    document.getElementById('popular-title').innerText = t.popularTitle;
+    document.getElementById('prod-1-name').innerText = t.prod1Name;
+    document.getElementById('prod-1-price').innerText = t.prod1Price;
+    document.getElementById('prod-2-name').innerText = t.prod2Name;
+    document.getElementById('prod-2-price').innerText = t.prod2Price;
+    document.getElementById('prod-3-name').innerText = t.prod3Name;
+    document.getElementById('prod-3-price').innerText = t.prod3Price;
+    document.getElementById('prod-4-name').innerText = t.prod4Name;
+    document.getElementById('prod-4-price').innerText = t.prod4Price;
+
+    document.getElementById('cart-title').innerText = t.cartTitle;
+    document.getElementById('cart-order-btn').innerText = t.cartOrderBtn;
+    document.getElementById('cart-clear-btn').innerText = t.cartClearBtn;
+
+    document.getElementById('order-title').innerText = t.orderTitle;
+    document.getElementById('order-btn').innerText = t.orderBtn;
+
+    document.getElementById('contacts-title').innerText = t.contactsTitle;
+    document.getElementById('footer-text').innerText = t.footer;
+  }
 </script>
 
 </body>
