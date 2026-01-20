@@ -255,134 +255,206 @@
   let currentStore = null;
 
   const defaultStores = {
-    million: {
-      name: "Million",
-      products: [
-        // Молочные продукты
-        { name: "Молоко 1л", price: 450, category: "Молочные продукты" },
-        { name: "Йогурт", price: 350, category: "Молочные продукты" },
-        { name: "Сыр 200г", price: 900, category: "Молочные продукты" },
-        { name: "Творог", price: 500, category: "Молочные продукты" },
-        { name: "Масло сливочное", price: 800, category: "Молочные продукты" },
+  million: {
+    name: "Million",
+    products: [
+      // Овощи и фрукты
+      { name: "Картофель 1кг", price: 300, category: "Овощи и фрукты" },
+      { name: "Лук 1кг", price: 250, category: "Овощи и фрукты" },
+      { name: "Помидоры 1кг", price: 600, category: "Овощи и фрукты" },
+      { name: "Огурцы 1кг", price: 550, category: "Овощи и фрукты" },
+      { name: "Яблоки 1кг", price: 400, category: "Овощи и фрукты" },
 
-        // Хлеб и выпечка
-        { name: "Хлеб белый", price: 200, category: "Хлеб и выпечка" },
-        { name: "Хлеб чёрный", price: 220, category: "Хлеб и выпечка" },
-        { name: "Лаваш", price: 180, category: "Хлеб и выпечка" },
-        { name: "Булочка", price: 120, category: "Хлеб и выпечка" },
+      // Мясо и рыба
+      { name: "Куриное филе 1кг", price: 1800, category: "Мясо и рыба" },
+      { name: "Говядина 1кг", price: 2800, category: "Мясо и рыба" },
+      { name: "Фарш 1кг", price: 2000, category: "Мясо и рыба" },
+      { name: "Сосиски 500г", price: 1200, category: "Мясо и рыба" },
+      { name: "Рыба свежая 1кг", price: 2200, category: "Мясо и рыба" },
 
-        // Бакалея
-        { name: "Сахар 1кг", price: 420, category: "Бакалея" },
-        { name: "Рис 1кг", price: 490, category: "Бакалея" },
-        { name: "Макароны", price: 340, category: "Бакалея" },
-        { name: "Масло подсолнечное", price: 650, category: "Бакалея" },
+      // Молочные продукты
+      { name: "Молоко 1л", price: 350, category: "Молочные продукты" },
+      { name: "Сыр 200г", price: 900, category: "Молочные продукты" },
+      { name: "Творог 200г", price: 500, category: "Молочные продукты" },
+      { name: "Йогурт 400г", price: 300, category: "Молочные продукты" },
+      { name: "Масло сливочное 200г", price: 800, category: "Молочные продукты" },
 
-        // Мясо и рыба
-        { name: "Куриное филе", price: 1400, category: "Мясо и рыба" },
-        { name: "Говядина", price: 2300, category: "Мясо и рыба" },
-        { name: "Колбаса", price: 1200, category: "Мясо и рыба" },
-        { name: "Сосиски", price: 900, category: "Мясо и рыба" },
+      // Хлеб и выпечка
+      { name: "Хлеб белый", price: 200, category: "Хлеб и выпечка" },
+      { name: "Хлеб чёрный", price: 220, category: "Хлеб и выпечка" },
+      { name: "Булочки 4шт", price: 300, category: "Хлеб и выпечка" },
+      { name: "Лаваш", price: 180, category: "Хлеб и выпечка" },
+      { name: "Багет", price: 250, category: "Хлеб и выпечка" },
 
-        // Овощи и фрукты
-        { name: "Яблоки 1кг", price: 350, category: "Овощи и фрукты" },
-        { name: "Бананы 1кг", price: 480, category: "Овощи и фрукты" },
-        { name: "Картофель 1кг", price: 250, category: "Овощи и фрукты" },
-        { name: "Помидоры 1кг", price: 540, category: "Овощи и фрукты" },
-        { name: "Огурцы 1кг", price: 500, category: "Овощи и фрукты" },
+      // Бакалея
+      { name: "Рис 1кг", price: 450, category: "Бакалея" },
+      { name: "Макароны 500г", price: 300, category: "Бакалея" },
+      { name: "Сахар 1кг", price: 400, category: "Бакалея" },
+      { name: "Соль 1кг", price: 150, category: "Бакалея" },
+      { name: "Мука 1кг", price: 350, category: "Бакалея" },
 
-        // Напитки
-        { name: "Вода 1.5л", price: 200, category: "Напитки" },
-        { name: "Сок апельсиновый", price: 450, category: "Напитки" },
-        { name: "Кока-Кола 1л", price: 400, category: "Напитки" },
-        { name: "Чай", price: 600, category: "Напитки" },
-        { name: "Кофе", price: 1200, category: "Напитки" },
+      // Напитки
+      { name: "Вода 1.5л", price: 200, category: "Напитки" },
+      { name: "Сок 1л", price: 450, category: "Напитки" },
+      { name: "Газировка 1л", price: 350, category: "Напитки" },
+      { name: "Чай 100г", price: 600, category: "Напитки" },
+      { name: "Кофе 100г", price: 1200, category: "Напитки" },
 
-        // Бытовая химия
-        { name: "Порошок стиральный", price: 1500, category: "Бытовая химия" },
-        { name: "Средство для посуды", price: 700, category: "Бытовая химия" },
-        { name: "Мыло", price: 300, category: "Бытовая химия" },
-        { name: "Шампунь", price: 1100, category: "Бытовая химия" },
+      // Бытовая химия
+      { name: "Порошок стиральный 1кг", price: 900, category: "Бытовая химия" },
+      { name: "Моющее средство 500мл", price: 450, category: "Бытовая химия" },
+      { name: "Средство для посуды", price: 350, category: "Бытовая химия" },
+      { name: "Губки 5шт", price: 200, category: "Бытовая химия" },
+      { name: "Салфетки влажные", price: 300, category: "Бытовая химия" },
 
-        // Сладости
-        { name: "Шоколад", price: 500, category: "Сладости" },
-        { name: "Печенье", price: 450, category: "Сладости" },
-        { name: "Конфеты", price: 800, category: "Сладости" },
-        { name: "Вафли", price: 350, category: "Сладости" }
-      ]
-    },
+      // Сладости
+      { name: "Шоколад 100г", price: 400, category: "Сладости" },
+      { name: "Печенье 300г", price: 500, category: "Сладости" },
+      { name: "Торт шоколадный", price: 3500, category: "Сладости" },
+      { name: "Пирожные 4шт", price: 1200, category: "Сладости" },
+      { name: "Конфеты 500г", price: 1800, category: "Сладости" }
+    ]
+  },
 
-    mush: {
-      name: "Մուշ",
-      products: [
-        { name: "Молоко 1л", price: 430, category: "Молочные продукты" },
-        { name: "Йогурт", price: 330, category: "Молочные продукты" },
-        { name: "Сыр", price: 880, category: "Молочные продукты" },
-        { name: "Сметана", price: 480, category: "Молочные продукты" },
-        { name: "Кефир", price: 420, category: "Молочные продукты" },
+  mush: {
+    name: "Մուշ",
+    products: [
+      // Овощи и фрукты
+      { name: "Картофель 1кг", price: 290, category: "Овощи и фрукты" },
+      { name: "Лук 1кг", price: 240, category: "Овощи и фрукты" },
+      { name: "Помидоры 1кг", price: 580, category: "Овощи и фрукты" },
+      { name: "Огурцы 1кг", price: 530, category: "Овощи и фрукты" },
+      { name: "Бананы 1кг", price: 700, category: "Овощи и фрукты" },
 
-        { name: "Хлеб", price: 190, category: "Хлеб и выпечка" },
-        { name: "Лаваш", price: 200, category: "Хлеб и выпечка" },
-        { name: "Булочка", price: 130, category: "Хлеб и выпечка" },
+      // Мясо и рыба
+      { name: "Куриные ножки 1кг", price: 1600, category: "Мясо и рыба" },
+      { name: "Фарш говяжий 1кг", price: 2100, category: "Мясо и рыба" },
+      { name: "Колбаса варёная 500г", price: 1400, category: "Мясо и рыба" },
+      { name: "Рыба замороженная 1кг", price: 2000, category: "Мясо и рыба" },
+      { name: "Котлеты 1кг", price: 1900, category: "Мясо и рыба" },
 
-        { name: "Сахар 1кг", price: 410, category: "Бакалея" },
-        { name: "Рис 1кг", price: 480, category: "Бакалея" },
-        { name: "Макароны", price: 330, category: "Бакалея" },
-        { name: "Масло подсолнечное", price: 640, category: "Бакалея" },
+      // Молочные продукты
+      { name: "Молоко 1л", price: 340, category: "Молочные продукты" },
+      { name: "Сметана 200г", price: 420, category: "Молочные продукты" },
+      { name: "Кефир 1л", price: 350, category: "Молочные продукты" },
+      { name: "Йогурт 400г", price: 310, category: "Молочные продукты" },
+      { name: "Сыр 250г", price: 1100, category: "Молочные продукты" },
 
-        { name: "Курица целая", price: 1600, category: "Мясо и рыба" },
-        { name: "Говядина", price: 2250, category: "Мясо и рыба" },
-        { name: "Колбаса", price: 1150, category: "Мясо и рыба" },
+      // Хлеб и выпечка
+      { name: "Хлеб армянский", price: 190, category: "Хлеб и выпечка" },
+      { name: "Лаваш тонкий", price: 170, category: "Хлеб и выпечка" },
+      { name: "Булочки с сахаром", price: 280, category: "Хлеб и выпечка" },
+      { name: "Круассаны 2шт", price: 350, category: "Хлеб и выпечка" },
+      { name: "Багет", price: 260, category: "Хлеб и выпечка" },
 
-        { name: "Яблоки 1кг", price: 330, category: "Овощи и фрукты" },
-        { name: "Бананы 1кг", price: 460, category: "Овощи и фрукты" },
-        { name: "Картофель 1кг", price: 240, category: "Овощи и фрукты" },
-        { name: "Лук 1кг", price: 190, category: "Овощи и фрукты" },
-        { name: "Капуста 1кг", price: 220, category: "Овощи и фрукты" },
+      // Бакалея
+      { name: "Рис 1кг", price: 430, category: "Бакалея" },
+      { name: "Макароны 500г", price: 290, category: "Бакалея" },
+      { name: "Сахар 1кг", price: 390, category: "Бакалея" },
+      { name: "Масло подсолнечное 1л", price: 850, category: "Бакалея" },
+      { name: "Чай 100г", price: 580, category: "Бакалея" },
 
-        { name: "Вода 1.5л", price: 190, category: "Напитки" },
-        { name: "Сок яблочный", price: 430, category: "Напитки" },
-        { name: "Газировка", price: 380, category: "Напитки" },
+      // Напитки
+      { name: "Вода 1.5л", price: 190, category: "Напитки" },
+      { name: "Сок 1л", price: 430, category: "Напитки" },
+      { name: "Газировка 1л", price: 330, category: "Напитки" },
+      { name: "Минеральная вода", price: 220, category: "Напитки" },
+      { name: "Кофе 100г", price: 1150, category: "Напитки" },
 
-        { name: "Порошок", price: 1450, category: "Бытовая химия" },
-        { name: "Средство для посуды", price: 680, category: "Бытовая химия" },
-        { name: "Мыло", price: 280, category: "Бытовая химия" },
+      // Бытовая химия
+      { name: "Порошок 1кг", price: 880, category: "Бытовая химия" },
+      { name: "Средство для пола", price: 500, category: "Бытовая химия" },
+      { name: "Средство для посуды", price: 340, category: "Бытовая химия" },
+      { name: "Салфетки бумажные", price: 250, category: "Бытовая химия" },
+      { name: "Мыло жидкое", price: 400, category: "Бытовая химия" },
 
-        { name: "Шоколад", price: 480, category: "Сладости" },
-        { name: "Печенье", price: 420, category: "Сладости" },
-        { name: "Конфеты", price: 780, category: "Сладости" }
-      ]
-    },
+      // Сладости
+      { name: "Шоколад 90г", price: 380, category: "Сладости" },
+      { name: "Печенье 250г", price: 480, category: "Сладости" },
+      { name: "Торт ванильный", price: 3200, category: "Сладости" },
+      { name: "Пирожные ассорти", price: 1300, category: "Сладости" },
+      { name: "Конфеты 400г", price: 1600, category: "Сладости" }
+    ]
+  },
 
-    tonoyan: {
-      name: "Tonoyan",
-      products: [
-        { name: "Яблоки 1кг", price: 330, category: "Овощи и фрукты" },
-        { name: "Бананы 1кг", price: 460, category: "Овощи и фрукты" },
-        { name: "Апельсины 1кг", price: 520, category: "Овощи и фрукты" },
-        { name: "Помидоры 1кг", price: 540, category: "Овощи и фрукты" },
-        { name: "Огурцы 1кг", price: 500, category: "Овощи и фрукты" },
-        { name: "Картофель 1кг", price: 240, category: "Овощи и фрукты" },
-        { name: "Лук 1кг", price: 190, category: "Овощи и фрукты" },
-        { name: "Капуста 1кг", price: 220, category: "Овощи и фрукты" },
-        { name: "Зелень", price: 150, category: "Овощи и фрукты" },
-        { name: "Грибы", price: 700, category: "Овощи и фрукты" }
-      ]
-    },
+  tonoyan: {
+    name: "Tonoyan",
+    products: [
+      // Овощи и фрукты
+      { name: "Картофель 1кг", price: 280, category: "Овощи и фрукты" },
+      { name: "Лук 1кг", price: 230, category: "Овощи и фрукты" },
+      { name: "Морковь 1кг", price: 260, category: "Овощи и фрукты" },
+      { name: "Помидоры 1кг", price: 570, category: "Овощи и фрукты" },
+      { name: "Огурцы 1кг", price: 520, category: "Овощи и фрукты" },
 
-    danielyan: {
-      name: "Danielyan",
-      products: [
-        { name: "Торт шоколадный", price: 2500, category: "Сладости" },
-        { name: "Торт ванильный", price: 2400, category: "Сладости" },
-        { name: "Эклер", price: 300, category: "Сладости" },
-        { name: "Наполеон", price: 2800, category: "Сладости" },
-        { name: "Круассан", price: 250, category: "Сладости" },
-        { name: "Маффин", price: 350, category: "Сладости" },
-        { name: "Пахлава", price: 400, category: "Сладости" },
-        { name: "Печенье ассорти", price: 1500, category: "Сладости" }
-      ]
-    }
-  };
+      // Мясо и рыба
+      { name: "Курица целая 1кг", price: 1500, category: "Мясо и рыба" },
+      { name: "Говядина 1кг", price: 2700, category: "Мясо и рыба" },
+      { name: "Фарш 1кг", price: 1950, category: "Мясо и рыба" },
+      { name: "Колбаса копчёная 500г", price: 1600, category: "Мясо и рыба" },
+      { name: "Рыба охлаждённая 1кг", price: 2300, category: "Мясо и рыба" },
+
+      // Молочные продукты
+      { name: "Молоко 1л", price: 330, category: "Молочные продукты" },
+      { name: "Сыр 200г", price: 880, category: "Молочные продукты" },
+      { name: "Йогурт 400г", price: 290, category: "Молочные продукты" },
+      { name: "Кефир 1л", price: 340, category: "Молочные продукты" },
+      { name: "Творог 200г", price: 480, category: "Молочные продукты" },
+
+      // Хлеб и выпечка
+      { name: "Хлеб деревенский", price: 210, category: "Хлеб и выпечка" },
+      { name: "Лаваш", price: 175, category: "Хлеб и выпечка" },
+      { name: "Булочки 4шт", price: 310, category: "Хлеб и выпечка" },
+      { name: "Круассаны 3шт", price: 420, category: "Хлеб и выпечка" },
+      { name: "Багет", price: 270, category: "Хлеб и выпечка" },
+
+      // Бакалея
+      { name: "Рис 1кг", price: 420, category: "Бакалея" },
+      { name: "Макароны 500г", price: 280, category: "Бакалея" },
+      { name: "Сахар 1кг", price: 380, category: "Бакалея" },
+      { name: "Масло подсолнечное 1л", price: 840, category: "Бакалея" },
+      { name: "Мука 1кг", price: 340, category: "Бакалея" },
+
+      // Напитки
+      { name: "Вода 1.5л", price: 185, category: "Напитки" },
+      { name: "Сок 1л", price: 420, category: "Напитки" },
+      { name: "Газировка 1л", price: 320, category: "Напитки" },
+      { name: "Чай 100г", price: 570, category: "Напитки" },
+      { name: "Кофе 100г", price: 1180, category: "Напитки" },
+
+      // Бытовая химия
+      { name: "Порошок стиральный", price: 890, category: "Бытовая химия" },
+      { name: "Средство для стекол", price: 470, category: "Бытовая химия" },
+      { name: "Средство для посуды", price: 330, category: "Бытовая химия" },
+      { name: "Губки 5шт", price: 190, category: "Бытовая химия" },
+      { name: "Тряпки для уборки", price: 260, category: "Бытовая химия" },
+
+      // Сладости
+      { name: "Шоколад 100г", price: 390, category: "Сладости" },
+      { name: "Печенье 300г", price: 490, category: "Сладости" },
+      { name: "Торт медовый", price: 3300, category: "Сладости" },
+      { name: "Пирожные 6шт", price: 1500, category: "Сладости" },
+      { name: "Конфеты 500г", price: 1700, category: "Сладости" }
+    ]
+  },
+
+  danielyan: {
+    name: "Danielyan",
+    products: [
+      // Сладости
+      { name: "Торт шоколадный", price: 3600, category: "Сладости" },
+      { name: "Торт ванильный", price: 3400, category: "Сладости" },
+      { name: "Чизкейк", price: 2800, category: "Сладости" },
+      { name: "Пирожные эклеры 6шт", price: 1400, category: "Сладости" },
+      { name: "Пирожные наполеон 4шт", price: 1600, category: "Сладости" },
+      { name: "Круассаны 4шт", price: 1200, category: "Сладости" },
+      { name: "Маффины 6шт", price: 1500, category: "Сладости" },
+      { name: "Печенье ассорти 500г", price: 1800, category: "Сладости" },
+      { name: "Пахлава", price: 2000, category: "Сладости" },
+      { name: "Конфеты ручной работы 500г", price: 2500, category: "Сладости" }
+    ]
+  }
+};
 
   let stores = JSON.parse(localStorage.getItem("stores")) || defaultStores;
 
