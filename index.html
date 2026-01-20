@@ -21,9 +21,12 @@
     .shops, .categories, .products { display: grid; grid-template-columns: repeat(auto-fit, minmax(160px, 1fr)); gap: 16px; }
 
     .card, .product { background: white; padding: 16px; border-radius: 10px; box-shadow: 0 2px 6px rgba(0,0,0,0.1); text-align: center; cursor: pointer; }
-    .product button { background: #2ecc71; color: white; border: none; padding: 8px 12px; border-radius: 6px; cursor: pointer; margin-top: 10px; font-size: 14px; }
+    .product button { background: #2ecc71; color: white; border: none; padding: 8px 12px; border-radius: 6px; cursor: pointer; margin-top: 10px; }
 
-    .cart { background: white; padding: 16px; border-radius: 10px; max-width: 700px; margin: 20px auto; box-shadow: 0 2px 6px rgba(0,0,0,0.1); }
+    .qty-controls { display:flex; justify-content:center; gap:8px; margin-top:8px; }
+    .qty-controls button { padding:4px 10px; font-size:16px; }
+
+    .cart { background: white; padding: 16px; border-radius: 10px; max-width: 800px; margin: 20px auto; box-shadow: 0 2px 6px rgba(0,0,0,0.1); }
     .cart h4 { margin-top: 0; }
     .cart-store { border-top: 1px solid #ddd; margin-top: 12px; padding-top: 12px; }
     .cart-item { display: flex; justify-content: space-between; align-items: center; margin-bottom: 8px; font-size: 14px; }
@@ -42,6 +45,17 @@
     footer { background: #2ecc71; color: white; text-align: center; padding: 16px; margin-top: 40px; font-size: 14px; }
 
     .hidden { display: none; }
+
+    .back-btn {
+      display:inline-block;
+      background:#27ae60;
+      color:white;
+      border:none;
+      padding:8px 14px;
+      border-radius:6px;
+      cursor:pointer;
+      margin-bottom:12px;
+    }
 
     /* Admin styles */
     .admin-login, .admin-panel {
@@ -107,11 +121,9 @@
 </section>
 
 <section class="section hidden" id="category-page">
+  <button class="back-btn" onclick="goHome()">← На главную</button>
   <h3 id="category-title"></h3>
   <div class="products" id="category-products"></div>
-  <div style="text-align:center; margin-top:20px;">
-    <button onclick="goHome()" style="background:#27ae60;color:white;border:none;padding:10px 16px;border-radius:6px;cursor:pointer;">← Назад на главную</button>
-  </div>
 </section>
 
 <section class="section">
@@ -130,11 +142,9 @@
 <!-- СТРАНИЦА СУПЕРМАРКЕТА -->
 <div id="store-page" class="hidden">
   <section class="section">
+    <button class="back-btn" onclick="goHome()">← На главную</button>
     <h3 id="store-title"></h3>
     <div class="products" id="store-products"></div>
-    <div style="text-align:center; margin-top:20px;">
-      <button onclick="goHome()" style="background:#27ae60;color:white;border:none;padding:10px 16px;border-radius:6px;cursor:pointer;">← Назад на главную</button>
-    </div>
   </section>
 </div>
 
@@ -171,6 +181,14 @@
     <input type="text" id="name" placeholder="Ваше имя" required />
     <input type="tel" id="phone" placeholder="Телефон" required />
     <input type="text" id="address" placeholder="Адрес доставки" required />
+    <select id="district" required>
+      <option value="">Выберите район</option>
+      <option value="Центр">Центр — 500 AMD</option>
+      <option value="Север">Север — 600 AMD</option>
+      <option value="Юг">Юг — 700 AMD</option>
+      <option value="Восток">Восток — 650 AMD</option>
+      <option value="Запад">Запад — 650 AMD</option>
+    </select>
     <textarea rows="3" id="comment" placeholder="Комментарий к заказу"></textarea>
     <button type="submit">Отправить заказ</button>
   </form>
@@ -197,7 +215,15 @@
 <script>
   /* ================= ДАННЫЕ ================= */
 
-  let cart = {}; // корзина по магазинам
+  let cart = {}; // { storeKey: { productName: {price, qty} } }
+
+  const deliveryPrices = {
+    "Центр": 500,
+    "Север": 600,
+    "Юг": 700,
+    "Восток": 650,
+    "Запад": 650
+  };
 
   const categories = {
     "🥦 Овощи и фрукты": ["Овощи ассорти", "Фрукты ассорти", "Картофель", "Лук", "Помидоры", "Огурцы", "Яблоки", "Апельсины", "Бананы", "Зелень", "Грибы", "Капуста"],
@@ -329,7 +355,10 @@
       div.innerHTML = `
         <h4>${item.name}</h4>
         <p>Цена: ${item.price} AMD</p>
-        <button onclick="addToCart('${storeKey}', '${item.name}', ${item.price})">В корзину</button>
+        <div class="qty-controls">
+          <button onclick="changeQty('${storeKey}', '${item.name}', ${item.price}, -1)">−</button>
+          <button onclick="changeQty('${storeKey}', '${item.name}', ${item.price}, 1)">+</button>
+        </div>
       `;
       container.appendChild(div);
     });
@@ -365,9 +394,13 @@
         div.className = 'product';
         let inner = `<h4>${productName}</h4>`;
         found.forEach(f => {
-          inner += `<p>${f.storeName}: ${f.price} AMD 
-            <button onclick="addToCart('${f.storeKey}', '${productName}', ${f.price})">В корзину</button>
-          </p>`;
+          inner += `
+            <p>${f.storeName}: ${f.price} AMD</p>
+            <div class="qty-controls">
+              <button onclick="changeQty('${f.storeKey}', '${productName}', ${f.price}, -1)">−</button>
+              <button onclick="changeQty('${f.storeKey}', '${productName}', ${f.price}, 1)">+</button>
+            </div>
+          `;
         });
         div.innerHTML = inner;
         container.appendChild(div);
@@ -388,15 +421,12 @@
 
   /* ================= КОРЗИНА ================= */
 
-  function addToCart(storeKey, name, price) {
-    if (!cart[storeKey]) cart[storeKey] = [];
-    cart[storeKey].push({ name, price });
-    renderCart();
-  }
-
-  function removeFromCart(storeKey, index) {
-    cart[storeKey].splice(index, 1);
-    if (cart[storeKey].length === 0) delete cart[storeKey];
+  function changeQty(storeKey, name, price, delta) {
+    if (!cart[storeKey]) cart[storeKey] = {};
+    if (!cart[storeKey][name]) cart[storeKey][name] = { price, qty: 0 };
+    cart[storeKey][name].qty += delta;
+    if (cart[storeKey][name].qty <= 0) delete cart[storeKey][name];
+    if (Object.keys(cart[storeKey]).length === 0) delete cart[storeKey];
     renderCart();
   }
 
@@ -413,13 +443,16 @@
 
       let storeTotal = 0;
 
-      cart[storeKey].forEach((item, index) => {
-        storeTotal += item.price;
+      Object.keys(cart[storeKey]).forEach(productName => {
+        const item = cart[storeKey][productName];
+        const itemTotal = item.price * item.qty;
+        storeTotal += itemTotal;
+
         const div = document.createElement('div');
         div.className = 'cart-item';
         div.innerHTML = `
-          <span>${item.name} — ${item.price} AMD</span>
-          <button onclick="removeFromCart('${storeKey}', ${index})">✖</button>
+          <span>${productName} × ${item.qty} — ${itemTotal} AMD</span>
+          <button onclick="changeQty('${storeKey}', '${productName}', ${item.price}, -1)">✖</button>
         `;
         storeDiv.appendChild(div);
       });
@@ -433,7 +466,9 @@
       grandTotal += storeTotal;
     });
 
-    document.getElementById('cart-total').innerText = `Итого: ${grandTotal} AMD`;
+    const district = document.getElementById('district').value;
+    const delivery = deliveryPrices[district] || 0;
+    document.getElementById('cart-total').innerText = `Итого: ${grandTotal + delivery} AMD (доставка: ${delivery} AMD)`;
   }
 
   function clearCart() {
@@ -449,6 +484,9 @@
       return;
     }
 
+    const district = document.getElementById('district').value;
+    const delivery = deliveryPrices[district] || 0;
+
     let message = 'Здравствуйте! Хочу заказать:%0A%0A';
     let grandTotal = 0;
 
@@ -457,16 +495,19 @@
       message += `🛒 ${store.name}%0A`;
       let storeTotal = 0;
 
-      cart[storeKey].forEach(item => {
-        message += `- ${item.name}: ${item.price} AMD%0A`;
-        storeTotal += item.price;
+      Object.keys(cart[storeKey]).forEach(productName => {
+        const item = cart[storeKey][productName];
+        const itemTotal = item.price * item.qty;
+        message += `- ${productName} × ${item.qty}: ${itemTotal} AMD%0A`;
+        storeTotal += itemTotal;
       });
 
       message += `Итого (${store.name}): ${storeTotal} AMD%0A%0A`;
       grandTotal += storeTotal;
     });
 
-    message += `Общий итог: ${grandTotal} AMD`;
+    message += `Доставка (${district || "не выбран"}): ${delivery} AMD%0A`;
+    message += `Общий итог: ${grandTotal + delivery} AMD`;
 
     window.open(`https://wa.me/37443797727?text=${message}`, '_blank');
   }
@@ -477,6 +518,9 @@
       return;
     }
 
+    const district = document.getElementById('district').value;
+    const delivery = deliveryPrices[district] || 0;
+
     let message = 'Здравствуйте! Хочу заказать:%0A%0A';
     let grandTotal = 0;
 
@@ -485,16 +529,19 @@
       message += `🛒 ${store.name}%0A`;
       let storeTotal = 0;
 
-      cart[storeKey].forEach(item => {
-        message += `- ${item.name}: ${item.price} AMD%0A`;
-        storeTotal += item.price;
+      Object.keys(cart[storeKey]).forEach(productName => {
+        const item = cart[storeKey][productName];
+        const itemTotal = item.price * item.qty;
+        message += `- ${productName} × ${item.qty}: ${itemTotal} AMD%0A`;
+        storeTotal += itemTotal;
       });
 
       message += `Итого (${store.name}): ${storeTotal} AMD%0A%0A`;
       grandTotal += storeTotal;
     });
 
-    message += `Общий итог: ${grandTotal} AMD`;
+    message += `Доставка (${district || "не выбран"}): ${delivery} AMD%0A`;
+    message += `Общий итог: ${grandTotal + delivery} AMD`;
 
     window.open(`https://t.me/artikfood?text=${message}`, '_blank');
   }
@@ -503,9 +550,10 @@
     const name = document.getElementById('name').value;
     const phone = document.getElementById('phone').value;
     const address = document.getElementById('address').value;
+    const district = document.getElementById('district').value;
     const comment = document.getElementById('comment').value;
 
-    let message = `Здравствуйте!%0AИмя: ${name}%0AТелефон: ${phone}%0AАдрес: ${address}`;
+    let message = `Здравствуйте!%0AИмя: ${name}%0AТелефон: ${phone}%0AАдрес: ${address}%0AРайон: ${district}`;
     if (comment) message += `%0AКомментарий: ${comment}`;
 
     window.open(`https://wa.me/37443797727?text=${message}`, '_blank');
