@@ -4,6 +4,11 @@
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
   <title>Artik Food — Доставка продуктов в Артике</title>
+
+  <!-- PWA -->
+  <link rel="manifest" href="manifest.json">
+  <meta name="theme-color" content="#ff6b00">
+
   <style>
     body { font-family: Arial, sans-serif; margin: 0; background: #f8f8f8; color: #333; }
     header { background: #2ecc71; color: white; padding: 12px 16px; display: flex; justify-content: space-between; align-items: center; flex-wrap: wrap; }
@@ -254,7 +259,7 @@
   <h3>Контакты</h3>
   <div class="card" style="max-width:400px; margin:auto;">
     <p>📞 Телефон / WhatsApp: <a href="tel:+37443797727" style="color:#27ae60; font-weight:bold;">+374 43 79 77 27</a></p>
-    <p>✈️ Telegram: @photostudio_sirius</p>
+    <p>✈️ Telegram: @artikfood</p>
     <p>📍 Артик, Армения</p>
   </div>
 </section>
@@ -275,6 +280,15 @@
 </footer>
 
 <script>
+  // ===== PWA: регистрация Service Worker =====
+  if ("serviceWorker" in navigator) {
+    window.addEventListener("load", () => {
+      navigator.serviceWorker.register("service-worker.js")
+        .then(reg => console.log("Service Worker зарегистрирован", reg))
+        .catch(err => console.log("Service Worker ошибка", err));
+    });
+  }
+
   let carts = JSON.parse(localStorage.getItem("carts")) || {};
   let orders = JSON.parse(localStorage.getItem("orders")) || [];
   let currentStore = null;
