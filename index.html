@@ -1,257 +1,7 @@
-<!DOCTYPE html>
-<html lang="ru">
-<head>
-  <meta charset="UTF-8" />
-  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
-  <title>Artik Food — Доставка продуктов в Артике</title>
-  <style>
-    body { font-family: Arial, sans-serif; margin: 0; background: #f8f8f8; color: #333; }
-    header { background: #2ecc71; color: white; padding: 12px 16px; display: flex; justify-content: space-between; align-items: center; flex-wrap: wrap; }
-    header h1 { margin: 0; font-size: 22px; cursor: pointer; }
-    nav a { color: white; margin-left: 12px; text-decoration: none; font-weight: bold; font-size: 14px; }
-
-    .hero { background: #27ae60; color: white; padding: 40px 16px; text-align: center; }
-    .hero h2 { font-size: 30px; margin-bottom: 10px; }
-    .hero p { font-size: 17px; margin-bottom: 20px; }
-    .hero button { background: white; color: #27ae60; border: none; padding: 12px 20px; font-size: 16px; border-radius: 6px; cursor: pointer; }
-
-    .section { padding: 32px 16px; max-width: 1100px; margin: auto; }
-    .section h3 { text-align: center; margin-bottom: 24px; }
-
-    .shops, .categories, .products { display: grid; grid-template-columns: repeat(auto-fit, minmax(160px, 1fr)); gap: 16px; }
-
-    .card, .product { background: white; padding: 16px; border-radius: 10px; box-shadow: 0 2px 6px rgba(0,0,0,0.1); text-align: center; cursor: pointer; }
-    .product button { background: #2ecc71; color: white; border: none; padding: 6px 10px; border-radius: 6px; cursor: pointer; font-size: 14px; }
-
-    .qty-controls {
-      display: flex;
-      justify-content: center;
-      align-items: center;
-      gap: 8px;
-      margin-top: 8px;
-    }
-    .qty-controls button {
-      width: 30px;
-      height: 30px;
-      border-radius: 50%;
-      border: none;
-      background: #2ecc71;
-      color: white;
-      font-weight: bold;
-      cursor: pointer;
-    }
-    .qty-number {
-      min-width: 20px;
-      font-weight: bold;
-    }
-
-    .cart { background: white; padding: 16px; border-radius: 10px; max-width: 500px; margin: 20px auto; box-shadow: 0 2px 6px rgba(0,0,0,0.1); }
-    .cart h4 { margin-top: 0; text-align:center; }
-    .cart-item { display: flex; justify-content: space-between; align-items: center; margin-bottom: 8px; font-size: 14px; }
-    .cart-total { font-weight: bold; margin-top: 10px; text-align:center; }
-    .cart button { width: 100%; background: #27ae60; color: white; border: none; padding: 10px; font-size: 15px; border-radius: 6px; cursor: pointer; margin-top: 10px; }
-
-    .order-form { background: white; padding: 20px; border-radius: 10px; max-width: 500px; margin: auto; box-shadow: 0 2px 6px rgba(0,0,0,0.1); }
-    .order-form input, .order-form textarea, .order-form select { width: 100%; padding: 10px; margin-bottom: 12px; border-radius: 6px; border: 1px solid #ccc; font-size: 14px; }
-    .order-form button { width: 100%; background: #27ae60; color: white; border: none; padding: 12px; font-size: 16px; border-radius: 6px; cursor: pointer; }
-
-    .whatsapp-btn { position: fixed; bottom: 16px; right: 16px; background: #25D366; color: white; padding: 14px 18px; border-radius: 50px; text-decoration: none; font-weight: bold; box-shadow: 0 4px 10px rgba(0,0,0,0.2); font-size: 15px; }
-    .telegram-btn { position: fixed; bottom: 70px; right: 16px; background: #0088cc; color: white; padding: 14px 18px; border-radius: 50px; text-decoration: none; font-weight: bold; box-shadow: 0 4px 10px rgba(0,0,0,0.2); font-size: 15px; display:flex; align-items:center; gap:6px; }
-
-    footer { background: #2ecc71; color: white; text-align: center; padding: 16px; margin-top: 40px; font-size: 14px; }
-
-    .hidden { display: none; }
-
-    /* Admin styles */
-    .admin-login, .admin-panel {
-      max-width: 700px;
-      margin: 40px auto;
-      background: white;
-      padding: 20px;
-      border-radius: 10px;
-      box-shadow: 0 2px 6px rgba(0,0,0,0.1);
-    }
-    .admin-panel h3, .admin-panel h4 { text-align: center; }
-    .admin-panel select, .admin-panel input {
-      width: 100%;
-      padding: 8px;
-      margin-bottom: 10px;
-      border-radius: 6px;
-      border: 1px solid #ccc;
-    }
-    .admin-panel button {
-      width: 100%;
-      background: #27ae60;
-      color: white;
-      border: none;
-      padding: 10px;
-      border-radius: 6px;
-      cursor: pointer;
-      margin-top: 8px;
-    }
-    .admin-panel .danger {
-      background: #e74c3c;
-    }
-    .report-box {
-      border: 1px solid #ddd;
-      padding: 10px;
-      border-radius: 6px;
-      margin-bottom: 10px;
-      font-size: 14px;
-    }
-  </style>
-</head>
-<body>
-
-<header>
-  <h1 onclick="goHome()">Artik Food</h1>
-  <nav>
-    <a href="#" onclick="goHome()">Главная</a>
-    <a href="#order">Заказать</a>
-    <a href="#contacts">Контакты</a>
-    <a href="#" onclick="openAdmin()">Админ</a>
-  </nav>
-</header>
-
-<!-- ГЛАВНАЯ -->
-<div id="home-page">
-
-<section class="hero">
-  <h2>Доставка продуктов в Артике</h2>
-  <p>Свежие продукты из супермаркетов — прямо к вашей двери</p>
-  <button onclick="document.getElementById('order').scrollIntoView({behavior:'smooth'});">Заказать сейчас</button>
-</section>
-
-<section class="section" id="shops">
-  <h3>Супермаркеты</h3>
-  <div class="shops" id="shops-list"></div>
-</section>
-
-<section class="section" id="catalog">
-  <h3>Категории товаров</h3>
-  <div class="categories">
-    <div class="card" onclick="openCategory('Овощи и фрукты')">🥦 Овощи и фрукты</div>
-    <div class="card" onclick="openCategory('Мясо и рыба')">🥩 Мясо и рыба</div>
-    <div class="card" onclick="openCategory('Молочные продукты')">🧀 Молочные продукты</div>
-    <div class="card" onclick="openCategory('Хлеб и выпечка')">🍞 Хлеб и выпечка</div>
-    <div class="card" onclick="openCategory('Бакалея')">🥫 Бакалея</div>
-    <div class="card" onclick="openCategory('Напитки')">🧃 Напитки</div>
-    <div class="card" onclick="openCategory('Бытовая химия')">🧼 Бытовая химия</div>
-    <div class="card" onclick="openCategory('Сладости')">🍰 Danielyan Sweet</div>
-  </div>
-</section>
-
-<section class="section">
-  <div class="cart" id="global-cart">
-    <h4>Корзина (все магазины)</h4>
-    <div id="global-cart-items"></div>
-    <div class="cart-total" id="global-cart-total">Итого: 0 AMD</div>
-  </div>
-</section>
-
-</div>
-
-<!-- СТРАНИЦА СУПЕРМАРКЕТА -->
-<div id="store-page" class="hidden">
-  <section class="section">
-    <h3 id="store-title"></h3>
-    <div class="products" id="store-products"></div>
-
-    <div class="cart" id="store-cart">
-      <h4>Корзина этого магазина</h4>
-      <div id="store-cart-items"></div>
-      <div class="cart-total" id="store-cart-total">Итого: 0 AMD</div>
-      <button onclick="sendStoreToWhatsApp()">Заказать из этого магазина (WhatsApp)</button>
-      <button onclick="sendStoreToTelegram()" style="background:#0088cc;">Заказать из этого магазина (Telegram)</button>
-    </div>
-
-    <div style="text-align:center; margin-top:20px;">
-      <button onclick="goHome()" style="background:#27ae60;color:white;border:none;padding:10px 16px;border-radius:6px;cursor:pointer;">← Назад на главную</button>
-    </div>
-  </section>
-</div>
-
-<!-- СТРАНИЦА КАТЕГОРИИ -->
-<div id="category-page" class="hidden">
-  <section class="section">
-    <h3 id="category-title"></h3>
-    <div class="products" id="category-products"></div>
-    <div style="text-align:center; margin-top:20px;">
-      <button onclick="goHome()" style="background:#27ae60;color:white;border:none;padding:10px 16px;border-radius:6px;cursor:pointer;">← Назад на главную</button>
-    </div>
-  </section>
-</div>
-
-<!-- АДМИН ЛОГИН -->
-<div id="admin-login" class="admin-login hidden">
-  <h3>Вход в админ панель</h3>
-  <input type="text" id="admin-user" placeholder="Логин" />
-  <input type="password" id="admin-pass" placeholder="Пароль" />
-  <button onclick="loginAdmin()">Войти</button>
-  <p id="admin-error" style="color:red; text-align:center;"></p>
-</div>
-
-<!-- АДМИН ПАНЕЛЬ -->
-<div id="admin-panel" class="admin-panel hidden">
-  <h3>Админ панель</h3>
-
-  <label>Выберите супермаркет:</label>
-  <select id="admin-store-select" onchange="loadAdminProducts()"></select>
-
-  <div id="admin-products-list"></div>
-
-  <h4>Добавить новый товар</h4>
-  <input type="text" id="new-product-name" placeholder="Название товара" />
-  <input type="number" id="new-product-price" placeholder="Цена (AMD)" />
-  <input type="text" id="new-product-category" placeholder="Категория (например: Бакалея)" />
-  <button onclick="addProduct()">Добавить товар</button>
-
-  <h4>📊 Отчёт по заказам</h4>
-  <div id="orders-report"></div>
-
-  <button class="danger" onclick="logoutAdmin()">Выйти из админки</button>
-</div>
-
-<!-- ОФОРМЛЕНИЕ -->
-<section class="section" id="order">
-  <h3>Оформление заказа</h3>
-  <form class="order-form" onsubmit="event.preventDefault(); sendFormToWhatsApp();">
-    <input type="text" id="name" placeholder="Ваше имя" required />
-    <input type="tel" id="phone" placeholder="Телефон" required />
-    <input type="text" id="address" placeholder="Адрес доставки" required />
-    <select id="district" required>
-      <option value="">Выберите район доставки</option>
-      <option value="Центр">Центр — 500 AMD</option>
-      <option value="Север">Север — 700 AMD</option>
-      <option value="Юг">Юг — 800 AMD</option>
-      <option value="Окраина">Окраина — 1000 AMD</option>
-    </select>
-    <textarea rows="3" id="comment" placeholder="Комментарий к заказу"></textarea>
-    <button type="submit">Отправить заказ</button>
-  </form>
-</section>
-
-<section class="section" id="contacts">
-  <h3>Контакты</h3>
-  <div class="card" style="max-width:400px; margin:auto;">
-    <p>📞 Телефон / WhatsApp: <a href="tel:+37443797727" style="color:#27ae60; font-weight:bold;">+374 43 79 77 27</a></p>
-    <p>✈️ Telegram: @artikfood</p>
-    <p>📍 Артик, Армения</p>
-  </div>
-</section>
-
-<a class="whatsapp-btn" href="https://wa.me/37443797727" target="_blank">💬 WhatsApp</a>
-<a class="telegram-btn" href="https://t.me/artikfood" target="_blank">
-  <span>✈️</span> Telegram
-</a>
-
-<footer>
-  <p>© 2026 Artik Food — Доставка продуктов в Артике</p>
-</footer>
-
 <script>
-  let carts = {}; // { storeKey: { productName: {price, qty} } }
+  let carts = JSON.parse(localStorage.getItem("carts")) || {}; // { storeKey: { productName: {price, qty} } }
   let orders = JSON.parse(localStorage.getItem("orders")) || [];
+  let currentStore = null;
 
   const defaultStores = {
     million: {
@@ -330,6 +80,10 @@
     localStorage.setItem("stores", JSON.stringify(stores));
   }
 
+  function saveCarts() {
+    localStorage.setItem("carts", JSON.stringify(carts));
+  }
+
   function renderShops() {
     const container = document.getElementById("shops-list");
     container.innerHTML = "";
@@ -393,6 +147,7 @@
     updateQtyDisplay(storeKey, name);
     renderStoreCart(storeKey);
     renderGlobalCart();
+    saveCarts();
   }
 
   function updateQtyDisplay(storeKey, name) {
@@ -400,6 +155,15 @@
     const el = document.getElementById(id);
     if (el) {
       el.innerText = carts[storeKey]?.[name]?.qty || 0;
+    }
+  }
+
+  function removeItem(storeKey, name) {
+    if (carts[storeKey] && carts[storeKey][name]) {
+      delete carts[storeKey][name];
+      renderStoreCart(storeKey);
+      renderGlobalCart();
+      saveCarts();
     }
   }
 
@@ -418,6 +182,7 @@
       div.innerHTML = `
         <span>${name} × ${item.qty}</span>
         <span>${sum} AMD</span>
+        <button onclick="removeItem('${storeKey}', '${name}')" style="color:red;border:none;background:none;cursor:pointer;">❌</button>
       `;
       container.appendChild(div);
     });
@@ -425,39 +190,40 @@
     document.getElementById("store-cart-total").innerText = `Итого: ${total} AMD`;
   }
 
-function renderGlobalCart() {
-  const container = document.getElementById("global-cart-items");
-  container.innerHTML = "";
-  let total = 0;
+  function renderGlobalCart() {
+    const container = document.getElementById("global-cart-items");
+    container.innerHTML = "";
+    let total = 0;
 
-  Object.keys(carts).forEach(storeKey => {
-    const storeName = stores[storeKey].name;
-    const storeCart = carts[storeKey];
+    Object.keys(carts).forEach(storeKey => {
+      const storeName = stores[storeKey].name;
+      const storeCart = carts[storeKey];
 
-    if (storeCart && Object.keys(storeCart).length > 0) {
-      const storeTitle = document.createElement("div");
-      storeTitle.innerHTML = `<strong>${storeName}</strong>`;
-      storeTitle.style.marginTop = "10px";
-      container.appendChild(storeTitle);
+      if (storeCart && Object.keys(storeCart).length > 0) {
+        const storeTitle = document.createElement("div");
+        storeTitle.innerHTML = `<strong>${storeName}</strong>`;
+        storeTitle.style.marginTop = "10px";
+        container.appendChild(storeTitle);
 
-      Object.keys(storeCart).forEach(name => {
-        const item = storeCart[name];
-        const sum = item.price * item.qty;
-        total += sum;
+        Object.keys(storeCart).forEach(name => {
+          const item = storeCart[name];
+          const sum = item.price * item.qty;
+          total += sum;
 
-        const div = document.createElement("div");
-        div.className = "cart-item";
-        div.innerHTML = `
-          <span>${name} × ${item.qty}</span>
-          <span>${sum} AMD</span>
-        `;
-        container.appendChild(div);
-      });
-    }
-  });
+          const div = document.createElement("div");
+          div.className = "cart-item";
+          div.innerHTML = `
+            <span>${name} × ${item.qty}</span>
+            <span>${sum} AMD</span>
+            <button onclick="removeItem('${storeKey}', '${name}')" style="color:red;border:none;background:none;cursor:pointer;">❌</button>
+          `;
+          container.appendChild(div);
+        });
+      }
+    });
 
-  document.getElementById("global-cart-total").innerText = `Итого: ${total} AMD`;
-}
+    document.getElementById("global-cart-total").innerText = `Итого: ${total} AMD`;
+  }
 
   function sendStoreToWhatsApp() {
     if (!currentStore || !carts[currentStore] || Object.keys(carts[currentStore]).length === 0) {
@@ -553,8 +319,6 @@ function renderGlobalCart() {
     window.open(`https://wa.me/37443797727?text=${message}`, '_blank');
   }
 
-  /* ================= CATEGORIES ================= */
-
   function openCategory(categoryName) {
     document.getElementById('home-page').classList.add('hidden');
     document.getElementById('store-page').classList.add('hidden');
@@ -581,8 +345,6 @@ function renderGlobalCart() {
       });
     });
   }
-
-  /* ================= ADMIN ================= */
 
   function openAdmin() {
     document.getElementById('home-page').classList.add('hidden');
@@ -717,6 +479,3 @@ function renderGlobalCart() {
   renderShops();
   renderGlobalCart();
 </script>
-
-</body>
-</html>
