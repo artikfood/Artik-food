@@ -23,17 +23,20 @@
     .card, .product { background: white; padding: 16px; border-radius: 10px; box-shadow: 0 2px 6px rgba(0,0,0,0.1); text-align: center; cursor: pointer; }
     .product button { background: #2ecc71; color: white; border: none; padding: 8px 12px; border-radius: 6px; cursor: pointer; margin-top: 10px; font-size: 14px; }
 
-    .cart { background: white; padding: 16px; border-radius: 10px; max-width: 500px; margin: 20px auto; box-shadow: 0 2px 6px rgba(0,0,0,0.1); }
+    .cart { background: white; padding: 16px; border-radius: 10px; max-width: 700px; margin: 20px auto; box-shadow: 0 2px 6px rgba(0,0,0,0.1); }
     .cart h4 { margin-top: 0; }
-    .cart-item { display: flex; justify-content: space-between; margin-bottom: 8px; font-size: 14px; }
+    .cart-store { border-top: 1px solid #ddd; margin-top: 12px; padding-top: 12px; }
+    .cart-item { display: flex; justify-content: space-between; align-items: center; margin-bottom: 8px; font-size: 14px; }
+    .cart-item button { background:#e74c3c; color:white; border:none; border-radius:4px; padding:4px 8px; cursor:pointer; }
     .cart-total { font-weight: bold; margin-top: 10px; }
-    .cart button { width: 100%; background: #27ae60; color: white; border: none; padding: 10px; font-size: 15px; border-radius: 6px; cursor: pointer; margin-top: 10px; }
+
+    .cart button.main-btn { width: 100%; background: #27ae60; color: white; border: none; padding: 10px; font-size: 15px; border-radius: 6px; cursor: pointer; margin-top: 10px; }
 
     .order-form { background: white; padding: 20px; border-radius: 10px; max-width: 500px; margin: auto; box-shadow: 0 2px 6px rgba(0,0,0,0.1); }
     .order-form input, .order-form textarea { width: 100%; padding: 10px; margin-bottom: 12px; border-radius: 6px; border: 1px solid #ccc; font-size: 14px; }
     .order-form button { width: 100%; background: #27ae60; color: white; border: none; padding: 12px; font-size: 16px; border-radius: 6px; cursor: pointer; }
 
-    .whatsapp-btn { position: fixed; bottom: 16px; right: 16px; background: #25D366; color: white; padding: 14px 18px; border-radius: 50px; text-decoration: none; font-weight: bold; box-shadow: 0 4px 10px rgba(0,0,0,0.2); font-size: 15px; }
+    .whatsapp-btn { position: fixed; bottom: 16px; right: 16px; background: #25D366; color: white; padding: 14px 18px; border-radius: 50px; text-decoration: none; font-weight: bold; box-shadow: 0 4px 10px rgba(0,0,0,0.2); font-size: 15px; display:flex; align-items:center; gap:6px; }
     .telegram-btn { position: fixed; bottom: 70px; right: 16px; background: #0088cc; color: white; padding: 14px 18px; border-radius: 50px; text-decoration: none; font-weight: bold; box-shadow: 0 4px 10px rgba(0,0,0,0.2); font-size: 15px; display:flex; align-items:center; gap:6px; }
 
     footer { background: #2ecc71; color: white; text-align: center; padding: 16px; margin-top: 40px; font-size: 14px; }
@@ -100,26 +103,25 @@
 
 <section class="section" id="catalog">
   <h3>Категории товаров</h3>
-  <div class="categories">
-    <div class="card">🥦 Овощи и фрукты</div>
-    <div class="card">🥩 Мясо и рыба</div>
-    <div class="card">🧀 Молочные продукты</div>
-    <div class="card">🍞 Хлеб и выпечка</div>
-    <div class="card">🥫 Бакалея</div>
-    <div class="card">🧃 Напитки</div>
-    <div class="card">🧼 Бытовая химия</div>
-    <div class="card">🍰 Danielyan Sweet</div>
+  <div class="categories" id="categories-list"></div>
+</section>
+
+<section class="section hidden" id="category-page">
+  <h3 id="category-title"></h3>
+  <div class="products" id="category-products"></div>
+  <div style="text-align:center; margin-top:20px;">
+    <button onclick="goHome()" style="background:#27ae60;color:white;border:none;padding:10px 16px;border-radius:6px;cursor:pointer;">← Назад на главную</button>
   </div>
 </section>
 
 <section class="section">
   <div class="cart" id="cart">
-    <h4>Корзина</h4>
-    <div id="cart-items"></div>
+    <h4>Корзины по супермаркетам</h4>
+    <div id="cart-stores"></div>
     <div class="cart-total" id="cart-total">Итого: 0 AMD</div>
-    <button onclick="sendToWhatsApp()">Заказать через WhatsApp</button>
-    <button onclick="sendToTelegram()" style="background:#0088cc;">Заказать через Telegram</button>
-    <button onclick="clearCart()" style="background:#e74c3c; margin-top:8px;">Очистить корзину</button>
+    <button class="main-btn" onclick="sendToWhatsApp()">📲 Заказать через WhatsApp</button>
+    <button class="main-btn" onclick="sendToTelegram()" style="background:#0088cc;">✈️ Заказать через Telegram</button>
+    <button class="main-btn" onclick="clearCart()" style="background:#e74c3c; margin-top:8px;">🗑 Очистить все корзины</button>
   </div>
 </section>
 
@@ -183,9 +185,9 @@
   </div>
 </section>
 
-<a class="whatsapp-btn" href="https://wa.me/37443797727" target="_blank">💬 WhatsApp</a>
+<a class="whatsapp-btn" href="https://wa.me/37443797727" target="_blank">📲 WhatsApp</a>
 <a class="telegram-btn" href="https://t.me/artikfood" target="_blank">
-  <span>✈️</span> Telegram
+  ✈️ Telegram
 </a>
 
 <footer>
@@ -193,7 +195,20 @@
 </footer>
 
 <script>
-  let cart = [];
+  /* ================= ДАННЫЕ ================= */
+
+  let cart = {}; // корзина по магазинам
+
+  const categories = {
+    "🥦 Овощи и фрукты": ["Овощи ассорти", "Фрукты ассорти", "Картофель", "Лук", "Помидоры", "Огурцы", "Яблоки", "Апельсины", "Бананы", "Зелень", "Грибы", "Капуста"],
+    "🥩 Мясо и рыба": ["Мясо куриное", "Мясо говядина", "Колбаса"],
+    "🧀 Молочные продукты": ["Молоко 1л", "Йогурт", "Кефир", "Сметана", "Сыр", "Творог", "Масло сливочное"],
+    "🍞 Хлеб и выпечка": ["Хлеб", "Булочки", "Круассаны"],
+    "🥫 Бакалея": ["Сахар 1кг", "Рис 1кг", "Макароны", "Масло подсолнечное", "Чай", "Кофе", "Шоколад"],
+    "🧃 Напитки": ["Сок", "Вода", "Газировка"],
+    "🧼 Бытовая химия": ["Порошок", "Мыло", "Шампунь"],
+    "🍰 Danielyan Sweet": ["Торт шоколадный", "Торт ванильный", "Пирожное эклер", "Пирожное наполеон", "Печенье ассорти", "Чизкейк", "Маффины", "Конфеты"]
+  };
 
   const defaultStores = {
     million: {
@@ -205,7 +220,7 @@
         { name: "Сахар 1кг", price: 0 },
         { name: "Рис 1кг", price: 0 },
         { name: "Масло подсолнечное", price: 0 },
-        { name: "Сыр 200г", price: 0 },
+        { name: "Сыр", price: 0 },
         { name: "Колбаса", price: 0 },
         { name: "Макароны", price: 0 },
         { name: "Чай", price: 0 },
@@ -272,6 +287,8 @@
     localStorage.setItem("stores", JSON.stringify(stores));
   }
 
+  /* ================= РЕНДЕР ================= */
+
   function renderShops() {
     const container = document.getElementById("shops-list");
     container.innerHTML = "";
@@ -284,22 +301,35 @@
     });
   }
 
+  function renderCategories() {
+    const container = document.getElementById("categories-list");
+    container.innerHTML = "";
+    Object.keys(categories).forEach(cat => {
+      const div = document.createElement("div");
+      div.className = "card";
+      div.innerText = cat;
+      div.onclick = () => openCategory(cat);
+      container.appendChild(div);
+    });
+  }
+
   function openStore(storeKey) {
     const store = stores[storeKey];
     document.getElementById('home-page').classList.add('hidden');
     document.getElementById('store-page').classList.remove('hidden');
+    document.getElementById('category-page').classList.add('hidden');
     document.getElementById('store-title').innerText = store.name;
 
     const container = document.getElementById('store-products');
     container.innerHTML = '';
 
-    store.products.forEach((item, index) => {
+    store.products.forEach((item) => {
       const div = document.createElement('div');
       div.className = 'product';
       div.innerHTML = `
         <h4>${item.name}</h4>
         <p>Цена: ${item.price} AMD</p>
-        <button onclick="addToCart('${item.name}', ${item.price})">В корзину</button>
+        <button onclick="addToCart('${storeKey}', '${item.name}', ${item.price})">В корзину</button>
       `;
       container.appendChild(div);
     });
@@ -307,73 +337,165 @@
     window.scrollTo({ top: 0, behavior: 'smooth' });
   }
 
+  function openCategory(categoryName) {
+    document.getElementById('home-page').classList.add('hidden');
+    document.getElementById('store-page').classList.add('hidden');
+    document.getElementById('category-page').classList.remove('hidden');
+    document.getElementById('category-title').innerText = categoryName;
+
+    const container = document.getElementById('category-products');
+    container.innerHTML = '';
+
+    categories[categoryName].forEach(productName => {
+      let found = [];
+      Object.keys(stores).forEach(storeKey => {
+        const store = stores[storeKey];
+        const product = store.products.find(p => p.name === productName);
+        if (product) {
+          found.push({
+            storeKey,
+            storeName: store.name,
+            price: product.price
+          });
+        }
+      });
+
+      if (found.length > 0) {
+        const div = document.createElement('div');
+        div.className = 'product';
+        let inner = `<h4>${productName}</h4>`;
+        found.forEach(f => {
+          inner += `<p>${f.storeName}: ${f.price} AMD 
+            <button onclick="addToCart('${f.storeKey}', '${productName}', ${f.price})">В корзину</button>
+          </p>`;
+        });
+        div.innerHTML = inner;
+        container.appendChild(div);
+      }
+    });
+
+    window.scrollTo({ top: 0, behavior: 'smooth' });
+  }
+
   function goHome() {
     document.getElementById('store-page').classList.add('hidden');
+    document.getElementById('category-page').classList.add('hidden');
     document.getElementById('admin-login').classList.add('hidden');
     document.getElementById('admin-panel').classList.add('hidden');
     document.getElementById('home-page').classList.remove('hidden');
     window.scrollTo({ top: 0, behavior: 'smooth' });
   }
 
-  function addToCart(name, price) {
-    cart.push({ name, price });
+  /* ================= КОРЗИНА ================= */
+
+  function addToCart(storeKey, name, price) {
+    if (!cart[storeKey]) cart[storeKey] = [];
+    cart[storeKey].push({ name, price });
+    renderCart();
+  }
+
+  function removeFromCart(storeKey, index) {
+    cart[storeKey].splice(index, 1);
+    if (cart[storeKey].length === 0) delete cart[storeKey];
     renderCart();
   }
 
   function renderCart() {
-    const cartItems = document.getElementById('cart-items');
-    cartItems.innerHTML = '';
-    let total = 0;
+    const container = document.getElementById('cart-stores');
+    container.innerHTML = '';
+    let grandTotal = 0;
 
-    cart.forEach(item => {
-      total += item.price;
-      const div = document.createElement('div');
-      div.className = 'cart-item';
-      div.innerHTML = `<span>${item.name}</span><span>${item.price} AMD</span>`;
-      cartItems.appendChild(div);
+    Object.keys(cart).forEach(storeKey => {
+      const store = stores[storeKey];
+      const storeDiv = document.createElement('div');
+      storeDiv.className = 'cart-store';
+      storeDiv.innerHTML = `<h5>🛒 ${store.name}</h5>`;
+
+      let storeTotal = 0;
+
+      cart[storeKey].forEach((item, index) => {
+        storeTotal += item.price;
+        const div = document.createElement('div');
+        div.className = 'cart-item';
+        div.innerHTML = `
+          <span>${item.name} — ${item.price} AMD</span>
+          <button onclick="removeFromCart('${storeKey}', ${index})">✖</button>
+        `;
+        storeDiv.appendChild(div);
+      });
+
+      const totalDiv = document.createElement('div');
+      totalDiv.className = 'cart-total';
+      totalDiv.innerText = `Итого (${store.name}): ${storeTotal} AMD`;
+      storeDiv.appendChild(totalDiv);
+
+      container.appendChild(storeDiv);
+      grandTotal += storeTotal;
     });
 
-    document.getElementById('cart-total').innerText = `Итого: ${total} AMD`;
+    document.getElementById('cart-total').innerText = `Итого: ${grandTotal} AMD`;
   }
 
   function clearCart() {
-    cart = [];
+    cart = {};
     renderCart();
   }
 
+  /* ================= ОТПРАВКА ================= */
+
   function sendToWhatsApp() {
-    if (cart.length === 0) {
+    if (Object.keys(cart).length === 0) {
       alert('Корзина пуста');
       return;
     }
 
-    let message = 'Здравствуйте! Хочу заказать:%0A';
-    let total = 0;
+    let message = 'Здравствуйте! Хочу заказать:%0A%0A';
+    let grandTotal = 0;
 
-    cart.forEach(item => {
-      message += `- ${item.name}: ${item.price} AMD%0A`;
-      total += item.price;
+    Object.keys(cart).forEach(storeKey => {
+      const store = stores[storeKey];
+      message += `🛒 ${store.name}%0A`;
+      let storeTotal = 0;
+
+      cart[storeKey].forEach(item => {
+        message += `- ${item.name}: ${item.price} AMD%0A`;
+        storeTotal += item.price;
+      });
+
+      message += `Итого (${store.name}): ${storeTotal} AMD%0A%0A`;
+      grandTotal += storeTotal;
     });
 
-    message += `%0AИтого: ${total} AMD`;
+    message += `Общий итог: ${grandTotal} AMD`;
+
     window.open(`https://wa.me/37443797727?text=${message}`, '_blank');
   }
 
   function sendToTelegram() {
-    if (cart.length === 0) {
+    if (Object.keys(cart).length === 0) {
       alert('Корзина пуста');
       return;
     }
 
-    let message = 'Здравствуйте! Хочу заказать:%0A';
-    let total = 0;
+    let message = 'Здравствуйте! Хочу заказать:%0A%0A';
+    let grandTotal = 0;
 
-    cart.forEach(item => {
-      message += `- ${item.name}: ${item.price} AMD%0A`;
-      total += item.price;
+    Object.keys(cart).forEach(storeKey => {
+      const store = stores[storeKey];
+      message += `🛒 ${store.name}%0A`;
+      let storeTotal = 0;
+
+      cart[storeKey].forEach(item => {
+        message += `- ${item.name}: ${item.price} AMD%0A`;
+        storeTotal += item.price;
+      });
+
+      message += `Итого (${store.name}): ${storeTotal} AMD%0A%0A`;
+      grandTotal += storeTotal;
     });
 
-    message += `%0AИтого: ${total} AMD`;
+    message += `Общий итог: ${grandTotal} AMD`;
+
     window.open(`https://t.me/artikfood?text=${message}`, '_blank');
   }
 
@@ -394,6 +516,7 @@
   function openAdmin() {
     document.getElementById('home-page').classList.add('hidden');
     document.getElementById('store-page').classList.add('hidden');
+    document.getElementById('category-page').classList.add('hidden');
     document.getElementById('admin-login').classList.remove('hidden');
   }
 
@@ -476,7 +599,9 @@
     loadAdminProducts();
   }
 
+  /* ================= ИНИЦИАЛИЗАЦИЯ ================= */
   renderShops();
+  renderCategories();
 </script>
 
 </body>
