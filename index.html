@@ -425,33 +425,39 @@
     document.getElementById("store-cart-total").innerText = `Итого: ${total} AMD`;
   }
 
-  function renderGlobalCart() {
-    const container = document.getElementById("global-cart-items");
-    container.innerHTML = "";
-    let total = 0;
+function renderGlobalCart() {
+  const container = document.getElementById("global-cart-items");
+  container.innerHTML = "";
+  let total = 0;
 
-    Object.keys(carts).forEach(storeKey => {
-      const storeName = stores[storeKey].name;
-      const storeCart = carts[storeKey];
-      let storeTotal = 0;
+  Object.keys(carts).forEach(storeKey => {
+    const storeName = stores[storeKey].name;
+    const storeCart = carts[storeKey];
+
+    if (storeCart && Object.keys(storeCart).length > 0) {
+      const storeTitle = document.createElement("div");
+      storeTitle.innerHTML = `<strong>${storeName}</strong>`;
+      storeTitle.style.marginTop = "10px";
+      container.appendChild(storeTitle);
 
       Object.keys(storeCart).forEach(name => {
         const item = storeCart[name];
         const sum = item.price * item.qty;
-        storeTotal += sum;
-      });
+        total += sum;
 
-      if (storeTotal > 0) {
-        total += storeTotal;
         const div = document.createElement("div");
         div.className = "cart-item";
-        div.innerHTML = `<strong>${storeName}</strong>: ${storeTotal} AMD`;
+        div.innerHTML = `
+          <span>${name} × ${item.qty}</span>
+          <span>${sum} AMD</span>
+        `;
         container.appendChild(div);
-      }
-    });
+      });
+    }
+  });
 
-    document.getElementById("global-cart-total").innerText = `Итого: ${total} AMD`;
-  }
+  document.getElementById("global-cart-total").innerText = `Итого: ${total} AMD`;
+}
 
   function sendStoreToWhatsApp() {
     if (!currentStore || !carts[currentStore] || Object.keys(carts[currentStore]).length === 0) {
