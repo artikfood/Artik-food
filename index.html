@@ -21,52 +21,57 @@
     .shops, .categories, .products { display: grid; grid-template-columns: repeat(auto-fit, minmax(160px, 1fr)); gap: 16px; }
 
     .card, .product { background: white; padding: 16px; border-radius: 10px; box-shadow: 0 2px 6px rgba(0,0,0,0.1); text-align: center; cursor: pointer; }
-    .product button { background: #2ecc71; color: white; border: none; padding: 8px 12px; border-radius: 6px; cursor: pointer; margin-top: 10px; }
+    .product button { background: #2ecc71; color: white; border: none; padding: 6px 10px; border-radius: 6px; cursor: pointer; font-size: 14px; }
 
-    .qty-controls { display:flex; justify-content:center; gap:8px; margin-top:8px; }
-    .qty-controls button { padding:4px 10px; font-size:16px; }
+    .qty-controls {
+      display: flex;
+      justify-content: center;
+      align-items: center;
+      gap: 8px;
+      margin-top: 8px;
+    }
+    .qty-controls button {
+      width: 30px;
+      height: 30px;
+      border-radius: 50%;
+      border: none;
+      background: #2ecc71;
+      color: white;
+      font-weight: bold;
+      cursor: pointer;
+    }
+    .qty-number {
+      min-width: 20px;
+      font-weight: bold;
+    }
 
-    .cart { background: white; padding: 16px; border-radius: 10px; max-width: 800px; margin: 20px auto; box-shadow: 0 2px 6px rgba(0,0,0,0.1); }
-    .cart h4 { margin-top: 0; }
-    .cart-store { border-top: 1px solid #ddd; margin-top: 12px; padding-top: 12px; }
+    .cart { background: white; padding: 16px; border-radius: 10px; max-width: 500px; margin: 20px auto; box-shadow: 0 2px 6px rgba(0,0,0,0.1); }
+    .cart h4 { margin-top: 0; text-align:center; }
     .cart-item { display: flex; justify-content: space-between; align-items: center; margin-bottom: 8px; font-size: 14px; }
-    .cart-item button { background:#e74c3c; color:white; border:none; border-radius:4px; padding:4px 8px; cursor:pointer; }
-    .cart-total { font-weight: bold; margin-top: 10px; }
-
-    .cart button.main-btn { width: 100%; background: #27ae60; color: white; border: none; padding: 10px; font-size: 15px; border-radius: 6px; cursor: pointer; margin-top: 10px; }
+    .cart-total { font-weight: bold; margin-top: 10px; text-align:center; }
+    .cart button { width: 100%; background: #27ae60; color: white; border: none; padding: 10px; font-size: 15px; border-radius: 6px; cursor: pointer; margin-top: 10px; }
 
     .order-form { background: white; padding: 20px; border-radius: 10px; max-width: 500px; margin: auto; box-shadow: 0 2px 6px rgba(0,0,0,0.1); }
-    .order-form input, .order-form textarea { width: 100%; padding: 10px; margin-bottom: 12px; border-radius: 6px; border: 1px solid #ccc; font-size: 14px; }
+    .order-form input, .order-form textarea, .order-form select { width: 100%; padding: 10px; margin-bottom: 12px; border-radius: 6px; border: 1px solid #ccc; font-size: 14px; }
     .order-form button { width: 100%; background: #27ae60; color: white; border: none; padding: 12px; font-size: 16px; border-radius: 6px; cursor: pointer; }
 
-    .whatsapp-btn { position: fixed; bottom: 16px; right: 16px; background: #25D366; color: white; padding: 14px 18px; border-radius: 50px; text-decoration: none; font-weight: bold; box-shadow: 0 4px 10px rgba(0,0,0,0.2); font-size: 15px; display:flex; align-items:center; gap:6px; }
+    .whatsapp-btn { position: fixed; bottom: 16px; right: 16px; background: #25D366; color: white; padding: 14px 18px; border-radius: 50px; text-decoration: none; font-weight: bold; box-shadow: 0 4px 10px rgba(0,0,0,0.2); font-size: 15px; }
     .telegram-btn { position: fixed; bottom: 70px; right: 16px; background: #0088cc; color: white; padding: 14px 18px; border-radius: 50px; text-decoration: none; font-weight: bold; box-shadow: 0 4px 10px rgba(0,0,0,0.2); font-size: 15px; display:flex; align-items:center; gap:6px; }
 
     footer { background: #2ecc71; color: white; text-align: center; padding: 16px; margin-top: 40px; font-size: 14px; }
 
     .hidden { display: none; }
 
-    .back-btn {
-      display:inline-block;
-      background:#27ae60;
-      color:white;
-      border:none;
-      padding:8px 14px;
-      border-radius:6px;
-      cursor:pointer;
-      margin-bottom:12px;
-    }
-
     /* Admin styles */
     .admin-login, .admin-panel {
-      max-width: 600px;
+      max-width: 700px;
       margin: 40px auto;
       background: white;
       padding: 20px;
       border-radius: 10px;
       box-shadow: 0 2px 6px rgba(0,0,0,0.1);
     }
-    .admin-panel h3 { text-align: center; }
+    .admin-panel h3, .admin-panel h4 { text-align: center; }
     .admin-panel select, .admin-panel input {
       width: 100%;
       padding: 8px;
@@ -86,6 +91,13 @@
     }
     .admin-panel .danger {
       background: #e74c3c;
+    }
+    .report-box {
+      border: 1px solid #ddd;
+      padding: 10px;
+      border-radius: 6px;
+      margin-bottom: 10px;
+      font-size: 14px;
     }
   </style>
 </head>
@@ -117,23 +129,23 @@
 
 <section class="section" id="catalog">
   <h3>Категории товаров</h3>
-  <div class="categories" id="categories-list"></div>
-</section>
-
-<section class="section hidden" id="category-page">
-  <button class="back-btn" onclick="goHome()">← На главную</button>
-  <h3 id="category-title"></h3>
-  <div class="products" id="category-products"></div>
+  <div class="categories">
+    <div class="card" onclick="openCategory('Овощи и фрукты')">🥦 Овощи и фрукты</div>
+    <div class="card" onclick="openCategory('Мясо и рыба')">🥩 Мясо и рыба</div>
+    <div class="card" onclick="openCategory('Молочные продукты')">🧀 Молочные продукты</div>
+    <div class="card" onclick="openCategory('Хлеб и выпечка')">🍞 Хлеб и выпечка</div>
+    <div class="card" onclick="openCategory('Бакалея')">🥫 Бакалея</div>
+    <div class="card" onclick="openCategory('Напитки')">🧃 Напитки</div>
+    <div class="card" onclick="openCategory('Бытовая химия')">🧼 Бытовая химия</div>
+    <div class="card" onclick="openCategory('Сладости')">🍰 Danielyan Sweet</div>
+  </div>
 </section>
 
 <section class="section">
-  <div class="cart" id="cart">
-    <h4>Корзины по супермаркетам</h4>
-    <div id="cart-stores"></div>
-    <div class="cart-total" id="cart-total">Итого: 0 AMD</div>
-    <button class="main-btn" onclick="sendToWhatsApp()">📲 Заказать через WhatsApp</button>
-    <button class="main-btn" onclick="sendToTelegram()" style="background:#0088cc;">✈️ Заказать через Telegram</button>
-    <button class="main-btn" onclick="clearCart()" style="background:#e74c3c; margin-top:8px;">🗑 Очистить все корзины</button>
+  <div class="cart" id="global-cart">
+    <h4>Корзина (все магазины)</h4>
+    <div id="global-cart-items"></div>
+    <div class="cart-total" id="global-cart-total">Итого: 0 AMD</div>
   </div>
 </section>
 
@@ -142,9 +154,31 @@
 <!-- СТРАНИЦА СУПЕРМАРКЕТА -->
 <div id="store-page" class="hidden">
   <section class="section">
-    <button class="back-btn" onclick="goHome()">← На главную</button>
     <h3 id="store-title"></h3>
     <div class="products" id="store-products"></div>
+
+    <div class="cart" id="store-cart">
+      <h4>Корзина этого магазина</h4>
+      <div id="store-cart-items"></div>
+      <div class="cart-total" id="store-cart-total">Итого: 0 AMD</div>
+      <button onclick="sendStoreToWhatsApp()">Заказать из этого магазина (WhatsApp)</button>
+      <button onclick="sendStoreToTelegram()" style="background:#0088cc;">Заказать из этого магазина (Telegram)</button>
+    </div>
+
+    <div style="text-align:center; margin-top:20px;">
+      <button onclick="goHome()" style="background:#27ae60;color:white;border:none;padding:10px 16px;border-radius:6px;cursor:pointer;">← Назад на главную</button>
+    </div>
+  </section>
+</div>
+
+<!-- СТРАНИЦА КАТЕГОРИИ -->
+<div id="category-page" class="hidden">
+  <section class="section">
+    <h3 id="category-title"></h3>
+    <div class="products" id="category-products"></div>
+    <div style="text-align:center; margin-top:20px;">
+      <button onclick="goHome()" style="background:#27ae60;color:white;border:none;padding:10px 16px;border-radius:6px;cursor:pointer;">← Назад на главную</button>
+    </div>
   </section>
 </div>
 
@@ -169,7 +203,11 @@
   <h4>Добавить новый товар</h4>
   <input type="text" id="new-product-name" placeholder="Название товара" />
   <input type="number" id="new-product-price" placeholder="Цена (AMD)" />
+  <input type="text" id="new-product-category" placeholder="Категория (например: Бакалея)" />
   <button onclick="addProduct()">Добавить товар</button>
+
+  <h4>📊 Отчёт по заказам</h4>
+  <div id="orders-report"></div>
 
   <button class="danger" onclick="logoutAdmin()">Выйти из админки</button>
 </div>
@@ -182,12 +220,11 @@
     <input type="tel" id="phone" placeholder="Телефон" required />
     <input type="text" id="address" placeholder="Адрес доставки" required />
     <select id="district" required>
-      <option value="">Выберите район</option>
+      <option value="">Выберите район доставки</option>
       <option value="Центр">Центр — 500 AMD</option>
-      <option value="Север">Север — 600 AMD</option>
-      <option value="Юг">Юг — 700 AMD</option>
-      <option value="Восток">Восток — 650 AMD</option>
-      <option value="Запад">Запад — 650 AMD</option>
+      <option value="Север">Север — 700 AMD</option>
+      <option value="Юг">Юг — 800 AMD</option>
+      <option value="Окраина">Окраина — 1000 AMD</option>
     </select>
     <textarea rows="3" id="comment" placeholder="Комментарий к заказу"></textarea>
     <button type="submit">Отправить заказ</button>
@@ -203,9 +240,9 @@
   </div>
 </section>
 
-<a class="whatsapp-btn" href="https://wa.me/37443797727" target="_blank">📲 WhatsApp</a>
+<a class="whatsapp-btn" href="https://wa.me/37443797727" target="_blank">💬 WhatsApp</a>
 <a class="telegram-btn" href="https://t.me/artikfood" target="_blank">
-  ✈️ Telegram
+  <span>✈️</span> Telegram
 </a>
 
 <footer>
@@ -213,96 +250,76 @@
 </footer>
 
 <script>
-  /* ================= ДАННЫЕ ================= */
-
-  let cart = {}; // { storeKey: { productName: {price, qty} } }
-
-  const deliveryPrices = {
-    "Центр": 500,
-    "Север": 600,
-    "Юг": 700,
-    "Восток": 650,
-    "Запад": 650
-  };
-
-  const categories = {
-    "🥦 Овощи и фрукты": ["Овощи ассорти", "Фрукты ассорти", "Картофель", "Лук", "Помидоры", "Огурцы", "Яблоки", "Апельсины", "Бананы", "Зелень", "Грибы", "Капуста"],
-    "🥩 Мясо и рыба": ["Мясо куриное", "Мясо говядина", "Колбаса"],
-    "🧀 Молочные продукты": ["Молоко 1л", "Йогурт", "Кефир", "Сметана", "Сыр", "Творог", "Масло сливочное"],
-    "🍞 Хлеб и выпечка": ["Хлеб", "Булочки", "Круассаны"],
-    "🥫 Бакалея": ["Сахар 1кг", "Рис 1кг", "Макароны", "Масло подсолнечное", "Чай", "Кофе", "Шоколад"],
-    "🧃 Напитки": ["Сок", "Вода", "Газировка"],
-    "🧼 Бытовая химия": ["Порошок", "Мыло", "Шампунь"],
-    "🍰 Danielyan Sweet": ["Торт шоколадный", "Торт ванильный", "Пирожное эклер", "Пирожное наполеон", "Печенье ассорти", "Чизкейк", "Маффины", "Конфеты"]
-  };
+  let carts = {}; // { storeKey: { productName: {price, qty} } }
+  let orders = JSON.parse(localStorage.getItem("orders")) || [];
 
   const defaultStores = {
     million: {
       name: "Million",
       products: [
-        { name: "Молоко 1л", price: 0 },
-        { name: "Хлеб", price: 0 },
-        { name: "Яйца 10шт", price: 0 },
-        { name: "Сахар 1кг", price: 0 },
-        { name: "Рис 1кг", price: 0 },
-        { name: "Масло подсолнечное", price: 0 },
-        { name: "Сыр", price: 0 },
-        { name: "Колбаса", price: 0 },
-        { name: "Макароны", price: 0 },
-        { name: "Чай", price: 0 },
-        { name: "Кофе", price: 0 },
-        { name: "Шоколад", price: 0 }
+        { name: "Молоко 1л", price: 0, category: "Молочные продукты" },
+        { name: "Хлеб", price: 0, category: "Хлеб и выпечка" },
+        { name: "Яйца 10шт", price: 0, category: "Молочные продукты" },
+        { name: "Сахар 1кг", price: 0, category: "Бакалея" },
+        { name: "Рис 1кг", price: 0, category: "Бакалея" },
+        { name: "Масло подсолнечное", price: 0, category: "Бакалея" },
+        { name: "Сыр 200г", price: 0, category: "Молочные продукты" },
+        { name: "Колбаса", price: 0, category: "Мясо и рыба" },
+        { name: "Макароны", price: 0, category: "Бакалея" },
+        { name: "Чай", price: 0, category: "Напитки" },
+        { name: "Кофе", price: 0, category: "Напитки" },
+        { name: "Шоколад", price: 0, category: "Сладости" }
       ]
     },
     mush: {
       name: "Մուշ",
       products: [
-        { name: "Молоко 1л", price: 0 },
-        { name: "Йогурт", price: 0 },
-        { name: "Кефир", price: 0 },
-        { name: "Сметана", price: 0 },
-        { name: "Хлеб", price: 0 },
-        { name: "Яйца", price: 0 },
-        { name: "Сыр", price: 0 },
-        { name: "Колбаса", price: 0 },
-        { name: "Мясо куриное", price: 0 },
-        { name: "Мясо говядина", price: 0 },
-        { name: "Масло сливочное", price: 0 },
-        { name: "Творог", price: 0 }
+        { name: "Молоко 1л", price: 0, category: "Молочные продукты" },
+        { name: "Йогурт", price: 0, category: "Молочные продукты" },
+        { name: "Кефир", price: 0, category: "Молочные продукты" },
+        { name: "Сметана", price: 0, category: "Молочные продукты" },
+        { name: "Хлеб", price: 0, category: "Хлеб и выпечка" },
+        { name: "Яйца", price: 0, category: "Молочные продукты" },
+        { name: "Сыр", price: 0, category: "Молочные продукты" },
+        { name: "Колбаса", price: 0, category: "Мясо и рыба" },
+        { name: "Мясо куриное", price: 0, category: "Мясо и рыба" },
+        { name: "Мясо говядина", price: 0, category: "Мясо и рыба" },
+        { name: "Масло сливочное", price: 0, category: "Молочные продукты" },
+        { name: "Творог", price: 0, category: "Молочные продукты" }
       ]
     },
     tonoyan: {
       name: "Tonoyan",
       products: [
-        { name: "Овощи ассорти", price: 0 },
-        { name: "Фрукты ассорти", price: 0 },
-        { name: "Картофель", price: 0 },
-        { name: "Лук", price: 0 },
-        { name: "Помидоры", price: 0 },
-        { name: "Огурцы", price: 0 },
-        { name: "Яблоки", price: 0 },
-        { name: "Апельсины", price: 0 },
-        { name: "Бананы", price: 0 },
-        { name: "Зелень", price: 0 },
-        { name: "Грибы", price: 0 },
-        { name: "Капуста", price: 0 }
+        { name: "Овощи ассорти", price: 0, category: "Овощи и фрукты" },
+        { name: "Фрукты ассорти", price: 0, category: "Овощи и фрукты" },
+        { name: "Картофель", price: 0, category: "Овощи и фрукты" },
+        { name: "Лук", price: 0, category: "Овощи и фрукты" },
+        { name: "Помидоры", price: 0, category: "Овощи и фрукты" },
+        { name: "Огурцы", price: 0, category: "Овощи и фрукты" },
+        { name: "Яблоки", price: 0, category: "Овощи и фрукты" },
+        { name: "Апельсины", price: 0, category: "Овощи и фрукты" },
+        { name: "Бананы", price: 0, category: "Овощи и фрукты" },
+        { name: "Зелень", price: 0, category: "Овощи и фрукты" },
+        { name: "Грибы", price: 0, category: "Овощи и фрукты" },
+        { name: "Капуста", price: 0, category: "Овощи и фрукты" }
       ]
     },
     danielyan: {
       name: "Danielyan",
       products: [
-        { name: "Торт шоколадный", price: 0 },
-        { name: "Торт ванильный", price: 0 },
-        { name: "Пирожное эклер", price: 0 },
-        { name: "Пирожное наполеон", price: 0 },
-        { name: "Печенье ассорти", price: 0 },
-        { name: "Круассаны", price: 0 },
-        { name: "Булочки", price: 0 },
-        { name: "Пахлава", price: 0 },
-        { name: "Чизкейк", price: 0 },
-        { name: "Маффины", price: 0 },
-        { name: "Рулеты", price: 0 },
-        { name: "Конфеты", price: 0 }
+        { name: "Торт шоколадный", price: 0, category: "Сладости" },
+        { name: "Торт ванильный", price: 0, category: "Сладости" },
+        { name: "Пирожное эклер", price: 0, category: "Сладости" },
+        { name: "Пирожное наполеон", price: 0, category: "Сладости" },
+        { name: "Печенье ассорти", price: 0, category: "Сладости" },
+        { name: "Круассаны", price: 0, category: "Сладости" },
+        { name: "Булочки", price: 0, category: "Сладости" },
+        { name: "Пахлава", price: 0, category: "Сладости" },
+        { name: "Чизкейк", price: 0, category: "Сладости" },
+        { name: "Маффины", price: 0, category: "Сладости" },
+        { name: "Рулеты", price: 0, category: "Сладости" },
+        { name: "Конфеты", price: 0, category: "Сладости" }
       ]
     }
   };
@@ -312,8 +329,6 @@
   function saveStores() {
     localStorage.setItem("stores", JSON.stringify(stores));
   }
-
-  /* ================= РЕНДЕР ================= */
 
   function renderShops() {
     const container = document.getElementById("shops-list");
@@ -327,86 +342,33 @@
     });
   }
 
-  function renderCategories() {
-    const container = document.getElementById("categories-list");
-    container.innerHTML = "";
-    Object.keys(categories).forEach(cat => {
-      const div = document.createElement("div");
-      div.className = "card";
-      div.innerText = cat;
-      div.onclick = () => openCategory(cat);
-      container.appendChild(div);
-    });
-  }
-
   function openStore(storeKey) {
-    const store = stores[storeKey];
+    currentStore = storeKey;
     document.getElementById('home-page').classList.add('hidden');
-    document.getElementById('store-page').classList.remove('hidden');
     document.getElementById('category-page').classList.add('hidden');
-    document.getElementById('store-title').innerText = store.name;
+    document.getElementById('store-page').classList.remove('hidden');
+    document.getElementById('store-title').innerText = stores[storeKey].name;
 
     const container = document.getElementById('store-products');
     container.innerHTML = '';
 
-    store.products.forEach((item) => {
+    stores[storeKey].products.forEach((item) => {
       const div = document.createElement('div');
       div.className = 'product';
+      const qty = carts[storeKey]?.[item.name]?.qty || 0;
       div.innerHTML = `
         <h4>${item.name}</h4>
         <p>Цена: ${item.price} AMD</p>
         <div class="qty-controls">
           <button onclick="changeQty('${storeKey}', '${item.name}', ${item.price}, -1)">−</button>
+          <span class="qty-number" id="qty-${storeKey}-${item.name.replace(/\\s+/g,'')}">${qty}</span>
           <button onclick="changeQty('${storeKey}', '${item.name}', ${item.price}, 1)">+</button>
         </div>
       `;
       container.appendChild(div);
     });
 
-    window.scrollTo({ top: 0, behavior: 'smooth' });
-  }
-
-  function openCategory(categoryName) {
-    document.getElementById('home-page').classList.add('hidden');
-    document.getElementById('store-page').classList.add('hidden');
-    document.getElementById('category-page').classList.remove('hidden');
-    document.getElementById('category-title').innerText = categoryName;
-
-    const container = document.getElementById('category-products');
-    container.innerHTML = '';
-
-    categories[categoryName].forEach(productName => {
-      let found = [];
-      Object.keys(stores).forEach(storeKey => {
-        const store = stores[storeKey];
-        const product = store.products.find(p => p.name === productName);
-        if (product) {
-          found.push({
-            storeKey,
-            storeName: store.name,
-            price: product.price
-          });
-        }
-      });
-
-      if (found.length > 0) {
-        const div = document.createElement('div');
-        div.className = 'product';
-        let inner = `<h4>${productName}</h4>`;
-        found.forEach(f => {
-          inner += `
-            <p>${f.storeName}: ${f.price} AMD</p>
-            <div class="qty-controls">
-              <button onclick="changeQty('${f.storeKey}', '${productName}', ${f.price}, -1)">−</button>
-              <button onclick="changeQty('${f.storeKey}', '${productName}', ${f.price}, 1)">+</button>
-            </div>
-          `;
-        });
-        div.innerHTML = inner;
-        container.appendChild(div);
-      }
-    });
-
+    renderStoreCart(storeKey);
     window.scrollTo({ top: 0, behavior: 'smooth' });
   }
 
@@ -419,144 +381,199 @@
     window.scrollTo({ top: 0, behavior: 'smooth' });
   }
 
-  /* ================= КОРЗИНА ================= */
-
   function changeQty(storeKey, name, price, delta) {
-    if (!cart[storeKey]) cart[storeKey] = {};
-    if (!cart[storeKey][name]) cart[storeKey][name] = { price, qty: 0 };
-    cart[storeKey][name].qty += delta;
-    if (cart[storeKey][name].qty <= 0) delete cart[storeKey][name];
-    if (Object.keys(cart[storeKey]).length === 0) delete cart[storeKey];
-    renderCart();
+    if (!carts[storeKey]) carts[storeKey] = {};
+    if (!carts[storeKey][name]) carts[storeKey][name] = { price, qty: 0 };
+
+    carts[storeKey][name].qty += delta;
+    if (carts[storeKey][name].qty <= 0) {
+      delete carts[storeKey][name];
+    }
+
+    updateQtyDisplay(storeKey, name);
+    renderStoreCart(storeKey);
+    renderGlobalCart();
   }
 
-  function renderCart() {
-    const container = document.getElementById('cart-stores');
-    container.innerHTML = '';
-    let grandTotal = 0;
+  function updateQtyDisplay(storeKey, name) {
+    const id = `qty-${storeKey}-${name.replace(/\\s+/g,'')}`;
+    const el = document.getElementById(id);
+    if (el) {
+      el.innerText = carts[storeKey]?.[name]?.qty || 0;
+    }
+  }
 
-    Object.keys(cart).forEach(storeKey => {
-      const store = stores[storeKey];
-      const storeDiv = document.createElement('div');
-      storeDiv.className = 'cart-store';
-      storeDiv.innerHTML = `<h5>🛒 ${store.name}</h5>`;
+  function renderStoreCart(storeKey) {
+    const container = document.getElementById("store-cart-items");
+    container.innerHTML = "";
+    let total = 0;
 
-      let storeTotal = 0;
-
-      Object.keys(cart[storeKey]).forEach(productName => {
-        const item = cart[storeKey][productName];
-        const itemTotal = item.price * item.qty;
-        storeTotal += itemTotal;
-
-        const div = document.createElement('div');
-        div.className = 'cart-item';
-        div.innerHTML = `
-          <span>${productName} × ${item.qty} — ${itemTotal} AMD</span>
-          <button onclick="changeQty('${storeKey}', '${productName}', ${item.price}, -1)">✖</button>
-        `;
-        storeDiv.appendChild(div);
-      });
-
-      const totalDiv = document.createElement('div');
-      totalDiv.className = 'cart-total';
-      totalDiv.innerText = `Итого (${store.name}): ${storeTotal} AMD`;
-      storeDiv.appendChild(totalDiv);
-
-      container.appendChild(storeDiv);
-      grandTotal += storeTotal;
+    const storeCart = carts[storeKey] || {};
+    Object.keys(storeCart).forEach(name => {
+      const item = storeCart[name];
+      const sum = item.price * item.qty;
+      total += sum;
+      const div = document.createElement("div");
+      div.className = "cart-item";
+      div.innerHTML = `
+        <span>${name} × ${item.qty}</span>
+        <span>${sum} AMD</span>
+      `;
+      container.appendChild(div);
     });
 
-    const district = document.getElementById('district').value;
-    const delivery = deliveryPrices[district] || 0;
-    document.getElementById('cart-total').innerText = `Итого: ${grandTotal + delivery} AMD (доставка: ${delivery} AMD)`;
+    document.getElementById("store-cart-total").innerText = `Итого: ${total} AMD`;
   }
 
-  function clearCart() {
-    cart = {};
-    renderCart();
+  function renderGlobalCart() {
+    const container = document.getElementById("global-cart-items");
+    container.innerHTML = "";
+    let total = 0;
+
+    Object.keys(carts).forEach(storeKey => {
+      const storeName = stores[storeKey].name;
+      const storeCart = carts[storeKey];
+      let storeTotal = 0;
+
+      Object.keys(storeCart).forEach(name => {
+        const item = storeCart[name];
+        const sum = item.price * item.qty;
+        storeTotal += sum;
+      });
+
+      if (storeTotal > 0) {
+        total += storeTotal;
+        const div = document.createElement("div");
+        div.className = "cart-item";
+        div.innerHTML = `<strong>${storeName}</strong>: ${storeTotal} AMD`;
+        container.appendChild(div);
+      }
+    });
+
+    document.getElementById("global-cart-total").innerText = `Итого: ${total} AMD`;
   }
 
-  /* ================= ОТПРАВКА ================= */
-
-  function sendToWhatsApp() {
-    if (Object.keys(cart).length === 0) {
-      alert('Корзина пуста');
+  function sendStoreToWhatsApp() {
+    if (!currentStore || !carts[currentStore] || Object.keys(carts[currentStore]).length === 0) {
+      alert("Корзина этого магазина пуста");
       return;
     }
 
-    const district = document.getElementById('district').value;
-    const delivery = deliveryPrices[district] || 0;
+    let message = `Здравствуйте! Хочу заказать из магазина ${stores[currentStore].name}:%0A`;
+    let total = 0;
 
-    let message = 'Здравствуйте! Хочу заказать:%0A%0A';
-    let grandTotal = 0;
-
-    Object.keys(cart).forEach(storeKey => {
-      const store = stores[storeKey];
-      message += `🛒 ${store.name}%0A`;
-      let storeTotal = 0;
-
-      Object.keys(cart[storeKey]).forEach(productName => {
-        const item = cart[storeKey][productName];
-        const itemTotal = item.price * item.qty;
-        message += `- ${productName} × ${item.qty}: ${itemTotal} AMD%0A`;
-        storeTotal += itemTotal;
-      });
-
-      message += `Итого (${store.name}): ${storeTotal} AMD%0A%0A`;
-      grandTotal += storeTotal;
+    Object.keys(carts[currentStore]).forEach(name => {
+      const item = carts[currentStore][name];
+      const sum = item.price * item.qty;
+      message += `- ${name} × ${item.qty}: ${sum} AMD%0A`;
+      total += sum;
     });
 
-    message += `Доставка (${district || "не выбран"}): ${delivery} AMD%0A`;
-    message += `Общий итог: ${grandTotal + delivery} AMD`;
+    message += `%0AИтого: ${total} AMD`;
+    saveOrder(stores[currentStore].name, carts[currentStore], total);
 
     window.open(`https://wa.me/37443797727?text=${message}`, '_blank');
   }
 
-  function sendToTelegram() {
-    if (Object.keys(cart).length === 0) {
-      alert('Корзина пуста');
+  function sendStoreToTelegram() {
+    if (!currentStore || !carts[currentStore] || Object.keys(carts[currentStore]).length === 0) {
+      alert("Корзина этого магазина пуста");
       return;
     }
 
-    const district = document.getElementById('district').value;
-    const delivery = deliveryPrices[district] || 0;
+    let message = `Здравствуйте! Хочу заказать из магазина ${stores[currentStore].name}:%0A`;
+    let total = 0;
 
-    let message = 'Здравствуйте! Хочу заказать:%0A%0A';
-    let grandTotal = 0;
-
-    Object.keys(cart).forEach(storeKey => {
-      const store = stores[storeKey];
-      message += `🛒 ${store.name}%0A`;
-      let storeTotal = 0;
-
-      Object.keys(cart[storeKey]).forEach(productName => {
-        const item = cart[storeKey][productName];
-        const itemTotal = item.price * item.qty;
-        message += `- ${productName} × ${item.qty}: ${itemTotal} AMD%0A`;
-        storeTotal += itemTotal;
-      });
-
-      message += `Итого (${store.name}): ${storeTotal} AMD%0A%0A`;
-      grandTotal += storeTotal;
+    Object.keys(carts[currentStore]).forEach(name => {
+      const item = carts[currentStore][name];
+      const sum = item.price * item.qty;
+      message += `- ${name} × ${item.qty}: ${sum} AMD%0A`;
+      total += sum;
     });
 
-    message += `Доставка (${district || "не выбран"}): ${delivery} AMD%0A`;
-    message += `Общий итог: ${grandTotal + delivery} AMD`;
+    message += `%0AИтого: ${total} AMD`;
+    saveOrder(stores[currentStore].name, carts[currentStore], total);
 
     window.open(`https://t.me/artikfood?text=${message}`, '_blank');
+  }
+
+  function saveOrder(storeName, items, total) {
+    const order = {
+      date: new Date().toLocaleString(),
+      store: storeName,
+      items: JSON.parse(JSON.stringify(items)),
+      total
+    };
+    orders.push(order);
+    localStorage.setItem("orders", JSON.stringify(orders));
   }
 
   function sendFormToWhatsApp() {
     const name = document.getElementById('name').value;
     const phone = document.getElementById('phone').value;
     const address = document.getElementById('address').value;
-    const district = document.getElementById('district').value;
     const comment = document.getElementById('comment').value;
+    const district = document.getElementById('district').value;
 
-    let message = `Здравствуйте!%0AИмя: ${name}%0AТелефон: ${phone}%0AАдрес: ${address}%0AРайон: ${district}`;
-    if (comment) message += `%0AКомментарий: ${comment}`;
+    const deliveryPrices = {
+      "Центр": 500,
+      "Север": 700,
+      "Юг": 800,
+      "Окраина": 1000
+    };
+    const deliveryCost = deliveryPrices[district] || 0;
+
+    let message = `Здравствуйте!%0AИмя: ${name}%0AТелефон: ${phone}%0AАдрес: ${address}%0AРайон: ${district}%0AСтоимость доставки: ${deliveryCost} AMD`;
+
+    let total = deliveryCost;
+
+    Object.keys(carts).forEach(storeKey => {
+      const storeCart = carts[storeKey];
+      if (storeCart && Object.keys(storeCart).length > 0) {
+        message += `%0A%0AМагазин ${stores[storeKey].name}:`;
+        Object.keys(storeCart).forEach(name => {
+          const item = storeCart[name];
+          const sum = item.price * item.qty;
+          message += `%0A- ${name} × ${item.qty}: ${sum} AMD`;
+          total += sum;
+        });
+      }
+    });
+
+    message += `%0A%0AИтого с доставкой: ${total} AMD`;
+
+    saveOrder("Смешанный заказ", carts, total);
 
     window.open(`https://wa.me/37443797727?text=${message}`, '_blank');
+  }
+
+  /* ================= CATEGORIES ================= */
+
+  function openCategory(categoryName) {
+    document.getElementById('home-page').classList.add('hidden');
+    document.getElementById('store-page').classList.add('hidden');
+    document.getElementById('category-page').classList.remove('hidden');
+    document.getElementById('category-title').innerText = categoryName;
+
+    const container = document.getElementById('category-products');
+    container.innerHTML = '';
+
+    Object.keys(stores).forEach(storeKey => {
+      const store = stores[storeKey];
+      store.products.forEach(item => {
+        if (item.category === categoryName) {
+          const div = document.createElement('div');
+          div.className = 'product';
+          div.innerHTML = `
+            <h4>${item.name}</h4>
+            <p>Цена: ${item.price} AMD</p>
+            <p style="font-size:12px;color:#777;">Магазин: ${store.name}</p>
+            <button onclick="openStore('${storeKey}')">Перейти в магазин</button>
+          `;
+          container.appendChild(div);
+        }
+      });
+    });
   }
 
   /* ================= ADMIN ================= */
@@ -575,6 +592,7 @@
       document.getElementById('admin-login').classList.add('hidden');
       document.getElementById('admin-panel').classList.remove('hidden');
       loadAdminStores();
+      renderOrdersReport();
     } else {
       document.getElementById('admin-error').innerText = "Неверный логин или пароль";
     }
@@ -607,6 +625,7 @@
       div.innerHTML = `
         <input type="text" value="${item.name}" onchange="editProductName('${storeKey}', ${index}, this.value)" />
         <input type="number" value="${item.price}" onchange="editProductPrice('${storeKey}', ${index}, this.value)" />
+        <input type="text" value="${item.category}" onchange="editProductCategory('${storeKey}', ${index}, this.value)" />
         <button class="danger" onclick="deleteProduct('${storeKey}', ${index})">Удалить</button>
         <hr/>
       `;
@@ -624,6 +643,11 @@
     saveStores();
   }
 
+  function editProductCategory(storeKey, index, value) {
+    stores[storeKey].products[index].category = value;
+    saveStores();
+  }
+
   function deleteProduct(storeKey, index) {
     stores[storeKey].products.splice(index, 1);
     saveStores();
@@ -634,22 +658,58 @@
     const storeKey = document.getElementById("admin-store-select").value;
     const name = document.getElementById("new-product-name").value;
     const price = Number(document.getElementById("new-product-price").value);
+    const category = document.getElementById("new-product-category").value;
 
-    if (!name || price < 0) {
+    if (!name || price < 0 || !category) {
       alert("Введите корректные данные");
       return;
     }
 
-    stores[storeKey].products.push({ name, price });
+    stores[storeKey].products.push({ name, price, category });
     saveStores();
     document.getElementById("new-product-name").value = "";
     document.getElementById("new-product-price").value = "";
+    document.getElementById("new-product-category").value = "";
     loadAdminProducts();
   }
 
-  /* ================= ИНИЦИАЛИЗАЦИЯ ================= */
+  function renderOrdersReport() {
+    const container = document.getElementById("orders-report");
+    container.innerHTML = "";
+
+    if (orders.length === 0) {
+      container.innerHTML = "<p>Заказов пока нет.</p>";
+      return;
+    }
+
+    orders.forEach((order, index) => {
+      const div = document.createElement("div");
+      div.className = "report-box";
+      let itemsText = "";
+      Object.keys(order.items).forEach(storeKey => {
+        const storeCart = order.items[storeKey];
+        if (storeCart && typeof storeCart === "object") {
+          itemsText += `<strong>${stores[storeKey]?.name || storeKey}:</strong><br/>`;
+          Object.keys(storeCart).forEach(name => {
+            const item = storeCart[name];
+            itemsText += `- ${name} × ${item.qty} = ${item.price * item.qty} AMD<br/>`;
+          });
+        }
+      });
+
+      div.innerHTML = `
+        <strong>Заказ #${index + 1}</strong><br/>
+        Дата: ${order.date}<br/>
+        Магазин: ${order.store}<br/>
+        Сумма: ${order.total} AMD<br/>
+        <div>${itemsText}</div>
+      `;
+      container.appendChild(div);
+    });
+  }
+
   renderShops();
-  renderCategories();
+  renderGlobalCart();
 </script>
 
 </body>
