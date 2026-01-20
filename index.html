@@ -99,6 +99,30 @@
       margin-bottom: 10px;
       font-size: 14px;
     }
+
+    /* Floating navigation buttons */
+    .floating-buttons {
+      position: fixed;
+      bottom: 140px;
+      right: 16px;
+      display: flex;
+      flex-direction: column;
+      gap: 10px;
+      z-index: 9999;
+    }
+    .floating-buttons button {
+      padding: 10px 14px;
+      border: none;
+      border-radius: 25px;
+      background: #ff6b00;
+      color: #fff;
+      font-size: 14px;
+      box-shadow: 0 4px 10px rgba(0,0,0,0.2);
+      cursor: pointer;
+    }
+    .floating-buttons button:hover {
+      background: #e65c00;
+    }
   </style>
 </head>
 <body>
@@ -145,7 +169,9 @@
   <div class="cart" id="global-cart">
     <h4>Корзина (все магазины)</h4>
     <div id="global-cart-items"></div>
-    <div class="cart-total" id="global-cart-total">Итого: 0 AMD</div>
+    <div class="cart-total" id="global-cart-total">Товары: 0 AMD</div>
+    <div class="cart-total" id="delivery-total">Доставка: 0 AMD</div>
+    <div class="cart-total" id="grand-total">Итого: 0 AMD</div>
   </div>
 </section>
 
@@ -164,10 +190,6 @@
       <button onclick="sendStoreToWhatsApp()">Заказать из этого магазина (WhatsApp)</button>
       <button onclick="sendStoreToTelegram()" style="background:#0088cc;">Заказать из этого магазина (Telegram)</button>
     </div>
-
-    <div style="text-align:center; margin-top:20px;">
-      <button onclick="goHome()" style="background:#27ae60;color:white;border:none;padding:10px 16px;border-radius:6px;cursor:pointer;">← Назад на главную</button>
-    </div>
   </section>
 </div>
 
@@ -176,9 +198,6 @@
   <section class="section">
     <h3 id="category-title"></h3>
     <div class="products" id="category-products"></div>
-    <div style="text-align:center; margin-top:20px;">
-      <button onclick="goHome()" style="background:#27ae60;color:white;border:none;padding:10px 16px;border-radius:6px;cursor:pointer;">← Назад на главную</button>
-    </div>
   </section>
 </div>
 
@@ -219,7 +238,7 @@
     <input type="text" id="name" placeholder="Ваше имя" required />
     <input type="tel" id="phone" placeholder="Телефон" required />
     <input type="text" id="address" placeholder="Адрес доставки" required />
-    <select id="district" required>
+    <select id="district" required onchange="renderGlobalCart()">
       <option value="">Выберите район доставки</option>
       <option value="Центр">Центр — 500 AMD</option>
       <option value="Север">Север — 700 AMD</option>
@@ -245,65 +264,70 @@
   <span>✈️</span> Telegram
 </a>
 
+<!-- Floating buttons -->
+<div class="floating-buttons">
+  <button onclick="goBack()">← Назад</button>
+  <button onclick="goHome()">🏠 Главная</button>
+</div>
+
 <footer>
   <p>© 2026 Artik Food — Доставка продуктов в Артике</p>
 </footer>
 
 <script>
-  let carts = JSON.parse(localStorage.getItem("carts")) || {}; // сохранённые корзины
+  let carts = JSON.parse(localStorage.getItem("carts")) || {};
   let orders = JSON.parse(localStorage.getItem("orders")) || [];
   let currentStore = null;
+
+  const deliveryPrices = {
+    "Центр": 500,
+    "Север": 700,
+    "Юг": 800,
+    "Окраина": 1000
+  };
 
   const defaultStores = {
     million: {
       name: "Million",
       products: [
-        // Молочные продукты
         { name: "Молоко 1л", price: 450, category: "Молочные продукты" },
         { name: "Йогурт", price: 350, category: "Молочные продукты" },
         { name: "Сыр 200г", price: 900, category: "Молочные продукты" },
         { name: "Творог", price: 500, category: "Молочные продукты" },
         { name: "Масло сливочное", price: 800, category: "Молочные продукты" },
 
-        // Хлеб и выпечка
         { name: "Хлеб белый", price: 200, category: "Хлеб и выпечка" },
         { name: "Хлеб чёрный", price: 220, category: "Хлеб и выпечка" },
         { name: "Лаваш", price: 180, category: "Хлеб и выпечка" },
         { name: "Булочка", price: 120, category: "Хлеб и выпечка" },
 
-        // Бакалея
         { name: "Сахар 1кг", price: 420, category: "Бакалея" },
         { name: "Рис 1кг", price: 490, category: "Бакалея" },
         { name: "Макароны", price: 340, category: "Бакалея" },
         { name: "Масло подсолнечное", price: 650, category: "Бакалея" },
 
-        // Мясо и рыба
         { name: "Куриное филе", price: 1400, category: "Мясо и рыба" },
         { name: "Говядина", price: 2300, category: "Мясо и рыба" },
         { name: "Колбаса", price: 1200, category: "Мясо и рыба" },
         { name: "Сосиски", price: 900, category: "Мясо и рыба" },
 
-        // Овощи и фрукты
         { name: "Яблоки 1кг", price: 350, category: "Овощи и фрукты" },
         { name: "Бананы 1кг", price: 480, category: "Овощи и фрукты" },
         { name: "Картофель 1кг", price: 250, category: "Овощи и фрукты" },
         { name: "Помидоры 1кг", price: 540, category: "Овощи и фрукты" },
         { name: "Огурцы 1кг", price: 500, category: "Овощи и фрукты" },
 
-        // Напитки
         { name: "Вода 1.5л", price: 200, category: "Напитки" },
         { name: "Сок апельсиновый", price: 450, category: "Напитки" },
         { name: "Кока-Кола 1л", price: 400, category: "Напитки" },
         { name: "Чай", price: 600, category: "Напитки" },
         { name: "Кофе", price: 1200, category: "Напитки" },
 
-        // Бытовая химия
         { name: "Порошок стиральный", price: 1500, category: "Бытовая химия" },
         { name: "Средство для посуды", price: 700, category: "Бытовая химия" },
         { name: "Мыло", price: 300, category: "Бытовая химия" },
         { name: "Шампунь", price: 1100, category: "Бытовая химия" },
 
-        // Сладости
         { name: "Шоколад", price: 500, category: "Сладости" },
         { name: "Печенье", price: 450, category: "Сладости" },
         { name: "Конфеты", price: 800, category: "Сладости" },
@@ -446,6 +470,10 @@
     window.scrollTo({ top: 0, behavior: 'smooth' });
   }
 
+  function goBack() {
+    window.history.back();
+  }
+
   function changeQty(storeKey, name, price, delta) {
     if (!carts[storeKey]) carts[storeKey] = {};
     if (!carts[storeKey][name]) carts[storeKey][name] = { price, qty: 0 };
@@ -534,7 +562,12 @@
       }
     });
 
-    document.getElementById("global-cart-total").innerText = `Итого: ${total} AMD`;
+    const district = document.getElementById("district")?.value || "";
+    const deliveryCost = deliveryPrices[district] || 0;
+
+    document.getElementById("global-cart-total").innerText = `Товары: ${total} AMD`;
+    document.getElementById("delivery-total").innerText = `Доставка: ${deliveryCost} AMD`;
+    document.getElementById("grand-total").innerText = `Итого: ${total + deliveryCost} AMD`;
   }
 
   function sendStoreToWhatsApp() {
@@ -599,12 +632,6 @@
     const comment = document.getElementById('comment').value;
     const district = document.getElementById('district').value;
 
-    const deliveryPrices = {
-      "Центр": 500,
-      "Север": 700,
-      "Юг": 800,
-      "Окраина": 1000
-    };
     const deliveryCost = deliveryPrices[district] || 0;
 
     let message = `Здравствуйте!%0AИмя: ${name}%0AТелефон: ${phone}%0AАдрес: ${address}%0AРайон: ${district}%0AСтоимость доставки: ${deliveryCost} AMD`;
@@ -630,8 +657,6 @@
 
     window.open(`https://wa.me/37443797727?text=${message}`, '_blank');
   }
-
-  /* ================= CATEGORIES ================= */
 
   function openCategory(categoryName) {
     document.getElementById('home-page').classList.add('hidden');
@@ -659,8 +684,6 @@
       });
     });
   }
-
-  /* ================= ADMIN ================= */
 
   function openAdmin() {
     document.getElementById('home-page').classList.add('hidden');
