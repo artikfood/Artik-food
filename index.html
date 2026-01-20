@@ -1,39 +1,114 @@
 <!DOCTYPE html>
 <html lang="ru">
 <head>
-<meta charset="UTF-8" />
-<meta name="viewport" content="width=device-width, initial-scale=1.0" />
-<title>Artik Food — Доставка из супермаркетов Артика</title>
-<style>
-  body{font-family:Arial,sans-serif;margin:0;background:#f8f8f8;color:#333;}
-  header{background:#2ecc71;color:white;padding:12px 16px;text-align:center;}
-  header h1{margin:0;font-size:24px;}
-  .section{padding:24px 16px;max-width:1100px;margin:auto;}
-  .shops, .products{display:grid;grid-template-columns:repeat(auto-fit,minmax(160px,1fr));gap:16px;}
-  .shop-card, .product-card{background:white;padding:14px;border-radius:10px;box-shadow:0 2px 6px rgba(0,0,0,0.1);text-align:center;cursor:pointer;}
-  .product-card img{width:100%;height:120px;object-fit:cover;border-radius:8px;}
-  button{background:#2ecc71;color:white;border:none;padding:8px 12px;border-radius:6px;cursor:pointer;font-size:14px;}
-  .btn-telegram{background:#0088cc;}
-  .cart{background:white;padding:16px;border-radius:10px;max-width:500px;margin:20px auto;box-shadow:0 2px 6px rgba(0,0,0,0.1);}
-  .cart-item{display:flex;justify-content:space-between;margin-bottom:6px;}
-  .cart-total{font-weight:bold;margin-top:10px;}
-  .hidden{display:none;}
-</style>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+  <title>Artik Food — Доставка продуктов в Артике</title>
+  <style>
+    body { font-family: Arial, sans-serif; margin: 0; background: #f8f8f8; color: #333; }
+    header { background: #2ecc71; color: white; padding: 12px 16px; display: flex; justify-content: space-between; align-items: center; flex-wrap: wrap; }
+    header h1 { margin: 0; font-size: 22px; cursor: pointer; }
+    nav a { color: white; margin-left: 12px; text-decoration: none; font-weight: bold; font-size: 14px; }
+
+    .hero { background: #27ae60; color: white; padding: 40px 16px; text-align: center; }
+    .hero h2 { font-size: 30px; margin-bottom: 10px; }
+    .hero p { font-size: 17px; margin-bottom: 20px; }
+    .hero button { background: white; color: #27ae60; border: none; padding: 12px 20px; font-size: 16px; border-radius: 6px; cursor: pointer; }
+
+    .section { padding: 32px 16px; max-width: 1100px; margin: auto; }
+    .section h3 { text-align: center; margin-bottom: 24px; }
+
+    .shops, .categories, .products { display: grid; grid-template-columns: repeat(auto-fit, minmax(160px, 1fr)); gap: 16px; }
+
+    .card, .product { background: white; padding: 16px; border-radius: 10px; box-shadow: 0 2px 6px rgba(0,0,0,0.1); text-align: center; cursor: pointer; }
+    .product button { background: #2ecc71; color: white; border: none; padding: 8px 12px; border-radius: 6px; cursor: pointer; margin-top: 10px; font-size: 14px; }
+
+    .cart { background: white; padding: 16px; border-radius: 10px; max-width: 500px; margin: 20px auto; box-shadow: 0 2px 6px rgba(0,0,0,0.1); }
+    .cart h4 { margin-top: 0; }
+    .cart-item { display: flex; justify-content: space-between; margin-bottom: 8px; font-size: 14px; }
+    .cart-total { font-weight: bold; margin-top: 10px; }
+    .cart button { width: 100%; background: #27ae60; color: white; border: none; padding: 10px; font-size: 15px; border-radius: 6px; cursor: pointer; margin-top: 10px; }
+
+    .order-form { background: white; padding: 20px; border-radius: 10px; max-width: 500px; margin: auto; box-shadow: 0 2px 6px rgba(0,0,0,0.1); }
+    .order-form input, .order-form textarea { width: 100%; padding: 10px; margin-bottom: 12px; border-radius: 6px; border: 1px solid #ccc; font-size: 14px; }
+    .order-form button { width: 100%; background: #27ae60; color: white; border: none; padding: 12px; font-size: 16px; border-radius: 6px; cursor: pointer; }
+
+    .whatsapp-btn { position: fixed; bottom: 16px; right: 16px; background: #25D366; color: white; padding: 14px 18px; border-radius: 50px; text-decoration: none; font-weight: bold; box-shadow: 0 4px 10px rgba(0,0,0,0.2); font-size: 15px; }
+    .telegram-btn { position: fixed; bottom: 70px; right: 16px; background: #0088cc; color: white; padding: 14px 18px; border-radius: 50px; text-decoration: none; font-weight: bold; box-shadow: 0 4px 10px rgba(0,0,0,0.2); font-size: 15px; display:flex; align-items:center; gap:6px; }
+
+    footer { background: #2ecc71; color: white; text-align: center; padding: 16px; margin-top: 40px; font-size: 14px; }
+
+    .hidden { display: none; }
+
+    /* Admin styles */
+    .admin-login, .admin-panel {
+      max-width: 600px;
+      margin: 40px auto;
+      background: white;
+      padding: 20px;
+      border-radius: 10px;
+      box-shadow: 0 2px 6px rgba(0,0,0,0.1);
+    }
+    .admin-panel h3 { text-align: center; }
+    .admin-panel select, .admin-panel input {
+      width: 100%;
+      padding: 8px;
+      margin-bottom: 10px;
+      border-radius: 6px;
+      border: 1px solid #ccc;
+    }
+    .admin-panel button {
+      width: 100%;
+      background: #27ae60;
+      color: white;
+      border: none;
+      padding: 10px;
+      border-radius: 6px;
+      cursor: pointer;
+      margin-top: 8px;
+    }
+    .admin-panel .danger {
+      background: #e74c3c;
+    }
+  </style>
 </head>
 <body>
 
-<header><h1>Artik Food — Супермаркеты Артика</h1></header>
+<header>
+  <h1 onclick="goHome()">Artik Food</h1>
+  <nav>
+    <a href="#" onclick="goHome()">Главная</a>
+    <a href="#order">Заказать</a>
+    <a href="#contacts">Контакты</a>
+    <a href="#" onclick="openAdmin()">Админ</a>
+  </nav>
+</header>
 
-<section class="section" id="shops-section">
-  <h3>🛍 Выберите магазин</h3>
-  <div class="shops" id="shops-container"></div>
+<!-- ГЛАВНАЯ -->
+<div id="home-page">
+
+<section class="hero">
+  <h2>Доставка продуктов в Артике</h2>
+  <p>Свежие продукты из супермаркетов — прямо к вашей двери</p>
+  <button onclick="document.getElementById('order').scrollIntoView({behavior:'smooth'});">Заказать сейчас</button>
 </section>
 
-<section class="section hidden" id="products-section">
-  <h3 id="products-title"></h3>
-  <div class="products" id="products-container"></div>
-  <div style="text-align:center;margin-top:20px;">
-    <button onclick="backToShops()">⬅ Назад к магазинам</button>
+<section class="section" id="shops">
+  <h3>Супермаркеты</h3>
+  <div class="shops" id="shops-list"></div>
+</section>
+
+<section class="section" id="catalog">
+  <h3>Категории товаров</h3>
+  <div class="categories">
+    <div class="card">🥦 Овощи и фрукты</div>
+    <div class="card">🥩 Мясо и рыба</div>
+    <div class="card">🧀 Молочные продукты</div>
+    <div class="card">🍞 Хлеб и выпечка</div>
+    <div class="card">🥫 Бакалея</div>
+    <div class="card">🧃 Напитки</div>
+    <div class="card">🧼 Бытовая химия</div>
+    <div class="card">🍰 Danielyan Sweet</div>
   </div>
 </section>
 
@@ -42,171 +117,366 @@
     <h4>Корзина</h4>
     <div id="cart-items"></div>
     <div class="cart-total" id="cart-total">Итого: 0 AMD</div>
-    <button onclick="sendToWhatsApp()">📲 Заказать через WhatsApp</button>
-    <button class="btn-telegram" onclick="sendToTelegram()">✈️ Заказать через Telegram</button>
+    <button onclick="sendToWhatsApp()">Заказать через WhatsApp</button>
+    <button onclick="sendToTelegram()" style="background:#0088cc;">Заказать через Telegram</button>
+    <button onclick="clearCart()" style="background:#e74c3c; margin-top:8px;">Очистить корзину</button>
   </div>
 </section>
 
+</div>
+
+<!-- СТРАНИЦА СУПЕРМАРКЕТА -->
+<div id="store-page" class="hidden">
+  <section class="section">
+    <h3 id="store-title"></h3>
+    <div class="products" id="store-products"></div>
+    <div style="text-align:center; margin-top:20px;">
+      <button onclick="goHome()" style="background:#27ae60;color:white;border:none;padding:10px 16px;border-radius:6px;cursor:pointer;">← Назад на главную</button>
+    </div>
+  </section>
+</div>
+
+<!-- АДМИН ЛОГИН -->
+<div id="admin-login" class="admin-login hidden">
+  <h3>Вход в админ панель</h3>
+  <input type="text" id="admin-user" placeholder="Логин" />
+  <input type="password" id="admin-pass" placeholder="Пароль" />
+  <button onclick="loginAdmin()">Войти</button>
+  <p id="admin-error" style="color:red; text-align:center;"></p>
+</div>
+
+<!-- АДМИН ПАНЕЛЬ -->
+<div id="admin-panel" class="admin-panel hidden">
+  <h3>Админ панель</h3>
+
+  <label>Выберите супермаркет:</label>
+  <select id="admin-store-select" onchange="loadAdminProducts()"></select>
+
+  <div id="admin-products-list"></div>
+
+  <h4>Добавить новый товар</h4>
+  <input type="text" id="new-product-name" placeholder="Название товара" />
+  <input type="number" id="new-product-price" placeholder="Цена (AMD)" />
+  <button onclick="addProduct()">Добавить товар</button>
+
+  <button class="danger" onclick="logoutAdmin()">Выйти из админки</button>
+</div>
+
+<!-- ОФОРМЛЕНИЕ -->
+<section class="section" id="order">
+  <h3>Оформление заказа</h3>
+  <form class="order-form" onsubmit="event.preventDefault(); sendFormToWhatsApp();">
+    <input type="text" id="name" placeholder="Ваше имя" required />
+    <input type="tel" id="phone" placeholder="Телефон" required />
+    <input type="text" id="address" placeholder="Адрес доставки" required />
+    <textarea rows="3" id="comment" placeholder="Комментарий к заказу"></textarea>
+    <button type="submit">Отправить заказ</button>
+  </form>
+</section>
+
+<section class="section" id="contacts">
+  <h3>Контакты</h3>
+  <div class="card" style="max-width:400px; margin:auto;">
+    <p>📞 Телефон / WhatsApp: <a href="tel:+37443797727" style="color:#27ae60; font-weight:bold;">+374 43 79 77 27</a></p>
+    <p>✈️ Telegram: @artikfood</p>
+    <p>📍 Артик, Армения</p>
+  </div>
+</section>
+
+<a class="whatsapp-btn" href="https://wa.me/37443797727" target="_blank">💬 WhatsApp</a>
+<a class="telegram-btn" href="https://t.me/artikfood" target="_blank">
+  <span>✈️</span> Telegram
+</a>
+
+<footer>
+  <p>© 2026 Artik Food — Доставка продуктов в Артике</p>
+</footer>
+
 <script>
-let cart = [];
+  let cart = [];
 
-const shops = [
-  {
-    id: "million",
-    name: "Million Supermarket",
-    products: [
-      {name:"Яблоки 1кг",price:600,img:"https://i.imgur.com/1bX5QH6.jpg"},
-      {name:"Бананы 1кг",price:700,img:"https://i.imgur.com/4AiXzf8.jpg"},
-      {name:"Помидоры 1кг",price:550,img:"https://i.imgur.com/z0RZQFv.jpg"},
-      {name:"Огурцы 1кг",price:500,img:"https://i.imgur.com/Vc8p3K4.jpg"},
-      {name:"Картофель 1кг",price:300,img:"https://i.imgur.com/PrF9pHT.jpg"},
-      {name:"Лук 1кг",price:250,img:"https://i.imgur.com/3aX9Q8I.jpg"},
-      {name:"Хлеб",price:250,img:"https://i.imgur.com/Wd5ZpQZ.jpg"},
-      {name:"Молоко 1л",price:500,img:"https://i.imgur.com/YW7V0hK.jpg"},
-      {name:"Сыр 200г",price:900,img:"https://i.imgur.com/8RKXAIV.jpg"},
-      {name:"Йогурт",price:300,img:"https://i.imgur.com/4M7IWwP.jpg"},
-      {name:"Вода 1.5л",price:300,img:"https://i.imgur.com/d5Z8pWw.jpg"},
-      {name:"Сок",price:600,img:"https://i.imgur.com/7yUVEJv.jpg"}
-    ]
-  },
-  {
-    id: "mush",
-    name: "Մուշ սուպերմարկետ",
-    products: [
-      {name:"Կարտոֆիլ 1կգ",price:300,img:"https://i.imgur.com/PrF9pHT.jpg"},
-      {name:"Սոխ 1կգ",price:250,img:"https://i.imgur.com/3aX9Q8I.jpg"},
-      {name:"Լոլիկ 1կգ",price:550,img:"https://i.imgur.com/z0RZQFv.jpg"},
-      {name:"Վարունգ 1կգ",price:500,img:"https://i.imgur.com/Vc8p3K4.jpg"},
-      {name:"Խնձոր 1կգ",price:600,img:"https://i.imgur.com/1bX5QH6.jpg"},
-      {name:"Բանան 1կգ",price:700,img:"https://i.imgur.com/4AiXzf8.jpg"},
-      {name:"Հաց",price:250,img:"https://i.imgur.com/Wd5ZpQZ.jpg"},
-      {name:"Կաթ 1լ",price:500,img:"https://i.imgur.com/YW7V0hK.jpg"},
-      {name:"Պանիր 200գ",price:900,img:"https://i.imgur.com/8RKXAIV.jpg"},
-      {name:"Յոգուրտ",price:300,img:"https://i.imgur.com/4M7IWwP.jpg"},
-      {name:"Ջուր 1.5լ",price:300,img:"https://i.imgur.com/d5Z8pWw.jpg"},
-      {name:"Հյութ",price:600,img:"https://i.imgur.com/7yUVEJv.jpg"}
-    ]
-  },
-  {
-    id: "tonoyan",
-    name: "Tonoyan",
-    products: [
-      {name:"Яблоки 1кг",price:600,img:"https://i.imgur.com/1bX5QH6.jpg"},
-      {name:"Бананы 1кг",price:700,img:"https://i.imgur.com/4AiXzf8.jpg"},
-      {name:"Курица 1кг",price:1800,img:"https://i.imgur.com/0umadnY.jpg"},
-      {name:"Говядина 1кг",price:4200,img:"https://i.imgur.com/6y5qHqE.jpg"},
-      {name:"Форель 1кг",price:3500,img:"https://i.imgur.com/fK8JQ8b.jpg"},
-      {name:"Хлеб",price:250,img:"https://i.imgur.com/Wd5ZpQZ.jpg"},
-      {name:"Молоко 1л",price:500,img:"https://i.imgur.com/YW7V0hK.jpg"},
-      {name:"Сыр 200г",price:900,img:"https://i.imgur.com/8RKXAIV.jpg"},
-      {name:"Йогурт",price:300,img:"https://i.imgur.com/4M7IWwP.jpg"},
-      {name:"Вода 1.5л",price:300,img:"https://i.imgur.com/d5Z8pWw.jpg"},
-      {name:"Сок",price:600,img:"https://i.imgur.com/7yUVEJv.jpg"},
-      {name:"Кола",price:550,img:"https://i.imgur.com/V4RclNb.jpg"}
-    ]
-  },
-  {
-    id: "danielyan",
-    name: "Danielyan Supermarket",
-    products: [
-      {name:"Մոլոկո 1լ",price:500,img:"https://i.imgur.com/YW7V0hK.jpg"},
-      {name:"Հաց",price:250,img:"https://i.imgur.com/Wd5ZpQZ.jpg"},
-      {name:"Խնձոր 1կգ",price:600,img:"https://i.imgur.com/1bX5QH6.jpg"},
-      {name:"Բանան 1կգ",price:700,img:"https://i.imgur.com/4AiXzf8.jpg"},
-      {name:"Պանիր 200գ",price:900,img:"https://i.imgur.com/8RKXAIV.jpg"},
-      {name:"Յոգուրտ",price:300,img:"https://i.imgur.com/4M7IWwP.jpg"},
-      {name:"Հավ 1կգ",price:1800,img:"https://i.imgur.com/0umadnY.jpg"},
-      {name:"Տավարի միս 1կգ",price:4200,img:"https://i.imgur.com/6y5qHqE.jpg"},
-      {name:"Ձուկ 1կգ",price:3500,img:"https://i.imgur.com/fK8JQ8b.jpg"},
-      {name:"Ջուր 1.5լ",price:300,img:"https://i.imgur.com/d5Z8pWw.jpg"},
-      {name:"Հյութ",price:600,img:"https://i.imgur.com/7yUVEJv.jpg"},
-      {name:"Կոլա",price:550,img:"https://i.imgur.com/V4RclNb.jpg"}
-    ]
+  const defaultStores = {
+    million: {
+      name: "Million",
+      products: [
+        { name: "Молоко 1л", price: 0 },
+        { name: "Хлеб", price: 0 },
+        { name: "Яйца 10шт", price: 0 },
+        { name: "Сахар 1кг", price: 0 },
+        { name: "Рис 1кг", price: 0 },
+        { name: "Масло подсолнечное", price: 0 },
+        { name: "Сыр 200г", price: 0 },
+        { name: "Колбаса", price: 0 },
+        { name: "Макароны", price: 0 },
+        { name: "Чай", price: 0 },
+        { name: "Кофе", price: 0 },
+        { name: "Шоколад", price: 0 }
+      ]
+    },
+    mush: {
+      name: "Մուշ",
+      products: [
+        { name: "Молоко 1л", price: 0 },
+        { name: "Йогурт", price: 0 },
+        { name: "Кефир", price: 0 },
+        { name: "Сметана", price: 0 },
+        { name: "Хлеб", price: 0 },
+        { name: "Яйца", price: 0 },
+        { name: "Сыр", price: 0 },
+        { name: "Колбаса", price: 0 },
+        { name: "Мясо куриное", price: 0 },
+        { name: "Мясо говядина", price: 0 },
+        { name: "Масло сливочное", price: 0 },
+        { name: "Творог", price: 0 }
+      ]
+    },
+    tonoyan: {
+      name: "Tonoyan",
+      products: [
+        { name: "Овощи ассорти", price: 0 },
+        { name: "Фрукты ассорти", price: 0 },
+        { name: "Картофель", price: 0 },
+        { name: "Лук", price: 0 },
+        { name: "Помидоры", price: 0 },
+        { name: "Огурцы", price: 0 },
+        { name: "Яблоки", price: 0 },
+        { name: "Апельсины", price: 0 },
+        { name: "Бананы", price: 0 },
+        { name: "Зелень", price: 0 },
+        { name: "Грибы", price: 0 },
+        { name: "Капуста", price: 0 }
+      ]
+    },
+    danielyan: {
+      name: "Danielyan",
+      products: [
+        { name: "Торт шоколадный", price: 0 },
+        { name: "Торт ванильный", price: 0 },
+        { name: "Пирожное эклер", price: 0 },
+        { name: "Пирожное наполеон", price: 0 },
+        { name: "Печенье ассорти", price: 0 },
+        { name: "Круассаны", price: 0 },
+        { name: "Булочки", price: 0 },
+        { name: "Пахлава", price: 0 },
+        { name: "Чизкейк", price: 0 },
+        { name: "Маффины", price: 0 },
+        { name: "Рулеты", price: 0 },
+        { name: "Конфеты", price: 0 }
+      ]
+    }
+  };
+
+  let stores = JSON.parse(localStorage.getItem("stores")) || defaultStores;
+
+  function saveStores() {
+    localStorage.setItem("stores", JSON.stringify(stores));
   }
-];
 
-function renderShops(){
-  const container = document.getElementById("shops-container");
-  container.innerHTML = "";
-  shops.forEach(shop=>{
-    const div = document.createElement("div");
-    div.className="shop-card";
-    div.innerHTML = `<h4>${shop.name}</h4>`;
-    div.onclick = ()=>openShop(shop.id);
-    container.appendChild(div);
-  });
-}
+  function renderShops() {
+    const container = document.getElementById("shops-list");
+    container.innerHTML = "";
+    Object.keys(stores).forEach(key => {
+      const div = document.createElement("div");
+      div.className = "card";
+      div.innerText = "🛒 " + stores[key].name;
+      div.onclick = () => openStore(key);
+      container.appendChild(div);
+    });
+  }
 
-function openShop(shopId){
-  const shop = shops.find(s=>s.id===shopId);
-  document.getElementById("products-title").innerText = shop.name;
-  const pc = document.getElementById("products-container");
-  pc.innerHTML="";
-  shop.products.forEach(item=>{
-    const div = document.createElement("div");
-    div.className="product-card";
-    div.innerHTML = `
-      <img src="${item.img}" alt="${item.name}">
-      <h4>${item.name}</h4>
-      <p>Цена: ${item.price} AMD</p>
-      <button onclick="addToCart('${item.name}',${item.price})">В корзину</button>
-    `;
-    pc.appendChild(div);
-  });
-  document.getElementById("shops-section").classList.add("hidden");
-  document.getElementById("products-section").classList.remove("hidden");
-}
+  function openStore(storeKey) {
+    const store = stores[storeKey];
+    document.getElementById('home-page').classList.add('hidden');
+    document.getElementById('store-page').classList.remove('hidden');
+    document.getElementById('store-title').innerText = store.name;
 
-function backToShops(){
-  document.getElementById("products-section").classList.add("hidden");
-  document.getElementById("shops-section").classList.remove("hidden");
-}
+    const container = document.getElementById('store-products');
+    container.innerHTML = '';
 
-function addToCart(name,price){
-  cart.push({name,price});
-  renderCart();
-}
+    store.products.forEach((item, index) => {
+      const div = document.createElement('div');
+      div.className = 'product';
+      div.innerHTML = `
+        <h4>${item.name}</h4>
+        <p>Цена: ${item.price} AMD</p>
+        <button onclick="addToCart('${item.name}', ${item.price})">В корзину</button>
+      `;
+      container.appendChild(div);
+    });
 
-function renderCart(){
-  const ci = document.getElementById("cart-items");
-  ci.innerHTML="";
-  let total=0;
-  cart.forEach(item=>{
-    total+=item.price;
-    const d = document.createElement("div");
-    d.className="cart-item";
-    d.innerText=`${item.name} — ${item.price} AMD`;
-    ci.appendChild(d);
-  });
-  document.getElementById("cart-total").innerText = `Итого: ${total} AMD`;
-}
+    window.scrollTo({ top: 0, behavior: 'smooth' });
+  }
 
-function sendToWhatsApp(){
-  if(cart.length===0){alert("Корзина пуста.");return;}
-  let message = "Здравствуйте! Хочу заказать:%0A";
-  let total=0;
-  cart.forEach(item=>{
-    message+=`- ${item.name}: ${item.price} AMD%0A`;
-    total+=item.price;
-  });
-  message+=`%0AИтого: ${total} AMD`;
-  window.open(`https://wa.me/37443797727?text=${message}`,'_blank');
-}
+  function goHome() {
+    document.getElementById('store-page').classList.add('hidden');
+    document.getElementById('admin-login').classList.add('hidden');
+    document.getElementById('admin-panel').classList.add('hidden');
+    document.getElementById('home-page').classList.remove('hidden');
+    window.scrollTo({ top: 0, behavior: 'smooth' });
+  }
 
-function sendToTelegram(){
-  if(cart.length===0){alert("Корзина пуста.");return;}
-  let message = "Здравствуйте! Хочу заказать:\n";
-  let total=0;
-  cart.forEach(item=>{
-    message+=`- ${item.name}: ${item.price} AMD\n`;
-    total+=item.price;
-  });
-  message+=`\nИтого: ${total} AMD`;
-  const encodedMessage = encodeURIComponent(message);
-  window.open(`https://t.me/share/url?text=${encodedMessage}`,'_blank');
-}
+  function addToCart(name, price) {
+    cart.push({ name, price });
+    renderCart();
+  }
 
-renderShops();
+  function renderCart() {
+    const cartItems = document.getElementById('cart-items');
+    cartItems.innerHTML = '';
+    let total = 0;
+
+    cart.forEach(item => {
+      total += item.price;
+      const div = document.createElement('div');
+      div.className = 'cart-item';
+      div.innerHTML = `<span>${item.name}</span><span>${item.price} AMD</span>`;
+      cartItems.appendChild(div);
+    });
+
+    document.getElementById('cart-total').innerText = `Итого: ${total} AMD`;
+  }
+
+  function clearCart() {
+    cart = [];
+    renderCart();
+  }
+
+  function sendToWhatsApp() {
+    if (cart.length === 0) {
+      alert('Корзина пуста');
+      return;
+    }
+
+    let message = 'Здравствуйте! Хочу заказать:%0A';
+    let total = 0;
+
+    cart.forEach(item => {
+      message += `- ${item.name}: ${item.price} AMD%0A`;
+      total += item.price;
+    });
+
+    message += `%0AИтого: ${total} AMD`;
+    window.open(`https://wa.me/37443797727?text=${message}`, '_blank');
+  }
+
+  function sendToTelegram() {
+    if (cart.length === 0) {
+      alert('Корзина пуста');
+      return;
+    }
+
+    let message = 'Здравствуйте! Хочу заказать:%0A';
+    let total = 0;
+
+    cart.forEach(item => {
+      message += `- ${item.name}: ${item.price} AMD%0A`;
+      total += item.price;
+    });
+
+    message += `%0AИтого: ${total} AMD`;
+    window.open(`https://t.me/artikfood?text=${message}`, '_blank');
+  }
+
+  function sendFormToWhatsApp() {
+    const name = document.getElementById('name').value;
+    const phone = document.getElementById('phone').value;
+    const address = document.getElementById('address').value;
+    const comment = document.getElementById('comment').value;
+
+    let message = `Здравствуйте!%0AИмя: ${name}%0AТелефон: ${phone}%0AАдрес: ${address}`;
+    if (comment) message += `%0AКомментарий: ${comment}`;
+
+    window.open(`https://wa.me/37443797727?text=${message}`, '_blank');
+  }
+
+  /* ================= ADMIN ================= */
+
+  function openAdmin() {
+    document.getElementById('home-page').classList.add('hidden');
+    document.getElementById('store-page').classList.add('hidden');
+    document.getElementById('admin-login').classList.remove('hidden');
+  }
+
+  function loginAdmin() {
+    const user = document.getElementById('admin-user').value;
+    const pass = document.getElementById('admin-pass').value;
+    if (user === "admin" && pass === "1234") {
+      document.getElementById('admin-login').classList.add('hidden');
+      document.getElementById('admin-panel').classList.remove('hidden');
+      loadAdminStores();
+    } else {
+      document.getElementById('admin-error').innerText = "Неверный логин или пароль";
+    }
+  }
+
+  function logoutAdmin() {
+    document.getElementById('admin-panel').classList.add('hidden');
+    goHome();
+  }
+
+  function loadAdminStores() {
+    const select = document.getElementById("admin-store-select");
+    select.innerHTML = "";
+    Object.keys(stores).forEach(key => {
+      const option = document.createElement("option");
+      option.value = key;
+      option.text = stores[key].name;
+      select.appendChild(option);
+    });
+    loadAdminProducts();
+  }
+
+  function loadAdminProducts() {
+    const storeKey = document.getElementById("admin-store-select").value;
+    const list = document.getElementById("admin-products-list");
+    list.innerHTML = "";
+
+    stores[storeKey].products.forEach((item, index) => {
+      const div = document.createElement("div");
+      div.innerHTML = `
+        <input type="text" value="${item.name}" onchange="editProductName('${storeKey}', ${index}, this.value)" />
+        <input type="number" value="${item.price}" onchange="editProductPrice('${storeKey}', ${index}, this.value)" />
+        <button class="danger" onclick="deleteProduct('${storeKey}', ${index})">Удалить</button>
+        <hr/>
+      `;
+      list.appendChild(div);
+    });
+  }
+
+  function editProductName(storeKey, index, value) {
+    stores[storeKey].products[index].name = value;
+    saveStores();
+  }
+
+  function editProductPrice(storeKey, index, value) {
+    stores[storeKey].products[index].price = Number(value);
+    saveStores();
+  }
+
+  function deleteProduct(storeKey, index) {
+    stores[storeKey].products.splice(index, 1);
+    saveStores();
+    loadAdminProducts();
+  }
+
+  function addProduct() {
+    const storeKey = document.getElementById("admin-store-select").value;
+    const name = document.getElementById("new-product-name").value;
+    const price = Number(document.getElementById("new-product-price").value);
+
+    if (!name || price < 0) {
+      alert("Введите корректные данные");
+      return;
+    }
+
+    stores[storeKey].products.push({ name, price });
+    saveStores();
+    document.getElementById("new-product-name").value = "";
+    document.getElementById("new-product-price").value = "";
+    loadAdminProducts();
+  }
+
+  renderShops();
 </script>
 
 </body>
