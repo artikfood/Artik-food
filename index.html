@@ -1,264 +1,189 @@
 <!DOCTYPE html>
 <html lang="ru">
 <head>
-  <meta charset="UTF-8" />
-  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
-  <title>Artik Food — Доставка продуктов в Артике</title>
+<meta charset="UTF-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1.0" />
+<title>Artik Food</title>
 
-  <!-- PWA -->
-  <link rel="manifest" href="manifest.json">
-  <meta name="theme-color" content="#2ecc71">
-  <link rel="apple-touch-icon" href="icon-192.png">
+<!-- PWA -->
+<link rel="manifest" href="manifest.json">
+<meta name="theme-color" content="#2e7d32">
 
-  <style>
-    body { font-family: Arial, sans-serif; margin: 0; background: #f8f8f8; color: #333; }
-    header { background: #2ecc71; color: white; padding: 12px 16px; display: flex; justify-content: space-between; align-items: center; flex-wrap: wrap; }
-    header .logo-box { display:flex; align-items:center; gap:10px; cursor:pointer; }
-    header img { height: 40px; }
-    header h1 { margin: 0; font-size: 22px; }
+<style>
+body {
+  font-family: Arial, sans-serif;
+  margin: 0;
+  background: #f5f5f5;
+}
 
-    nav a { color: white; margin-left: 12px; text-decoration: none; font-weight: bold; font-size: 14px; }
-    .lang-switch { margin-left: 12px; background:#fff; color:#2ecc71; border:none; border-radius:6px; padding:4px 8px; cursor:pointer; font-weight:bold; }
+header {
+  background: #2e7d32;
+  color: #fff;
+  padding: 10px;
+  display: flex;
+  align-items: center;
+  gap: 10px;
+}
 
-    .hero { background: #27ae60; color: white; padding: 40px 16px; text-align: center; }
-    .hero h2 { font-size: 30px; margin-bottom: 10px; }
-    .hero p { font-size: 17px; margin-bottom: 20px; }
-    .hero button { background: white; color: #27ae60; border: none; padding: 12px 20px; font-size: 16px; border-radius: 6px; cursor: pointer; }
+header img {
+  height: 40px;
+}
 
-    .section { padding: 32px 16px; max-width: 1100px; margin: auto; }
-    .section h3 { text-align: center; margin-bottom: 24px; }
+header h1 {
+  font-size: 18px;
+  margin: 0;
+}
 
-    .shops, .products { display: grid; grid-template-columns: repeat(auto-fit, minmax(160px, 1fr)); gap: 16px; }
+#search {
+  width: 100%;
+  padding: 10px;
+  border: none;
+  outline: none;
+  font-size: 16px;
+}
 
-    .card, .product { background: white; padding: 16px; border-radius: 10px; box-shadow: 0 2px 6px rgba(0,0,0,0.1); text-align: center; cursor: pointer; }
-    .product button { background: #2ecc71; color: white; border: none; padding: 6px 10px; border-radius: 6px; cursor: pointer; font-size: 14px; }
+main {
+  padding: 10px;
+}
 
-    .qty-controls { display:flex; justify-content:center; align-items:center; gap:8px; margin-top:8px; }
-    .qty-controls button { width:30px; height:30px; border-radius:50%; border:none; background:#2ecc71; color:white; font-weight:bold; cursor:pointer; }
-    .qty-number { min-width:20px; font-weight:bold; }
+.product {
+  background: #fff;
+  margin-bottom: 8px;
+  padding: 10px;
+  border-radius: 8px;
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+}
 
-    .cart { background:white; padding:16px; border-radius:10px; max-width:500px; margin:20px auto; box-shadow:0 2px 6px rgba(0,0,0,0.1); }
-    .cart h4 { margin-top:0; text-align:center; }
-    .cart-item { display:flex; justify-content:space-between; align-items:center; margin-bottom:8px; font-size:14px; gap:8px; }
-    .cart-total { font-weight:bold; margin-top:10px; text-align:center; }
-    .cart button { width:100%; background:#27ae60; color:white; border:none; padding:10px; font-size:15px; border-radius:6px; cursor:pointer; margin-top:10px; }
+.product button {
+  background: #2e7d32;
+  color: #fff;
+  border: none;
+  padding: 6px 10px;
+  border-radius: 6px;
+}
 
-    .order-form { background:white; padding:20px; border-radius:10px; max-width:500px; margin:auto; box-shadow:0 2px 6px rgba(0,0,0,0.1); }
-    .order-form input, .order-form textarea, .order-form select { width:100%; padding:10px; margin-bottom:12px; border-radius:6px; border:1px solid #ccc; font-size:14px; }
-    .order-form button { width:100%; background:#27ae60; color:white; border:none; padding:12px; font-size:16px; border-radius:6px; cursor:pointer; }
+#cart {
+  position: fixed;
+  bottom: 0;
+  left: 0;
+  right: 0;
+  background: #fff;
+  border-top: 1px solid #ddd;
+  padding: 10px;
+}
 
-    footer { background:#2ecc71; color:white; text-align:center; padding:16px; margin-top:40px; font-size:14px; }
-    .hidden { display:none; }
+.float-buttons {
+  position: fixed;
+  right: 10px;
+  bottom: 120px;
+  display: flex;
+  flex-direction: column;
+  gap: 10px;
+}
 
-    /* Admin + courier */
-    .admin-login, .admin-panel, .courier-panel {
-      max-width:700px;
-      margin:40px auto;
-      background:white;
-      padding:20px;
-      border-radius:10px;
-      box-shadow:0 2px 6px rgba(0,0,0,0.1);
-    }
-    .admin-panel h3, .admin-panel h4, .courier-panel h3 { text-align:center; }
-    .admin-panel select, .admin-panel input, .courier-panel input {
-      width:100%;
-      padding:8px;
-      margin-bottom:10px;
-      border-radius:6px;
-      border:1px solid #ccc;
-    }
-    .admin-panel button, .courier-panel button {
-      width:100%;
-      background:#27ae60;
-      color:white;
-      border:none;
-      padding:10px;
-      border-radius:6px;
-      cursor:pointer;
-      margin-top:8px;
-    }
-    .admin-panel .danger { background:#e74c3c; }
-    .report-box { border:1px solid #ddd; padding:10px; border-radius:6px; margin-bottom:10px; font-size:14px; }
+.float-buttons button {
+  width: 48px;
+  height: 48px;
+  border-radius: 50%;
+  border: none;
+  background: #2e7d32;
+  color: #fff;
+  font-size: 18px;
+}
 
-    /* Categories list */
-    .categories-list {
-      display: flex;
-      flex-direction: column;
-      gap: 12px;
-    }
-    .category-item {
-      background: white;
-      padding: 14px 16px;
-      border-radius: 10px;
-      box-shadow: 0 2px 6px rgba(0,0,0,0.1);
-      font-size: 16px;
-      cursor: pointer;
-      display: flex;
-      align-items: center;
-      gap: 12px;
-    }
-    .category-item:hover { background:#f0f0f0; }
-
-    /* Floating stack */
-    .floating-stack {
-      position: fixed;
-      right: 16px;
-      bottom: 16px;
-      display: flex;
-      flex-direction: column;
-      gap: 10px;
-      z-index: 9999;
-    }
-    .float-btn {
-      width: 48px;
-      height: 48px;
-      border-radius: 50%;
-      background: #27ae60;
-      color: white;
-      border: none;
-      display: flex;
-      align-items: center;
-      justify-content: center;
-      font-size: 20px;
-      text-decoration: none;
-      cursor: pointer;
-      box-shadow: 0 4px 10px rgba(0,0,0,0.2);
-    }
-    .float-btn:hover { background:#219150; }
-
-    /* Новые стили для поиска и товаров */
-    #search {
-      width: 100%;
-      padding: 12px;
-      margin-bottom: 20px;
-      border: 1px solid #ddd;
-      border-radius: 6px;
-      font-size: 16px;
-    }
-
-    .product {
-      background: white;
-      padding: 12px;
-      margin-bottom: 8px;
-      border-radius: 8px;
-      box-shadow: 0 2px 4px rgba(0,0,0,0.1);
-      display: flex;
-      justify-content: space-between;
-      align-items: center;
-    }
-
-    .product h4 {
-      margin: 0;
-      flex-grow: 1;
-    }
-
-    .product p {
-      margin: 0 15px;
-      color: #27ae60;
-      font-weight: bold;
-    }
-
-    .qty-controls {
-      display: flex;
-      align-items: center;
-      gap: 8px;
-    }
-  </style>
+</style>
 </head>
+
 <body>
 
 <header>
-  <div class="logo-box" onclick="goHome()">
-    <img src="logo.png" alt="Artik Food">
-    <h1>Artik Food</h1>
-  </div>
-  <nav>
-    <a href="#" onclick="goHome()" data-i18n="nav_home">Главная</a>
-    <a href="#order" data-i18n="nav_order">Заказать</a>
-    <a href="#contacts" data-i18n="nav_contacts">Контакты</a>
-    <a href="#" onclick="openAdmin()" data-i18n="nav_admin">Админ</a>
-    <a href="#" onclick="openCourier()" data-i18n="nav_courier">Курьер</a>
-    <button class="lang-switch" onclick="switchLang()">RU / AM</button>
-  </nav>
+  <img src="logo.png" alt="Artik Food">
+  <h1>Artik Food</h1>
 </header>
 
-<!-- ГЛАВНАЯ -->
-<div id="home-page">
+<input id="search" placeholder="Поиск товара..." />
 
-<section class="hero">
-  <h2 data-i18n="hero_title">Доставка продуктов в Артике</h2>
-  <p data-i18n="hero_subtitle">Свежие продукты из супермаркетов — прямо к вашей двери</p>
-  <button onclick="document.getElementById('order').scrollIntoView({behavior:'smooth'});" data-i18n="hero_btn">Заказать сейчас</button>
-</section>
+<main id="products"></main>
 
-<section class="section" id="shops">
-  <h3 data-i18n="shops_title">Супермаркеты</h3>
-  <input type="text" id="search" placeholder="🔍 Поиск супермаркетов..." oninput="filterShops()">
-  <div class="shops" id="shops-list"></div>
-</section>
-
-<section class="section" id="catalog">
-  <h3 data-i18n="categories_title">Категории товаров</h3>
-  <div class="categories-list">
-    <div class="category-item" onclick="openCategory('Овощи и фрукты')">🥦 <span data-i18n="cat_veg">Овощи и фрукты</span></div>
-    <div class="category-item" onclick="openCategory('Мясо и рыба')">🥩 <span data-i18n="cat_meat">Мясо и рыба</span></div>
-    <div class="category-item" onclick="openCategory('Молочные продукты')">🧀 <span data-i18n="cat_dairy">Молочные продукты</span></div>
-    <div class="category-item" onclick="openCategory('Хлеб и выпечка')">🍞 <span data-i18n="cat_bread">Хлеб и выпечка</span></div>
-    <div class="category-item" onclick="openCategory('Бакалея')">🥫 <span data-i18n="cat_grocery">Бакалея</span></div>
-    <div class="category-item" onclick="openCategory('Напитки')">🧃 <span data-i18n="cat_drinks">Напитки</span></div>
-    <div class="category-item" onclick="openCategory('Бытовая химия')">🧼 <span data-i18n="cat_clean">Бытовая химия</span></div>
-    <div class="category-item" onclick="openCategory('Сладости')">🍰 <span data-i18n="cat_sweets">Сладости</span></div>
-  </div>
-</section>
-
-<section class="section">
-  <div class="cart" id="global-cart">
-    <h4 data-i18n="cart_global">Корзина (все магазины)</h4>
-    <div id="global-cart-items"></div>
-    <div class="cart-total" id="global-cart-total">Товары: 0 AMD</div>
-    <div class="cart-total" id="delivery-total">Доставка: 0 AMD</div>
-    <div class="cart-total" id="grand-total">Итого: 0 AMD</div>
-  </div>
-</section>
-
+<div id="cart">
+  🛒 Товаров: <span id="cartCount">0</span> |
+  Сумма: <span id="cartSum">0</span> ֏ |
+  Доставка: 500 ֏
 </div>
 
-<!-- СТРАНИЦА СУПЕРМАРКЕТА -->
-<div id="store-page" class="hidden">
-  <section class="section">
-    <h3 id="store-title"></h3>
-    <div class="products" id="store-products"></div>
-
-    <div class="cart" id="store-cart">
-      <h4 data-i18n="cart_store">Корзина этого магазина</h4>
-      <div id="store-cart-items"></div>
-      <div class="cart-total" id="store-cart-total">Итого: 0 AMD</div>
-      <button onclick="sendStoreToWhatsApp()" data-i18n="btn_whatsapp_store">Заказать из этого магазина (WhatsApp)</button>
-      <button onclick="sendStoreToTelegram()" style="background:#0088cc;" data-i18n="btn_telegram_store">Заказать из этого магазина (Telegram)</button>
-    </div>
-  </section>
+<div class="float-buttons">
+  <button onclick="scrollToTop()">⬆️</button>
+  <button onclick="alert('Главная')">🏠</button>
+  <button onclick="alert('Назад')">↩️</button>
+  <button onclick="window.open('https://wa.me/','_blank')">💬</button>
 </div>
-
-<!-- Остальной HTML остаётся без изменений -->
 
 <script>
-  /* ... (весь предыдущий JavaScript остаётся без изменений) ... */
+// ======= ТОВАРЫ (ЗДЕСЬ МОЖЕШЬ ВСТАВИТЬ СВОЙ defaultStores) =======
+const productsData = [
+  { name: "Картофель 1кг", price: 300 },
+  { name: "Лук 1кг", price: 250 },
+  { name: "Молоко 1л", price: 350 },
+  { name: "Хлеб", price: 200 }
+];
 
-  // Новая функция для поиска супермаркетов
-  function filterShops() {
-    const query = document.getElementById('search').value.toLowerCase();
-    const shops = document.querySelectorAll('#shops-list .card');
-    
-    shops.forEach(shop => {
-      const shopName = shop.innerText.toLowerCase();
-      shop.style.display = shopName.includes(query) ? 'block' : 'none';
-    });
-  }
+// ======= КОРЗИНА =======
+let cart = JSON.parse(localStorage.getItem("cart") || "[]");
 
-  // Инициализация (без изменений)
-  renderShops();
-  renderGlobalCart();
-  applyLanguage();
+function renderProducts(list) {
+  const box = document.getElementById("products");
+  box.innerHTML = "";
+  list.forEach(p => {
+    const div = document.createElement("div");
+    div.className = "product";
+    div.innerHTML = `
+      <div>
+        <strong>${p.name}</strong><br>
+        ${p.price} ֏
+      </div>
+      <button onclick='addToCart(${JSON.stringify(p)})'>+</button>
+    `;
+    box.appendChild(div);
+  });
+}
+
+function addToCart(p) {
+  cart.push(p);
+  saveCart();
+}
+
+function saveCart() {
+  localStorage.setItem("cart", JSON.stringify(cart));
+  updateCart();
+}
+
+function updateCart() {
+  document.getElementById("cartCount").innerText = cart.length;
+  const sum = cart.reduce((s,p)=>s+p.price,0);
+  document.getElementById("cartSum").innerText = sum;
+}
+
+document.getElementById("search").addEventListener("input", e => {
+  const q = e.target.value.toLowerCase();
+  renderProducts(productsData.filter(p => p.name.toLowerCase().includes(q)));
+});
+
+function scrollToTop() {
+  window.scrollTo({ top: 0, behavior: "smooth" });
+}
+
+// INIT
+renderProducts(productsData);
+updateCart();
+
+// PWA
+if ("serviceWorker" in navigator) {
+  navigator.serviceWorker.register("sw.js");
+}
 </script>
+
 </body>
 </html>
+
