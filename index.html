@@ -5,7 +5,6 @@
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <title>Artik Food — Доставка продуктов</title>
   <style>
-    /* Базовые стили */
     :root {
       --primary: #2ecc71;
       --primary-dark: #27ae60;
@@ -15,14 +14,11 @@
       --shadow: 0 2px 6px rgba(0,0,0,0.1);
     }
 
-    /* Тёмная тема */
-    @media (prefers-color-scheme: dark) {
-      :root {
-        --text: #eee;
-        --bg: #121212;
-        --card-bg: #1e1e1e;
-        --shadow: 0 2px 6px rgba(0,0,0,0.3);
-      }
+    body.dark-mode {
+      --text: #eee;
+      --bg: #121212;
+      --card-bg: #1e1e1e;
+      --shadow: 0 2px 6px rgba(0,0,0,0.3);
     }
 
     body {
@@ -31,10 +27,9 @@
       padding: 0;
       background: var(--bg);
       color: var(--text);
-      transition: background 0.3s, color 0.3s;
+      transition: all 0.3s ease;
     }
 
-    /* Шапка */
     header {
       background: var(--primary);
       color: white;
@@ -42,43 +37,28 @@
       display: flex;
       justify-content: space-between;
       align-items: center;
+      box-shadow: var(--shadow);
     }
 
-    .logo-box {
+    .logo {
       display: flex;
       align-items: center;
+      gap: 10px;
       cursor: pointer;
     }
 
-    .logo-box img {
+    .logo img {
       height: 40px;
-      margin-right: 10px;
+      border-radius: 50%;
     }
 
-    /* Основной контент */
-    .container {
-      padding: 16px;
-      max-width: 1200px;
-      margin: 0 auto;
+    nav {
+      display: flex;
+      gap: 15px;
     }
 
-    /* Карточки товаров */
-    .card {
-      background: var(--card-bg);
-      border-radius: 8px;
-      padding: 16px;
-      margin-bottom: 16px;
-      box-shadow: var(--shadow);
-      transition: transform 0.2s;
-    }
-
-    .card:hover {
-      transform: translateY(-5px);
-    }
-
-    /* Кнопки */
     button {
-      background: var(--primary);
+      background: var(--primary-dark);
       color: white;
       border: none;
       padding: 8px 16px;
@@ -88,119 +68,158 @@
     }
 
     button:hover {
-      background: var(--primary-dark);
+      background: #219653;
     }
 
-    /* Корзина */
+    .container {
+      padding: 20px;
+      max-width: 1200px;
+      margin: 0 auto;
+    }
+
+    .products-grid {
+      display: grid;
+      grid-template-columns: repeat(auto-fill, minmax(250px, 1fr));
+      gap: 20px;
+      margin-top: 20px;
+    }
+
+    .product-card {
+      background: var(--card-bg);
+      border-radius: 8px;
+      padding: 16px;
+      box-shadow: var(--shadow);
+      transition: transform 0.2s;
+    }
+
+    .product-card:hover {
+      transform: translateY(-5px);
+    }
+
     .cart-item {
       display: flex;
       justify-content: space-between;
-      padding: 8px 0;
+      padding: 10px 0;
       border-bottom: 1px solid #eee;
     }
 
-    /* Адаптивность */
+    #search {
+      width: 100%;
+      padding: 10px;
+      margin: 20px 0;
+      border: 1px solid #ddd;
+      border-radius: 4px;
+    }
+
     @media (max-width: 768px) {
       header {
         flex-direction: column;
-        text-align: center;
+        gap: 10px;
+      }
+      
+      .products-grid {
+        grid-template-columns: 1fr;
       }
     }
   </style>
 </head>
 <body>
   <header>
-    <div class="logo-box" onclick="goHome()">
-      <img src="https://via.placeholder.com/40" alt="Логотип">
+    <div class="logo" onclick="showPage('home')">
+      <img src="https://via.placeholder.com/40" alt="Лого">
       <h1>Artik Food</h1>
     </div>
     <nav>
       <button onclick="showPage('home')">Главная</button>
-      <button onclick="showPage('cart')">Корзина</button>
-      <button onclick="toggleDarkMode()">🌙 Тёмная тема</button>
+      <button onclick="showPage('cart')">Корзина (<span id="cart-count">0</span>)</button>
+      <button onclick="toggleDarkMode()">🌙</button>
     </nav>
   </header>
 
   <div class="container">
-    <!-- Главная страница -->
     <div id="home-page">
       <h2>Доставка продуктов в Артике</h2>
+      <input type="text" id="search" placeholder="🔍 Поиск товаров..." oninput="searchProducts()">
       
-      <!-- Поиск -->
-      <input type="text" id="search" placeholder="🔍 Поиск..." oninput="searchProducts()">
+      <div id="shops-container">
+        <h3>Магазины</h3>
+        <div id="shops-list" class="products-grid"></div>
+      </div>
       
-      <!-- Список магазинов -->
-      <div id="shops-list"></div>
-      
-      <!-- Список товаров -->
-      <div id="products-list"></div>
+      <div id="products-container">
+        <h3>Товары</h3>
+        <div id="products-list" class="products-grid"></div>
+      </div>
     </div>
 
-    <!-- Страница корзины -->
     <div id="cart-page" style="display: none;">
       <h2>Ваша корзина</h2>
       <div id="cart-items"></div>
-      <div id="cart-total">Итого: 0 AMD</div>
+      <div id="cart-total" style="font-weight: bold; margin: 20px 0;">Итого: 0 AMD</div>
       <button onclick="checkout()">Оформить заказ</button>
     </div>
   </div>
 
   <script>
-    // Данные
+    // Данные приложения
     const stores = {
       million: {
         name: "Million",
         products: [
-          { name: "Молоко 1л", price: 450, category: "Молочные" },
-          { name: "Хлеб", price: 200, category: "Хлебобулочные" }
+          { id: 1, name: "Молоко 1л", price: 450, category: "Молочные" },
+          { id: 2, name: "Хлеб", price: 200, category: "Хлеб" },
+          { id: 3, name: "Яйца 10шт", price: 600, category: "Молочные" }
         ]
       },
       mush: {
         name: "Մուշ",
         products: [
-          { name: "Молоко 1л", price: 430, category: "Молочные" },
-          { name: "Яйца 10шт", price: 600, category: "Молочные" }
+          { id: 4, name: "Молоко 1л", price: 430, category: "Молочные" },
+          { id: 5, name: "Сыр", price: 1200, category: "Молочные" },
+          { id: 6, name: "Йогурт", price: 300, category: "Молочные" }
         ]
       }
     };
 
     let cart = {};
+    let currentStore = 'million';
 
-    // Инициализация
+    // Инициализация при загрузке
     document.addEventListener('DOMContentLoaded', () => {
       renderShops();
       renderProducts();
+      updateCartCount();
     });
 
     // Отображение магазинов
     function renderShops() {
       const container = document.getElementById('shops-list');
-      container.innerHTML = '<h3>Магазины</h3>';
+      container.innerHTML = '';
       
       Object.keys(stores).forEach(storeId => {
         const store = stores[storeId];
         const card = document.createElement('div');
-        card.className = 'card';
+        card.className = 'product-card';
         card.innerHTML = `
           <h3>${store.name}</h3>
-          <button onclick="showStore('${storeId}')">Выбрать</button>
+          <button onclick="selectStore('${storeId}')">Выбрать</button>
         `;
         container.appendChild(card);
       });
     }
 
     // Отображение товаров
-    function renderProducts(storeId = 'million') {
+    function renderProducts() {
       const container = document.getElementById('products-list');
-      container.innerHTML = '<h3>Товары</h3>';
+      container.innerHTML = '';
       
-      stores[storeId].products.forEach(product => {
+      stores[currentStore].products.forEach(product => {
         const card = document.createElement('div');
-        card.className = 'card';
+        card.className = 'product-card';
         card.innerHTML = `
           <h4>${product.name}</h4>
           <p>${product.price} AMD</p>
-          <button onclick="addToCart('${storeId}', '${product.name}', ${product.price})">
+          <button onclick="addToCart(${product.id}, '${product.name}', ${product.price})">
             В корзину
           </button>
         `;
@@ -208,13 +227,30 @@
       });
     }
 
-    // Корзина
-    function addToCart(storeId, productName, price) {
-      const key = `${storeId}-${productName}`;
-      cart[key] = cart[key] || { name: productName, price: price, qty: 0 };
-      cart[key].qty += 1;
+    // Работа с корзиной
+    function addToCart(id, name, price) {
+      if (!cart[id]) {
+        cart[id] = { id, name, price, quantity: 0 };
+      }
+      cart[id].quantity += 1;
+      updateCart();
+      showNotification(`${name} добавлен в корзину`);
+    }
+
+    function removeFromCart(id) {
+      if (cart[id] && cart[id].quantity > 0) {
+        cart[id].quantity -= 1;
+        if (cart[id].quantity === 0) {
+          delete cart[id];
+        }
+        updateCart();
+      }
+    }
+
+    function updateCart() {
       renderCart();
-      alert(`Добавлено: ${productName}`);
+      updateCartCount();
+      saveCartToLocal();
     }
 
     function renderCart() {
@@ -222,26 +258,43 @@
       container.innerHTML = '';
       
       let total = 0;
-      Object.keys(cart).forEach(key => {
-        const item = cart[key];
-        total += item.price * item.qty;
+      Object.keys(cart).forEach(id => {
+        const item = cart[id];
+        const sum = item.price * item.quantity;
+        total += sum;
         
         const div = document.createElement('div');
         div.className = 'cart-item';
         div.innerHTML = `
-          <span>${item.name} × ${item.qty}</span>
-          <span>${item.price * item.qty} AMD</span>
-          <button onclick="removeFromCart('${key}')">❌</button>
+          <span>${item.name} × ${item.quantity}</span>
+          <span>${sum} AMD</span>
+          <div>
+            <button onclick="addToCart(${item.id}, '${item.name}', ${item.price})">+</button>
+            <button onclick="removeFromCart(${item.id})">-</button>
+          </div>
         `;
         container.appendChild(div);
       });
       
-      document.getElementById('cart-total').innerText = `Итого: ${total} AMD`;
+      document.getElementById('cart-total').textContent = `Итого: ${total} AMD`;
     }
 
-    function removeFromCart(key) {
-      delete cart[key];
-      renderCart();
+    function updateCartCount() {
+      const count = Object.values(cart).reduce((sum, item) => sum + item.quantity, 0);
+      document.getElementById('cart-count').textContent = count;
+    }
+
+    // Локальное хранилище
+    function saveCartToLocal() {
+      localStorage.setItem('artik-food-cart', JSON.stringify(cart));
+    }
+
+    function loadCartFromLocal() {
+      const savedCart = localStorage.getItem('artik-food-cart');
+      if (savedCart) {
+        cart = JSON.parse(savedCart);
+        updateCart();
+      }
     }
 
     // Навигация
@@ -253,37 +306,69 @@
       if (page === 'cart') renderCart();
     }
 
-    function goHome() {
-      showPage('home');
+    function selectStore(storeId) {
+      currentStore = storeId;
+      renderProducts();
+      document.getElementById('products-container').scrollIntoView();
     }
 
     // Поиск
     function searchProducts() {
       const query = document.getElementById('search').value.toLowerCase();
-      const cards = document.querySelectorAll('.card');
+      const cards = document.querySelectorAll('.product-card');
       
       cards.forEach(card => {
-        const name = card.querySelector('h4')?.innerText.toLowerCase() || '';
+        const name = card.querySelector('h4')?.textContent.toLowerCase() || '';
         card.style.display = name.includes(query) ? 'block' : 'none';
       });
     }
 
     // Тёмная тема
     function toggleDarkMode() {
-      document.body.classList.toggle('force-dark');
+      document.body.classList.toggle('dark-mode');
+      localStorage.setItem('darkMode', document.body.classList.contains('dark-mode'));
+    }
+
+    // Проверка темы при загрузке
+    if (localStorage.getItem('darkMode') === 'true') {
+      document.body.classList.add('dark-mode');
+    }
+
+    // Уведомления
+    function showNotification(message) {
+      const notification = document.createElement('div');
+      notification.style.position = 'fixed';
+      notification.style.bottom = '20px';
+      notification.style.right = '20px';
+      notification.style.backgroundColor = 'var(--primary)';
+      notification.style.color = 'white';
+      notification.style.padding = '10px 20px';
+      notification.style.borderRadius = '5px';
+      notification.style.boxShadow = '0 2px 10px rgba(0,0,0,0.2)';
+      notification.textContent = message;
+      document.body.appendChild(notification);
+      
+      setTimeout(() => {
+        notification.style.opacity = '0';
+        setTimeout(() => notification.remove(), 300);
+      }, 2000);
     }
 
     // Оформление заказа
     function checkout() {
       if (Object.keys(cart).length === 0) {
-        alert('Корзина пуста!');
+        showNotification('Корзина пуста!');
         return;
       }
-      alert('Заказ оформлен! Спасибо!');
+      
+      showNotification('Заказ оформлен! Спасибо!');
       cart = {};
-      renderCart();
+      updateCart();
       showPage('home');
     }
+
+    // Загрузка корзины при старте
+    loadCartFromLocal();
   </script>
 </body>
 </html>
