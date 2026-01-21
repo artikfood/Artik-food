@@ -5,216 +5,249 @@
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 <title>Artik Food</title>
 
-<link rel="manifest" href="manifest.json">
-<meta name="theme-color" content="#2e7d32">
-
 <style>
-body {
-  margin: 0;
-  font-family: Arial, sans-serif;
-  background: #f4f4f4;
+body { margin:0; font-family:Arial,sans-serif; background:#f8f8f8; }
+header { background:#2ecc71; color:#fff; padding:12px 16px; display:flex; justify-content:space-between; align-items:center; }
+header h1 { margin:0; font-size:22px; }
+nav a { color:#fff; margin-left:10px; text-decoration:none; font-weight:bold; }
+
+.section { padding:20px; max-width:1100px; margin:auto; }
+.hidden { display:none; }
+
+.shops, .products {
+  display:grid;
+  grid-template-columns:repeat(auto-fit,minmax(160px,1fr));
+  gap:12px;
 }
 
-/* ===== HEADER ===== */
-header {
-  background: #2e7d32;
-  color: #fff;
-  padding: 10px;
-  display: flex;
-  align-items: center;
-  gap: 10px;
-}
-header img {
-  height: 40px;
-}
-header h1 {
-  font-size: 18px;
-  margin: 0;
+.card, .product {
+  background:#fff;
+  padding:12px;
+  border-radius:10px;
+  box-shadow:0 2px 6px rgba(0,0,0,.1);
 }
 
-/* ===== SEARCH ===== */
-#search {
-  width: 100%;
-  padding: 12px;
-  border: none;
-  font-size: 16px;
-  outline: none;
+.qty-controls {
+  display:flex;
+  justify-content:center;
+  align-items:center;
+  gap:8px;
 }
 
-/* ===== MAIN ===== */
-main {
-  padding: 10px;
+.qty-controls button {
+  width:30px;
+  height:30px;
+  border-radius:50%;
+  border:none;
+  background:#2ecc71;
+  color:#fff;
+  font-weight:bold;
 }
 
-/* ===== PRODUCT CARD ===== */
-.product {
-  background: #fff;
-  border-radius: 8px;
-  padding: 10px;
-  margin-bottom: 8px;
-  display: flex;
-  justify-content: space-between;
-  align-items: center;
-}
-.product button {
-  background: #2e7d32;
-  color: #fff;
-  border: none;
-  padding: 6px 10px;
-  border-radius: 6px;
+.cart {
+  background:#fff;
+  padding:14px;
+  border-radius:10px;
+  margin-top:20px;
 }
 
-/* ===== PRODUCT LIST (CATEGORY) ===== */
+/* ===== ДОБАВКИ БЕЗ ИЗМЕНЕНИЯ ДИЗАЙНА ===== */
+
+/* список товаров в категориях */
 .product-list {
-  background: #fff;
-  border-radius: 6px;
-  padding: 10px;
-  margin-bottom: 6px;
-  display: flex;
-  justify-content: space-between;
-  align-items: center;
-  border-left: 4px solid #2e7d32;
+  display:flex;
+  justify-content:space-between;
+  align-items:center;
 }
 
-/* ===== CART ===== */
-#cart {
-  position: fixed;
-  bottom: 0;
-  left: 0;
-  right: 0;
-  background: #fff;
-  border-top: 1px solid #ccc;
-  padding: 10px;
-  font-size: 14px;
-}
-
-/* ===== FLOAT BUTTONS ===== */
+/* floating stack */
 .float-stack {
-  position: fixed;
-  right: 12px;
-  bottom: 130px;
-  display: flex;
-  flex-direction: column;
-  gap: 10px;
-  z-index: 999;
-}
-.float-stack button {
-  width: 50px;
-  height: 50px;
-  border-radius: 50%;
-  border: none;
-  background: #2e7d32;
-  color: #fff;
-  font-size: 18px;
+  position:fixed;
+  right:12px;
+  bottom:120px;
+  display:flex;
+  flex-direction:column;
+  gap:10px;
+  z-index:9999;
 }
 
-/* ===== HIDE ===== */
-.hidden { display: none; }
+.float-stack button,
+.float-stack a {
+  width:48px;
+  height:48px;
+  border-radius:50%;
+  background:#2ecc71;
+  color:#fff;
+  border:none;
+  display:flex;
+  align-items:center;
+  justify-content:center;
+  font-size:18px;
+  cursor:pointer;
+  text-decoration:none;
+  box-shadow:0 4px 10px rgba(0,0,0,.2);
+}
 </style>
 </head>
 
 <body>
 
 <header>
-  <img src="logo.png">
-  <h1>Artik Food</h1>
+  <h1 onclick="goHome()" style="cursor:pointer">Artik Food</h1>
+  <nav>
+    <a href="#" onclick="goHome()">Главная</a>
+    <a href="#" onclick="openAdmin()">Админ</a>
+  </nav>
 </header>
 
-<input id="search" placeholder="Поиск товара...">
+<!-- HOME -->
+<div id="home">
+  <section class="section">
+    <h3>Супермаркеты</h3>
+    <div class="shops" id="shops"></div>
+  </section>
 
-<main id="products"></main>
-
-<div id="cart">
-  🛒 <span id="cartCount">0</span> |
-  💰 <span id="cartSum">0</span> ֏ |
-  🚚 500 ֏
+  <section class="section">
+    <h3>Категории</h3>
+    <div class="card" onclick="openCategory('Овощи')">🥦 Овощи</div>
+    <div class="card" onclick="openCategory('Мясо')">🥩 Мясо</div>
+    <div class="card" onclick="openCategory('Сладости')">🍰 Сладости</div>
+  </section>
 </div>
 
-<!-- FLOAT BUTTONS -->
+<!-- STORE -->
+<div id="store" class="hidden">
+  <section class="section">
+    <h3 id="storeTitle"></h3>
+
+    <input
+      type="text"
+      placeholder="Поиск товара..."
+      oninput="searchProducts(this.value)"
+      style="width:100%;padding:10px;margin-bottom:10px"
+    >
+
+    <div class="products" id="storeProducts"></div>
+
+    <div class="cart">
+      <strong>Корзина</strong>
+      <div id="storeCart"></div>
+    </div>
+  </section>
+</div>
+
+<!-- CATEGORY -->
+<div id="category" class="hidden">
+  <section class="section">
+    <h3 id="categoryTitle"></h3>
+
+    <input
+      type="text"
+      placeholder="Поиск товара..."
+      oninput="searchProducts(this.value)"
+      style="width:100%;padding:10px;margin-bottom:10px"
+    >
+
+    <div id="categoryProducts"></div>
+  </section>
+</div>
+
+<!-- FLOATING BUTTONS -->
 <div class="float-stack">
-  <button onclick="scrollTopSmooth()">⬆️</button>
+  <button onclick="scrollToTop()">⬆</button>
   <button onclick="goHome()">🏠</button>
-  <button onclick="goBack()">↩️</button>
-  <button onclick="openWA()">💬</button>
-  <button onclick="openTG()">✈️</button>
+  <button onclick="history.back()">↩</button>
+  <a href="https://wa.me/37443797727" target="_blank">💬</a>
+  <a href="https://t.me/artikfood" target="_blank">✈</a>
 </div>
 
 <script>
-/* ===== DATA (пример, твой defaultStores сюда же) ===== */
-let products = [
-  {name:"Картофель 1кг", price:300},
-  {name:"Лук 1кг", price:250},
-  {name:"Молоко 1л", price:350},
-  {name:"Хлеб", price:200}
-];
+const stores = {
+  million: {
+    name:"Million",
+    products:[
+      {name:"Картофель",price:250,category:"Овощи"},
+      {name:"Помидоры",price:500,category:"Овощи"},
+      {name:"Говядина",price:2300,category:"Мясо"},
+      {name:"Шоколад",price:500,category:"Сладости"}
+    ]
+  }
+};
 
-/* ===== CART ===== */
-let cart = JSON.parse(localStorage.getItem("cart") || "[]");
+let currentStore=null;
+let currentProducts=[];
+let carts={};
 
-function saveCart() {
-  localStorage.setItem("cart", JSON.stringify(cart));
-  updateCart();
+function scrollToTop(){
+  window.scrollTo({top:0,behavior:"smooth"});
 }
 
-function updateCart() {
-  document.getElementById("cartCount").innerText = cart.length;
-  document.getElementById("cartSum").innerText =
-    cart.reduce((s,p)=>s+p.price,0);
+function goHome(){
+  document.getElementById("home").classList.remove("hidden");
+  document.getElementById("store").classList.add("hidden");
+  document.getElementById("category").classList.add("hidden");
 }
 
-function addToCart(p) {
-  cart.push(p);
-  saveCart();
-}
-
-/* ===== RENDER ===== */
-function render(list, type="grid") {
-  const box = document.getElementById("products");
-  box.innerHTML = "";
-  list.forEach(p => {
-    const div = document.createElement("div");
-    div.className = type==="list" ? "product-list" : "product";
-    div.innerHTML = `
-      <div>
-        <b>${p.name}</b><br>${p.price} ֏
-      </div>
-      <button onclick='addToCart(${JSON.stringify(p)})'>+</button>
-    `;
-    box.appendChild(div);
+function renderShops(){
+  const box=document.getElementById("shops");
+  box.innerHTML="";
+  Object.keys(stores).forEach(k=>{
+    const d=document.createElement("div");
+    d.className="card";
+    d.innerText=stores[k].name;
+    d.onclick=()=>openStore(k);
+    box.appendChild(d);
   });
 }
 
-/* ===== SEARCH ===== */
-document.getElementById("search").addEventListener("input", e=>{
-  const q = e.target.value.toLowerCase();
-  render(products.filter(p=>p.name.toLowerCase().includes(q)));
-});
-
-/* ===== NAV ===== */
-function scrollTopSmooth() {
-  window.scrollTo({top:0, behavior:"smooth"});
-}
-function goHome() {
-  render(products);
-}
-function goBack() {
-  history.back();
-}
-function openWA() {
-  window.open("https://wa.me/","_blank");
-}
-function openTG() {
-  window.open("https://t.me/","_blank");
+function openStore(key){
+  currentStore=key;
+  currentProducts=[...stores[key].products];
+  document.getElementById("home").classList.add("hidden");
+  document.getElementById("store").classList.remove("hidden");
+  document.getElementById("storeTitle").innerText=stores[key].name;
+  renderProducts(currentProducts,false);
 }
 
-/* ===== INIT ===== */
-render(products);
-updateCart();
-
-/* ===== PWA ===== */
-if ("serviceWorker" in navigator) {
-  navigator.serviceWorker.register("sw.js");
+function openCategory(cat){
+  currentProducts=[];
+  Object.values(stores).forEach(s=>{
+    s.products.forEach(p=>{
+      if(p.category===cat) currentProducts.push(p);
+    });
+  });
+  document.getElementById("home").classList.add("hidden");
+  document.getElementById("category").classList.remove("hidden");
+  document.getElementById("categoryTitle").innerText=cat;
+  renderProducts(currentProducts,true);
 }
+
+function renderProducts(list,isCategory){
+  const box=isCategory
+    ? document.getElementById("categoryProducts")
+    : document.getElementById("storeProducts");
+
+  box.innerHTML="";
+  list.forEach(p=>{
+    const d=document.createElement("div");
+    d.className="product"+(isCategory?" product-list":"");
+    d.innerHTML=`
+      <span>${p.name}</span>
+      <strong>${p.price} AMD</strong>
+    `;
+    box.appendChild(d);
+  });
+}
+
+function searchProducts(q){
+  q=q.toLowerCase();
+  renderProducts(
+    currentProducts.filter(p=>p.name.toLowerCase().includes(q)),
+    !document.getElementById("category").classList.contains("hidden")
+  );
+}
+
+renderShops();
 </script>
 
 </body>
