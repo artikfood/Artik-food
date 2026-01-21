@@ -126,7 +126,7 @@
     }
     .float-btn:hover { background:#219150; }
 
-    /* Для поиска */
+    /* Новые стили для поиска и товаров */
     #search {
       width: 100%;
       padding: 12px;
@@ -136,27 +136,32 @@
       font-size: 16px;
     }
 
-    /* Для строк с товарами */
-    .product-row {
-      display: flex;
-      justify-content: space-between;
-      align-items: center;
+    .product {
       background: white;
       padding: 12px;
       margin-bottom: 8px;
       border-radius: 8px;
       box-shadow: 0 2px 4px rgba(0,0,0,0.1);
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
     }
-    .product-row button {
-      background: #2ecc71;
-      color: white;
-      border: none;
-      padding: 6px 12px;
-      border-radius: 6px;
-      cursor: pointer;
+
+    .product h4 {
+      margin: 0;
+      flex-grow: 1;
     }
-    .product-row button:hover {
-      background: #27ae60;
+
+    .product p {
+      margin: 0 15px;
+      color: #27ae60;
+      font-weight: bold;
+    }
+
+    .qty-controls {
+      display: flex;
+      align-items: center;
+      gap: 8px;
     }
   </style>
 </head>
@@ -188,63 +193,72 @@
 
 <section class="section" id="shops">
   <h3 data-i18n="shops_title">Супермаркеты</h3>
-  <input type="text" id="search" placeholder="🔍 Поиск товаров..." oninput="searchProducts()">
+  <input type="text" id="search" placeholder="🔍 Поиск супермаркетов..." oninput="filterShops()">
   <div class="shops" id="shops-list"></div>
 </section>
 
-<!-- Остальной код остаётся без изменений -->
+<section class="section" id="catalog">
+  <h3 data-i18n="categories_title">Категории товаров</h3>
+  <div class="categories-list">
+    <div class="category-item" onclick="openCategory('Овощи и фрукты')">🥦 <span data-i18n="cat_veg">Овощи и фрукты</span></div>
+    <div class="category-item" onclick="openCategory('Мясо и рыба')">🥩 <span data-i18n="cat_meat">Мясо и рыба</span></div>
+    <div class="category-item" onclick="openCategory('Молочные продукты')">🧀 <span data-i18n="cat_dairy">Молочные продукты</span></div>
+    <div class="category-item" onclick="openCategory('Хлеб и выпечка')">🍞 <span data-i18n="cat_bread">Хлеб и выпечка</span></div>
+    <div class="category-item" onclick="openCategory('Бакалея')">🥫 <span data-i18n="cat_grocery">Бакалея</span></div>
+    <div class="category-item" onclick="openCategory('Напитки')">🧃 <span data-i18n="cat_drinks">Напитки</span></div>
+    <div class="category-item" onclick="openCategory('Бытовая химия')">🧼 <span data-i18n="cat_clean">Бытовая химия</span></div>
+    <div class="category-item" onclick="openCategory('Сладости')">🍰 <span data-i18n="cat_sweets">Сладости</span></div>
+  </div>
+</section>
+
+<section class="section">
+  <div class="cart" id="global-cart">
+    <h4 data-i18n="cart_global">Корзина (все магазины)</h4>
+    <div id="global-cart-items"></div>
+    <div class="cart-total" id="global-cart-total">Товары: 0 AMD</div>
+    <div class="cart-total" id="delivery-total">Доставка: 0 AMD</div>
+    <div class="cart-total" id="grand-total">Итого: 0 AMD</div>
+  </div>
+</section>
 
 </div>
 
+<!-- СТРАНИЦА СУПЕРМАРКЕТА -->
+<div id="store-page" class="hidden">
+  <section class="section">
+    <h3 id="store-title"></h3>
+    <div class="products" id="store-products"></div>
+
+    <div class="cart" id="store-cart">
+      <h4 data-i18n="cart_store">Корзина этого магазина</h4>
+      <div id="store-cart-items"></div>
+      <div class="cart-total" id="store-cart-total">Итого: 0 AMD</div>
+      <button onclick="sendStoreToWhatsApp()" data-i18n="btn_whatsapp_store">Заказать из этого магазина (WhatsApp)</button>
+      <button onclick="sendStoreToTelegram()" style="background:#0088cc;" data-i18n="btn_telegram_store">Заказать из этого магазина (Telegram)</button>
+    </div>
+  </section>
+</div>
+
+<!-- Остальной HTML остаётся без изменений -->
+
 <script>
-  // Добавляем функцию поиска
-  function searchProducts() {
+  /* ... (весь предыдущий JavaScript остаётся без изменений) ... */
+
+  // Новая функция для поиска супермаркетов
+  function filterShops() {
     const query = document.getElementById('search').value.toLowerCase();
-    const products = document.querySelectorAll('.product-row');
-
-    products.forEach(product => {
-      const name = product.querySelector('h4').innerText.toLowerCase();
-      product.style.display = name.includes(query) ? 'flex' : 'none';
+    const shops = document.querySelectorAll('#shops-list .card');
+    
+    shops.forEach(shop => {
+      const shopName = shop.innerText.toLowerCase();
+      shop.style.display = shopName.includes(query) ? 'block' : 'none';
     });
   }
 
-  // Изменяем отображение товаров в супермаркетах
-  function openStore(storeKey) {
-    currentStore = storeKey;
-    document.getElementById('home-page').classList.add('hidden');
-    document.getElementById('category-page').classList.add('hidden');
-    document.getElementById('admin-login').classList.add('hidden');
-    document.getElementById('admin-panel').classList.add('hidden');
-    document.getElementById('courier-panel').classList.add('hidden');
-    document.getElementById('store-page').classList.remove('hidden');
-    document.getElementById('store-title').innerText = stores[storeKey].name;
-
-    const container = document.getElementById('store-products');
-    container.innerHTML = '';
-
-    stores[storeKey].products.forEach((item) => {
-      const safeId = item.name.replace(/\s+/g,'');
-      const qty = carts[storeKey]?.[item.name]?.qty || 0;
-      const div = document.createElement('div');
-      div.className = 'product-row';
-      div.innerHTML = `
-        <h4>${item.name}</h4>
-        <p>${item.price} AMD</p>
-        <div class="qty-controls">
-          <button onclick="changeQty('${storeKey}', '${item.name}', ${item.price}, -1)">−</button>
-          <span class="qty-number" id="qty-${storeKey}-${safeId}">${qty}</span>
-          <button onclick="changeQty('${storeKey}', '${item.name}', ${item.price}, 1)">+</button>
-        </div>
-      `;
-      container.appendChild(div);
-    });
-
-    renderStoreCart(storeKey);
-    window.scrollTo({ top: 0, behavior: 'smooth' });
-  }
-
-  // Остальной код остаётся без изменений
+  // Инициализация (без изменений)
+  renderShops();
+  renderGlobalCart();
+  applyLanguage();
 </script>
-
 </body>
 </html>
