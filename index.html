@@ -111,13 +111,100 @@
     }
     .floating-buttons button:hover { background:#e65c00; }
 
-    /* ===== ДОБАВЛЕНО: админка и курьер (стили) ===== */
-    .admin-panel, .courier-panel, .login-panel {
-      max-width: 900px;
-      margin: 30px auto;
-      background: #fff;
+    /* Админ и курьер */
+    .admin-panel, .courier-panel {
+      max-width: 1000px;
+      margin: 40px auto;
+      background: white;
       padding: 20px;
       border-radius: 10px;
       box-shadow: 0 2px 6px rgba(0,0,0,0.1);
     }
-    .admin-panel h3, .courier-panel h3, .login-panel h
+    .admin-panel table, .courier-panel table {
+      width: 100%;
+      border-collapse: collapse;
+      font-size: 14px;
+    }
+    .admin-panel th, .admin-panel td,
+    .courier-panel th, .courier-panel td {
+      border: 1px solid #ddd;
+      padding: 8px;
+      text-align: left;
+    }
+    .admin-panel th, .courier-panel th {
+      background: #f1f1f1;
+    }
+    .status-new { color: blue; }
+    .status-work { color: orange; }
+    .status-done { color: green; }
+    .status-cancel { color: red; }
+  </style>
+</head>
+<body>
+
+<header>
+  <div class="logo-box" onclick="goHome()">
+    <img src="logo.png" alt="Artik Food">
+    <h1>Artik Food</h1>
+  </div>
+  <nav>
+    <a href="#" onclick="goHome()">Главная</a>
+    <a href="#order">Заказать</a>
+    <a href="#contacts">Контакты</a>
+  </nav>
+</header>
+
+<!-- ГЛАВНАЯ -->
+<div id="home-page">
+
+<section class="hero">
+  <h2>Доставка продуктов в Артике</h2>
+  <p>Свежие продукты из супермаркетов — прямо к вашей двери</p>
+  <button onclick="document.getElementById('order').scrollIntoView({behavior:'smooth'});">Заказать сейчас</button>
+</section>
+
+<section class="section" id="shops">
+  <h3>Супермаркеты</h3>
+  <div class="shops" id="shops-list"></div>
+</section>
+
+<section class="section">
+  <div class="cart" id="global-cart">
+    <h4>Корзина (все магазины)</h4>
+    <div id="global-cart-items"></div>
+    <div class="cart-total" id="global-cart-total">Товары: 0 AMD</div>
+    <div class="cart-total" id="delivery-total">Доставка: 0 AMD</div>
+    <div class="cart-total" id="grand-total">Итого: 0 AMD</div>
+  </div>
+</section>
+
+</div>
+
+<!-- СТРАНИЦА СУПЕРМАРКЕТА -->
+<div id="store-page" class="hidden">
+  <section class="section">
+    <h3 id="store-title"></h3>
+    <div class="products" id="store-products"></div>
+
+    <div class="cart hidden" id="store-cart">
+      <h4>Корзина этого магазина</h4>
+      <div id="store-cart-items"></div>
+      <div class="cart-total" id="store-cart-total">Итого: 0 AMD</div>
+      <button onclick="sendStoreToWhatsApp()">Заказать из этого магазина (WhatsApp)</button>
+      <button onclick="sendStoreToTelegram()" style="background:#0088cc;">Заказать из этого магазина (Telegram)</button>
+    </div>
+  </section>
+</div>
+
+<!-- ОФОРМЛЕНИЕ -->
+<section class="section" id="order">
+  <h3>Оформление заказа</h3>
+  <form class="order-form" onsubmit="event.preventDefault(); sendFormToWhatsApp(); saveOrder();">
+    <input type="text" id="name" placeholder="Ваше имя" required />
+    <input type="tel" id="phone" placeholder="Телефон" required />
+    <input type="text" id="address" placeholder="Адрес доставки" required />
+    <select id="district" required onchange="renderGlobalCart()">
+      <option value="">Выберите район доставки</option>
+      <option value="Артик">Артик — 500 AMD</option>
+      <option value="Арич">Арич — 700 AMD</option>
+      <option value="Нор-Кянк">Нор-К
