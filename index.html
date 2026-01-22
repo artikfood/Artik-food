@@ -3,518 +3,1032 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Artik Food - Доставка продуктов</title>
-    <link rel="stylesheet" href="style.css">
-    <link rel="manifest" href="manifest.json">
+    <title>Artik Food | Премиум доставка</title>
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <style>
+        /* ===== CSS RESET ===== */
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+            font-family: 'Segoe UI', system-ui, -apple-system, sans-serif;
+        }
+
+        /* ===== VARIABLES ===== */
+        :root {
+            --primary: #00a896;
+            --primary-dark: #028090;
+            --secondary: #f4a261;
+            --dark: #2d3142;
+            --light: #f8f9fa;
+            --gray: #6c757d;
+            --success: #06d6a0;
+            --danger: #ef476f;
+            --shadow: 0 10px 30px rgba(0, 0, 0, 0.08);
+            --radius: 16px;
+            --transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+        }
+
+        /* ===== BASE STYLES ===== */
+        body {
+            background: linear-gradient(135deg, #f8f9fa 0%, #e9ecef 100%);
+            color: var(--dark);
+            line-height: 1.6;
+            min-height: 100vh;
+        }
+
+        .container {
+            max-width: 1400px;
+            margin: 0 auto;
+            padding: 0 20px;
+        }
+
+        /* ===== TYPOGRAPHY ===== */
+        h1, h2, h3, h4 {
+            font-weight: 700;
+            line-height: 1.2;
+        }
+
+        h1 { font-size: 3.5rem; }
+        h2 { font-size: 2.5rem; }
+        h3 { font-size: 1.8rem; }
+        h4 { font-size: 1.4rem; }
+
+        .text-gradient {
+            background: linear-gradient(90deg, var(--primary), var(--primary-dark));
+            -webkit-background-clip: text;
+            background-clip: text;
+            color: transparent;
+        }
+
+        /* ===== HEADER ===== */
+        .header {
+            background: white;
+            position: fixed;
+            top: 0;
+            left: 0;
+            right: 0;
+            z-index: 1000;
+            box-shadow: var(--shadow);
+            padding: 1rem 0;
+        }
+
+        .nav {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+        }
+
+        .logo {
+            display: flex;
+            align-items: center;
+            gap: 15px;
+            text-decoration: none;
+            color: var(--dark);
+        }
+
+        .logo-icon {
+            width: 50px;
+            height: 50px;
+            background: linear-gradient(135deg, var(--primary), var(--primary-dark));
+            border-radius: 12px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            color: white;
+            font-size: 1.5rem;
+            font-weight: bold;
+        }
+
+        .logo-text {
+            font-size: 1.8rem;
+            font-weight: 700;
+        }
+
+        .logo-text span {
+            color: var(--primary);
+        }
+
+        .nav-links {
+            display: flex;
+            gap: 2rem;
+            align-items: center;
+        }
+
+        .nav-link {
+            color: var(--dark);
+            text-decoration: none;
+            font-weight: 500;
+            padding: 0.5rem 1rem;
+            border-radius: var(--radius);
+            transition: var(--transition);
+        }
+
+        .nav-link:hover {
+            background: rgba(0, 168, 150, 0.1);
+            color: var(--primary);
+        }
+
+        .btn {
+            display: inline-flex;
+            align-items: center;
+            gap: 10px;
+            padding: 14px 28px;
+            border-radius: var(--radius);
+            font-weight: 600;
+            text-decoration: none;
+            cursor: pointer;
+            border: none;
+            transition: var(--transition);
+            font-size: 1rem;
+        }
+
+        .btn-primary {
+            background: linear-gradient(135deg, var(--primary), var(--primary-dark));
+            color: white;
+            box-shadow: 0 4px 15px rgba(0, 168, 150, 0.3);
+        }
+
+        .btn-primary:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 8px 25px rgba(0, 168, 150, 0.4);
+        }
+
+        .btn-outline {
+            border: 2px solid var(--primary);
+            color: var(--primary);
+            background: transparent;
+        }
+
+        .btn-outline:hover {
+            background: var(--primary);
+            color: white;
+        }
+
+        /* ===== HERO SECTION ===== */
+        .hero {
+            padding: 180px 0 100px;
+            background: linear-gradient(rgba(255, 255, 255, 0.9), rgba(255, 255, 255, 0.9)),
+                        url('https://images.unsplash.com/photo-1556909114-f6e7ad7d3136?ixlib=rb-4.0.3&auto=format&fit=crop&w=1920&q=80');
+            background-size: cover;
+            background-position: center;
+            position: relative;
+            overflow: hidden;
+        }
+
+        .hero::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: 0;
+            right: 0;
+            bottom: 0;
+            background: linear-gradient(45deg, rgba(0, 168, 150, 0.1), rgba(2, 128, 144, 0.1));
+        }
+
+        .hero-content {
+            position: relative;
+            z-index: 1;
+            max-width: 600px;
+        }
+
+        .hero h1 {
+            margin-bottom: 1.5rem;
+        }
+
+        .hero p {
+            font-size: 1.2rem;
+            color: var(--gray);
+            margin-bottom: 2rem;
+        }
+
+        .hero-stats {
+            display: flex;
+            gap: 3rem;
+            margin-top: 3rem;
+        }
+
+        .stat {
+            display: flex;
+            flex-direction: column;
+        }
+
+        .stat-number {
+            font-size: 2.5rem;
+            font-weight: 700;
+            color: var(--primary);
+        }
+
+        .stat-label {
+            color: var(--gray);
+            font-size: 0.9rem;
+            text-transform: uppercase;
+            letter-spacing: 1px;
+        }
+
+        /* ===== STORES SECTION ===== */
+        .section {
+            padding: 100px 0;
+        }
+
+        .section-title {
+            text-align: center;
+            margin-bottom: 4rem;
+        }
+
+        .stores-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+            gap: 2rem;
+            margin-bottom: 4rem;
+        }
+
+        .store-card {
+            background: white;
+            border-radius: var(--radius);
+            overflow: hidden;
+            box-shadow: var(--shadow);
+            transition: var(--transition);
+        }
+
+        .store-card:hover {
+            transform: translateY(-10px);
+            box-shadow: 0 20px 40px rgba(0, 0, 0, 0.12);
+        }
+
+        .store-image {
+            height: 200px;
+            background: linear-gradient(45deg, #f8f9fa, #e9ecef);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 4rem;
+            color: var(--primary);
+        }
+
+        .store-content {
+            padding: 2rem;
+        }
+
+        .store-badge {
+            display: inline-block;
+            background: var(--secondary);
+            color: white;
+            padding: 5px 15px;
+            border-radius: 20px;
+            font-size: 0.8rem;
+            font-weight: 600;
+            margin-bottom: 1rem;
+        }
+
+        .store-meta {
+            display: flex;
+            gap: 1rem;
+            color: var(--gray);
+            font-size: 0.9rem;
+            margin: 1rem 0;
+        }
+
+        /* ===== CART ===== */
+        .cart-sidebar {
+            position: fixed;
+            top: 0;
+            right: -400px;
+            width: 400px;
+            height: 100vh;
+            background: white;
+            box-shadow: -10px 0 30px rgba(0, 0, 0, 0.1);
+            z-index: 2000;
+            transition: var(--transition);
+            display: flex;
+            flex-direction: column;
+        }
+
+        .cart-sidebar.active {
+            right: 0;
+        }
+
+        .cart-header {
+            padding: 2rem;
+            border-bottom: 1px solid #eee;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+        }
+
+        .cart-items {
+            flex: 1;
+            overflow-y: auto;
+            padding: 2rem;
+        }
+
+        .cart-item {
+            display: flex;
+            align-items: center;
+            gap: 1rem;
+            padding: 1rem 0;
+            border-bottom: 1px solid #eee;
+        }
+
+        .cart-item-img {
+            width: 80px;
+            height: 80px;
+            background: #f8f9fa;
+            border-radius: 10px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 1.5rem;
+            color: var(--primary);
+        }
+
+        .cart-item-info {
+            flex: 1;
+        }
+
+        .cart-item-controls {
+            display: flex;
+            align-items: center;
+            gap: 10px;
+            margin-top: 10px;
+        }
+
+        .qty-btn {
+            width: 30px;
+            height: 30px;
+            border-radius: 50%;
+            border: 1px solid var(--primary);
+            background: transparent;
+            color: var(--primary);
+            cursor: pointer;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+        }
+
+        .cart-footer {
+            padding: 2rem;
+            border-top: 1px solid #eee;
+            background: #f8f9fa;
+        }
+
+        /* ===== MODALS ===== */
+        .modal {
+            position: fixed;
+            top: 0;
+            left: 0;
+            right: 0;
+            bottom: 0;
+            background: rgba(0, 0, 0, 0.8);
+            display: none;
+            align-items: center;
+            justify-content: center;
+            z-index: 3000;
+            padding: 20px;
+        }
+
+        .modal.active {
+            display: flex;
+            animation: fadeIn 0.3s ease;
+        }
+
+        .modal-content {
+            background: white;
+            border-radius: var(--radius);
+            max-width: 500px;
+            width: 100%;
+            max-height: 90vh;
+            overflow-y: auto;
+            animation: slideUp 0.4s cubic-bezier(0.4, 0, 0.2, 1);
+        }
+
+        .modal-header {
+            padding: 2rem 2rem 1rem;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+        }
+
+        .modal-body {
+            padding: 0 2rem 2rem;
+        }
+
+        .form-group {
+            margin-bottom: 1.5rem;
+        }
+
+        .form-label {
+            display: block;
+            margin-bottom: 0.5rem;
+            font-weight: 500;
+            color: var(--dark);
+        }
+
+        .form-control {
+            width: 100%;
+            padding: 14px;
+            border: 2px solid #e9ecef;
+            border-radius: 10px;
+            font-size: 1rem;
+            transition: var(--transition);
+        }
+
+        .form-control:focus {
+            outline: none;
+            border-color: var(--primary);
+            box-shadow: 0 0 0 3px rgba(0, 168, 150, 0.1);
+        }
+
+        /* ===== ADMIN PANEL ===== */
+        .admin-panel {
+            position: fixed;
+            top: 0;
+            left: -400px;
+            width: 400px;
+            height: 100vh;
+            background: white;
+            box-shadow: 10px 0 30px rgba(0, 0, 0, 0.1);
+            z-index: 2000;
+            transition: var(--transition);
+            display: flex;
+            flex-direction: column;
+        }
+
+        .admin-panel.active {
+            left: 0;
+        }
+
+        .admin-header {
+            background: linear-gradient(135deg, var(--dark), #1a1d29);
+            color: white;
+            padding: 2rem;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+        }
+
+        .admin-nav {
+            padding: 2rem;
+            flex: 1;
+        }
+
+        .admin-nav-item {
+            display: flex;
+            align-items: center;
+            gap: 15px;
+            padding: 1rem;
+            color: var(--dark);
+            text-decoration: none;
+            border-radius: 10px;
+            transition: var(--transition);
+            margin-bottom: 10px;
+        }
+
+        .admin-nav-item:hover {
+            background: #f8f9fa;
+            color: var(--primary);
+        }
+
+        /* ===== ANIMATIONS ===== */
+        @keyframes fadeIn {
+            from { opacity: 0; }
+            to { opacity: 1; }
+        }
+
+        @keyframes slideUp {
+            from {
+                opacity: 0;
+                transform: translateY(50px);
+            }
+            to {
+                opacity: 1;
+                transform: translateY(0);
+            }
+        }
+
+        /* ===== RESPONSIVE ===== */
+        @media (max-width: 768px) {
+            .container {
+                padding: 0 15px;
+            }
+            
+            h1 { font-size: 2.5rem; }
+            h2 { font-size: 2rem; }
+            
+            .nav-links {
+                display: none;
+            }
+            
+            .hero-stats {
+                flex-direction: column;
+                gap: 1.5rem;
+            }
+            
+            .cart-sidebar,
+            .admin-panel {
+                width: 100%;
+                right: -100%;
+            }
+            
+            .cart-sidebar.active {
+                right: 0;
+            }
+            
+            .admin-panel.active {
+                left: 0;
+            }
+        }
+
+        /* ===== UTILITY CLASSES ===== */
+        .hidden { display: none !important; }
+        .text-center { text-align: center; }
+        .mb-1 { margin-bottom: 1rem; }
+        .mb-2 { margin-bottom: 2rem; }
+        .mt-1 { margin-top: 1rem; }
+        .mt-2 { margin-top: 2rem; }
+        .p-1 { padding: 1rem; }
+        .p-2 { padding: 2rem; }
+    </style>
 </head>
 <body>
-    <!-- Скрытая ссылка для админа -->
-    <a href="#" onclick="showAdminPanel()" class="admin-access-link">
-        <i class="fas fa-cog"></i>
-    </a>
 
-    <!-- Уведомления -->
-    <div id="notification-container"></div>
-
-    <!-- Чат поддержки -->
-    <div id="chat-widget">
-        <div class="chat-header" onclick="toggleChat()">
-            <i class="fas fa-comments"></i> Поддержка
-            <span class="chat-badge" id="chat-unread">0</span>
-        </div>
-        <div class="chat-body">
-            <div class="chat-messages" id="chat-messages"></div>
-            <div class="chat-input">
-                <input type="text" id="chat-input" placeholder="Введите сообщение...">
-                <button onclick="sendChatMessage()"><i class="fas fa-paper-plane"></i></button>
+<!-- ===== HEADER ===== -->
+<header class="header">
+    <div class="container">
+        <nav class="nav">
+            <a href="#" class="logo" onclick="showHome()">
+                <div class="logo-icon">AF</div>
+                <div class="logo-text">Artik<span>Food</span></div>
+            </a>
+            
+            <div class="nav-links">
+                <a href="#" class="nav-link" onclick="showHome()"><i class="fas fa-home"></i> Главная</a>
+                <a href="#" class="nav-link" onclick="showStores()"><i class="fas fa-store"></i> Магазины</a>
+                <a href="#" class="nav-link" onclick="showOrderForm()"><i class="fas fa-shopping-bag"></i> Заказать</a>
+                <button class="btn btn-outline" onclick="toggleCart()">
+                    <i class="fas fa-shopping-cart"></i> Корзина
+                    <span id="cart-count" class="badge">0</span>
+                </button>
+                <button class="btn btn-primary" onclick="showCourierModal()">
+                    <i class="fas fa-bicycle"></i> Стать курьером
+                </button>
             </div>
-        </div>
-    </div>
-
-    <!-- Основной интерфейс -->
-    <header>
-        <div class="logo-box" onclick="goHome()">
-            <div class="logo">AF</div>
-            <h1>Artik Food</h1>
-        </div>
-        
-        <div class="online-status" id="online-status">
-            <i class="fas fa-wifi"></i> Онлайн
-        </div>
-        
-        <nav>
-            <a href="#" onclick="goHome()"><i class="fas fa-home"></i> Главная</a>
-            <a href="#order"><i class="fas fa-shopping-cart"></i> Заказать</a>
-            <a href="#reviews"><i class="fas fa-star"></i> Отзывы</a>
-            <a href="#contacts"><i class="fas fa-phone"></i> Контакты</a>
         </nav>
-        
-        <div class="header-buttons">
-            <button class="btn-courier" onclick="showCourierModal()">
-                <i class="fas fa-motorcycle"></i> Курьер
-            </button>
-            <button class="btn-cart" onclick="toggleCart()">
-                <i class="fas fa-shopping-basket"></i>
-                <span class="cart-count" id="cart-count">0</span>
-            </button>
-        </div>
-    </header>
+    </div>
+</header>
 
-    <!-- Корзина -->
-    <div id="cart-sidebar">
-        <div class="cart-header">
-            <h3><i class="fas fa-shopping-cart"></i> Корзина</h3>
-            <button class="close-cart" onclick="toggleCart()">&times;</button>
-        </div>
-        <div class="cart-items" id="cart-items">
-            <!-- Товары загружаются динамически -->
-        </div>
-        <div class="cart-footer">
-            <div class="cart-totals">
-                <div>Товары: <span id="cart-subtotal">0</span> AMD</div>
-                <div>Доставка: <span id="cart-delivery">0</span> AMD</div>
-                <div class="total">Итого: <span id="cart-total">0</span> AMD</div>
-            </div>
-            <button class="btn-order" onclick="scrollToOrder()">
-                <i class="fas fa-check"></i> Оформить заказ
+<!-- ===== HERO SECTION ===== -->
+<section class="hero" id="home-section">
+    <div class="container">
+        <div class="hero-content">
+            <h1 class="text-gradient">Премиум доставка <br>продуктов в <span style="color: var(--dark);">Артике</span></h1>
+            <p>Свежайшие продукты из лучших магазинов города прямо к вашей двери. 
+               Быстро, качественно, с заботой о каждом клиенте.</p>
+            <button class="btn btn-primary" onclick="showStores()">
+                <i class="fas fa-rocket"></i> Начать покупки
             </button>
+            
+            <div class="hero-stats">
+                <div class="stat">
+                    <div class="stat-number">30-45</div>
+                    <div class="stat-label">минут доставка</div>
+                </div>
+                <div class="stat">
+                    <div class="stat-number">500+</div>
+                    <div class="stat-label">довольных клиентов</div>
+                </div>
+                <div class="stat">
+                    <div class="stat-number">4.9</div>
+                    <div class="stat-label">средний рейтинг</div>
+                </div>
+            </div>
         </div>
     </div>
+</section>
 
-    <!-- ГЛАВНАЯ СТРАНИЦА -->
-    <main id="home-page">
-        <section class="hero">
-            <div class="hero-content">
-                <h2>Доставка продуктов в Артике</h2>
-                <p>Свежие продукты из супермаркетов — прямо к вашей двери</p>
-                <button class="btn-hero" onclick="scrollToOrder()">
-                    <i class="fas fa-bolt"></i> Заказать сейчас
-                </button>
-            </div>
-            <div class="hero-features">
-                <div class="feature">
-                    <i class="fas fa-clock"></i>
-                    <span>Доставка за 60 минут</span>
-                </div>
-                <div class="feature">
-                    <i class="fas fa-percentage"></i>
-                    <span>Лучшие цены</span>
-                </div>
-                <div class="feature">
-                    <i class="fas fa-star"></i>
-                    <span>Рейтинг 4.9</span>
-                </div>
-            </div>
-        </section>
-
-        <!-- Поиск товаров -->
-        <section class="section search-section">
-            <div class="search-container">
-                <i class="fas fa-search"></i>
-                <input type="text" id="product-search" placeholder="Поиск продуктов...">
-                <button class="btn-clear-search" onclick="clearSearch()">
-                    <i class="fas fa-times"></i>
-                </button>
-            </div>
-        </section>
-
-        <!-- Магазины -->
-        <section class="section" id="shops">
-            <h3><i class="fas fa-store"></i> Супермаркеты</h3>
-            <div class="shops-grid" id="shops-list">
-                <!-- Магазины загружаются динамически -->
-            </div>
-        </section>
-
-        <!-- Продукты магазина -->
-        <section class="section hidden" id="store-products">
-            <div class="store-header">
-                <button class="btn-back" onclick="goHome()">
-                    <i class="fas fa-arrow-left"></i> Назад
-                </button>
-                <h3 id="store-title"></h3>
-            </div>
-            <div class="products-grid" id="products-list">
-                <!-- Продукты загружаются динамически -->
-            </div>
-        </section>
-
-        <!-- Отзывы -->
-        <section class="section" id="reviews">
-            <h3><i class="fas fa-star"></i> Отзывы наших клиентов</h3>
-            <div class="reviews-container">
-                <div class="review-stats">
-                    <div class="average-rating">
-                        <div class="rating-number">4.9</div>
-                        <div class="rating-stars">
-                            <i class="fas fa-star"></i>
-                            <i class="fas fa-star"></i>
-                            <i class="fas fa-star"></i>
-                            <i class="fas fa-star"></i>
-                            <i class="fas fa-star-half-alt"></i>
-                        </div>
-                        <div class="rating-count">на основе 247 отзывов</div>
-                    </div>
-                    <div class="rating-bars">
-                        <div class="rating-bar">
-                            <span>5 звёзд</span>
-                            <div class="bar">
-                                <div class="fill" style="width: 85%"></div>
-                            </div>
-                            <span>85%</span>
-                        </div>
-                        <div class="rating-bar">
-                            <span>4 звезды</span>
-                            <div class="bar">
-                                <div class="fill" style="width: 12%"></div>
-                            </div>
-                            <span>12%</span>
-                        </div>
-                        <div class="rating-bar">
-                            <span>3 звезды</span>
-                            <div class="bar">
-                                <div class="fill" style="width: 2%"></div>
-                            </div>
-                            <span>2%</span>
-                        </div>
-                        <div class="rating-bar">
-                            <span>2 звезды</span>
-                            <div class="bar">
-                                <div class="fill" style="width: 1%"></div>
-                            </div>
-                            <span>1%</span>
-                        </div>
-                    </div>
-                </div>
-                
-                <div class="add-review">
-                    <h4>Оставить отзыв</h4>
-                    <div class="review-rating">
-                        <span>Оценка:</span>
-                        <div class="stars-input">
-                            <i class="far fa-star" data-rating="1"></i>
-                            <i class="far fa-star" data-rating="2"></i>
-                            <i class="far fa-star" data-rating="3"></i>
-                            <i class="far fa-star" data-rating="4"></i>
-                            <i class="far fa-star" data-rating="5"></i>
-                        </div>
-                    </div>
-                    <textarea id="review-text" placeholder="Поделитесь вашим опытом..."></textarea>
-                    <input type="text" id="review-name" placeholder="Ваше имя (необязательно)">
-                    <button class="btn-submit-review" onclick="submitReview()">
-                        <i class="fas fa-paper-plane"></i> Отправить отзыв
-                    </button>
-                </div>
-                
-                <div class="reviews-list" id="reviews-list">
-                    <!-- Отзывы загружаются динамически -->
-                </div>
-            </div>
-        </section>
-
-        <!-- Оформление заказа -->
-        <section class="section" id="order">
-            <h3><i class="fas fa-shopping-bag"></i> Оформление заказа</h3>
-            <form id="order-form" class="order-form">
-                <div class="form-group">
-                    <label for="name"><i class="fas fa-user"></i> Ваше имя *</label>
-                    <input type="text" id="name" required>
-                    <div class="error-message" id="name-error"></div>
-                </div>
-                
-                <div class="form-group">
-                    <label for="phone"><i class="fas fa-phone"></i> Телефон *</label>
-                    <input type="tel" id="phone" required>
-                    <div class="error-message" id="phone-error"></div>
-                </div>
-                
-                <div class="form-group">
-                    <label for="address"><i class="fas fa-map-marker-alt"></i> Адрес доставки *</label>
-                    <input type="text" id="address" required>
-                    <div class="error-message" id="address-error"></div>
-                </div>
-                
-                <div class="form-group">
-                    <label for="district"><i class="fas fa-map"></i> Район доставки *</label>
-                    <select id="district" required onchange="calculateDelivery()">
-                        <option value="">Выберите район...</option>
-                        <option value="Артик">Артик — 500 AMD</option>
-                        <option value="Арич">Арич — 700 AMD</option>
-                        <option value="Нор-Кянк">Нор-Кянк — 1000 AMD</option>
-                        <option value="Пемзашен">Пемзашен — 1000 AMD</option>
-                    </select>
-                </div>
-                
-                <div class="form-group">
-                    <label for="payment"><i class="fas fa-credit-card"></i> Способ оплаты *</label>
-                    <select id="payment" required>
-                        <option value="">Выберите оплату...</option>
-                        <option value="cash">💵 Наличными курьеру</option>
-                        <option value="idram">🏦 IDram</option>
-                        <option value="card">💳 Картой онлайн</option>
-                    </select>
-                </div>
-                
-                <div class="form-group">
-                    <label for="comment"><i class="fas fa-comment"></i> Комментарий к заказу</label>
-                    <textarea id="comment" rows="3"></textarea>
-                </div>
-                
-                <div class="order-summary">
-                    <h4>Итог заказа</h4>
-                    <div class="summary-item">
-                        <span>Товары:</span>
-                        <span id="summary-items">0 AMD</span>
-                    </div>
-                    <div class="summary-item">
-                        <span>Доставка:</span>
-                        <span id="summary-delivery">0 AMD</span>
-                    </div>
-                    <div class="summary-total">
-                        <span>Итого к оплате:</span>
-                        <span id="summary-total">0 AMD</span>
-                    </div>
-                </div>
-                
-                <button type="submit" class="btn-submit-order">
-                    <i class="fas fa-check-circle"></i> Подтвердить заказ
-                </button>
-                
-                <div class="form-notice">
-                    <i class="fas fa-info-circle"></i>
-                    Нажимая кнопку, вы соглашаетесь с условиями доставки
-                </div>
-            </form>
-        </section>
-
-        <!-- Контакты -->
-        <section class="section" id="contacts">
-            <h3><i class="fas fa-address-book"></i> Контакты</h3>
-            <div class="contacts-grid">
-                <div class="contact-card">
-                    <div class="contact-icon">
-                        <i class="fas fa-phone-alt"></i>
-                    </div>
-                    <div class="contact-info">
-                        <h4>Телефон / WhatsApp</h4>
-                        <a href="tel:+37443797727">+374 43 79 77 27</a>
-                    </div>
-                </div>
-                
-                <div class="contact-card">
-                    <div class="contact-icon">
-                        <i class="fab fa-telegram"></i>
-                    </div>
-                    <div class="contact-info">
-                        <h4>Telegram</h4>
-                        <a href="https://t.me/artikfood" target="_blank">@artikfood</a>
-                    </div>
-                </div>
-                
-                <div class="contact-card">
-                    <div class="contact-icon">
-                        <i class="fas fa-map-marker-alt"></i>
-                    </div>
-                    <div class="contact-info">
-                        <h4>Адрес</h4>
-                        <p>Артик, Ширак, Армения</p>
-                    </div>
-                </div>
-                
-                <div class="contact-card">
-                    <div class="contact-icon">
-                        <i class="fas fa-clock"></i>
-                    </div>
-                    <div class="contact-info">
-                        <h4>Часы работы</h4>
-                        <p>Круглосуточно, 7 дней в неделю</p>
-                    </div>
-                </div>
-            </div>
-            
-            <div class="map-container">
-                <div id="map-placeholder">
-                    <i class="fas fa-map"></i>
-                    <p>Карта доставки в Артике</p>
-                    <button class="btn-show-map" onclick="showDeliveryMap()">
-                        <i class="fas fa-expand"></i> Показать карту
-                    </button>
-                </div>
-            </div>
-        </section>
-    </main>
-
-    <footer>
-        <div class="footer-content">
-            <div class="footer-section">
-                <h4>Artik Food</h4>
-                <p>Доставка продуктов в Артике. Свежесть и качество гарантированы!</p>
-                <div class="social-links">
-                    <a href="#"><i class="fab fa-facebook"></i></a>
-                    <a href="#"><i class="fab fa-instagram"></i></a>
-                    <a href="#"><i class="fab fa-telegram"></i></a>
-                    <a href="#"><i class="fab fa-whatsapp"></i></a>
-                </div>
-            </div>
-            
-            <div class="footer-section">
-                <h4>Быстрые ссылки</h4>
-                <a href="#" onclick="goHome()">Главная</a>
-                <a href="#order">Заказать</a>
-                <a href="#reviews">Отзывы</a>
-                <a href="#contacts">Контакты</a>
-                <a href="#" onclick="showCourierModal()">Работа курьером</a>
-            </div>
-            
-            <div class="footer-section">
-                <h4>Способы оплаты</h4>
-                <div class="payment-methods">
-                    <span>💵 Наличные</span>
-                    <span>🏦 IDram</span>
-                    <span>💳 Карты</span>
-                </div>
-            </div>
+<!-- ===== STORES SECTION ===== -->
+<section class="section hidden" id="stores-section">
+    <div class="container">
+        <div class="section-title">
+            <h2 class="text-gradient">Выберите магазин</h2>
+            <p>Лучшие супермаркеты города к вашим услугам</p>
         </div>
         
-        <div class="footer-bottom">
-            <p>© 2026 Artik Food — Доставка продуктов в Артике. Все права защищены.</p>
-            <div class="footer-links">
-                <a href="#" onclick="showPrivacyPolicy()">Политика конфиденциальности</a>
-                <a href="#" onclick="showTerms()">Условия использования</a>
-            </div>
+        <div class="stores-grid" id="stores-container">
+            <!-- Магазины загружаются через JS -->
         </div>
-    </footer>
+    </div>
+</section>
 
-    <!-- МОДАЛЬНЫЕ ОКНА -->
-    <!-- Курьер -->
-    <div id="courier-modal" class="modal">
-        <div class="modal-content">
+<!-- ===== PRODUCTS SECTION ===== -->
+<section class="section hidden" id="products-section">
+    <div class="container">
+        <button class="btn btn-outline mb-2" onclick="showStores()">
+            <i class="fas fa-arrow-left"></i> Назад к магазинам
+        </button>
+        
+        <h2 id="store-name" class="text-gradient mb-2"></h2>
+        
+        <div class="stores-grid" id="products-container">
+            <!-- Товары загружаются через JS -->
+        </div>
+    </div>
+</section>
+
+<!-- ===== ORDER FORM ===== -->
+<section class="section hidden" id="order-section">
+    <div class="container">
+        <div class="modal-content" style="max-width: 600px; margin: 0 auto;">
             <div class="modal-header">
-                <h3><i class="fas fa-motorcycle"></i> Работа курьером</h3>
-                <button class="modal-close" onclick="closeModal('courier-modal')">&times;</button>
+                <h3 class="text-gradient">Оформление заказа</h3>
             </div>
+            
             <div class="modal-body">
-                <div class="mode-buttons">
-                    <button class="mode-btn" onclick="showCourierRegistration()">
-                        <i class="fas fa-user-plus"></i> Стать курьером
+                <form id="order-form" onsubmit="submitOrder(event)">
+                    <div class="form-group">
+                        <label class="form-label">Ваше имя</label>
+                        <input type="text" class="form-control" id="order-name" required>
+                    </div>
+                    
+                    <div class="form-group">
+                        <label class="form-label">Телефон</label>
+                        <input type="tel" class="form-control" id="order-phone" required>
+                    </div>
+                    
+                    <div class="form-group">
+                        <label class="form-label">Адрес доставки</label>
+                        <input type="text" class="form-control" id="order-address" required>
+                    </div>
+                    
+                    <div class="form-group">
+                        <label class="form-label">Район</label>
+                        <select class="form-control" id="order-district" required>
+                            <option value="">Выберите район</option>
+                            <option value="Артик">Артик (500 AMD)</option>
+                            <option value="Арич">Арич (700 AMD)</option>
+                            <option value="Нор-Кянк">Нор-Кянк (1000 AMD)</option>
+                        </select>
+                    </div>
+                    
+                    <div class="form-group">
+                        <label class="form-label">Способ оплаты</label>
+                        <select class="form-control" id="order-payment" required>
+                            <option value="">Выберите оплату</option>
+                            <option value="cash">💵 Наличными курьеру</option>
+                            <option value="card">💳 Картой онлайн</option>
+                            <option value="idram">🏦 IDram</option>
+                        </select>
+                    </div>
+                    
+                    <button type="submit" class="btn btn-primary" style="width: 100%; padding: 16px;">
+                        <i class="fas fa-paper-plane"></i> Отправить заказ
                     </button>
-                    <button class="mode-btn" onclick="showCourierLogin()">
-                        <i class="fas fa-sign-in-alt"></i> Вход в личный кабинет
-                    </button>
+                </form>
+            </div>
+        </div>
+    </div>
+</section>
+
+<!-- ===== CART SIDEBAR ===== -->
+<div class="cart-sidebar" id="cart-sidebar">
+    <div class="cart-header">
+        <h3 class="text-gradient">🛒 Ваша корзина</h3>
+        <button class="btn btn-outline" onclick="toggleCart()">
+            <i class="fas fa-times"></i>
+        </button>
+    </div>
+    
+    <div class="cart-items" id="cart-items">
+        <!-- Товары в корзине -->
+    </div>
+    
+    <div class="cart-footer">
+        <div style="display: flex; justify-content: space-between; margin-bottom: 1rem;">
+            <span>Сумма:</span>
+            <span id="cart-total">0 AMD</span>
+        </div>
+        <div style="display: flex; justify-content: space-between; margin-bottom: 1rem;">
+            <span>Доставка:</span>
+            <span id="cart-delivery">0 AMD</span>
+        </div>
+        <div style="display: flex; justify-content: space-between; font-size: 1.2rem; font-weight: bold; margin-bottom: 2rem;">
+            <span>Итого:</span>
+            <span id="cart-grand-total">0 AMD</span>
+        </div>
+        
+        <button class="btn btn-primary" style="width: 100%;" onclick="showOrderForm()">
+            <i class="fas fa-lock"></i> Перейти к оформлению
+        </button>
+    </div>
+</div>
+
+<!-- ===== MODALS ===== -->
+<div class="modal" id="courier-modal">
+    <div class="modal-content">
+        <div class="modal-header">
+            <h3 class="text-gradient"><i class="fas fa-bicycle"></i> Работа курьером</h3>
+            <button class="btn btn-outline" onclick="closeModal('courier-modal')">
+                <i class="fas fa-times"></i>
+            </button>
+        </div>
+        
+        <div class="modal-body">
+            <div style="text-align: center; margin-bottom: 2rem;">
+                <div style="font-size: 4rem; color: var(--primary); margin-bottom: 1rem;">
+                    🚴‍♂️
                 </div>
+                <h4 class="text-gradient">Зарабатывайте с Artik Food</h4>
+                <p>Станьте частью нашей команды и зарабатывайте от 3000 AMD в день</p>
+            </div>
+            
+            <div class="form-group">
+                <button class="btn btn-primary" style="width: 100%; margin-bottom: 1rem;" onclick="showCourierRegistration()">
+                    <i class="fas fa-user-plus"></i> Регистрация курьера
+                </button>
+                <button class="btn btn-outline" style="width: 100%;" onclick="showCourierLogin()">
+                    <i class="fas fa-sign-in-alt"></i> Вход для курьеров
+                </button>
             </div>
         </div>
     </div>
+</div>
 
-    <!-- Регистрация курьера -->
-    <div id="courier-registration-modal" class="modal">
-        <div class="modal-content">
-            <div class="modal-header">
-                <h3><i class="fas fa-user-plus"></i> Регистрация курьера</h3>
-                <button class="modal-close" onclick="closeAllModals()">&times;</button>
-            </div>
-            <form id="courier-registration-form" class="modal-form">
-                <!-- Форма регистрации -->
+<div class="modal" id="courier-registration-modal">
+    <div class="modal-content">
+        <div class="modal-header">
+            <h3 class="text-gradient"><i class="fas fa-user-plus"></i> Регистрация курьера</h3>
+            <button class="btn btn-outline" onclick="closeAllModals()">
+                <i class="fas fa-times"></i>
+            </button>
+        </div>
+        
+        <div class="modal-body">
+            <form id="courier-reg-form" onsubmit="registerCourier(event)">
+                <div class="form-group">
+                    <label class="form-label">Имя и фамилия</label>
+                    <input type="text" class="form-control" id="courier-name" required>
+                </div>
+                
+                <div class="form-group">
+                    <label class="form-label">Телефон</label>
+                    <input type="tel" class="form-control" id="courier-phone" required>
+                </div>
+                
+                <div class="form-group">
+                    <label class="form-label">Транспорт</label>
+                    <select class="form-control" id="courier-vehicle" required>
+                        <option value="">Выберите транспорт</option>
+                        <option value="bicycle">🚲 Велосипед</option>
+                        <option value="motorcycle">🏍️ Мотоцикл</option>
+                        <option value="car">🚗 Автомобиль</option>
+                    </select>
+                </div>
+                
+                <div class="form-group">
+                    <label class="form-label">Пароль</label>
+                    <input type="password" class="form-control" id="courier-password" required>
+                </div>
+                
+                <button type="submit" class="btn btn-primary" style="width: 100%;">
+                    <i class="fas fa-check"></i> Зарегистрироваться
+                </button>
+                
+                <div class="text-center mt-2">
+                    <a href="#" onclick="showCourierLogin()" style="color: var(--primary); text-decoration: none;">
+                        Уже есть аккаунт? Войти
+                    </a>
+                </div>
             </form>
         </div>
     </div>
+</div>
 
-    <!-- Вход курьера -->
-    <div id="courier-login-modal" class="modal">
-        <div class="modal-content">
-            <div class="modal-header">
-                <h3><i class="fas fa-sign-in-alt"></i> Вход для курьеров</h3>
-                <button class="modal-close" onclick="closeAllModals()">&times;</button>
-            </div>
-            <form id="courier-login-form" class="modal-form">
-                <!-- Форма входа -->
+<div class="modal" id="courier-login-modal">
+    <div class="modal-content">
+        <div class="modal-header">
+            <h3 class="text-gradient"><i class="fas fa-sign-in-alt"></i> Вход для курьеров</h3>
+            <button class="btn btn-outline" onclick="closeAllModals()">
+                <i class="fas fa-times"></i>
+            </button>
+        </div>
+        
+        <div class="modal-body">
+            <form id="courier-login-form" onsubmit="loginCourier(event)">
+                <div class="form-group">
+                    <label class="form-label">Телефон</label>
+                    <input type="tel" class="form-control" id="login-phone" required>
+                </div>
+                
+                <div class="form-group">
+                    <label class="form-label">Пароль</label>
+                    <input type="password" class="form-control" id="login-password" required>
+                </div>
+                
+                <button type="submit" class="btn btn-primary" style="width: 100%;">
+                    <i class="fas fa-sign-in-alt"></i> Войти в систему
+                </button>
+                
+                <div class="text-center mt-2">
+                    <a href="#" onclick="showCourierRegistration()" style="color: var(--primary); text-decoration: none;">
+                        Нет аккаунта? Зарегистрироваться
+                    </a>
+                </div>
             </form>
         </div>
     </div>
+</div>
 
-    <!-- Админ панель -->
-    <div id="admin-panel" class="panel">
-        <div class="panel-header">
-            <h3><i class="fas fa-crown"></i> Панель администратора</h3>
-            <button class="panel-close" onclick="hideAdminPanel()">&times;</button>
-        </div>
-        <div class="panel-content">
+<!-- ===== ADMIN ACCESS ===== -->
+<div style="position: fixed; bottom: 20px; left: 20px; z-index: 100;">
+    <button class="btn btn-primary" onclick="showAdminPanel()" style="border-radius: 50%; width: 50px; height: 50px; padding: 0;">
+        <i class="fas fa-cog"></i>
+    </button>
+</div>
+
+<!-- ===== ADMIN PANEL ===== -->
+<div class="admin-panel" id="admin-panel">
+    <div class="admin-header">
+        <h3><i class="fas fa-crown"></i> Панель администратора</h3>
+        <button class="btn btn-outline" onclick="hideAdminPanel()" style="color: white; border-color: white;">
+            <i class="fas fa-times"></i>
+        </button>
+    </div>
+    
+    <div class="admin-nav">
+        <a href="#" class="admin-nav-item" onclick="showAdminTab('dashboard')">
+            <i class="fas fa-chart-line"></i> Статистика
+        </a>
+        <a href="#" class="admin-nav-item" onclick="showAdminTab('orders')">
+            <i class="fas fa-shopping-bag"></i> Заказы
+        </a>
+        <a href="#" class="admin-nav-item" onclick="showAdminTab('couriers')">
+            <i class="fas fa-bicycle"></i> Курьеры
+        </a>
+        <a href="#" class="admin-nav-item" onclick="showAdminTab('products')">
+            <i class="fas fa-apple-alt"></i> Товары
+        </a>
+    </div>
+    
+    <div class="modal-body">
+        <div id="admin-content">
             <!-- Контент админки -->
         </div>
     </div>
+</div>
 
-    <!-- Панель курьера -->
-    <div id="courier-panel" class="panel">
-        <div class="panel-header">
-            <h3><i class="fas fa-motorcycle"></i> Личный кабинет курьера</h3>
-            <button class="panel-close" onclick="logoutCourier()">&times;</button>
-        </div>
-        <div class="panel-content">
-            <!-- Контент курьера -->
-        </div>
-    </div>
+<script>
+// ===== GLOBAL VARIABLES =====
+let currentStore = null;
+let cart = JSON.parse(localStorage.getItem('artikFoodCart')) || {};
+let currentCourier = JSON.parse(localStorage.getItem('currentCourier'));
+let adminPassword = "artik123";
 
-    <!-- Карта доставки -->
-    <div id="delivery-map-modal" class="modal">
-        <div class="modal-content modal-lg">
-            <div class="modal-header">
-                <h3><i class="fas fa-map-marked-alt"></i> Карта доставки</h3>
-                <button class="modal-close" onclick="closeModal('delivery-map-modal')">&times;</button>
+// ===== DATA =====
+const stores = {
+    million: {
+        name: "Million Supermarket",
+        icon: "🏪",
+        delivery: "200 AMD",
+        time: "30-45 мин",
+        categories: [
+            {
+                name: "🥦 Овощи и фрукты",
+                products: [
+                    { id: "potato", name: "Картофель", price: 300, unit: "1кг" },
+                    { id: "tomato", name: "Помидоры", price: 500, unit: "1кг" },
+                    { id: "apple", name: "Яблоки Голден", price: 450, unit: "1кг" }
+                ]
+            },
+            {
+                name: "🥩 Мясо и рыба",
+                products: [
+                    { id: "beef", name: "Говядина", price: 3200, unit: "1кг" },
+                    { id: "chicken", name: "Курица", price: 1800, unit: "1кг" }
+                ]
+            }
+        ]
+    },
+    mush: {
+        name: "Мүշ Маркет",
+        icon: "🛒",
+        delivery: "150 AMD",
+        time: "25-40 мин",
+        categories: [
+            {
+                name: "🥕 Овощи",
+                products: [
+                    { id: "potato_m", name: "Картофель", price: 280, unit: "1кг" },
+                    { id: "onion", name: "Лук", price: 250, unit: "1кг" }
+                ]
+            },
+            {
+                name: "🍞 Хлеб",
+                products: [
+                    { id: "bread", name: "Хлеб", price: 200, unit: "шт" },
+                    { id: "lavash", name: "Лаваш", price: 150, unit: "шт" }
+                ]
+            }
+        ]
+    }
+};
+
+// ===== INITIALIZATION =====
+document.addEventListener('DOMContentLoaded', function() {
+    loadStores();
+    updateCartCount();
+    
+    // Проверить авторизацию курьера
+    if (currentCourier) {
+        showNotification(`Добро пожаловать, ${currentCourier.name}!`, 'success');
+    }
+});
+
+// ===== NAVIGATION =====
+function showHome() {
+    hideAllSections();
+    document.getElementById('home-section').classList.remove('hidden');
+}
+
+function showStores() {
+    hideAllSections();
+    document.getElementById('stores-section').classList.remove('hidden');
+    loadStores();
+}
+
+function showOrderForm() {
+    hideAllSections();
+    document.getElementById('order-section').classList.remove('hidden');
+}
+
+function hideAllSections() {
+    document.querySelectorAll('section').forEach(section => {
+        section.classList.add('hidden');
+    });
+}
+
+// ===== STORES =====
+function loadStores() {
+    const container = document.getElementById('stores-container');
+    container.innerHTML = '';
+    
+    Object.keys(stores).forEach(storeId => {
+        const store = stores[storeId];
+        
+        const storeCard = document.createElement('div');
+        storeCard.className = 'store-card';
+        storeCard.innerHTML = `
+            <div class="store-image">
+                <div style="font-size: 4rem;">${store.icon}</div>
             </div>
-            <div class="modal-body">
-                <div id="delivery-map">
-                    <div class="map-zones">
-                        <div class="zone" data-zone="Артик" data-price="500">
-                            <h4>Артик</h4>
-                            <p>500 AMD</p>
-                        </div>
-                        <div class="zone" data-zone="Арич" data-price="700">
-                            <h4>Арич</h4>
-                            <p>700 AMD</p>
-                        </div>
-                        <div class="zone" data-zone="Нор-Кянк" data-price="1000">
-                            <h4>Нор-Кянк</h4>
-                            <p>1000 AMD</p>
-                        </div>
-                        <div class="zone" data-zone="Пемзашен" data-price="1000">
-                            <h4>Пемзашен</h4>
-                            <p>1000 AMD</p>
-                        </div>
-                    </div>
+            <div class="store-content">
+                <span class="store-badge">⭐ Премиум</span>
+                <h4>${store.name}</h4>
+                <div class="store-meta">
+                    <span><i class="fas fa-shipping-fast"></i> ${store.delivery}</span>
+                    <span><i class="fas fa-clock"></i> ${store.time}</span>
                 </div>
+                <p>Свежие продукты и лучшие цены</p>
+                <button class="btn btn-primary" onclick="openStore('${storeId}')" style="width: 100%;">
+                    <i class="fas fa-shopping-basket"></i> Выбрать товары
+                </button>
             </div>
-        </div>
-    </div>
+        `;
+        
+        container.appendChild(storeCard);
+    });
+}
 
-    <!-- Push уведомление запрос -->
-    <div id="push-permission-modal" class="modal">
-        <div class="modal-content">
-            <div class="modal-header">
-                <h3><i class="fas fa-bell"></i> Уведомления о заказах</h3>
-            </div>
-            <div class="modal-body">
-                <p>Получать уведомления о статусе вашего заказа?</p>
-                <div class="modal-buttons">
-                    <button class="btn-secondary" onclick="denyPushNotifications()">
-                        Нет, спасибо
-                    </button>
-                    <button class="btn-primary" onclick="requestPushPermission()">
-                        <i class="fas fa-bell"></i> Разрешить
-                    </button>
-                </div>
-            </div>
-        </div>
-    </div>
+function openStore(storeId) {
+    currentStore = storeId;
+    const store = stores[storeId];
+    
+    hideAllSections();
+    document.getElementById('products-section').classList.remove('hidden');
+    document.getElementById('store-name').textContent = store.name;
+    
+    loadProducts(storeId);
+}
 
-    <script src="script.js"></script>
-    <script>
-        // Регистрация Service Worker
-        if ('serviceWorker' in navigator) {
-            navigator.serviceWorker.register('service-worker.js')
-                .then(() => console.log('Service Worker зарегистрирован'))
-                .catch(err => console.log('Ошибка регистрации SW:', err));
-        }
-    </script>
-</body>
-</html>
+function loadProducts(storeId) {
+    const container = document.getElementById('products-container');
+    container.innerHTML = '';
+    
+    const store = stores[storeId];
+    
+    store.categories.forEach(category => {
+        const categoryCard = document.createElement('div');
+        categoryCard.className = 'store-card';
+        categoryCard.innerHTML = `
+            <div class="store-content">
+                <h4 style="color: var(--primary); margin-bottom: 1.5rem;">${category.name}</h4>
+                ${category.products.map(product => {
+                    const cartQty = cart[storeId]?.[product.id]?.qty || 0;
+                    return `
+                        <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 1rem; padding: 1rem; background: #f8f9fa; border-radius: 10px;">
+                            <div>
+                                <div style="font-weight: 600;">${product.name}</div>
+                                <div style="color: var(--primary); font-weight: bold; font-size: 1.1rem;">${product.price} AMD</div>
+                                <div style="color: var(--gray); font-size: 0.9rem;">${product.unit}</div>
+                            </div>
+                            <div style="display: flex; align-items: center; gap: 10px;">
+                                <button class="qty-btn" onclick="updateCart('${storeId}', '${product.id}', -1, ${product.price}, '
