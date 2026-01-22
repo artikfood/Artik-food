@@ -273,6 +273,43 @@
 
 <!-- ОФОРМЛЕНИЕ -->
 <section class="section" id="order">
+
+<section class="section" id="payment-methods">
+  <h3>Способы оплаты</h3>
+  
+  <div style="display: grid; grid-template-columns: repeat(auto-fit, minmax(200px, 1fr)); gap: 20px; margin-top: 20px;">
+    
+    <div class="payment-card" style="background: white; padding: 20px; border-radius: 10px; box-shadow: 0 2px 8px rgba(0,0,0,0.1); text-align: center;">
+      <div style="font-size: 40px; margin-bottom: 10px;">💵</div>
+      <h4 style="margin: 10px 0;">Наличными</h4>
+      <p style="font-size: 14px; color: #666;">Оплата наличными курьеру при получении заказа</p>
+    </div>
+    
+    <div class="payment-card" style="background: white; padding: 20px; border-radius: 10px; box-shadow: 0 2px 8px rgba(0,0,0,0.1); text-align: center;">
+      <div style="font-size: 40px; margin-bottom: 10px;">🏦</div>
+      <h4 style="margin: 10px 0;">IDram</h4>
+      <p style="font-size: 14px; color: #666;">Оплата через систему IDram. Ссылка придет после подтверждения заказа</p>
+    </div>
+    
+    <div class="payment-card" style="background: white; padding: 20px; border-radius: 10px; box-shadow: 0 2px 8px rgba(0,0,0,0.1); text-align: center;">
+      <div style="font-size: 40px; margin-bottom: 10px;">💳</div>
+      <h4 style="margin: 10px 0;">Банковская карта</h4>
+      <p style="font-size: 14px; color: #666;">Оплата картой онлайн (Visa, MasterCard, ArCa)</p>
+      <p style="font-size: 12px; color: #888; margin-top: 5px;">Скоро будет доступно</p>
+    </div>
+    
+  </div>
+  
+  <div style="margin-top: 30px; background: #f8f9fa; padding: 15px; border-radius: 8px; border-left: 4px solid #27ae60;">
+    <p style="margin: 0; font-size: 14px;"><strong>Как происходит оплата:</strong></p>
+    <ul style="margin: 10px 0; padding-left: 20px; font-size: 14px;">
+      <li>Выбираете удобный способ оплаты при оформлении заказа</li>
+      <li>При оплате наличными — передаете деньги курьеру при получении</li>
+      <li>При онлайн-оплате — получаете ссылку на оплату после подтверждения заказа оператором</li>
+      <li>После успешной оплаты получаете чек на email или в мессенджер</li>
+    </ul>
+  </div>
+</section>
   <h3>Оформление заказа</h3>
   <form class="order-form" onsubmit="event.preventDefault(); sendFormToWhatsApp();">
     <input type="text" id="name" placeholder="Ваше имя" required />
