@@ -3,1032 +3,1241 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Artik Food | Премиум доставка</title>
-    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <title>Artik Food - Доставка продуктов</title>
     <style>
-        /* ===== CSS RESET ===== */
+        /* ========== ОСНОВНЫЕ СТИЛИ ========== */
         * {
-            margin: 0;
-            padding: 0;
             box-sizing: border-box;
-            font-family: 'Segoe UI', system-ui, -apple-system, sans-serif;
         }
-
-        /* ===== VARIABLES ===== */
-        :root {
-            --primary: #00a896;
-            --primary-dark: #028090;
-            --secondary: #f4a261;
-            --dark: #2d3142;
-            --light: #f8f9fa;
-            --gray: #6c757d;
-            --success: #06d6a0;
-            --danger: #ef476f;
-            --shadow: 0 10px 30px rgba(0, 0, 0, 0.08);
-            --radius: 16px;
-            --transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
-        }
-
-        /* ===== BASE STYLES ===== */
-        body {
-            background: linear-gradient(135deg, #f8f9fa 0%, #e9ecef 100%);
-            color: var(--dark);
+        
+        body { 
+            font-family: Arial, sans-serif; 
+            margin: 0; 
+            background: #f8f8f8; 
+            color: #333;
             line-height: 1.6;
-            min-height: 100vh;
         }
-
-        .container {
-            max-width: 1400px;
-            margin: 0 auto;
-            padding: 0 20px;
-        }
-
-        /* ===== TYPOGRAPHY ===== */
-        h1, h2, h3, h4 {
-            font-weight: 700;
-            line-height: 1.2;
-        }
-
-        h1 { font-size: 3.5rem; }
-        h2 { font-size: 2.5rem; }
-        h3 { font-size: 1.8rem; }
-        h4 { font-size: 1.4rem; }
-
-        .text-gradient {
-            background: linear-gradient(90deg, var(--primary), var(--primary-dark));
-            -webkit-background-clip: text;
-            background-clip: text;
-            color: transparent;
-        }
-
-        /* ===== HEADER ===== */
-        .header {
-            background: white;
-            position: fixed;
+        
+        /* ========== HEADER ========== */
+        header { 
+            background: #2ecc71; 
+            color: white; 
+            padding: 12px 16px; 
+            display: flex; 
+            justify-content: space-between; 
+            align-items: center; 
+            flex-wrap: wrap;
+            position: sticky;
             top: 0;
-            left: 0;
-            right: 0;
             z-index: 1000;
-            box-shadow: var(--shadow);
-            padding: 1rem 0;
+            box-shadow: 0 2px 10px rgba(0,0,0,0.1);
         }
-
-        .nav {
-            display: flex;
-            justify-content: space-between;
-            align-items: center;
-        }
-
-        .logo {
-            display: flex;
-            align-items: center;
-            gap: 15px;
-            text-decoration: none;
-            color: var(--dark);
-        }
-
-        .logo-icon {
-            width: 50px;
-            height: 50px;
-            background: linear-gradient(135deg, var(--primary), var(--primary-dark));
-            border-radius: 12px;
-            display: flex;
-            align-items: center;
-            justify-content: center;
-            color: white;
-            font-size: 1.5rem;
-            font-weight: bold;
-        }
-
-        .logo-text {
-            font-size: 1.8rem;
-            font-weight: 700;
-        }
-
-        .logo-text span {
-            color: var(--primary);
-        }
-
-        .nav-links {
-            display: flex;
-            gap: 2rem;
-            align-items: center;
-        }
-
-        .nav-link {
-            color: var(--dark);
-            text-decoration: none;
-            font-weight: 500;
-            padding: 0.5rem 1rem;
-            border-radius: var(--radius);
-            transition: var(--transition);
-        }
-
-        .nav-link:hover {
-            background: rgba(0, 168, 150, 0.1);
-            color: var(--primary);
-        }
-
-        .btn {
-            display: inline-flex;
-            align-items: center;
-            gap: 10px;
-            padding: 14px 28px;
-            border-radius: var(--radius);
-            font-weight: 600;
-            text-decoration: none;
+        
+        header .logo-box { 
+            display: flex; 
+            align-items: center; 
+            gap: 10px; 
             cursor: pointer;
-            border: none;
-            transition: var(--transition);
-            font-size: 1rem;
+            transition: transform 0.2s;
         }
-
-        .btn-primary {
-            background: linear-gradient(135deg, var(--primary), var(--primary-dark));
-            color: white;
-            box-shadow: 0 4px 15px rgba(0, 168, 150, 0.3);
+        
+        header .logo-box:hover {
+            transform: scale(1.02);
         }
-
-        .btn-primary:hover {
-            transform: translateY(-2px);
-            box-shadow: 0 8px 25px rgba(0, 168, 150, 0.4);
+        
+        header img { 
+            height: 40px; 
+            border-radius: 5px;
         }
-
-        .btn-outline {
-            border: 2px solid var(--primary);
-            color: var(--primary);
-            background: transparent;
+        
+        header h1 { 
+            margin: 0; 
+            font-size: 22px; 
+            font-weight: 600;
         }
-
-        .btn-outline:hover {
-            background: var(--primary);
-            color: white;
+        
+        nav a { 
+            color: white; 
+            margin-left: 12px; 
+            text-decoration: none; 
+            font-weight: bold; 
+            font-size: 14px; 
+            padding: 5px 10px;
+            border-radius: 4px;
+            transition: background 0.2s;
         }
-
-        /* ===== HERO SECTION ===== */
-        .hero {
-            padding: 180px 0 100px;
-            background: linear-gradient(rgba(255, 255, 255, 0.9), rgba(255, 255, 255, 0.9)),
-                        url('https://images.unsplash.com/photo-1556909114-f6e7ad7d3136?ixlib=rb-4.0.3&auto=format&fit=crop&w=1920&q=80');
-            background-size: cover;
-            background-position: center;
+        
+        nav a:hover { 
+            background: rgba(255,255,255,0.1);
+        }
+        
+        .header-buttons {
+            display: flex;
+            gap: 10px;
+            align-items: center;
+        }
+        
+        /* Скрываем кнопки админа */
+        .admin-btn {
+            display: none !important;
+        }
+        
+        /* ========== HERO SECTION ========== */
+        .hero { 
+            background: linear-gradient(135deg, #27ae60 0%, #2ecc71 100%); 
+            color: white; 
+            padding: 40px 16px; 
+            text-align: center;
             position: relative;
             overflow: hidden;
         }
-
-        .hero::before {
-            content: '';
-            position: absolute;
-            top: 0;
-            left: 0;
-            right: 0;
-            bottom: 0;
-            background: linear-gradient(45deg, rgba(0, 168, 150, 0.1), rgba(2, 128, 144, 0.1));
+        
+        .hero h2 { 
+            font-size: 30px; 
+            margin-bottom: 10px;
+            position: relative;
+            z-index: 1;
         }
-
-        .hero-content {
+        
+        .hero p { 
+            font-size: 17px; 
+            margin-bottom: 20px;
             position: relative;
             z-index: 1;
             max-width: 600px;
+            margin-left: auto;
+            margin-right: auto;
         }
-
-        .hero h1 {
-            margin-bottom: 1.5rem;
-        }
-
-        .hero p {
-            font-size: 1.2rem;
-            color: var(--gray);
-            margin-bottom: 2rem;
-        }
-
-        .hero-stats {
-            display: flex;
-            gap: 3rem;
-            margin-top: 3rem;
-        }
-
-        .stat {
-            display: flex;
-            flex-direction: column;
-        }
-
-        .stat-number {
-            font-size: 2.5rem;
-            font-weight: 700;
-            color: var(--primary);
-        }
-
-        .stat-label {
-            color: var(--gray);
-            font-size: 0.9rem;
-            text-transform: uppercase;
-            letter-spacing: 1px;
-        }
-
-        /* ===== STORES SECTION ===== */
-        .section {
-            padding: 100px 0;
-        }
-
-        .section-title {
-            text-align: center;
-            margin-bottom: 4rem;
-        }
-
-        .stores-grid {
-            display: grid;
-            grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
-            gap: 2rem;
-            margin-bottom: 4rem;
-        }
-
-        .store-card {
-            background: white;
-            border-radius: var(--radius);
-            overflow: hidden;
-            box-shadow: var(--shadow);
-            transition: var(--transition);
-        }
-
-        .store-card:hover {
-            transform: translateY(-10px);
-            box-shadow: 0 20px 40px rgba(0, 0, 0, 0.12);
-        }
-
-        .store-image {
-            height: 200px;
-            background: linear-gradient(45deg, #f8f9fa, #e9ecef);
-            display: flex;
-            align-items: center;
-            justify-content: center;
-            font-size: 4rem;
-            color: var(--primary);
-        }
-
-        .store-content {
-            padding: 2rem;
-        }
-
-        .store-badge {
-            display: inline-block;
-            background: var(--secondary);
-            color: white;
-            padding: 5px 15px;
-            border-radius: 20px;
-            font-size: 0.8rem;
-            font-weight: 600;
-            margin-bottom: 1rem;
-        }
-
-        .store-meta {
-            display: flex;
-            gap: 1rem;
-            color: var(--gray);
-            font-size: 0.9rem;
-            margin: 1rem 0;
-        }
-
-        /* ===== CART ===== */
-        .cart-sidebar {
-            position: fixed;
-            top: 0;
-            right: -400px;
-            width: 400px;
-            height: 100vh;
-            background: white;
-            box-shadow: -10px 0 30px rgba(0, 0, 0, 0.1);
-            z-index: 2000;
-            transition: var(--transition);
-            display: flex;
-            flex-direction: column;
-        }
-
-        .cart-sidebar.active {
-            right: 0;
-        }
-
-        .cart-header {
-            padding: 2rem;
-            border-bottom: 1px solid #eee;
-            display: flex;
-            justify-content: space-between;
-            align-items: center;
-        }
-
-        .cart-items {
-            flex: 1;
-            overflow-y: auto;
-            padding: 2rem;
-        }
-
-        .cart-item {
-            display: flex;
-            align-items: center;
-            gap: 1rem;
-            padding: 1rem 0;
-            border-bottom: 1px solid #eee;
-        }
-
-        .cart-item-img {
-            width: 80px;
-            height: 80px;
-            background: #f8f9fa;
-            border-radius: 10px;
-            display: flex;
-            align-items: center;
-            justify-content: center;
-            font-size: 1.5rem;
-            color: var(--primary);
-        }
-
-        .cart-item-info {
-            flex: 1;
-        }
-
-        .cart-item-controls {
-            display: flex;
-            align-items: center;
-            gap: 10px;
-            margin-top: 10px;
-        }
-
-        .qty-btn {
-            width: 30px;
-            height: 30px;
-            border-radius: 50%;
-            border: 1px solid var(--primary);
-            background: transparent;
-            color: var(--primary);
+        
+        .hero button { 
+            background: white; 
+            color: #27ae60; 
+            border: none; 
+            padding: 12px 20px; 
+            font-size: 16px; 
+            border-radius: 6px; 
             cursor: pointer;
-            display: flex;
-            align-items: center;
-            justify-content: center;
+            font-weight: bold;
+            transition: all 0.3s;
+            position: relative;
+            z-index: 1;
         }
-
-        .cart-footer {
-            padding: 2rem;
-            border-top: 1px solid #eee;
-            background: #f8f9fa;
+        
+        .hero button:hover { 
+            background: #f8f8f8;
+            transform: translateY(-2px);
+            box-shadow: 0 4px 12px rgba(0,0,0,0.15);
         }
-
-        /* ===== MODALS ===== */
-        .modal {
+        
+        /* ========== СКРЫТАЯ ССЫЛКА АДМИНА ========== */
+        .admin-access-link {
+            position: fixed;
+            bottom: 10px;
+            left: 10px;
+            background: rgba(52, 152, 219, 0.1);
+            color: #3498db;
+            padding: 5px 10px;
+            border-radius: 4px;
+            font-size: 12px;
+            cursor: pointer;
+            text-decoration: none;
+            z-index: 9999;
+            opacity: 0.3;
+            transition: opacity 0.3s;
+        }
+        
+        .admin-access-link:hover {
+            opacity: 1;
+        }
+        
+        /* ========== МОДАЛЬНЫЕ ОКНА ========== */
+        .modal-overlay {
             position: fixed;
             top: 0;
             left: 0;
             right: 0;
             bottom: 0;
-            background: rgba(0, 0, 0, 0.8);
+            background: rgba(0,0,0,0.5);
             display: none;
-            align-items: center;
             justify-content: center;
-            z-index: 3000;
+            align-items: center;
+            z-index: 10000;
             padding: 20px;
         }
-
-        .modal.active {
+        
+        .modal-overlay.active {
             display: flex;
-            animation: fadeIn 0.3s ease;
         }
-
-        .modal-content {
+        
+        .modal {
             background: white;
-            border-radius: var(--radius);
+            border-radius: 10px;
+            padding: 30px;
             max-width: 500px;
             width: 100%;
             max-height: 90vh;
             overflow-y: auto;
-            animation: slideUp 0.4s cubic-bezier(0.4, 0, 0.2, 1);
+            box-shadow: 0 10px 40px rgba(0,0,0,0.2);
+            position: relative;
         }
-
-        .modal-header {
-            padding: 2rem 2rem 1rem;
+        
+        .modal h3 {
+            margin-top: 0;
+            color: #2c3e50;
+            text-align: center;
+            margin-bottom: 20px;
+        }
+        
+        .modal-close {
+            position: absolute;
+            top: 15px;
+            right: 15px;
+            background: none;
+            border: none;
+            font-size: 20px;
+            cursor: pointer;
+            color: #999;
+            width: 30px;
+            height: 30px;
+            border-radius: 50%;
             display: flex;
-            justify-content: space-between;
             align-items: center;
+            justify-content: center;
         }
-
-        .modal-body {
-            padding: 0 2rem 2rem;
+        
+        .modal-close:hover {
+            background: #f5f5f5;
+            color: #333;
         }
-
+        
+        /* ========== ФОРМЫ ========== */
         .form-group {
-            margin-bottom: 1.5rem;
+            margin-bottom: 15px;
         }
-
+        
         .form-label {
             display: block;
-            margin-bottom: 0.5rem;
+            margin-bottom: 5px;
             font-weight: 500;
-            color: var(--dark);
+            color: #2c3e50;
         }
-
-        .form-control {
+        
+        .form-input {
             width: 100%;
-            padding: 14px;
-            border: 2px solid #e9ecef;
-            border-radius: 10px;
-            font-size: 1rem;
-            transition: var(--transition);
+            padding: 10px;
+            border: 1px solid #ddd;
+            border-radius: 6px;
+            font-size: 14px;
+            transition: border-color 0.3s;
         }
-
-        .form-control:focus {
+        
+        .form-input:focus {
             outline: none;
-            border-color: var(--primary);
-            box-shadow: 0 0 0 3px rgba(0, 168, 150, 0.1);
+            border-color: #2ecc71;
+            box-shadow: 0 0 0 3px rgba(46, 204, 113, 0.1);
         }
-
-        /* ===== ADMIN PANEL ===== */
-        .admin-panel {
-            position: fixed;
-            top: 0;
-            left: -400px;
-            width: 400px;
-            height: 100vh;
+        
+        .form-select {
+            width: 100%;
+            padding: 10px;
+            border: 1px solid #ddd;
+            border-radius: 6px;
+            font-size: 14px;
             background: white;
-            box-shadow: 10px 0 30px rgba(0, 0, 0, 0.1);
-            z-index: 2000;
-            transition: var(--transition);
+        }
+        
+        .form-button {
+            width: 100%;
+            padding: 12px;
+            background: #2ecc71;
+            color: white;
+            border: none;
+            border-radius: 6px;
+            font-size: 16px;
+            font-weight: bold;
+            cursor: pointer;
+            transition: all 0.3s;
+            margin-top: 10px;
+        }
+        
+        .form-button:hover {
+            background: #27ae60;
+            transform: translateY(-2px);
+            box-shadow: 0 4px 8px rgba(0,0,0,0.1);
+        }
+        
+        .form-link {
+            text-align: center;
+            margin-top: 15px;
+            color: #3498db;
+            cursor: pointer;
+            font-size: 14px;
+        }
+        
+        .form-link:hover {
+            text-decoration: underline;
+        }
+        
+        /* ========== КНОПКИ РЕЖИМОВ ========== */
+        .mode-buttons {
             display: flex;
             flex-direction: column;
+            gap: 15px;
+            margin-top: 20px;
         }
-
-        .admin-panel.active {
-            left: 0;
+        
+        .mode-btn {
+            padding: 15px;
+            border: 2px solid #2ecc71;
+            background: white;
+            color: #2ecc71;
+            border-radius: 8px;
+            font-size: 16px;
+            font-weight: bold;
+            cursor: pointer;
+            transition: all 0.3s;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            gap: 10px;
         }
-
-        .admin-header {
-            background: linear-gradient(135deg, var(--dark), #1a1d29);
+        
+        .mode-btn:hover {
+            background: #2ecc71;
             color: white;
-            padding: 2rem;
+            transform: translateY(-2px);
+            box-shadow: 0 4px 12px rgba(0,0,0,0.15);
+        }
+        
+        /* ========== ПАНЕЛИ ========== */
+        .panel-overlay {
+            position: fixed;
+            top: 0;
+            left: 0;
+            right: 0;
+            bottom: 0;
+            background: white;
+            z-index: 9998;
+            display: none;
+            overflow-y: auto;
+        }
+        
+        .panel-overlay.active {
+            display: block;
+        }
+        
+        .panel-header {
+            background: #2c3e50;
+            color: white;
+            padding: 15px 20px;
             display: flex;
             justify-content: space-between;
             align-items: center;
+            position: sticky;
+            top: 0;
+            z-index: 100;
         }
-
-        .admin-nav {
-            padding: 2rem;
-            flex: 1;
+        
+        .panel-content {
+            padding: 20px;
+            max-width: 800px;
+            margin: 0 auto;
         }
-
-        .admin-nav-item {
+        
+        /* ========== ОСТАЛЬНЫЕ СТИЛИ (из предыдущих версий) ========== */
+        /* ... остальные стили остаются без изменений ... */
+        
+        .section { 
+            padding: 32px 16px; 
+            max-width: 1100px; 
+            margin: auto; 
+        }
+        
+        .section h3 { 
+            text-align: center; 
+            margin-bottom: 24px;
+            color: #2c3e50;
+            font-size: 24px;
+            position: relative;
+            padding-bottom: 10px;
+        }
+        
+        .section h3::after {
+            content: '';
+            position: absolute;
+            bottom: 0;
+            left: 50%;
+            transform: translateX(-50%);
+            width: 60px;
+            height: 3px;
+            background: #2ecc71;
+            border-radius: 2px;
+        }
+        
+        .shops, .categories { 
+            display: grid; 
+            grid-template-columns: repeat(auto-fit, minmax(160px, 1fr)); 
+            gap: 16px; 
+        }
+        
+        .products {
             display: flex;
-            align-items: center;
-            gap: 15px;
-            padding: 1rem;
-            color: var(--dark);
-            text-decoration: none;
+            flex-direction: column;
+            gap: 12px;
+        }
+        
+        .card, .product {
+            background: white;
+            padding: 16px;
             border-radius: 10px;
-            transition: var(--transition);
-            margin-bottom: 10px;
+            box-shadow: 0 2px 6px rgba(0,0,0,0.1);
+            text-align: center;
+            cursor: pointer;
+            transition: all 0.3s;
+            border: 1px solid #eee;
         }
-
-        .admin-nav-item:hover {
-            background: #f8f9fa;
-            color: var(--primary);
+        
+        .card:hover {
+            transform: translateY(-4px);
+            box-shadow: 0 4px 15px rgba(0,0,0,0.15);
         }
-
-        /* ===== ANIMATIONS ===== */
-        @keyframes fadeIn {
-            from { opacity: 0; }
-            to { opacity: 1; }
+        
+        .product {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            text-align: left;
+            gap: 10px;
         }
-
-        @keyframes slideUp {
-            from {
-                opacity: 0;
-                transform: translateY(50px);
-            }
-            to {
-                opacity: 1;
-                transform: translateY(0);
-            }
+        
+        .product h4 { 
+            margin: 0; 
+            font-size: 16px; 
+            color: #2c3e50;
         }
-
-        /* ===== RESPONSIVE ===== */
-        @media (max-width: 768px) {
-            .container {
-                padding: 0 15px;
-            }
-            
-            h1 { font-size: 2.5rem; }
-            h2 { font-size: 2rem; }
-            
-            .nav-links {
-                display: none;
-            }
-            
-            .hero-stats {
-                flex-direction: column;
-                gap: 1.5rem;
-            }
-            
-            .cart-sidebar,
-            .admin-panel {
-                width: 100%;
-                right: -100%;
-            }
-            
-            .cart-sidebar.active {
-                right: 0;
-            }
-            
-            .admin-panel.active {
-                left: 0;
-            }
+        
+        .product p { 
+            margin: 4px 0; 
+            font-size: 14px; 
+            color: #7f8c8d;
         }
-
-        /* ===== UTILITY CLASSES ===== */
-        .hidden { display: none !important; }
-        .text-center { text-align: center; }
-        .mb-1 { margin-bottom: 1rem; }
-        .mb-2 { margin-bottom: 2rem; }
-        .mt-1 { margin-top: 1rem; }
-        .mt-2 { margin-top: 2rem; }
-        .p-1 { padding: 1rem; }
-        .p-2 { padding: 2rem; }
+        
+        .qty-controls { 
+            display: flex; 
+            justify-content: center; 
+            align-items: center; 
+            gap: 8px; 
+        }
+        
+        .qty-controls button { 
+            width: 30px; 
+            height: 30px; 
+            border-radius: 50%; 
+            border: none; 
+            background: #2ecc71; 
+            color: white; 
+            font-weight: bold; 
+            cursor: pointer;
+            transition: all 0.2s;
+        }
+        
+        .qty-controls button:hover { 
+            background: #27ae60;
+            transform: scale(1.1);
+        }
+        
+        .qty-number { 
+            min-width: 20px; 
+            font-weight: bold; 
+            text-align: center;
+        }
+        
+        .cart { 
+            background: white; 
+            padding: 16px; 
+            border-radius: 10px; 
+            max-width: 500px; 
+            margin: 20px auto; 
+            box-shadow: 0 2px 6px rgba(0,0,0,0.1);
+            border: 1px solid #eee;
+        }
+        
+        .cart h4 { 
+            margin-top: 0; 
+            text-align: center; 
+            color: #2c3e50;
+            border-bottom: 2px solid #f1f1f1;
+            padding-bottom: 10px;
+        }
+        
+        .cart-item { 
+            display: flex; 
+            justify-content: space-between; 
+            align-items: center; 
+            margin-bottom: 8px; 
+            font-size: 14px; 
+            gap: 8px;
+            padding: 8px 0;
+            border-bottom: 1px solid #f5f5f5;
+        }
+        
+        .cart-total { 
+            font-weight: bold; 
+            margin-top: 10px; 
+            text-align: center; 
+            font-size: 16px;
+            padding-top: 10px;
+            border-top: 2px solid #f1f1f1;
+        }
+        
+        footer { 
+            background: #2c3e50; 
+            color: white; 
+            text-align: center; 
+            padding: 16px; 
+            margin-top: 40px; 
+            font-size: 14px;
+        }
+        
+        .hidden { 
+            display: none !important; 
+        }
     </style>
 </head>
 <body>
-
-<!-- ===== HEADER ===== -->
-<header class="header">
-    <div class="container">
-        <nav class="nav">
-            <a href="#" class="logo" onclick="showHome()">
-                <div class="logo-icon">AF</div>
-                <div class="logo-text">Artik<span>Food</span></div>
-            </a>
-            
-            <div class="nav-links">
-                <a href="#" class="nav-link" onclick="showHome()"><i class="fas fa-home"></i> Главная</a>
-                <a href="#" class="nav-link" onclick="showStores()"><i class="fas fa-store"></i> Магазины</a>
-                <a href="#" class="nav-link" onclick="showOrderForm()"><i class="fas fa-shopping-bag"></i> Заказать</a>
-                <button class="btn btn-outline" onclick="toggleCart()">
-                    <i class="fas fa-shopping-cart"></i> Корзина
-                    <span id="cart-count" class="badge">0</span>
-                </button>
-                <button class="btn btn-primary" onclick="showCourierModal()">
-                    <i class="fas fa-bicycle"></i> Стать курьером
-                </button>
-            </div>
+    <!-- Скрытая ссылка для админа -->
+    <a href="#" onclick="showAdminPanel()" class="admin-access-link">🔧</a>
+    
+    <!-- Основной интерфейс -->
+    <header>
+        <div class="logo-box" onclick="goHome()">
+            <!-- Добавьте ваш логотип -->
+            <div style="width: 40px; height: 40px; background: white; border-radius: 5px; display: flex; align-items: center; justify-content: center; color: #2ecc71; font-weight: bold;">AF</div>
+            <h1>Artik Food</h1>
+        </div>
+        <nav>
+            <a href="#" onclick="goHome()">Главная</a>
+            <a href="#order">Заказать</a>
+            <a href="#contacts">Контакты</a>
         </nav>
-    </div>
-</header>
-
-<!-- ===== HERO SECTION ===== -->
-<section class="hero" id="home-section">
-    <div class="container">
-        <div class="hero-content">
-            <h1 class="text-gradient">Премиум доставка <br>продуктов в <span style="color: var(--dark);">Артике</span></h1>
-            <p>Свежайшие продукты из лучших магазинов города прямо к вашей двери. 
-               Быстро, качественно, с заботой о каждом клиенте.</p>
-            <button class="btn btn-primary" onclick="showStores()">
-                <i class="fas fa-rocket"></i> Начать покупки
-            </button>
-            
-            <div class="hero-stats">
-                <div class="stat">
-                    <div class="stat-number">30-45</div>
-                    <div class="stat-label">минут доставка</div>
-                </div>
-                <div class="stat">
-                    <div class="stat-number">500+</div>
-                    <div class="stat-label">довольных клиентов</div>
-                </div>
-                <div class="stat">
-                    <div class="stat-number">4.9</div>
-                    <div class="stat-label">средний рейтинг</div>
-                </div>
-            </div>
-        </div>
-    </div>
-</section>
-
-<!-- ===== STORES SECTION ===== -->
-<section class="section hidden" id="stores-section">
-    <div class="container">
-        <div class="section-title">
-            <h2 class="text-gradient">Выберите магазин</h2>
-            <p>Лучшие супермаркеты города к вашим услугам</p>
-        </div>
-        
-        <div class="stores-grid" id="stores-container">
-            <!-- Магазины загружаются через JS -->
-        </div>
-    </div>
-</section>
-
-<!-- ===== PRODUCTS SECTION ===== -->
-<section class="section hidden" id="products-section">
-    <div class="container">
-        <button class="btn btn-outline mb-2" onclick="showStores()">
-            <i class="fas fa-arrow-left"></i> Назад к магазинам
-        </button>
-        
-        <h2 id="store-name" class="text-gradient mb-2"></h2>
-        
-        <div class="stores-grid" id="products-container">
-            <!-- Товары загружаются через JS -->
-        </div>
-    </div>
-</section>
-
-<!-- ===== ORDER FORM ===== -->
-<section class="section hidden" id="order-section">
-    <div class="container">
-        <div class="modal-content" style="max-width: 600px; margin: 0 auto;">
-            <div class="modal-header">
-                <h3 class="text-gradient">Оформление заказа</h3>
-            </div>
-            
-            <div class="modal-body">
-                <form id="order-form" onsubmit="submitOrder(event)">
-                    <div class="form-group">
-                        <label class="form-label">Ваше имя</label>
-                        <input type="text" class="form-control" id="order-name" required>
-                    </div>
-                    
-                    <div class="form-group">
-                        <label class="form-label">Телефон</label>
-                        <input type="tel" class="form-control" id="order-phone" required>
-                    </div>
-                    
-                    <div class="form-group">
-                        <label class="form-label">Адрес доставки</label>
-                        <input type="text" class="form-control" id="order-address" required>
-                    </div>
-                    
-                    <div class="form-group">
-                        <label class="form-label">Район</label>
-                        <select class="form-control" id="order-district" required>
-                            <option value="">Выберите район</option>
-                            <option value="Артик">Артик (500 AMD)</option>
-                            <option value="Арич">Арич (700 AMD)</option>
-                            <option value="Нор-Кянк">Нор-Кянк (1000 AMD)</option>
-                        </select>
-                    </div>
-                    
-                    <div class="form-group">
-                        <label class="form-label">Способ оплаты</label>
-                        <select class="form-control" id="order-payment" required>
-                            <option value="">Выберите оплату</option>
-                            <option value="cash">💵 Наличными курьеру</option>
-                            <option value="card">💳 Картой онлайн</option>
-                            <option value="idram">🏦 IDram</option>
-                        </select>
-                    </div>
-                    
-                    <button type="submit" class="btn btn-primary" style="width: 100%; padding: 16px;">
-                        <i class="fas fa-paper-plane"></i> Отправить заказ
-                    </button>
-                </form>
-            </div>
-        </div>
-    </div>
-</section>
-
-<!-- ===== CART SIDEBAR ===== -->
-<div class="cart-sidebar" id="cart-sidebar">
-    <div class="cart-header">
-        <h3 class="text-gradient">🛒 Ваша корзина</h3>
-        <button class="btn btn-outline" onclick="toggleCart()">
-            <i class="fas fa-times"></i>
-        </button>
-    </div>
-    
-    <div class="cart-items" id="cart-items">
-        <!-- Товары в корзине -->
-    </div>
-    
-    <div class="cart-footer">
-        <div style="display: flex; justify-content: space-between; margin-bottom: 1rem;">
-            <span>Сумма:</span>
-            <span id="cart-total">0 AMD</span>
-        </div>
-        <div style="display: flex; justify-content: space-between; margin-bottom: 1rem;">
-            <span>Доставка:</span>
-            <span id="cart-delivery">0 AMD</span>
-        </div>
-        <div style="display: flex; justify-content: space-between; font-size: 1.2rem; font-weight: bold; margin-bottom: 2rem;">
-            <span>Итого:</span>
-            <span id="cart-grand-total">0 AMD</span>
-        </div>
-        
-        <button class="btn btn-primary" style="width: 100%;" onclick="showOrderForm()">
-            <i class="fas fa-lock"></i> Перейти к оформлению
-        </button>
-    </div>
-</div>
-
-<!-- ===== MODALS ===== -->
-<div class="modal" id="courier-modal">
-    <div class="modal-content">
-        <div class="modal-header">
-            <h3 class="text-gradient"><i class="fas fa-bicycle"></i> Работа курьером</h3>
-            <button class="btn btn-outline" onclick="closeModal('courier-modal')">
-                <i class="fas fa-times"></i>
+        <div class="header-buttons">
+            <!-- Кнопка для курьеров -->
+            <button onclick="showCourierModal()" style="background: #3498db; color: white; border: none; padding: 8px 15px; border-radius: 20px; cursor: pointer; font-size: 14px;">
+                🚴 Курьер
             </button>
         </div>
-        
-        <div class="modal-body">
-            <div style="text-align: center; margin-bottom: 2rem;">
-                <div style="font-size: 4rem; color: var(--primary); margin-bottom: 1rem;">
-                    🚴‍♂️
-                </div>
-                <h4 class="text-gradient">Зарабатывайте с Artik Food</h4>
-                <p>Станьте частью нашей команды и зарабатывайте от 3000 AMD в день</p>
+    </header>
+
+    <!-- ГЛАВНАЯ СТРАНИЦА -->
+    <div id="home-page">
+        <section class="hero">
+            <h2>Доставка продуктов в Артике</h2>
+            <p>Свежие продукты из супермаркетов — прямо к вашей двери</p>
+            <button onclick="document.getElementById('order').scrollIntoView({behavior:'smooth'});">
+                Заказать сейчас
+            </button>
+        </section>
+
+        <!-- Магазины -->
+        <section class="section" id="shops">
+            <h3>Супермаркеты</h3>
+            <div class="shops" id="shops-list"></div>
+        </section>
+
+        <!-- Корзина -->
+        <section class="section">
+            <div class="cart" id="global-cart">
+                <h4>Корзина (все магазины)</h4>
+                <div id="global-cart-items"></div>
+                <div class="cart-total" id="global-cart-total">Товары: 0 AMD</div>
+                <div class="cart-total" id="delivery-total">Доставка: 0 AMD</div>
+                <div class="cart-total" id="grand-total">Итого: 0 AMD</div>
             </div>
+        </section>
+    </div>
+
+    <!-- ОФОРМЛЕНИЕ ЗАКАЗА -->
+    <section class="section" id="order">
+        <h3>Оформление заказа</h3>
+        <form class="order-form" onsubmit="event.preventDefault(); sendFormToWhatsApp();">
+            <input type="text" id="name" placeholder="Ваше имя" required class="form-input">
+            <input type="tel" id="phone" placeholder="Телефон" required class="form-input">
+            <input type="text" id="address" placeholder="Адрес доставки" required class="form-input">
+            <select id="district" required onchange="calculateDelivery()" class="form-select">
+                <option value="">Выберите район доставки</option>
+                <option value="Артик">Артик — 500 AMD</option>
+                <option value="Арич">Арич — 700 AMD</option>
+                <option value="Нор-Кянк">Нор-Кянк — 1000 AMD</option>
+                <option value="Пемзашен">Пемзашен — 1000 AMD</option>
+            </select>
+            <select id="payment" required class="form-select">
+                <option value="">Выберите способ оплаты</option>
+                <option value="Наличными курьеру">💵 Наличными курьеру</option>
+                <option value="IDram">🏦 IDram</option>
+                <option value="Картой онлайн">💳 Картой онлайн</option>
+            </select>
+            <textarea rows="3" id="comment" placeholder="Комментарий к заказу" class="form-input"></textarea>
+            <button type="submit" class="form-button">Отправить заказ</button>
+        </form>
+    </section>
+
+    <!-- КОНТАКТЫ -->
+    <section class="section" id="contacts">
+        <h3>Контакты</h3>
+        <div class="card" style="max-width:400px; margin:auto;">
+            <p>📞 Телефон / WhatsApp: <a href="tel:+37443797727" style="color:#27ae60; font-weight:bold;">+374 43 79 77 27</a></p>
+            <p>✈️ Telegram: @artikfood</p>
+            <p>📍 Артик, Ширак, Армения</p>
+        </div>
+    </section>
+
+    <footer>
+        <p>© 2026 Artik Food — Доставка продуктов в Артике</p>
+    </footer>
+
+    <!-- МОДАЛЬНОЕ ОКНО ДЛЯ КУРЬЕРОВ -->
+    <div id="courier-modal" class="modal-overlay">
+        <div class="modal">
+            <button class="modal-close" onclick="closeCourierModal()">✕</button>
+            <h3>🚴 Работа курьером</h3>
             
-            <div class="form-group">
-                <button class="btn btn-primary" style="width: 100%; margin-bottom: 1rem;" onclick="showCourierRegistration()">
-                    <i class="fas fa-user-plus"></i> Регистрация курьера
+            <div class="mode-buttons">
+                <button class="mode-btn" onclick="showCourierRegistration()">
+                    📝 Стать курьером
                 </button>
-                <button class="btn btn-outline" style="width: 100%;" onclick="showCourierLogin()">
-                    <i class="fas fa-sign-in-alt"></i> Вход для курьеров
+                <button class="mode-btn" onclick="showCourierLogin()">
+                    🔐 Вход в личный кабинет
                 </button>
             </div>
         </div>
     </div>
-</div>
 
-<div class="modal" id="courier-registration-modal">
-    <div class="modal-content">
-        <div class="modal-header">
-            <h3 class="text-gradient"><i class="fas fa-user-plus"></i> Регистрация курьера</h3>
-            <button class="btn btn-outline" onclick="closeAllModals()">
-                <i class="fas fa-times"></i>
-            </button>
-        </div>
-        
-        <div class="modal-body">
-            <form id="courier-reg-form" onsubmit="registerCourier(event)">
+    <!-- ФОРМА РЕГИСТРАЦИИ КУРЬЕРА -->
+    <div id="courier-registration-modal" class="modal-overlay hidden">
+        <div class="modal">
+            <button class="modal-close" onclick="closeAllModals()">✕</button>
+            <h3>📝 Регистрация курьера</h3>
+            
+            <form id="courier-registration-form" onsubmit="event.preventDefault(); registerCourier();">
                 <div class="form-group">
-                    <label class="form-label">Имя и фамилия</label>
-                    <input type="text" class="form-control" id="courier-name" required>
+                    <label class="form-label">Имя *</label>
+                    <input type="text" class="form-input" id="courier-firstname" required>
                 </div>
                 
                 <div class="form-group">
-                    <label class="form-label">Телефон</label>
-                    <input type="tel" class="form-control" id="courier-phone" required>
+                    <label class="form-label">Фамилия *</label>
+                    <input type="text" class="form-input" id="courier-lastname" required>
                 </div>
                 
                 <div class="form-group">
-                    <label class="form-label">Транспорт</label>
-                    <select class="form-control" id="courier-vehicle" required>
-                        <option value="">Выберите транспорт</option>
-                        <option value="bicycle">🚲 Велосипед</option>
-                        <option value="motorcycle">🏍️ Мотоцикл</option>
-                        <option value="car">🚗 Автомобиль</option>
+                    <label class="form-label">Номер телефона *</label>
+                    <input type="tel" class="form-input" id="courier-phone" required>
+                </div>
+                
+                <div class="form-group">
+                    <label class="form-label">Тип транспорта *</label>
+                    <select class="form-select" id="courier-vehicle-type" required>
+                        <option value="">Выберите тип</option>
+                        <option value="Велосипед">🚲 Велосипед</option>
+                        <option value="Мотоцикл">🏍️ Мотоцикл</option>
+                        <option value="Автомобиль">🚗 Автомобиль</option>
+                        <option value="Пешком">🚶 Пешком</option>
                     </select>
                 </div>
                 
                 <div class="form-group">
-                    <label class="form-label">Пароль</label>
-                    <input type="password" class="form-control" id="courier-password" required>
+                    <label class="form-label">Гос. номер</label>
+                    <input type="text" class="form-input" id="courier-vehicle-number" placeholder="Пример: 77AR777">
                 </div>
                 
-                <button type="submit" class="btn btn-primary" style="width: 100%;">
-                    <i class="fas fa-check"></i> Зарегистрироваться
-                </button>
+                <div class="form-group">
+                    <label class="form-label">Пароль *</label>
+                    <input type="password" class="form-input" id="courier-password" required>
+                </div>
                 
-                <div class="text-center mt-2">
-                    <a href="#" onclick="showCourierLogin()" style="color: var(--primary); text-decoration: none;">
-                        Уже есть аккаунт? Войти
-                    </a>
+                <div class="form-group">
+                    <label class="form-label">Подтвердите пароль *</label>
+                    <input type="password" class="form-input" id="courier-password-confirm" required>
+                </div>
+                
+                <button type="submit" class="form-button">Зарегистрироваться</button>
+                
+                <div class="form-link" onclick="showCourierLogin()">
+                    Уже есть аккаунт? Войти
                 </div>
             </form>
         </div>
     </div>
-</div>
 
-<div class="modal" id="courier-login-modal">
-    <div class="modal-content">
-        <div class="modal-header">
-            <h3 class="text-gradient"><i class="fas fa-sign-in-alt"></i> Вход для курьеров</h3>
-            <button class="btn btn-outline" onclick="closeAllModals()">
-                <i class="fas fa-times"></i>
+    <!-- ФОРМА ВХОДА КУРЬЕРА -->
+    <div id="courier-login-modal" class="modal-overlay hidden">
+        <div class="modal">
+            <button class="modal-close" onclick="closeAllModals()">✕</button>
+            <h3>🔐 Вход для курьеров</h3>
+            
+            <form id="courier-login-form" onsubmit="event.preventDefault(); loginCourier();">
+                <div class="form-group">
+                    <label class="form-label">Телефон *</label>
+                    <input type="tel" class="form-input" id="login-phone" required>
+                </div>
+                
+                <div class="form-group">
+                    <label class="form-label">Пароль *</label>
+                    <input type="password" class="form-input" id="login-password" required>
+                </div>
+                
+                <button type="submit" class="form-button">Войти</button>
+                
+                <div class="form-link" onclick="showCourierRegistration()">
+                    Нет аккаунта? Зарегистрироваться
+                </div>
+            </form>
+        </div>
+    </div>
+
+    <!-- ПАНЕЛЬ АДМИНА -->
+    <div id="admin-panel" class="panel-overlay">
+        <div class="panel-header">
+            <h2 style="margin: 0;">👑 Панель администратора</h2>
+            <button onclick="hideAdminPanel()" style="background: #e74c3c; color: white; border: none; padding: 8px 15px; border-radius: 4px; cursor: pointer;">
+                ✕ Закрыть
             </button>
         </div>
-        
-        <div class="modal-body">
-            <form id="courier-login-form" onsubmit="loginCourier(event)">
-                <div class="form-group">
-                    <label class="form-label">Телефон</label>
-                    <input type="tel" class="form-control" id="login-phone" required>
-                </div>
-                
-                <div class="form-group">
-                    <label class="form-label">Пароль</label>
-                    <input type="password" class="form-control" id="login-password" required>
-                </div>
-                
-                <button type="submit" class="btn btn-primary" style="width: 100%;">
-                    <i class="fas fa-sign-in-alt"></i> Войти в систему
-                </button>
-                
-                <div class="text-center mt-2">
-                    <a href="#" onclick="showCourierRegistration()" style="color: var(--primary); text-decoration: none;">
-                        Нет аккаунта? Зарегистрироваться
-                    </a>
-                </div>
-            </form>
+        <div class="panel-content">
+            <div style="text-align: center; padding: 40px;">
+                <h3>Введите пароль администратора</h3>
+                <input type="password" id="admin-password-input" class="form-input" style="max-width: 300px; margin: 20px auto;">
+                <button onclick="checkAdminPassword()" class="form-button" style="max-width: 300px;">Войти</button>
+            </div>
+            
+            <!-- Содержимое админки будет загружено после ввода пароля -->
+            <div id="admin-content" class="hidden"></div>
         </div>
     </div>
-</div>
 
-<!-- ===== ADMIN ACCESS ===== -->
-<div style="position: fixed; bottom: 20px; left: 20px; z-index: 100;">
-    <button class="btn btn-primary" onclick="showAdminPanel()" style="border-radius: 50%; width: 50px; height: 50px; padding: 0;">
-        <i class="fas fa-cog"></i>
-    </button>
-</div>
-
-<!-- ===== ADMIN PANEL ===== -->
-<div class="admin-panel" id="admin-panel">
-    <div class="admin-header">
-        <h3><i class="fas fa-crown"></i> Панель администратора</h3>
-        <button class="btn btn-outline" onclick="hideAdminPanel()" style="color: white; border-color: white;">
-            <i class="fas fa-times"></i>
-        </button>
-    </div>
-    
-    <div class="admin-nav">
-        <a href="#" class="admin-nav-item" onclick="showAdminTab('dashboard')">
-            <i class="fas fa-chart-line"></i> Статистика
-        </a>
-        <a href="#" class="admin-nav-item" onclick="showAdminTab('orders')">
-            <i class="fas fa-shopping-bag"></i> Заказы
-        </a>
-        <a href="#" class="admin-nav-item" onclick="showAdminTab('couriers')">
-            <i class="fas fa-bicycle"></i> Курьеры
-        </a>
-        <a href="#" class="admin-nav-item" onclick="showAdminTab('products')">
-            <i class="fas fa-apple-alt"></i> Товары
-        </a>
-    </div>
-    
-    <div class="modal-body">
-        <div id="admin-content">
-            <!-- Контент админки -->
+    <!-- ПАНЕЛЬ КУРЬЕРА -->
+    <div id="courier-panel" class="panel-overlay">
+        <div class="panel-header">
+            <h2 style="margin: 0;">🚴 Личный кабинет курьера</h2>
+            <button onclick="logoutCourier()" style="background: #e74c3c; color: white; border: none; padding: 8px 15px; border-radius: 4px; cursor: pointer;">
+                ✕ Выйти
+            </button>
+        </div>
+        <div class="panel-content">
+            <!-- Загружается динамически -->
         </div>
     </div>
-</div>
 
-<script>
-// ===== GLOBAL VARIABLES =====
-let currentStore = null;
-let cart = JSON.parse(localStorage.getItem('artikFoodCart')) || {};
-let currentCourier = JSON.parse(localStorage.getItem('currentCourier'));
-let adminPassword = "artik123";
-
-// ===== DATA =====
-const stores = {
-    million: {
-        name: "Million Supermarket",
-        icon: "🏪",
-        delivery: "200 AMD",
-        time: "30-45 мин",
-        categories: [
-            {
-                name: "🥦 Овощи и фрукты",
+    <script>
+        // ========== ДАННЫЕ ==========
+        const ADMIN_PASSWORD = "artik123";
+        const stores = {
+            million: {
+                name: "Million",
                 products: [
-                    { id: "potato", name: "Картофель", price: 300, unit: "1кг" },
-                    { id: "tomato", name: "Помидоры", price: 500, unit: "1кг" },
-                    { id: "apple", name: "Яблоки Голден", price: 450, unit: "1кг" }
+                    { name: "Картофель 1кг", price: 300, category: "Овощи и фрукты" },
+                    { name: "Яблоки 1кг", price: 400, category: "Овощи и фрукты" },
+                    { name: "Бананы 1кг", price: 550, category: "Овощи и фрукты" },
+                    { name: "Говядина 1кг", price: 3200, category: "Мясо и рыба" },
+                    { name: "Курица 1кг", price: 1800, category: "Мясо и рыба" },
                 ]
             },
-            {
-                name: "🥩 Мясо и рыба",
+            mush: {
+                name: "Мүշ",
                 products: [
-                    { id: "beef", name: "Говядина", price: 3200, unit: "1кг" },
-                    { id: "chicken", name: "Курица", price: 1800, unit: "1кг" }
+                    { name: "Картофель 1кг", price: 280, category: "Овощи и фрукты" },
+                    { name: "Помидоры 1кг", price: 500, category: "Овощи и фрукты" },
+                    { name: "Курица 1кг", price: 1750, category: "Мясо и рыба" },
                 ]
             }
-        ]
-    },
-    mush: {
-        name: "Мүշ Маркет",
-        icon: "🛒",
-        delivery: "150 AMD",
-        time: "25-40 мин",
-        categories: [
-            {
-                name: "🥕 Овощи",
-                products: [
-                    { id: "potato_m", name: "Картофель", price: 280, unit: "1кг" },
-                    { id: "onion", name: "Лук", price: 250, unit: "1кг" }
-                ]
-            },
-            {
-                name: "🍞 Хлеб",
-                products: [
-                    { id: "bread", name: "Хлеб", price: 200, unit: "шт" },
-                    { id: "lavash", name: "Лаваш", price: 150, unit: "шт" }
-                ]
+        };
+
+        let currentStore = null;
+        let currentCategory = null;
+        let carts = {};
+        let nextCourierId = localStorage.getItem('nextCourierId') ? parseInt(localStorage.getItem('nextCourierId')) : 1;
+
+        // ========== ИНИЦИАЛИЗАЦИЯ ==========
+        document.addEventListener('DOMContentLoaded', function() {
+            renderShops();
+            goHome();
+            
+            // Проверяем, авторизован ли курьер
+            const currentCourier = JSON.parse(localStorage.getItem('currentCourier'));
+            if (currentCourier) {
+                // Автоматически показываем панель курьера
+                showCourierDashboard();
             }
-        ]
-    }
-};
+        });
 
-// ===== INITIALIZATION =====
-document.addEventListener('DOMContentLoaded', function() {
-    loadStores();
-    updateCartCount();
-    
-    // Проверить авторизацию курьера
-    if (currentCourier) {
-        showNotification(`Добро пожаловать, ${currentCourier.name}!`, 'success');
-    }
-});
+        // ========== ОСНОВНЫЕ ФУНКЦИИ ==========
+        function goHome() {
+            document.getElementById('home-page').classList.remove('hidden');
+            window.scrollTo({ top: 0, behavior: 'smooth' });
+        }
 
-// ===== NAVIGATION =====
-function showHome() {
-    hideAllSections();
-    document.getElementById('home-section').classList.remove('hidden');
-}
+        function renderShops() {
+            const container = document.getElementById('shops-list');
+            container.innerHTML = '';
 
-function showStores() {
-    hideAllSections();
-    document.getElementById('stores-section').classList.remove('hidden');
-    loadStores();
-}
+            Object.keys(stores).forEach(key => {
+                const div = document.createElement('div');
+                div.className = 'card';
+                div.innerText = stores[key].name;
+                div.onclick = () => openStore(key);
+                container.appendChild(div);
+            });
+        }
 
-function showOrderForm() {
-    hideAllSections();
-    document.getElementById('order-section').classList.remove('hidden');
-}
+        function openStore(storeKey) {
+            // ... ваша логика открытия магазина ...
+        }
 
-function hideAllSections() {
-    document.querySelectorAll('section').forEach(section => {
-        section.classList.add('hidden');
-    });
-}
+        function changeQty(storeKey, productName, price, delta) {
+            // ... ваша логика изменения количества ...
+        }
 
-// ===== STORES =====
-function loadStores() {
-    const container = document.getElementById('stores-container');
-    container.innerHTML = '';
-    
-    Object.keys(stores).forEach(storeId => {
-        const store = stores[storeId];
-        
-        const storeCard = document.createElement('div');
-        storeCard.className = 'store-card';
-        storeCard.innerHTML = `
-            <div class="store-image">
-                <div style="font-size: 4rem;">${store.icon}</div>
-            </div>
-            <div class="store-content">
-                <span class="store-badge">⭐ Премиум</span>
-                <h4>${store.name}</h4>
-                <div class="store-meta">
-                    <span><i class="fas fa-shipping-fast"></i> ${store.delivery}</span>
-                    <span><i class="fas fa-clock"></i> ${store.time}</span>
+        function calculateDelivery() {
+            // ... ваша логика расчета доставки ...
+        }
+
+        function sendFormToWhatsApp() {
+            // ... ваша логика отправки заказа ...
+        }
+
+        // ========== МОДАЛЬНЫЕ ОКНА ==========
+        function showCourierModal() {
+            document.getElementById('courier-modal').classList.add('active');
+        }
+
+        function closeCourierModal() {
+            document.getElementById('courier-modal').classList.remove('active');
+        }
+
+        function closeAllModals() {
+            document.querySelectorAll('.modal-overlay').forEach(modal => {
+                modal.classList.remove('active');
+                modal.classList.add('hidden');
+            });
+        }
+
+        function showCourierRegistration() {
+            closeAllModals();
+            document.getElementById('courier-registration-modal').classList.remove('hidden');
+            document.getElementById('courier-registration-modal').classList.add('active');
+        }
+
+        function showCourierLogin() {
+            closeAllModals();
+            document.getElementById('courier-login-modal').classList.remove('hidden');
+            document.getElementById('courier-login-modal').classList.add('active');
+        }
+
+        // ========== РЕГИСТРАЦИЯ КУРЬЕРА ==========
+        function registerCourier() {
+            const firstName = document.getElementById('courier-firstname').value.trim();
+            const lastName = document.getElementById('courier-lastname').value.trim();
+            const phone = document.getElementById('courier-phone').value.trim();
+            const vehicleType = document.getElementById('courier-vehicle-type').value;
+            const vehicleNumber = document.getElementById('courier-vehicle-number').value.trim();
+            const password = document.getElementById('courier-password').value;
+            const passwordConfirm = document.getElementById('courier-password-confirm').value;
+            
+            // Проверки
+            if (!firstName || !lastName || !phone || !vehicleType || !password) {
+                alert('Заполните все обязательные поля');
+                return;
+            }
+            
+            if (password !== passwordConfirm) {
+                alert('Пароли не совпадают');
+                return;
+            }
+            
+            if (phone.length < 9) {
+                alert('Введите корректный номер телефона');
+                return;
+            }
+            
+            // Получаем существующих курьеров
+            let couriers = JSON.parse(localStorage.getItem('artikFoodCouriers')) || [];
+            
+            // Проверяем, не зарегистрирован ли уже такой телефон
+            if (couriers.some(c => c.phone === phone)) {
+                alert('Курьер с таким номером телефона уже зарегистрирован');
+                return;
+            }
+            
+            // Создаем нового курьера
+            const newCourier = {
+                id: nextCourierId++,
+                firstName: firstName,
+                lastName: lastName,
+                fullName: `${firstName} ${lastName}`,
+                phone: phone,
+                vehicleType: vehicleType,
+                vehicleNumber: vehicleNumber,
+                password: password, // В реальном приложении нужно хэшировать пароль!
+                status: 'pending', // ожидает подтверждения
+                registrationDate: new Date().toISOString(),
+                ordersCompleted: 0,
+                rating: 0
+            };
+            
+            // Сохраняем
+            couriers.push(newCourier);
+            localStorage.setItem('artikFoodCouriers', JSON.stringify(couriers));
+            localStorage.setItem('nextCourierId', nextCourierId.toString());
+            
+            // Закрываем модальное окно
+            closeAllModals();
+            
+            // Показываем сообщение об успехе
+            alert(`✅ Регистрация успешна!\n\nВаш ID: ${newCourier.id}\nСтатус: Ожидание подтверждения администратором\n\nС вами свяжутся после проверки заявки.`);
+        }
+
+        // ========== ВХОД КУРЬЕРА ==========
+        function loginCourier() {
+            const phone = document.getElementById('login-phone').value.trim();
+            const password = document.getElementById('login-password').value;
+            
+            const couriers = JSON.parse(localStorage.getItem('artikFoodCouriers')) || [];
+            const courier = couriers.find(c => c.phone === phone && c.password === password);
+            
+            if (courier) {
+                if (courier.status === 'active') {
+                    // Сохраняем текущего курьера
+                    localStorage.setItem('currentCourier', JSON.stringify(courier));
+                    
+                    // Закрываем модальное окно
+                    closeAllModals();
+                    
+                    // Показываем панель курьера
+                    showCourierDashboard();
+                } else if (courier.status === 'pending') {
+                    alert('⏳ Ваш аккаунт ожидает подтверждения администратором');
+                } else if (courier.status === 'blocked') {
+                    alert('🚫 Ваш аккаунт заблокирован. Обратитесь к администратору.');
+                } else {
+                    alert('⚠️ Неизвестный статус аккаунта');
+                }
+            } else {
+                alert('Неверный телефон или пароль');
+            }
+        }
+
+        // ========== ПАНЕЛЬ КУРЬЕРА ==========
+        function showCourierDashboard() {
+            const courier = JSON.parse(localStorage.getItem('currentCourier'));
+            const panel = document.getElementById('courier-panel');
+            const content = panel.querySelector('.panel-content');
+            
+            if (!courier) {
+                logoutCourier();
+                return;
+            }
+            
+            // Обновляем заголовок
+            panel.querySelector('h2').textContent = `🚴 ${courier.fullName}`;
+            
+            // Создаем содержимое панели
+            content.innerHTML = `
+                <div style="background: #f8f9fa; padding: 20px; border-radius: 10px; margin-bottom: 20px;">
+                    <h3 style="margin-top: 0;">👤 Информация о курьере</h3>
+                    <p><strong>Имя:</strong> ${courier.fullName}</p>
+                    <p><strong>Телефон:</strong> ${courier.phone}</p>
+                    <p><strong>Транспорт:</strong> ${courier.vehicleType} ${courier.vehicleNumber ? `(${courier.vehicleNumber})` : ''}</p>
+                    <p><strong>Статус:</strong> ${getCourierStatusText(courier.status)}</p>
+                    <p><strong>Завершено заказов:</strong> ${courier.ordersCompleted || 0}</p>
                 </div>
-                <p>Свежие продукты и лучшие цены</p>
-                <button class="btn btn-primary" onclick="openStore('${storeId}')" style="width: 100%;">
-                    <i class="fas fa-shopping-basket"></i> Выбрать товары
-                </button>
-            </div>
-        `;
-        
-        container.appendChild(storeCard);
-    });
-}
+                
+                <div style="display: grid; grid-template-columns: 1fr 1fr; gap: 15px; margin-bottom: 20px;">
+                    <button onclick="showCourierTab('orders')" style="padding: 15px; background: #3498db; color: white; border: none; border-radius: 8px; cursor: pointer;">
+                        📦 Мои заказы
+                    </button>
+                    <button onclick="showCourierTab('stats')" style="padding: 15px; background: #2ecc71; color: white; border: none; border-radius: 8px; cursor: pointer;">
+                        📊 Статистика
+                    </button>
+                </div>
+                
+                <div id="courier-tab-content"></div>
+            `;
+            
+            // Показываем панель
+            panel.classList.add('active');
+            
+            // Показываем первую вкладку
+            showCourierTab('orders');
+        }
 
-function openStore(storeId) {
-    currentStore = storeId;
-    const store = stores[storeId];
-    
-    hideAllSections();
-    document.getElementById('products-section').classList.remove('hidden');
-    document.getElementById('store-name').textContent = store.name;
-    
-    loadProducts(storeId);
-}
-
-function loadProducts(storeId) {
-    const container = document.getElementById('products-container');
-    container.innerHTML = '';
-    
-    const store = stores[storeId];
-    
-    store.categories.forEach(category => {
-        const categoryCard = document.createElement('div');
-        categoryCard.className = 'store-card';
-        categoryCard.innerHTML = `
-            <div class="store-content">
-                <h4 style="color: var(--primary); margin-bottom: 1.5rem;">${category.name}</h4>
-                ${category.products.map(product => {
-                    const cartQty = cart[storeId]?.[product.id]?.qty || 0;
-                    return `
-                        <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 1rem; padding: 1rem; background: #f8f9fa; border-radius: 10px;">
-                            <div>
-                                <div style="font-weight: 600;">${product.name}</div>
-                                <div style="color: var(--primary); font-weight: bold; font-size: 1.1rem;">${product.price} AMD</div>
-                                <div style="color: var(--gray); font-size: 0.9rem;">${product.unit}</div>
+        function showCourierTab(tabName) {
+            const courier = JSON.parse(localStorage.getItem('currentCourier'));
+            const content = document.getElementById('courier-tab-content');
+            
+            switch(tabName) {
+                case 'orders':
+                    // Получаем заказы для этого курьера
+                    const orders = JSON.parse(localStorage.getItem('artikFoodOrders')) || [];
+                    const courierOrders = orders.filter(order => order.courierId === courier.id);
+                    
+                    let html = '<h3>📦 Мои заказы</h3>';
+                    
+                    if (courierOrders.length === 0) {
+                        html += '<p style="text-align: center; padding: 20px;">Нет назначенных заказов</p>';
+                    } else {
+                        courierOrders.forEach(order => {
+                            html += `
+                                <div style="background: white; padding: 15px; border-radius: 8px; margin-bottom: 10px; border-left: 4px solid #3498db;">
+                                    <div style="display: flex; justify-content: space-between;">
+                                        <div>
+                                            <strong>Заказ #${order.id}</strong><br>
+                                            <small>${order.name} • ${order.phone}</small><br>
+                                            <small>${order.address}</small>
+                                        </div>
+                                        <div style="text-align: right;">
+                                            <span style="background: #eee; padding: 3px 8px; border-radius: 12px; font-size: 12px;">
+                                                ${getOrderStatusText(order.status)}
+                                            </span>
+                                            <p style="margin: 5px 0 0 0;"><strong>${order.total} AMD</strong></p>
+                                        </div>
+                                    </div>
+                                    <div style="margin-top: 10px;">
+                                        ${order.status === 'assigned' ? `
+                                            <button onclick="updateOrderStatus(${order.id}, 'in_delivery')" style="background: #9b59b6; color: white; border: none; padding: 8px 15px; border-radius: 5px; cursor: pointer; margin-right: 10px;">
+                                                Начать доставку
+                                            </button>
+                                        ` : ''}
+                                        ${order.status === 'in_delivery' ? `
+                                            <button onclick="updateOrderStatus(${order.id}, 'delivered')" style="background: #2ecc71; color: white; border: none; padding: 8px 15px; border-radius: 5px; cursor: pointer;">
+                                                Завершить доставку
+                                            </button>
+                                        ` : ''}
+                                        <button onclick="callCustomer('${order.phone}')" style="background: #27ae60; color: white; border: none; padding: 8px 15px; border-radius: 5px; cursor: pointer;">
+                                            📞 Позвонить
+                                        </button>
+                                    </div>
+                                </div>
+                            `;
+                        });
+                    }
+                    
+                    content.innerHTML = html;
+                    break;
+                    
+                case 'stats':
+                    const allOrders = JSON.parse(localStorage.getItem('artikFoodOrders')) || [];
+                    const completedOrders = allOrders.filter(order => 
+                        order.courierId === courier.id && order.status === 'delivered'
+                    );
+                    
+                    const today = new Date().toDateString();
+                    const todayOrders = completedOrders.filter(order => 
+                        new Date(order.date).toDateString() === today
+                    );
+                    
+                    const totalEarnings = completedOrders.reduce((sum, order) => sum + (order.total * 0.1), 0);
+                    
+                    content.innerHTML = `
+                        <h3>📊 Моя статистика</h3>
+                        <div style="display: grid; grid-template-columns: 1fr 1fr; gap: 15px;">
+                            <div style="background: white; padding: 20px; border-radius: 8px; text-align: center;">
+                                <div style="font-size: 24px; font-weight: bold;">${completedOrders.length}</div>
+                                <div>Всего доставок</div>
                             </div>
-                            <div style="display: flex; align-items: center; gap: 10px;">
-                                <button class="qty-btn" onclick="updateCart('${storeId}', '${product.id}', -1, ${product.price}, '
+                            <div style="background: white; padding: 20px; border-radius: 8px; text-align: center;">
+                                <div style="font-size: 24px; font-weight: bold;">${todayOrders.length}</div>
+                                <div>Сегодня</div>
+                            </div>
+                            <div style="background: white; padding: 20px; border-radius: 8px; text-align: center;">
+                                <div style="font-size: 24px; font-weight: bold;">${Math.round(totalEarnings)}</div>
+                                <div>Заработок (AMD)</div>
+                            </div>
+                            <div style="background: white; padding: 20px; border-radius: 8px; text-align: center;">
+                                <div style="font-size: 24px; font-weight: bold;">${courier.rating || 'Нет'}</div>
+                                <div>Рейтинг</div>
+                            </div>
+                        </div>
+                    `;
+                    break;
+            }
+        }
+
+        function logoutCourier() {
+            localStorage.removeItem('currentCourier');
+            document.getElementById('courier-panel').classList.remove('active');
+        }
+
+        function updateOrderStatus(orderId, newStatus) {
+            const orders = JSON.parse(localStorage.getItem('artikFoodOrders')) || [];
+            const orderIndex = orders.findIndex(order => order.id == orderId);
+            
+            if (orderIndex !== -1) {
+                orders[orderIndex].status = newStatus;
+                localStorage.setItem('artikFoodOrders', JSON.stringify(orders));
+                alert(`Статус заказа обновлен на: ${getOrderStatusText(newStatus)}`);
+                showCourierTab('orders');
+            }
+        }
+
+        function callCustomer(phone) {
+            if (confirm(`Позвонить клиенту: ${phone}?`)) {
+                window.open(`tel:${phone}`);
+            }
+        }
+
+        // ========== АДМИН-ПАНЕЛЬ ==========
+        function showAdminPanel() {
+            document.getElementById('admin-panel').classList.add('active');
+        }
+
+        function hideAdminPanel() {
+            document.getElementById('admin-panel').classList.remove('active');
+            document.getElementById('admin-content').classList.add('hidden');
+            document.getElementById('admin-password-input').value = '';
+        }
+
+        function checkAdminPassword() {
+            const password = document.getElementById('admin-password-input').value;
+            const adminContent = document.getElementById('admin-content');
+            
+            if (password === ADMIN_PASSWORD) {
+                // Показываем админ-панель
+                adminContent.classList.remove('hidden');
+                adminContent.innerHTML = `
+                    <div style="text-align: center; margin-bottom: 30px;">
+                        <h3>Добро пожаловать, администратор!</h3>
+                    </div>
+                    
+                    <div style="display: grid; grid-template-columns: 1fr 1fr; gap: 20px; margin-bottom: 30px;">
+                        <button onclick="showAdminTab('couriers')" style="padding: 15px; background: #3498db; color: white; border: none; border-radius: 8px; cursor: pointer;">
+                            🚴 Управление курьерами
+                        </button>
+                        <button onclick="showAdminTab('orders')" style="padding: 15px; background: #2ecc71; color: white; border: none; border-radius: 8px; cursor: pointer;">
+                            📦 Управление заказами
+                        </button>
+                    </div>
+                    
+                    <div id="admin-tab-content"></div>
+                `;
+                
+                // Показываем первую вкладку
+                showAdminTab('couriers');
+            } else {
+                alert('Неверный пароль');
+            }
+        }
+
+        function showAdminTab(tabName) {
+            const content = document.getElementById('admin-tab-content');
+            
+            switch(tabName) {
+                case 'couriers':
+                    const couriers = JSON.parse(localStorage.getItem('artikFoodCouriers')) || [];
+                    
+                    let html = '<h3>🚴 Список курьеров</h3>';
+                    
+                    if (couriers.length === 0) {
+                        html += '<p>Нет зарегистрированных курьеров</p>';
+                    } else {
+                        html += '<div style="background: white; border-radius: 8px; overflow: hidden;">';
+                        
+                        couriers.forEach(courier => {
+                            html += `
+                                <div style="padding: 15px; border-bottom: 1px solid #eee; display: flex; justify-content: space-between; align-items: center;">
+                                    <div>
+                                        <strong>${courier.fullName}</strong><br>
+                                        <small>📱 ${courier.phone} • ${courier.vehicleType}</small><br>
+                                        <small>Статус: ${getCourierStatusText(courier.status)}</small>
+                                    </div>
+                                    <div>
+                                        ${courier.status === 'pending' ? `
+                                            <button onclick="approveCourier(${courier.id})" style="background: #2ecc71; color: white; border: none; padding: 5px 10px; border-radius: 4px; cursor: pointer; margin-right: 5px;">
+                                                Одобрить
+                                            </button>
+                                        ` : ''}
+                                        ${courier.status === 'active' ? `
+                                            <button onclick="blockCourier(${courier.id})" style="background: #e74c3c; color: white; border: none; padding: 5px 10px; border-radius: 4px; cursor: pointer;">
+                                                Заблокировать
+                                            </button>
+                                        ` : ''}
+                                        ${courier.status === 'blocked' ? `
+                                            <button onclick="activateCourier(${courier.id})" style="background: #3498db; color: white; border: none; padding: 5px 10px; border-radius: 4px; cursor: pointer;">
+                                                Активировать
+                                            </button>
+                                        ` : ''}
+                                    </div>
+                                </div>
+                            `;
+                        });
+                        
+                        html += '</div>';
+                    }
+                    
+                    content.innerHTML = html;
+                    break;
+                    
+                case 'orders':
+                    // Логика управления заказами
+                    break;
+            }
+        }
+
+        function approveCourier(courierId) {
+            const couriers = JSON.parse(localStorage.getItem('artikFoodCouriers')) || [];
+            const courierIndex = couriers.findIndex(c => c.id === courierId);
+            
+            if (courierIndex !== -1) {
+                couriers[courierIndex].status = 'active';
+                localStorage.setItem('artikFoodCouriers', JSON.stringify(couriers));
+                alert('Курьер одобрен!');
+                showAdminTab('couriers');
+            }
+        }
+
+        function blockCourier(courierId) {
+            const couriers = JSON.parse(localStorage.getItem('artikFoodCouriers')) || [];
+            const courierIndex = couriers.findIndex(c => c.id === courierId);
+            
+            if (courierIndex !== -1) {
+                couriers[courierIndex].status = 'blocked';
+                localStorage.setItem('artikFoodCouriers', JSON.stringify(couriers));
+                alert('Курьер заблокирован!');
+                showAdminTab('couriers');
+            }
+        }
+
+        function activateCourier(courierId) {
+            const couriers = JSON.parse(localStorage.getItem('artikFoodCouriers')) || [];
+            const courierIndex = couriers.findIndex(c => c.id === courierId);
+            
+            if (courierIndex !== -1) {
+                couriers[courierIndex].status = 'active';
+                localStorage.setItem('artikFoodCouriers', JSON.stringify(couriers));
+                alert('Курьер активирован!');
+                showAdminTab('couriers');
+            }
+        }
+
+        // ========== ВСПОМОГАТЕЛЬНЫЕ ФУНКЦИИ ==========
+        function getCourierStatusText(status) {
+            const statuses = {
+                'pending': '⏳ Ожидает подтверждения',
+                'active': '✅ Активен',
+                'blocked': '🚫 Заблокирован'
+            };
+            return statuses[status] || status;
+        }
+
+        function getOrderStatusText(status) {
+            const statuses = {
+                'new': '🆕 Новый',
+                'assigned': '🚴 Назначен',
+                'in_delivery': '📦 В доставке',
+                'delivered': '✅ Доставлен',
+                'cancelled': '❌ Отменен'
+            };
+            return statuses[status] || status;
+        }
+    </script>
+</body>
+</html>
