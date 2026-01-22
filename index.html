@@ -4,395 +4,310 @@
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
   <title>Artik Food — Доставка продуктов</title>
-
-  <!-- Иконки -->
-  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.0/css/all.min.css"/>
-
-  <!-- PWA -->
-  <link rel="manifest" href="manifest.json">
-  <meta name="theme-color" content="#2ecc71">
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
 
   <style>
-    * { box-sizing: border-box; }
     body {
       margin: 0;
       font-family: Arial, sans-serif;
-      background: #f5f5f5;
+      background: #f6f6f6;
       color: #333;
     }
 
     header {
       background: #2ecc71;
       color: white;
-      padding: 12px 16px;
-      text-align: center;
-      font-size: 20px;
-      font-weight: bold;
-      position: sticky;
-      top: 0;
-      z-index: 1000;
-    }
-
-    .container {
-      padding: 12px;
-      padding-bottom: 120px;
-    }
-
-    h2 {
-      margin: 12px 0 8px;
-      font-size: 18px;
-    }
-
-    .list {
-      display: flex;
-      flex-direction: column;
-      gap: 8px;
-    }
-
-    .list-item {
-      background: white;
-      padding: 12px;
-      border-radius: 10px;
-      box-shadow: 0 2px 6px rgba(0,0,0,0.08);
+      padding: 12px 15px;
       display: flex;
       justify-content: space-between;
       align-items: center;
+      flex-wrap: wrap;
+    }
+
+    header h1 {
+      margin: 0;
+      font-size: 20px;
+      cursor: pointer;
+    }
+
+    .header-buttons {
+      display: flex;
+      gap: 10px;
+    }
+
+    .btn {
+      background: white;
+      color: #2ecc71;
+      border: none;
+      border-radius: 6px;
+      padding: 6px 10px;
+      cursor: pointer;
+      font-weight: bold;
+    }
+
+    main {
+      padding: 15px;
+    }
+
+    .section {
+      margin-bottom: 25px;
+    }
+
+    .shops-grid,
+    .categories-grid,
+    .products-grid {
+      display: grid;
+      grid-template-columns: repeat(auto-fill, minmax(140px, 1fr));
+      gap: 12px;
+    }
+
+    .card {
+      background: white;
+      border-radius: 10px;
+      padding: 12px;
+      box-shadow: 0 2px 5px rgba(0,0,0,0.1);
       cursor: pointer;
       transition: 0.2s;
     }
 
-    .list-item:hover {
-      background: #e9f9f0;
+    .card:hover {
+      transform: translateY(-2px);
     }
 
-    .list-item .title {
-      font-size: 16px;
-      font-weight: 500;
+    .hidden {
+      display: none;
     }
 
-    .badge {
+    .store-header {
+      display: flex;
+      align-items: center;
+      gap: 10px;
+      margin-bottom: 15px;
+    }
+
+    .btn-back {
       background: #2ecc71;
       color: white;
-      padding: 4px 8px;
-      border-radius: 20px;
-      font-size: 12px;
+      border: none;
+      border-radius: 6px;
+      padding: 6px 10px;
+      cursor: pointer;
     }
 
-    .product-row {
+    .product-card {
+      background: white;
+      border-radius: 10px;
+      padding: 10px;
+      box-shadow: 0 2px 5px rgba(0,0,0,0.1);
       display: flex;
+      flex-direction: column;
       justify-content: space-between;
-      align-items: center;
-      gap: 8px;
-    }
-
-    .product-info {
-      flex: 1;
     }
 
     .product-name {
-      font-size: 14px;
-      font-weight: 500;
+      font-weight: bold;
+      margin-bottom: 5px;
     }
 
     .product-price {
-      font-size: 12px;
-      color: #777;
-    }
-
-    .qty-controls {
-      display: flex;
-      align-items: center;
-      gap: 6px;
-    }
-
-    .qty-controls button {
-      width: 28px;
-      height: 28px;
-      border: none;
-      border-radius: 50%;
-      background: #2ecc71;
-      color: white;
-      font-size: 16px;
-      cursor: pointer;
-    }
-
-    .qty-controls span {
-      min-width: 20px;
-      text-align: center;
-      font-size: 14px;
+      color: #2ecc71;
       font-weight: bold;
-    }
-
-    .nav-buttons {
-      display: flex;
-      justify-content: space-between;
       margin-bottom: 8px;
     }
 
-    .icon-btn {
-      background: #2ecc71;
-      border: none;
-      color: white;
-      width: 36px;
-      height: 36px;
-      border-radius: 50%;
-      font-size: 16px;
-      cursor: pointer;
-      display: flex;
-      align-items: center;
-      justify-content: center;
-    }
-
-    /* Корзина снизу */
-    .cart-bar {
-      position: fixed;
-      bottom: 0;
-      left: 0;
-      right: 0;
-      background: white;
-      border-top: 1px solid #ddd;
-      padding: 10px 12px;
+    .product-controls {
       display: flex;
       justify-content: space-between;
       align-items: center;
-      z-index: 1000;
     }
 
-    .cart-info {
-      font-size: 14px;
-    }
-
-    .cart-info span {
-      font-weight: bold;
-    }
-
-    .cart-btn {
+    .control-btn {
       background: #2ecc71;
       color: white;
       border: none;
-      border-radius: 20px;
-      padding: 8px 14px;
-      font-size: 14px;
+      border-radius: 50%;
+      width: 30px;
+      height: 30px;
+      font-size: 18px;
       cursor: pointer;
     }
 
-    /* Модальное окно корзины */
-    .modal {
+    .quantity {
+      font-weight: bold;
+      min-width: 20px;
+      text-align: center;
+    }
+
+    /* Корзина */
+    #cart-sidebar {
       position: fixed;
       top: 0;
-      left: 0;
-      right: 0;
-      bottom: 0;
-      background: rgba(0,0,0,0.4);
-      display: none;
-      justify-content: center;
-      align-items: center;
-      z-index: 2000;
-    }
-
-    .modal.active {
-      display: flex;
-    }
-
-    .modal-content {
+      right: -100%;
+      width: 320px;
+      height: 100%;
       background: white;
-      width: 95%;
-      max-width: 420px;
-      max-height: 90vh;
-      overflow-y: auto;
-      border-radius: 12px;
-      padding: 14px;
+      box-shadow: -2px 0 10px rgba(0,0,0,0.2);
+      transition: right 0.3s ease;
+      z-index: 1000;
+      display: flex;
+      flex-direction: column;
     }
 
-    .modal-header {
+    #cart-sidebar.active {
+      right: 0;
+    }
+
+    .cart-header {
+      background: #2ecc71;
+      color: white;
+      padding: 12px;
       display: flex;
       justify-content: space-between;
       align-items: center;
-      margin-bottom: 10px;
     }
 
-    .modal-header h3 {
-      margin: 0;
-      font-size: 18px;
-    }
-
-    .close-btn {
-      background: transparent;
-      border: none;
-      font-size: 20px;
-      cursor: pointer;
+    .cart-items {
+      flex: 1;
+      overflow-y: auto;
+      padding: 10px;
     }
 
     .cart-item {
+      border-bottom: 1px solid #ddd;
+      padding: 8px 0;
       display: flex;
       justify-content: space-between;
       align-items: center;
-      gap: 8px;
-      padding: 6px 0;
-      border-bottom: 1px solid #eee;
-    }
-
-    .cart-item:last-child {
-      border-bottom: none;
     }
 
     .cart-item-name {
-      flex: 1;
       font-size: 14px;
     }
 
-    .cart-item-price {
-      font-size: 13px;
-      white-space: nowrap;
-    }
-
-    .remove-btn {
-      background: #e74c3c;
-      border: none;
-      color: white;
-      width: 24px;
-      height: 24px;
-      border-radius: 50%;
-      font-size: 12px;
-      cursor: pointer;
-    }
-
-    .total-row {
+    .cart-item-controls {
       display: flex;
-      justify-content: space-between;
-      font-size: 16px;
-      font-weight: bold;
-      margin: 10px 0;
+      align-items: center;
+      gap: 5px;
     }
 
-    /* Форма заказа */
-    .order-form input,
-    .order-form select,
-    .order-form textarea {
+    .cart-footer {
+      padding: 12px;
+      border-top: 1px solid #ddd;
+    }
+
+    .cart-footer div {
+      margin-bottom: 5px;
+    }
+
+    .btn-order {
+      width: 100%;
+      background: #2ecc71;
+      color: white;
+      border: none;
+      border-radius: 6px;
+      padding: 10px;
+      font-size: 16px;
+      cursor: pointer;
+      margin-top: 10px;
+    }
+
+    /* Оформление заказа */
+    .order-form {
+      background: white;
+      border-radius: 10px;
+      padding: 15px;
+      box-shadow: 0 2px 5px rgba(0,0,0,0.1);
+    }
+
+    .form-group {
+      margin-bottom: 12px;
+    }
+
+    .form-group label {
+      display: block;
+      margin-bottom: 4px;
+      font-weight: bold;
+    }
+
+    .form-group input,
+    .form-group select,
+    .form-group textarea {
       width: 100%;
       padding: 8px;
-      margin-bottom: 8px;
       border-radius: 6px;
       border: 1px solid #ccc;
       font-size: 14px;
     }
 
-    .order-form textarea {
-      resize: vertical;
-      min-height: 60px;
+    .order-summary {
+      margin-top: 15px;
+      padding-top: 10px;
+      border-top: 1px solid #ddd;
+    }
+
+    .summary-item,
+    .summary-total {
+      display: flex;
+      justify-content: space-between;
+      margin-bottom: 5px;
+    }
+
+    .summary-total {
+      font-weight: bold;
+      font-size: 16px;
     }
 
     .messenger-buttons {
       display: flex;
-      gap: 8px;
-      margin-bottom: 8px;
-    }
-
-    .btn-whatsapp,
-    .btn-telegram {
-      flex: 1;
-      border: none;
-      border-radius: 8px;
-      padding: 8px;
-      font-size: 14px;
-      color: white;
-      cursor: pointer;
+      gap: 10px;
+      margin-bottom: 10px;
     }
 
     .btn-whatsapp {
+      flex: 1;
       background: #25D366;
-    }
-
-    .btn-telegram {
-      background: #0088cc;
-    }
-
-    .confirm-btn {
-      width: 100%;
-      background: #2ecc71;
-      border: none;
-      border-radius: 10px;
-      padding: 10px;
-      font-size: 15px;
       color: white;
+      border: none;
+      border-radius: 6px;
+      padding: 8px;
+      font-weight: bold;
       cursor: pointer;
     }
 
-    /* Уведомления */
-    .notification {
-      position: fixed;
-      top: 10px;
-      left: 50%;
-      transform: translateX(-50%);
+    .btn-telegram {
+      flex: 1;
+      background: #0088cc;
+      color: white;
+      border: none;
+      border-radius: 6px;
+      padding: 8px;
+      font-weight: bold;
+      cursor: pointer;
+    }
+
+    footer {
       background: #2ecc71;
       color: white;
-      padding: 8px 14px;
-      border-radius: 20px;
-      font-size: 13px;
-      display: none;
-      z-index: 3000;
-    }
-
-    .notification.error {
-      background: #e74c3c;
-    }
-
-    /* Админ-панель */
-    .admin-panel {
-      position: fixed;
-      top: 0;
-      left: 0;
-      right: 0;
-      bottom: 0;
-      background: rgba(0,0,0,0.4);
-      display: none;
-      justify-content: center;
-      align-items: center;
-      z-index: 3000;
-    }
-
-    .admin-panel.active {
-      display: flex;
-    }
-
-    .admin-panel-content {
-      background: white;
-      width: 95%;
-      max-width: 480px;
-      max-height: 90vh;
-      overflow-y: auto;
-      border-radius: 12px;
-      padding: 14px;
-    }
-
-    .admin-order {
-      border: 1px solid #eee;
-      border-radius: 8px;
-      padding: 8px;
-      margin-bottom: 8px;
-      font-size: 13px;
-    }
-
-    .admin-order h5 {
-      margin: 0 0 6px;
+      padding: 15px;
+      text-align: center;
       font-size: 14px;
     }
 
-    .admin-order ul {
-      padding-left: 16px;
-      margin: 4px 0;
-    }
-
-    /* Адаптация под маленькие экраны */
-    @media (max-width: 360px) {
+    /* Мобильная адаптация (минимально) */
+    @media (max-width: 600px) {
       header {
-        font-size: 18px;
+        flex-direction: column;
+        gap: 8px;
       }
-      .product-name {
-        font-size: 13px;
+
+      #cart-sidebar {
+        width: 100%;
       }
-      .product-price {
-        font-size: 11px;
+
+      .shops-grid,
+      .categories-grid,
+      .products-grid {
+        grid-template-columns: repeat(auto-fill, minmax(120px, 1fr));
       }
     }
   </style>
@@ -400,53 +315,100 @@
 <body>
 
 <header>
-  Artik Food — Доставка продуктов
+  <h1 onclick="goHome()">Artik Food</h1>
+  <div class="header-buttons">
+    <button class="btn" onclick="goHome()"><i class="fas fa-home"></i></button>
+    <button class="btn" onclick="toggleCart()">
+      <i class="fas fa-shopping-basket"></i>
+      <span id="cart-count">0</span>
+    </button>
+  </div>
 </header>
 
-<div class="container" id="app"></div>
+<main>
+  <!-- СУПЕРМАРКЕТЫ -->
+  <section class="section" id="shops-section">
+    <h2>Супермаркеты</h2>
+    <div class="shops-grid" id="shops-list"></div>
+  </section>
 
-<!-- Нижняя панель корзины -->
-<div class="cart-bar">
-  <div class="cart-info">
-    🛒 <span id="cart-count">0</span> товаров — <span id="cart-total">0 AMD</span>
-  </div>
-  <button class="cart-btn" onclick="openCart()">Оформить</button>
-</div>
-
-<!-- Модалка корзины и оформления -->
-<div class="modal" id="cart-modal">
-  <div class="modal-content">
-    <div class="modal-header">
-      <h3>🛒 Ваша корзина</h3>
-      <button class="close-btn" onclick="closeCart()">✕</button>
+  <!-- КАТЕГОРИИ -->
+  <section class="section hidden" id="categories-section">
+    <div class="store-header">
+      <button class="btn-back" onclick="goHome()">← Назад</button>
+      <h2 id="store-title"></h2>
     </div>
+    <div class="categories-grid" id="categories-list"></div>
+  </section>
 
-    <div id="cart-items"></div>
-
-    <div class="total-row">
-      <span>Итого:</span>
-      <span id="summary-total">0 AMD</span>
+  <!-- ТОВАРЫ -->
+  <section class="section hidden" id="products-section">
+    <div class="store-header">
+      <button class="btn-back" onclick="backToCategories()">← Назад</button>
+      <h2 id="category-title"></h2>
     </div>
+    <div class="products-grid" id="products-list"></div>
+  </section>
 
-    <h4>📦 Оформление заказа</h4>
-    <form class="order-form" id="order-form">
-      <input type="text" id="name" placeholder="Имя *" required>
-      <input type="tel" id="phone" placeholder="Телефон *" required>
-      <input type="text" id="address" placeholder="Адрес *" required>
-      <select id="district" required>
-        <option value="">Выберите район *</option>
-        <option>Центр</option>
-        <option>Восток</option>
-        <option>Запад</option>
-        <option>Север</option>
-        <option>Юг</option>
-      </select>
-      <select id="payment" required>
-        <option value="">Способ оплаты *</option>
-        <option>Наличные</option>
-        <option>Карта</option>
-      </select>
-      <textarea id="comment" placeholder="Комментарий к заказу"></textarea>
+  <!-- ОФОРМЛЕНИЕ ЗАКАЗА -->
+  <section class="section" id="order-section">
+    <h2>Оформление заказа</h2>
+    <form id="order-form" class="order-form">
+      <div class="form-group">
+        <label>Ваше имя *</label>
+        <input type="text" id="name" required>
+      </div>
+
+      <div class="form-group">
+        <label>Телефон *</label>
+        <input type="tel" id="phone" required>
+      </div>
+
+      <div class="form-group">
+        <label>Адрес доставки *</label>
+        <input type="text" id="address" required>
+      </div>
+
+      <div class="form-group">
+        <label>Район доставки *</label>
+        <select id="district" required onchange="calculateDelivery()">
+          <option value="">Выберите район...</option>
+          <option value="Артик" data-price="500">Артик — 500 AMD</option>
+          <option value="Арич" data-price="700">Арич — 700 AMD</option>
+          <option value="Нор-Кянк" data-price="1000">Нор-Кянк — 1000 AMD</option>
+          <option value="Пемзашен" data-price="1000">Пемзашен — 1000 AMD</option>
+        </select>
+      </div>
+
+      <div class="form-group">
+        <label>Способ оплаты *</label>
+        <select id="payment" required>
+          <option value="">Выберите оплату...</option>
+          <option value="Наличными">💵 Наличными курьеру</option>
+          <option value="IDram">🏦 IDram</option>
+          <option value="Картой">💳 Картой онлайн</option>
+        </select>
+      </div>
+
+      <div class="form-group">
+        <label>Комментарий к заказу</label>
+        <textarea id="comment" rows="3"></textarea>
+      </div>
+
+      <div class="order-summary">
+        <div class="summary-item">
+          <span>Товары:</span>
+          <span id="summary-items">0 AMD</span>
+        </div>
+        <div class="summary-item">
+          <span>Доставка:</span>
+          <span id="summary-delivery">0 AMD</span>
+        </div>
+        <div class="summary-total">
+          <span>Итого:</span>
+          <span id="summary-total">0 AMD</span>
+        </div>
+      </div>
 
       <div class="messenger-buttons">
         <button type="button" class="btn-whatsapp" onclick="sendOrderToMessenger('whatsapp')">
@@ -457,523 +419,397 @@
         </button>
       </div>
 
-      <button type="submit" class="confirm-btn">Подтвердить заказ</button>
+      <button type="submit" class="btn-order">
+        <i class="fas fa-check-circle"></i> Подтвердить заказ
+      </button>
     </form>
+  </section>
+</main>
+
+<footer>
+  © 2026 Artik Food — Доставка продуктов в Артике
+</footer>
+
+<!-- КОРЗИНА -->
+<div id="cart-sidebar">
+  <div class="cart-header">
+    <h3>Корзина</h3>
+    <button class="btn" onclick="toggleCart()">✕</button>
+  </div>
+  <div class="cart-items" id="cart-items"></div>
+  <div class="cart-footer">
+    <div>Товары: <span id="cart-subtotal">0</span> AMD</div>
+    <div>Доставка: <span id="cart-delivery">0</span> AMD</div>
+    <div><strong>Итого: <span id="cart-total">0</span> AMD</strong></div>
+    <button class="btn-order" onclick="scrollToOrder()">Оформить заказ</button>
   </div>
 </div>
-
-<!-- Админ-панель -->
-<div class="admin-panel" id="admin-panel">
-  <div class="admin-panel-content">
-    <div class="modal-header">
-      <h3>📊 Админ-панель</h3>
-      <button class="close-btn" onclick="hideAdminPanel()">✕</button>
-    </div>
-    <div id="admin-orders"></div>
-  </div>
-</div>
-
-<!-- Уведомление -->
-<div class="notification" id="notification"></div>
 
 <script>
-/* ===============================
-   ДАННЫЕ: Супермаркеты → Категории → Товары
-================================ */
+/* ======================
+   ДАННЫЕ МАГАЗИНОВ
+====================== */
 
-const stores = [
-  {
-    id: "million",
+const stores = {
+  million: {
     name: "Million",
-    categories: [
-      {
-        id: "fruits",
-        name: "Овощи и фрукты",
-        products: [
-          { id: "potato", name: "Картофель 1 кг", price: 300 },
-          { id: "onion", name: "Лук 1 кг", price: 250 },
-          { id: "tomato", name: "Помидоры 1 кг", price: 800 },
-          { id: "cucumber", name: "Огурцы 1 кг", price: 700 },
-          { id: "apple", name: "Яблоки 1 кг", price: 600 },
-          { id: "banana", name: "Бананы 1 кг", price: 900 },
-          { id: "orange", name: "Апельсины 1 кг", price: 850 },
-          { id: "carrot", name: "Морковь 1 кг", price: 300 },
-          { id: "cabbage", name: "Капуста 1 кг", price: 200 },
-          { id: "lemon", name: "Лимоны 1 кг", price: 1000 }
-        ]
-      },
-      {
-        id: "dairy",
-        name: "Молочные продукты",
-        products: [
-          { id: "milk1", name: "Молоко 1 л", price: 350 },
-          { id: "milk2", name: "Молоко 2 л", price: 650 },
-          { id: "cheese1", name: "Сыр твёрдый 200 г", price: 1200 },
-          { id: "cheese2", name: "Сыр плавленый 180 г", price: 600 },
-          { id: "butter", name: "Масло сливочное 180 г", price: 900 },
-          { id: "yogurt", name: "Йогурт 400 г", price: 350 },
-          { id: "sourcream", name: "Сметана 400 г", price: 400 },
-          { id: "kefir", name: "Кефир 1 л", price: 300 },
-          { id: "cream", name: "Сливки 200 мл", price: 500 },
-          { id: "icecream", name: "Мороженое", price: 600 }
-        ]
-      },
-      {
-        id: "bakery",
-        name: "Хлеб и выпечка",
-        products: [
-          { id: "bread_white", name: "Хлеб белый", price: 150 },
-          { id: "bread_black", name: "Хлеб чёрный", price: 180 },
-          { id: "lavash", name: "Лаваш", price: 120 },
-          { id: "bun", name: "Булочка", price: 100 },
-          { id: "croissant", name: "Круассан", price: 250 },
-          { id: "cake", name: "Пирожное", price: 300 },
-          { id: "donut", name: "Пончик", price: 200 },
-          { id: "cookies", name: "Печенье 300 г", price: 450 },
-          { id: "cracker", name: "Сухари 200 г", price: 200 },
-          { id: "cake_big", name: "Торт", price: 2500 }
-        ]
-      },
-      {
-        id: "drinks",
-        name: "Напитки",
-        products: [
-          { id: "water", name: "Вода 1.5 л", price: 200 },
-          { id: "cola", name: "Cola 1.5 л", price: 500 },
-          { id: "fanta", name: "Fanta 1.5 л", price: 500 },
-          { id: "sprite", name: "Sprite 1.5 л", price: 500 },
-          { id: "juice_orange", name: "Сок апельсиновый 1 л", price: 600 },
-          { id: "juice_apple", name: "Сок яблочный 1 л", price: 600 },
-          { id: "tea", name: "Холодный чай 0.5 л", price: 350 },
-          { id: "energy", name: "Энергетик 0.5 л", price: 700 },
-          { id: "mineral", name: "Минеральная вода 1 л", price: 250 },
-          { id: "milkshake", name: "Молочный коктейль", price: 550 }
-        ]
-      }
-    ]
+    categories: {
+      "Овощи и фрукты": [
+        { name: "Картофель 1кг", price: 300 },
+        { name: "Лук 1кг", price: 250 },
+        { name: "Морковь 1кг", price: 280 },
+        { name: "Помидоры 1кг", price: 600 },
+        { name: "Огурцы 1кг", price: 550 },
+        { name: "Яблоки 1кг", price: 400 },
+        { name: "Бананы 1кг", price: 650 },
+        { name: "Апельсины 1кг", price: 500 },
+        { name: "Мандарины 1кг", price: 550 },
+        { name: "Груши 1кг", price: 600 }
+      ],
+      "Молочные продукты": [
+        { name: "Молоко 1л", price: 450 },
+        { name: "Сыр 1кг", price: 3200 },
+        { name: "Сметана 500г", price: 650 },
+        { name: "Йогурт 200г", price: 220 },
+        { name: "Творог 500г", price: 850 },
+        { name: "Кефир 1л", price: 400 },
+        { name: "Масло сливочное 200г", price: 900 },
+        { name: "Сливки 500мл", price: 700 },
+        { name: "Молоко шоколадное 1л", price: 500 },
+        { name: "Ряженка 1л", price: 420 }
+      ],
+      "Бакалея": [
+        { name: "Рис 1кг", price: 500 },
+        { name: "Гречка 1кг", price: 450 },
+        { name: "Макароны 500г", price: 350 },
+        { name: "Сахар 1кг", price: 400 },
+        { name: "Соль 1кг", price: 200 },
+        { name: "Мука 1кг", price: 350 },
+        { name: "Подсолнечное масло 1л", price: 900 },
+        { name: "Чай 100г", price: 700 },
+        { name: "Кофе 100г", price: 1200 },
+        { name: "Овсянка 500г", price: 300 }
+      ]
+    }
   },
-  {
-    id: "sas",
+
+  norzart: {
+    name: "Norzart",
+    categories: {
+      "Овощи и фрукты": [
+        { name: "Картофель 1кг", price: 290 },
+        { name: "Лук 1кг", price: 240 },
+        { name: "Морковь 1кг", price: 270 },
+        { name: "Помидоры 1кг", price: 580 },
+        { name: "Огурцы 1кг", price: 540 },
+        { name: "Яблоки 1кг", price: 390 },
+        { name: "Бананы 1кг", price: 640 },
+        { name: "Апельсины 1кг", price: 490 },
+        { name: "Мандарины 1кг", price: 540 },
+        { name: "Груши 1кг", price: 590 }
+      ],
+      "Мясо и птица": [
+        { name: "Курица целая 1кг", price: 1400 },
+        { name: "Филе куриное 1кг", price: 1900 },
+        { name: "Говядина 1кг", price: 3200 },
+        { name: "Свинина 1кг", price: 2800 },
+        { name: "Фарш 1кг", price: 2500 },
+        { name: "Колбаса варёная 1кг", price: 2200 },
+        { name: "Сосиски 1кг", price: 2000 },
+        { name: "Бекон 500г", price: 1800 },
+        { name: "Котлеты 1кг", price: 2600 },
+        { name: "Пельмени 1кг", price: 2300 }
+      ],
+      "Хлеб и выпечка": [
+        { name: "Хлеб белый", price: 200 },
+        { name: "Хлеб чёрный", price: 220 },
+        { name: "Лаваш", price: 180 },
+        { name: "Булочка сдобная", price: 150 },
+        { name: "Батон", price: 230 },
+        { name: "Круассан", price: 250 },
+        { name: "Пирожок с картошкой", price: 180 },
+        { name: "Пирожок с мясом", price: 220 },
+        { name: "Багет", price: 260 },
+        { name: "Торт порционный", price: 600 }
+      ]
+    }
+  },
+
+  sas: {
     name: "SAS",
-    categories: [
-      {
-        id: "meat",
-        name: "Мясо и колбасы",
-        products: [
-          { id: "chicken", name: "Курица 1 кг", price: 1200 },
-          { id: "beef", name: "Говядина 1 кг", price: 2500 },
-          { id: "pork", name: "Свинина 1 кг", price: 2200 },
-          { id: "sausages", name: "Сосиски 500 г", price: 1200 },
-          { id: "salami", name: "Салями 300 г", price: 1400 },
-          { id: "ham", name: "Ветчина 300 г", price: 1500 },
-          { id: "minced", name: "Фарш 500 г", price: 1300 },
-          { id: "chickenfillet", name: "Филе куриное 500 г", price: 1400 },
-          { id: "liver", name: "Печень 500 г", price: 900 },
-          { id: "sausages_smoked", name: "Колбаса копчёная 400 г", price: 1600 }
-        ]
-      },
-      {
-        id: "fish",
-        name: "Рыба и морепродукты",
-        products: [
-          { id: "salmon", name: "Лосось 1 кг", price: 4500 },
-          { id: "trout", name: "Форель 1 кг", price: 3800 },
-          { id: "hake", name: "Хек 1 кг", price: 2200 },
-          { id: "mackerel", name: "Скумбрия 1 кг", price: 2000 },
-          { id: "shrimp", name: "Креветки 500 г", price: 3000 },
-          { id: "squid", name: "Кальмар 500 г", price: 2500 },
-          { id: "crabsticks", name: "Крабовые палочки 200 г", price: 700 },
-          { id: "tuna", name: "Тунец консервированный", price: 900 },
-          { id: "sardines", name: "Сардины консервированные", price: 600 },
-          { id: "caviar", name: "Икра красная 100 г", price: 6000 }
-        ]
-      },
-      {
-        id: "grocery",
-        name: "Бакалея",
-        products: [
-          { id: "rice", name: "Рис 1 кг", price: 500 },
-          { id: "buckwheat", name: "Гречка 1 кг", price: 550 },
-          { id: "pasta", name: "Макароны 500 г", price: 350 },
-          { id: "flour", name: "Мука 1 кг", price: 300 },
-          { id: "sugar", name: "Сахар 1 кг", price: 350 },
-          { id: "salt", name: "Соль 1 кг", price: 100 },
-          { id: "oil", name: "Масло подсолнечное 1 л", price: 900 },
-          { id: "beans", name: "Фасоль 500 г", price: 400 },
-          { id: "lentils", name: "Чечевица 500 г", price: 450 },
-          { id: "peas", name: "Горох 500 г", price: 300 }
-        ]
-      },
-      {
-        id: "sweets",
-        name: "Сладости",
-        products: [
-          { id: "chocolate", name: "Шоколад плитка", price: 500 },
-          { id: "candies", name: "Конфеты 300 г", price: 700 },
-          { id: "cookies_sweet", name: "Печенье сладкое 300 г", price: 450 },
-          { id: "waffles", name: "Вафли", price: 400 },
-          { id: "cake_slice", name: "Кусок торта", price: 500 },
-          { id: "marshmallow", name: "Зефир 200 г", price: 350 },
-          { id: "halva", name: "Халва 300 г", price: 450 },
-          { id: "jam", name: "Варенье 400 г", price: 600 },
-          { id: "honey", name: "Мёд 500 г", price: 1800 },
-          { id: "condensed", name: "Сгущёнка", price: 500 }
-        ]
-      }
-    ]
+    categories: {
+      "Напитки": [
+        { name: "Вода 1.5л", price: 180 },
+        { name: "Вода 5л", price: 400 },
+        { name: "Сок 1л", price: 600 },
+        { name: "Газировка 2л", price: 500 },
+        { name: "Энергетик", price: 450 },
+        { name: "Чай холодный", price: 350 },
+        { name: "Молочный коктейль", price: 400 },
+        { name: "Квас 1л", price: 380 },
+        { name: "Лимонад", price: 300 },
+        { name: "Компот", price: 350 }
+      ],
+      "Сладости": [
+        { name: "Шоколад плитка", price: 450 },
+        { name: "Печенье 500г", price: 600 },
+        { name: "Вафли", price: 500 },
+        { name: "Конфеты 500г", price: 800 },
+        { name: "Торт", price: 3500 },
+        { name: "Пирожное", price: 600 },
+        { name: "Мармелад", price: 550 },
+        { name: "Зефир", price: 500 },
+        { name: "Кекс", price: 700 },
+        { name: "Пряники", price: 550 }
+      ],
+      "Заморозка": [
+        { name: "Пельмени 1кг", price: 2300 },
+        { name: "Вареники 1кг", price: 2000 },
+        { name: "Наггетсы 1кг", price: 1800 },
+        { name: "Картофель фри 1кг", price: 1600 },
+        { name: "Овощная смесь 1кг", price: 1400 },
+        { name: "Мороженое", price: 600 },
+        { name: "Креветки 500г", price: 2800 },
+        { name: "Рыбные палочки", price: 1700 },
+        { name: "Блинчики", price: 1500 },
+        { name: "Чебуреки", price: 1900 }
+      ]
+    }
   },
-  {
-    id: "evrika",
-    name: "Evrika",
-    categories: [
-      {
-        id: "household",
-        name: "Бытовая химия",
-        products: [
-          { id: "powder", name: "Стиральный порошок 3 кг", price: 2500 },
-          { id: "liquid", name: "Гель для стирки 2 л", price: 2200 },
-          { id: "dish", name: "Средство для посуды 500 мл", price: 600 },
-          { id: "cleaner", name: "Универсальный очиститель", price: 800 },
-          { id: "glass", name: "Средство для стёкол", price: 700 },
-          { id: "toilet", name: "Средство для унитаза", price: 900 },
-          { id: "soap", name: "Жидкое мыло 500 мл", price: 500 },
-          { id: "sponge", name: "Губки для посуды", price: 300 },
-          { id: "trash", name: "Мусорные пакеты", price: 400 },
-          { id: "paper", name: "Бумажные полотенца", price: 600 }
-        ]
-      },
-      {
-        id: "hygiene",
-        name: "Гигиена",
-        products: [
-          { id: "shampoo", name: "Шампунь 400 мл", price: 1200 },
-          { id: "conditioner", name: "Кондиционер 400 мл", price: 1200 },
-          { id: "soap_bar", name: "Мыло кусковое", price: 200 },
-          { id: "toothpaste", name: "Зубная паста", price: 600 },
-          { id: "toothbrush", name: "Зубная щётка", price: 300 },
-          { id: "shower_gel", name: "Гель для душа 400 мл", price: 900 },
-          { id: "deodorant", name: "Дезодорант", price: 1200 },
-          { id: "cream", name: "Крем для рук", price: 700 },
-          { id: "razor", name: "Бритва одноразовая", price: 400 },
-          { id: "cotton", name: "Ватные диски", price: 300 }
-        ]
-      },
-      {
-        id: "baby",
-        name: "Товары для детей",
-        products: [
-          { id: "diapers", name: "Подгузники", price: 3500 },
-          { id: "baby_food", name: "Детское питание", price: 500 },
-          { id: "baby_wipes", name: "Влажные салфетки", price: 400 },
-          { id: "baby_shampoo", name: "Детский шампунь", price: 900 },
-          { id: "baby_cream", name: "Детский крем", price: 800 },
-          { id: "baby_soap", name: "Детское мыло", price: 300 },
-          { id: "baby_powder", name: "Присыпка", price: 600 },
-          { id: "baby_bottle", name: "Бутылочка", price: 1200 },
-          { id: "baby_pacifier", name: "Пустышка", price: 500 },
-          { id: "baby_toy", name: "Игрушка", price: 1500 }
-        ]
-      },
-      {
-        id: "pets",
-        name: "Товары для животных",
-        products: [
-          { id: "dog_food", name: "Корм для собак 2 кг", price: 2500 },
-          { id: "cat_food", name: "Корм для кошек 2 кг", price: 2300 },
-          { id: "cat_litter", name: "Наполнитель для лотка", price: 2000 },
-          { id: "dog_treats", name: "Лакомства для собак", price: 1200 },
-          { id: "cat_treats", name: "Лакомства для кошек", price: 1100 },
-          { id: "pet_shampoo", name: "Шампунь для животных", price: 1500 },
-          { id: "pet_bowl", name: "Миска для животных", price: 700 },
-          { id: "pet_toy", name: "Игрушка для животных", price: 900 },
-          { id: "pet_collar", name: "Ошейник", price: 1000 },
-          { id: "pet_leash", name: "Поводок", price: 1200 }
-        ]
-      }
-    ]
-  },
-  {
-    id: "edem",
+
+  edem: {
     name: "Эдем (Цветы)",
-    categories: [
-      {
-        id: "bouquets",
-        name: "Букеты",
-        products: [
-          { id: "rose_bouquet", name: "Букет роз (11 шт)", price: 8000 },
-          { id: "tulip_bouquet", name: "Букет тюльпанов (15 шт)", price: 7000 },
-          { id: "mix_bouquet", name: "Смешанный букет", price: 6500 },
-          { id: "lily_bouquet", name: "Букет лилий", price: 9000 },
-          { id: "chrysanthemum_bouquet", name: "Букет хризантем", price: 6000 },
-          { id: "gerbera_bouquet", name: "Букет гербер", price: 6500 },
-          { id: "orchid_bouquet", name: "Букет орхидей", price: 10000 },
-          { id: "peony_bouquet", name: "Букет пионов", price: 12000 },
-          { id: "sunflower_bouquet", name: "Букет подсолнухов", price: 5500 },
-          { id: "wedding_bouquet", name: "Свадебный букет", price: 20000 }
-        ]
-      },
-      {
-        id: "single_flowers",
-        name: "Цветы поштучно",
-        products: [
-          { id: "rose_single", name: "Роза", price: 700 },
-          { id: "tulip_single", name: "Тюльпан", price: 500 },
-          { id: "lily_single", name: "Лилия", price: 900 },
-          { id: "gerbera_single", name: "Гербера", price: 600 },
-          { id: "chrysanthemum_single", name: "Хризантема", price: 550 },
-          { id: "orchid_single", name: "Орхидея", price: 1200 },
-          { id: "peony_single", name: "Пион", price: 1500 },
-          { id: "sunflower_single", name: "Подсолнух", price: 650 },
-          { id: "carnation_single", name: "Гвоздика", price: 400 },
-          { id: "alstroemeria_single", name: "Альстромерия", price: 800 }
-        ]
-      },
-      {
-        id: "gifts",
-        name: "Подарки",
-        products: [
-          { id: "chocolate_box", name: "Коробка конфет", price: 3000 },
-          { id: "teddy_bear", name: "Мягкая игрушка", price: 5000 },
-          { id: "balloons", name: "Воздушные шары (набор)", price: 2000 },
-          { id: "postcard", name: "Открытка", price: 500 },
-          { id: "gift_box", name: "Подарочная коробка", price: 2500 },
-          { id: "perfume", name: "Парфюм", price: 15000 },
-          { id: "sweets_box", name: "Набор сладостей", price: 4000 },
-          { id: "wine", name: "Вино", price: 6000 },
-          { id: "champagne", name: "Шампанское", price: 7000 },
-          { id: "flower_vase", name: "Ваза для цветов", price: 4500 }
-        ]
-      },
-      {
-        id: "decor",
-        name: "Декор",
-        products: [
-          { id: "flower_pot", name: "Горшок для цветов", price: 3000 },
-          { id: "ribbon", name: "Лента декоративная", price: 500 },
-          { id: "wrapping", name: "Упаковочная бумага", price: 800 },
-          { id: "basket", name: "Корзина для цветов", price: 4000 },
-          { id: "stand", name: "Подставка для цветов", price: 3500 },
-          { id: "vase_glass", name: "Ваза стеклянная", price: 5000 },
-          { id: "vase_ceramic", name: "Ваза керамическая", price: 5500 },
-          { id: "decor_light", name: "Декоративная гирлянда", price: 2500 },
-          { id: "figurine", name: "Декоративная фигурка", price: 3000 },
-          { id: "frame", name: "Фоторамка", price: 2000 }
-        ]
-      }
-    ]
+    categories: {
+      "Букеты": [
+        { name: "Букет роз", price: 5000 },
+        { name: "Букет тюльпанов", price: 3500 },
+        { name: "Букет хризантем", price: 4000 },
+        { name: "Букет лилий", price: 5500 },
+        { name: "Сборный букет", price: 4500 },
+        { name: "Букет ромашек", price: 3000 },
+        { name: "Букет пионов", price: 6000 },
+        { name: "Букет гербер", price: 4200 },
+        { name: "Букет орхидей", price: 7000 },
+        { name: "Букет подсолнухов", price: 3800 }
+      ],
+      "Комнатные растения": [
+        { name: "Фикус", price: 4500 },
+        { name: "Орхидея в горшке", price: 6000 },
+        { name: "Кактус", price: 2500 },
+        { name: "Драцена", price: 5000 },
+        { name: "Спатифиллум", price: 4200 },
+        { name: "Монстера", price: 7000 },
+        { name: "Алоэ", price: 3000 },
+        { name: "Фиалка", price: 2800 },
+        { name: "Пальма декоративная", price: 8000 },
+        { name: "Бонсай", price: 9000 }
+      ],
+      "Подарки": [
+        { name: "Открытка", price: 300 },
+        { name: "Мягкая игрушка", price: 2500 },
+        { name: "Коробка конфет", price: 2000 },
+        { name: "Воздушные шары", price: 1500 },
+        { name: "Подарочная коробка", price: 1800 },
+        { name: "Свечи ароматические", price: 1200 },
+        { name: "Фоторамка", price: 2200 },
+        { name: "Подарочный пакет", price: 400 },
+        { name: "Мишка плюшевый", price: 3500 },
+        { name: "Набор свечей", price: 1600 }
+      ]
+    }
   }
-];
+};
 
-/* ===============================
-   СОСТОЯНИЕ ПРИЛОЖЕНИЯ
-================================ */
+/* ======================
+   СОСТОЯНИЕ
+====================== */
 
-let currentStore = null;
-let currentCategory = null;
 let cart = [];
+let currentStoreKey = null;
+let currentCategoryName = null;
+let deliveryPrice = 0;
 
-/* ===============================
+/* ======================
    ИНИЦИАЛИЗАЦИЯ
-================================ */
+====================== */
 
 document.addEventListener("DOMContentLoaded", () => {
   loadCart();
   renderStores();
-  updateCartBar();
 });
 
-/* ===============================
-   РЕНДЕРИНГ ЭКРАНОВ
-================================ */
-
-const app = document.getElementById("app");
+/* ======================
+   РЕНДЕР МАГАЗИНОВ
+====================== */
 
 function renderStores() {
-  currentStore = null;
-  currentCategory = null;
+  const container = document.getElementById("shops-list");
+  container.innerHTML = "";
 
-  let html = `<h2>🏬 Выберите супермаркет</h2><div class="list">`;
-
-  stores.forEach(store => {
-    html += `
-      <div class="list-item" onclick="openStore('${store.id}')">
-        <div class="title">${store.name}</div>
-        <div class="badge">${store.categories.length} катег.</div>
-      </div>
-    `;
+  Object.keys(stores).forEach(storeKey => {
+    const store = stores[storeKey];
+    const div = document.createElement("div");
+    div.className = "card";
+    div.innerHTML = `<h3>${store.name}</h3>`;
+    div.onclick = () => openStore(storeKey);
+    container.appendChild(div);
   });
-
-  html += `
-    <div class="list-item" onclick="showAdminPanel()">
-      <div class="title">📊 Админ-панель</div>
-      <div class="badge">Отчёты</div>
-    </div>
-  `;
-
-  html += `</div>`;
-  app.innerHTML = html;
 }
 
-function openStore(storeId) {
-  currentStore = stores.find(s => s.id === storeId);
-  currentCategory = null;
+/* ======================
+   КАТЕГОРИИ
+====================== */
 
-  let html = `
-    <div class="nav-buttons">
-      <button class="icon-btn" onclick="renderStores()"><i class="fas fa-home"></i></button>
-      <button class="icon-btn" onclick="openCart()"><i class="fas fa-shopping-cart"></i></button>
-    </div>
-    <h2>🏬 ${currentStore.name}</h2>
-    <div class="list">
-  `;
+function openStore(storeKey) {
+  currentStoreKey = storeKey;
+  const store = stores[storeKey];
 
-  currentStore.categories.forEach(category => {
-    html += `
-      <div class="list-item" onclick="openCategory('${category.id}')">
-        <div class="title">${category.name}</div>
-        <div class="badge">${category.products.length} товаров</div>
-      </div>
-    `;
+  document.getElementById("store-title").textContent = store.name;
+
+  document.getElementById("shops-section").classList.add("hidden");
+  document.getElementById("categories-section").classList.remove("hidden");
+  document.getElementById("products-section").classList.add("hidden");
+
+  const categoriesContainer = document.getElementById("categories-list");
+  categoriesContainer.innerHTML = "";
+
+  Object.keys(store.categories).forEach(categoryName => {
+    const div = document.createElement("div");
+    div.className = "card";
+    div.innerHTML = `<h4>${categoryName}</h4>`;
+    div.onclick = () => openCategory(categoryName);
+    categoriesContainer.appendChild(div);
   });
-
-  html += `</div>`;
-  app.innerHTML = html;
 }
 
-function openCategory(categoryId) {
-  currentCategory = currentStore.categories.find(c => c.id === categoryId);
+function openCategory(categoryName) {
+  currentCategoryName = categoryName;
+  const store = stores[currentStoreKey];
+  const products = store.categories[categoryName];
 
-  let html = `
-    <div class="nav-buttons">
-      <button class="icon-btn" onclick="openStore('${currentStore.id}')"><i class="fas fa-arrow-left"></i></button>
-      <button class="icon-btn" onclick="renderStores()"><i class="fas fa-home"></i></button>
-      <button class="icon-btn" onclick="openCart()"><i class="fas fa-shopping-cart"></i></button>
-    </div>
-    <h2>📂 ${currentCategory.name}</h2>
-    <div class="list">
-  `;
+  document.getElementById("category-title").textContent = categoryName;
 
-  currentCategory.products.forEach(product => {
-    const qty = getCartQuantity(product.id);
-    html += `
-      <div class="list-item">
-        <div class="product-row">
-          <div class="product-info">
-            <div class="product-name">${product.name}</div>
-            <div class="product-price">${product.price} AMD</div>
-          </div>
-          <div class="qty-controls">
-            <button onclick="decreaseQuantity('${product.id}')">−</button>
-            <span id="qty-${product.id}">${qty}</span>
-            <button onclick="increaseQuantity('${product.id}', '${product.name}', ${product.price})">+</button>
-          </div>
-        </div>
+  document.getElementById("categories-section").classList.add("hidden");
+  document.getElementById("products-section").classList.remove("hidden");
+
+  const productsContainer = document.getElementById("products-list");
+  productsContainer.innerHTML = "";
+
+  products.forEach(product => {
+    const div = document.createElement("div");
+    div.className = "product-card";
+
+    const quantity = getProductQuantity(product.name);
+
+    div.innerHTML = `
+      <div>
+        <div class="product-name">${product.name}</div>
+        <div class="product-price">${product.price} AMD</div>
+      </div>
+      <div class="product-controls">
+        <button class="control-btn" onclick="changeQuantity('${product.name}', ${product.price}, -1)">➖</button>
+        <span class="quantity" id="qty-${sanitizeId(product.name)}">${quantity}</span>
+        <button class="control-btn" onclick="changeQuantity('${product.name}', ${product.price}, 1)">➕</button>
       </div>
     `;
-  });
 
-  html += `</div>`;
-  app.innerHTML = html;
+    productsContainer.appendChild(div);
+  });
 }
 
-/* ===============================
+function backToCategories() {
+  document.getElementById("products-section").classList.add("hidden");
+  document.getElementById("categories-section").classList.remove("hidden");
+}
+
+/* ======================
    КОРЗИНА
-================================ */
+====================== */
 
-function getCartQuantity(productId) {
-  const item = cart.find(i => i.id === productId);
+function toggleCart() {
+  document.getElementById("cart-sidebar").classList.toggle("active");
+}
+
+function scrollToOrder() {
+  toggleCart();
+  document.getElementById("order-section").scrollIntoView({ behavior: "smooth" });
+}
+
+function getProductQuantity(name) {
+  const item = cart.find(i => i.name === name);
   return item ? item.quantity : 0;
 }
 
-function increaseQuantity(id, name, price) {
-  const item = cart.find(i => i.id === id);
-  if (item) {
-    item.quantity++;
-  } else {
-    cart.push({ id, name, price, quantity: 1 });
+function changeQuantity(name, price, delta) {
+  const existing = cart.find(item => item.name === name);
+
+  if (existing) {
+    existing.quantity += delta;
+    if (existing.quantity <= 0) {
+      cart = cart.filter(item => item.name !== name);
+    }
+  } else if (delta > 0) {
+    cart.push({ name, price, quantity: 1 });
   }
-  updateCartUI();
+
   saveCart();
-  updateCategoryQty(id);
-  showNotification("Товар добавлен");
-}
-
-function decreaseQuantity(id) {
-  const item = cart.find(i => i.id === id);
-  if (!item) return;
-  item.quantity--;
-  if (item.quantity <= 0) {
-    cart = cart.filter(i => i.id !== id);
-  }
   updateCartUI();
-  saveCart();
-  updateCategoryQty(id);
-}
 
-function removeFromCart(id) {
-  cart = cart.filter(i => i.id !== id);
-  updateCartUI();
-  saveCart();
-}
-
-function updateCategoryQty(id) {
-  const el = document.getElementById(`qty-${id}`);
-  if (el) {
-    el.textContent = getCartQuantity(id);
+  // Обновляем количество в списке товаров
+  const qtySpan = document.getElementById("qty-" + sanitizeId(name));
+  if (qtySpan) {
+    qtySpan.textContent = getProductQuantity(name);
   }
-}
-
-function updateCartBar() {
-  const count = cart.reduce((sum, item) => sum + item.quantity, 0);
-  const total = cart.reduce((sum, item) => sum + item.quantity * item.price, 0);
-  document.getElementById("cart-count").textContent = count;
-  document.getElementById("cart-total").textContent = `${total} AMD`;
-}
-
-function openCart() {
-  renderCartItems();
-  document.getElementById("cart-modal").classList.add("active");
-}
-
-function closeCart() {
-  document.getElementById("cart-modal").classList.remove("active");
-}
-
-function renderCartItems() {
-  const container = document.getElementById("cart-items");
-  container.innerHTML = "";
-
-  if (cart.length === 0) {
-    container.innerHTML = "<p>Корзина пуста.</p>";
-    document.getElementById("summary-total").textContent = "0 AMD";
-    updateCartBar();
-    return;
-  }
-
-  cart.forEach(item => {
-    const row = document.createElement("div");
-    row.className = "cart-item";
-    row.innerHTML = `
-      <div class="cart-item-name">${item.name} x${item.quantity}</div>
-      <div class="cart-item-price">${item.price * item.quantity} AMD</div>
-      <button class="remove-btn" onclick="removeFromCart('${item.id}')">✕</button>
-    `;
-    container.appendChild(row);
-  });
-
-  const total = cart.reduce((sum, item) => sum + item.quantity * item.price, 0);
-  document.getElementById("summary-total").textContent = `${total} AMD`;
-  updateCartBar();
 }
 
 function updateCartUI() {
-  renderCartItems();
-  updateCartBar();
+  const cartItemsContainer = document.getElementById("cart-items");
+  cartItemsContainer.innerHTML = "";
+
+  let subtotal = 0;
+  let totalCount = 0;
+
+  cart.forEach(item => {
+    subtotal += item.price * item.quantity;
+    totalCount += item.quantity;
+
+    const div = document.createElement("div");
+    div.className = "cart-item";
+    div.innerHTML = `
+      <div class="cart-item-name">${item.name}</div>
+      <div class="cart-item-controls">
+        <button class="control-btn" onclick="changeQuantity('${item.name}', ${item.price}, -1)">➖</button>
+        <span class="quantity">${item.quantity}</span>
+        <button class="control-btn" onclick="changeQuantity('${item.name}', ${item.price}, 1)">➕</button>
+      </div>
+    `;
+    cartItemsContainer.appendChild(div);
+  });
+
+  document.getElementById("cart-subtotal").textContent = subtotal;
+  document.getElementById("cart-count").textContent = totalCount;
+  document.getElementById("cart-delivery").textContent = deliveryPrice;
+  document.getElementById("cart-total").textContent = subtotal + deliveryPrice;
+
+  document.getElementById("summary-items").textContent = subtotal + " AMD";
+  document.getElementById("summary-delivery").textContent = deliveryPrice + " AMD";
+  document.getElementById("summary-total").textContent = (subtotal + deliveryPrice) + " AMD";
 }
 
-/* ===============================
+/* ======================
+   ДОСТАВКА
+====================== */
+
+function calculateDelivery() {
+  const select = document.getElementById("district");
+  const option = select.options[select.selectedIndex];
+  deliveryPrice = option ? Number(option.getAttribute("data-price")) || 0 : 0;
+  updateCartUI();
+}
+
+/* ======================
    СОХРАНЕНИЕ КОРЗИНЫ
-================================ */
+====================== */
 
 function saveCart() {
   localStorage.setItem("artikFoodCart", JSON.stringify(cart));
@@ -984,15 +820,26 @@ function loadCart() {
   if (saved) {
     cart = JSON.parse(saved);
   }
+  updateCartUI();
 }
 
-/* ===============================
-   ЗАКАЗ: WhatsApp / Telegram
-================================ */
+/* ======================
+   НАВИГАЦИЯ
+====================== */
+
+function goHome() {
+  document.getElementById("shops-section").classList.remove("hidden");
+  document.getElementById("categories-section").classList.add("hidden");
+  document.getElementById("products-section").classList.add("hidden");
+}
+
+/* ======================
+   ЗАКАЗ В WHATSAPP / TELEGRAM
+====================== */
 
 function sendOrderToMessenger(type) {
-  if (!cart || cart.length === 0) {
-    showNotification("Корзина пуста", true);
+  if (cart.length === 0) {
+    alert("Корзина пуста");
     return;
   }
 
@@ -1004,21 +851,24 @@ function sendOrderToMessenger(type) {
   const comment = document.getElementById("comment").value;
 
   if (!name || !phone || !address || !district || !payment) {
-    showNotification("Заполните все обязательные поля", true);
+    alert("Заполните все обязательные поля");
     return;
   }
 
-  let text = `🛒 *Новый заказ — Artik Food*\n\n`;
-  text += `👤 Имя: ${name}\n📞 Телефон: ${phone}\n📍 Адрес: ${address}\n🏘 Район: ${district}\n💳 Оплата: ${payment}\n\n`;
+  let text = `🛒 Новый заказ — Artik Food\n\n`;
+  text += `👤 Имя: ${name}\n`;
+  text += `📞 Телефон: ${phone}\n`;
+  text += `📍 Адрес: ${address}\n`;
+  text += `🏘 Район: ${district}\n`;
+  text += `💳 Оплата: ${payment}\n\n`;
   text += `📦 Товары:\n`;
 
   cart.forEach(item => {
     text += `- ${item.name} x${item.quantity} = ${item.price * item.quantity} AMD\n`;
   });
 
-  const total = cart.reduce((sum, item) => sum + item.quantity * item.price, 0);
-  text += `\n💰 Итого: ${total} AMD\n`;
-  text += `\n💬 Комментарий: ${comment || "—"}`;
+  text += `\n💬 Комментарий: ${comment || "—"}\n`;
+  text += `\n💰 Итого: ${document.getElementById("summary-total").textContent}`;
 
   const encodedText = encodeURIComponent(text);
 
@@ -1031,23 +881,12 @@ function sendOrderToMessenger(type) {
   }
 }
 
-/* ===============================
-   АДМИН-ОТЧЁТЫ
-================================ */
-
-function saveOrderToAdmin(orderData) {
-  let orders = JSON.parse(localStorage.getItem("artikFoodOrders")) || [];
-  orders.push(orderData);
-  localStorage.setItem("artikFoodOrders", JSON.stringify(orders));
-}
+/* ======================
+   ОТПРАВКА ФОРМЫ (АДМИН-ОТЧЁТ)
+====================== */
 
 document.getElementById("order-form").addEventListener("submit", function(e) {
   e.preventDefault();
-
-  if (!cart || cart.length === 0) {
-    showNotification("Корзина пуста", true);
-    return;
-  }
 
   const order = {
     date: new Date().toLocaleString(),
@@ -1057,74 +896,28 @@ document.getElementById("order-form").addEventListener("submit", function(e) {
     district: document.getElementById("district").value,
     payment: document.getElementById("payment").value,
     comment: document.getElementById("comment").value,
-    items: [...cart],
-    total: cart.reduce((sum, item) => sum + item.quantity * item.price, 0) + " AMD"
+    items: cart,
+    total: document.getElementById("summary-total").textContent
   };
 
-  saveOrderToAdmin(order);
+  let orders = JSON.parse(localStorage.getItem("artikFoodOrders")) || [];
+  orders.push(order);
+  localStorage.setItem("artikFoodOrders", JSON.stringify(orders));
 
-  showNotification("Заказ оформлен!");
+  alert("Заказ сохранён и отправлен!");
 
   cart = [];
   saveCart();
   updateCartUI();
-  closeCart();
+  this.reset();
 });
 
-function showAdminPanel() {
-  renderAdminOrders();
-  document.getElementById("admin-panel").classList.add("active");
-}
+/* ======================
+   ВСПОМОГАТЕЛЬНЫЕ
+====================== */
 
-function hideAdminPanel() {
-  document.getElementById("admin-panel").classList.remove("active");
-}
-
-function renderAdminOrders() {
-  const container = document.getElementById("admin-orders");
-  const orders = JSON.parse(localStorage.getItem("artikFoodOrders")) || [];
-
-  if (orders.length === 0) {
-    container.innerHTML = "<p>Пока нет заказов.</p>";
-    return;
-  }
-
-  let html = "";
-
-  orders.forEach((order, index) => {
-    html += `
-      <div class="admin-order">
-        <h5>🧾 Заказ #${index + 1} — ${order.date}</h5>
-        <p><strong>Имя:</strong> ${order.name}</p>
-        <p><strong>Телефон:</strong> ${order.phone}</p>
-        <p><strong>Адрес:</strong> ${order.address}</p>
-        <p><strong>Район:</strong> ${order.district}</p>
-        <p><strong>Оплата:</strong> ${order.payment}</p>
-        <p><strong>Комментарий:</strong> ${order.comment || "—"}</p>
-        <p><strong>Товары:</strong></p>
-        <ul>
-          ${order.items.map(item => `<li>${item.name} x${item.quantity} — ${item.price * item.quantity} AMD</li>`).join("")}
-        </ul>
-        <p><strong>Итого:</strong> ${order.total}</p>
-      </div>
-    `;
-  });
-
-  container.innerHTML = html;
-}
-
-/* ===============================
-   УВЕДОМЛЕНИЯ
-================================ */
-
-function showNotification(message, isError = false) {
-  const notif = document.getElementById("notification");
-  notif.textContent = message;
-  notif.className = "notification" + (isError ? " error" : "");
-  notif.style.display = "block";
-  setTimeout(() => {
-    notif.style.display = "none";
-  }, 2000);
+function sanitizeId(text) {
+  return text.replace(/\s+/g, '-').replace(/[^\w-]/g, '');
 }
 </script>
 
