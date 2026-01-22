@@ -1,1 +1,44 @@
-
+body {
+    font-family: Arial, sans-serif;
+    margin: 0;
+    padding: 0;
+    background-color: #f9f9f9;
+}
+header {
+    background-color: #28A745;
+    color: white;
+    padding: 20px;
+    display: flex;
+    justify-content: space-between;
+}
+.logo {
+    font-size: 24px;
+    font-weight: bold;
+}
+nav a {
+    color: white;
+    margin: 0 10px;
+    text-decoration: none;
+}
+section {
+    padding: 50px 20px;
+}
+h1 {
+    font-size: 36px;
+}
+.store-list {
+    display: flex;
+    gap: 20px;
+}
+.store-card {
+    background-color: white;
+    padding: 20px;
+    border-radius: 8px;
+    box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+}
+footer {
+    background-color: #333;
+    color: white;
+    text-align: center;
+    padding: 10px;
+}
