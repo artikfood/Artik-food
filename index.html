@@ -65,11 +65,14 @@
     .cart { background:white; padding:16px; border-radius:10px; max-width:500px; margin:20px auto; box-shadow:0 2px 6px rgba(0,0,0,0.1); }
     .cart h4 { margin-top:0; text-align:center; }
     .cart-item { display:flex; justify-content:space-between; align-items:center; margin-bottom:8px; font-size:14px; gap:8px; padding:8px; border-radius:6px; background:#f8f9fa; }
+    .cart-item-remove { background:#e74c3c; color:white; border:none; border-radius:4px; width:24px; height:24px; cursor:pointer; font-weight:bold; font-size:12px; display:flex; align-items:center; justify-content:center; }
+    .cart-item-remove:hover { background:#c0392b; }
     .cart-total { font-weight:bold; margin-top:10px; text-align:center; }
     .cart button { width:100%; background:#27ae60; color:white; border:none; padding:10px; font-size:15px; border-radius:6px; cursor:pointer; margin-top:10px; }
     
     /* Кнопка очистки корзины */
     .clear-cart-btn { background:#e74c3c; color:white; border:none; padding:8px 12px; border-radius:6px; cursor:pointer; margin-top:10px; font-size:14px; width:100%; }
+    .clear-cart-btn:hover { background:#c0392b; }
 
     .order-form { background:white; padding:20px; border-radius:10px; max-width:500px; margin:auto; box-shadow:0 2px 6px rgba(0,0,0,0.1); }
     .order-form input, .order-form textarea, .order-form select { width:100%; padding:10px; margin-bottom:12px; border-radius:6px; border:1px solid #ccc; font-size:14px; }
@@ -196,7 +199,7 @@
     <div class="cart-total" id="global-cart-total">Товары: 0 AMD</div>
     <div class="cart-total" id="delivery-total">Доставка: 0 AMD</div>
     <div class="cart-total" id="grand-total">Итого: 0 AMD</div>
-    <button class="clear-cart-btn" onclick="clearCart()">🗑️ Очистить корзину</button>
+    <button class="clear-cart-btn" onclick="clearCart()">🗑️ Очистить всю корзину</button>
   </div>
 </section>
 
@@ -547,6 +550,29 @@ function changeQty(storeKey, productName, price, delta) {
   saveCart(); // Сохраняем корзину после изменения
 }
 
+// Удаление одного товара из корзины
+function removeItemFromCart(storeKey, productName) {
+  if (!carts[storeKey] || !carts[storeKey][productName]) return;
+  
+  if (confirm(`Удалить "${productName}" из корзины?`)) {
+    delete carts[storeKey][productName];
+    
+    // Если в магазине больше нет товаров, удаляем магазин из корзины
+    if (Object.keys(carts[storeKey]).length === 0) {
+      delete carts[storeKey];
+    }
+    
+    // Обновляем отображение количества в интерфейсе
+    const safeId = productName.replace(/\s+/g,'');
+    const qtyEl = document.getElementById(`qty-${storeKey}-${safeId}`);
+    if (qtyEl) qtyEl.innerText = '0';
+    
+    updateStoreCart();
+    renderGlobalCart();
+    saveCart();
+  }
+}
+
 function updateStoreCart() {
   const cartBox = document.getElementById('store-cart');
   const itemsBox = document.getElementById('store-cart-items');
@@ -562,6 +588,7 @@ function updateStoreCart() {
       div.innerHTML = `
         <span>${name} × ${data.qty}</span>
         <span>${data.qty * data.price} AMD</span>
+        <button class="cart-item-remove" onclick="removeItemFromCart('${currentStore}', '${name}')">×</button>
       `;
       itemsBox.appendChild(div);
       total += data.qty * data.price;
@@ -586,6 +613,7 @@ function renderGlobalCart() {
         div.innerHTML = `
           <span>${stores[storeKey].name}: ${name} × ${data.qty}</span>
           <span>${data.qty * data.price} AMD</span>
+          <button class="cart-item-remove" onclick="removeItemFromCart('${storeKey}', '${name}')">×</button>
         `;
         container.appendChild(div);
         goodsTotal += data.qty * data.price;
@@ -724,8 +752,4 @@ function sendStoreToTelegram() {
 /* ---------------- ИНИЦИАЛИЗАЦИЯ ---------------- */
 
 renderShops();
-goHome();
-</script>
-
-</body>
-</html>
+go
