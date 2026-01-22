@@ -77,17 +77,36 @@
     footer { background:#2ecc71; color:white; text-align:center; padding:16px; margin-top:40px; font-size:14px; }
     .hidden { display:none; }
 
-    .back-btn {
-      display: inline-block;
-      margin-bottom: 12px;
-      background: #ddd;
-      color: #333;
-      border: none;
-      padding: 8px 14px;
-      border-radius: 6px;
-      cursor: pointer;
-      font-size: 14px;
+     /* Admin + courier */
+    .admin-login, .admin-panel, .courier-panel {
+      max-width:700px;
+      margin:40px auto;
+      background:white;
+      padding:20px;
+      border-radius:10px;
+      box-shadow:0 2px 6px rgba(0,0,0,0.1);
     }
+    .admin-panel h3, .admin-panel h4, .courier-panel h3 { text-align:center; }
+    .admin-panel select, .admin-panel input, .courier-panel input {
+      width:100%;
+      padding:8px;
+      margin-bottom:10px;
+      border-radius:6px;
+      border:1px solid #ccc;
+    }
+    .admin-panel button, .courier-panel button {
+      width:100%;
+      background:#27ae60;
+      color:white;
+      border:none;
+      padding:10px;
+      border-radius:6px;
+      cursor:pointer;
+      margin-top:8px;
+    }
+    .admin-panel .danger { background:#e74c3c; }
+    .report-box { border:1px solid #ddd; padding:10px; border-radius:6px; margin-bottom:10px; font-size:14px; }
+
 
     /* Floating nav */
     .floating-buttons {
