@@ -213,6 +213,44 @@
     .admin-table tr:nth-child(even) {
       background: #f9f9f9;
     }
+
+    /* Поиск */
+    .search-box {
+      margin: 20px auto;
+      max-width: 500px;
+      text-align: center;
+    }
+
+    .search-input {
+      width: 100%;
+      padding: 12px 16px;
+      border: 2px solid #ddd;
+      border-radius: 25px;
+      font-size: 16px;
+      outline: none;
+      transition: border-color 0.3s;
+    }
+
+    .search-input:focus {
+      border-color: #2ecc71;
+    }
+
+    .search-results {
+      margin-top: 20px;
+    }
+
+    .search-item {
+      background: white;
+      padding: 12px;
+      margin-bottom: 8px;
+      border-radius: 8px;
+      box-shadow: 0 1px 3px rgba(0,0,0,0.1);
+      cursor: pointer;
+    }
+
+    .search-item:hover {
+      background: #f0fff4;
+    }
   </style>
 </head>
 <body>
@@ -238,6 +276,14 @@
   <button onclick="document.getElementById('order').scrollIntoView({behavior:'smooth'});">Заказать сейчас</button>
 </section>
 
+<!-- ПОИСК -->
+<section class="section">
+  <div class="search-box">
+    <input type="text" class="search-input" placeholder="🔍 Поиск товаров и магазинов..." id="search-input" oninput="searchProducts()">
+    <div class="search-results" id="search-results" style="display:none;"></div>
+  </div>
+</section>
+
 <section class="section" id="shops">
   <h3>Супермаркеты</h3>
   <div class="shops" id="shops-list"></div>
@@ -254,7 +300,7 @@
 </section>
 
 </div>
-<section class="section">
+
 <!-- СТРАНИЦА СУПЕРМАРКЕТА -->
 <div id="store-page" class="hidden">
   <section class="section">
@@ -278,7 +324,7 @@
     <input type="text" id="name" placeholder="Ваше имя" required />
     <input type="tel" id="phone" placeholder="Телефон" required />
     <input type="text" id="address" placeholder="Адрес доставки" required />
-    <select id="district" required onchange="renderGlobalCart()">
+    <select id="district" required onchange="calculateDelivery()">
       <option value="">Выберите район доставки</option>
       <option value="Артик">Артик — 500 AMD</option>
       <option value="Арич">Арич — 700 AMD</option>
@@ -286,7 +332,7 @@
       <option value="Пемзашен">Пемзашен — 1000 AMD</option>
     </select>
     
-    <!-- СПОСОБ ОПЛАТЫ (ДОБАВЛЕНО) -->
+    <!-- СПОСОБ ОПЛАТЫ -->
     <select id="payment" required style="margin-bottom:12px;">
       <option value="">Выберите способ оплаты</option>
       <option value="Наличными курьеру">💵 Наличными курьеру</option>
@@ -307,22 +353,6 @@
       <li>После успешной оплаты получаете чек на email или в мессенджер</li>
     </ul>
   </div>
-</section>
-  <h3>Оформление заказа</h3>
-  <form class="order-form" onsubmit="event.preventDefault(); sendFormToWhatsApp();">
-    <input type="text" id="name" placeholder="Ваше имя" required />
-    <input type="tel" id="phone" placeholder="Телефон" required />
-    <input type="text" id="address" placeholder="Адрес доставки" required />
-    <select id="district" required onchange="renderGlobalCart()">
-      <option value="">Выберите район доставки</option>
-      <option value="Артик">Артик — 500 AMD</option>
-      <option value="Арич">Арич — 700 AMD</option>
-      <option value="Нор-Кянк">Нор-Кянк — 1000 AMD</option>
-      <option value="Пемзашен">Пемзашен — 1000 AMD</option>
-    </select>
-    <textarea rows="3" id="comment" placeholder="Комментарий к заказу"></textarea>
-    <button type="submit">Отправить заказ</button>
-  </form>
 </section>
 
 <section class="section" id="contacts">
@@ -540,6 +570,78 @@ function goBack() {
   }
 }
 
+/* ---------------- ПОИСК ТОВАРОВ ---------------- */
+
+function searchProducts() {
+  const searchInput = document.getElementById('search-input');
+  const searchResults = document.getElementById('search-results');
+  const query = searchInput.value.toLowerCase().trim();
+  
+  if (!query) {
+    searchResults.style.display = 'none';
+    return;
+  }
+  
+  let results = [];
+  
+  // Ищем магазины
+  Object.keys(stores).forEach(storeKey => {
+    const store = stores[storeKey];
+    if (store.name.toLowerCase().includes(query)) {
+      results.push({
+        type: 'store',
+        storeKey: storeKey,
+        name: store.name,
+        display: `🏪 ${store.name}`
+      });
+    }
+  });
+  
+  // Ищем товары
+  Object.keys(stores).forEach(storeKey => {
+    const store = stores[storeKey];
+    store.products.forEach(product => {
+      if (product.name.toLowerCase().includes(query) || 
+          product.category.toLowerCase().includes(query)) {
+        results.push({
+          type: 'product',
+          storeKey: storeKey,
+          product: product,
+          display: `📦 ${product.name} - ${product.price} AMD (${store.name})`
+        });
+      }
+    });
+  });
+  
+  // Показываем результаты
+  if (results.length > 0) {
+    searchResults.innerHTML = '';
+    results.forEach(result => {
+      const div = document.createElement('div');
+      div.className = 'search-item';
+      div.innerHTML = result.display;
+      div.onclick = () => {
+        if (result.type === 'store') {
+          openStore(result.storeKey);
+        } else {
+          openStore(result.storeKey);
+          // Переходим к категории товара
+          setTimeout(() => {
+            openStoreCategory(result.storeKey, result.product.category);
+          }, 100);
+        }
+        searchInput.value = '';
+        searchResults.style.display = 'none';
+      };
+      searchResults.appendChild(div);
+    });
+    searchResults.style.display = 'block';
+  } else {
+    searchResults.innerHTML = '<div class="search-item">Ничего не найдено</div>';
+    searchResults.style.display = 'block';
+  }
+}
+
 /* ---------------- МАГАЗИНЫ ---------------- */
 
 function renderShops() {
@@ -645,6 +747,11 @@ function changeQty(storeKey, productName, price, delta) {
   renderGlobalCart();
 }
 
+// Функция расчета доставки
+function calculateDelivery() {
+  renderGlobalCart();
+}
+
 /* ---------------- УДАЛЕНИЕ ТОВАРА ИЗ КОРЗИНЫ ---------------- */
 
 function removeItemFromCart(storeKey, productName) {
@@ -713,12 +820,12 @@ function renderGlobalCart() {
 
   document.getElementById('global-cart-total').innerText = `Товары: ${goodsTotal} AMD`;
 
-  const district = document.getElementById('district').value;
+  const district = document.getElementById('district')?.value;
   let delivery = 0;
   if (district === "Артик") delivery = 500;
-  if (district === "Арич") delivery = 700;
-  if (district === "Нор-Кянк") delivery = 1000;
-  if (district === "Пемзашен") delivery = 1000;
+  else if (district === "Арич") delivery = 700;
+  else if (district === "Нор-Кянк") delivery = 1000;
+  else if (district === "Пемзашен") delivery = 1000;
 
   document.getElementById('delivery-total').innerText = `Доставка: ${delivery} AMD`;
   document.getElementById('grand-total').innerText = `Итого: ${goodsTotal + delivery} AMD`;
@@ -810,7 +917,7 @@ function updateAdminStats() {
   });
 }
 
-// Сохранение заказа (добавьте в функцию sendFormToWhatsApp)
+// Сохранение заказа
 function saveOrder(orderData) {
   const order = {
     id: Date.now(),
@@ -832,12 +939,14 @@ function sendFormToWhatsApp() {
   const phone = document.getElementById('phone').value;
   const address = document.getElementById('address').value;
   const district = document.getElementById('district').value;
+  const payment = document.getElementById('payment').value;
   const comment = document.getElementById('comment').value;
 
   let text = `🛒 Новый заказ Artik Food%0A%0A`;
   text += `👤 Имя: ${name}%0A`;
   text += `📞 Телефон: ${phone}%0A`;
   text += `📍 Адрес: ${address} (${district})%0A`;
+  text += `💳 Оплата: ${payment}%0A`;
   if (comment) text += `💬 Комментарий: ${comment}%0A`;
   text += `%0A📦 Товары:%0A`;
 
@@ -864,7 +973,7 @@ function sendFormToWhatsApp() {
 
   // Сохраняем заказ
   saveOrder({
-    name, phone, address, district, comment,
+    name, phone, address, district, payment, comment,
     items: JSON.parse(JSON.stringify(carts)),
     total: total,
     delivery: delivery
