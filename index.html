@@ -110,34 +110,6 @@
       cursor: pointer;
     }
     .floating-buttons button:hover { background:#e65c00; }
-
-    /* Админ и курьер */
-    .admin-panel, .courier-panel {
-      max-width: 1000px;
-      margin: 40px auto;
-      background: white;
-      padding: 20px;
-      border-radius: 10px;
-      box-shadow: 0 2px 6px rgba(0,0,0,0.1);
-    }
-    .admin-panel table, .courier-panel table {
-      width: 100%;
-      border-collapse: collapse;
-      font-size: 14px;
-    }
-    .admin-panel th, .admin-panel td,
-    .courier-panel th, .courier-panel td {
-      border: 1px solid #ddd;
-      padding: 8px;
-      text-align: left;
-    }
-    .admin-panel th, .courier-panel th {
-      background: #f1f1f1;
-    }
-    .status-new { color: blue; }
-    .status-work { color: orange; }
-    .status-done { color: green; }
-    .status-cancel { color: red; }
   </style>
 </head>
 <body>
@@ -199,7 +171,7 @@
 <!-- ОФОРМЛЕНИЕ -->
 <section class="section" id="order">
   <h3>Оформление заказа</h3>
-  <form class="order-form" onsubmit="event.preventDefault(); sendFormToWhatsApp(); saveOrder();">
+  <form class="order-form" onsubmit="event.preventDefault(); sendFormToWhatsApp();">
     <input type="text" id="name" placeholder="Ваше имя" required />
     <input type="tel" id="phone" placeholder="Телефон" required />
     <input type="text" id="address" placeholder="Адрес доставки" required />
@@ -207,4 +179,401 @@
       <option value="">Выберите район доставки</option>
       <option value="Артик">Артик — 500 AMD</option>
       <option value="Арич">Арич — 700 AMD</option>
-      <option value="Нор-Кянк">Нор-К
+      <option value="Нор-Кянк">Нор-Кянк — 1000 AMD</option>
+      <option value="Пемзашен">Пемзашен — 1000 AMD</option>
+    </select>
+    <textarea rows="3" id="comment" placeholder="Комментарий к заказу"></textarea>
+    <button type="submit">Отправить заказ</button>
+  </form>
+</section>
+
+<section class="section" id="contacts">
+  <h3>Контакты</h3>
+  <div class="card" style="max-width:400px; margin:auto;">
+    <p>📞 Телефон / WhatsApp: <a href="tel:+37443797727" style="color:#27ae60; font-weight:bold;">+374 43 79 77 27</a></p>
+    <p>✈️ Telegram: @artikfood</p>
+    <p>📍 Артик, Ширак, Армения</p>
+  </div>
+</section>
+
+<a class="whatsapp-btn" href="https://wa.me/37443797727" target="_blank">💬 WhatsApp</a>
+<a class="telegram-btn" href="https://t.me/artikfood" target="_blank"><span>✈️</span> Telegram</a>
+
+<div class="floating-buttons">
+  <button onclick="goBack()">← Назад</button>
+  <button onclick="goHome()">🏠 Главная</button>
+</div>
+
+<footer>
+  <p>© 2026 Artik Food — Доставка продуктов в Артике</p>
+</footer>
+
+<script>
+/* ---------------- ДАННЫЕ ---------------- */
+
+const stores = {
+  million: {
+    name: "Million",
+    products: [
+      { name: "Картофель 1кг", price: 300, category: "Овощи и фрукты" },
+      { name: "Яблоки 1кг", price: 400, category: "Овощи и фрукты" },
+      { name: "Бананы 1кг", price: 550, category: "Овощи и фрукты" },
+
+      { name: "Говядина 1кг", price: 3200, category: "Мясо и рыба" },
+      { name: "Курица 1кг", price: 1800, category: "Мясо и рыба" },
+      { name: "Рыба свежая 1кг", price: 2600, category: "Мясо и рыба" },
+
+      { name: "Молоко 1л", price: 350, category: "Молочные продукты" },
+      { name: "Сыр 300г", price: 1200, category: "Молочные продукты" },
+      { name: "Йогурт", price: 200, category: "Молочные продукты" },
+
+      { name: "Хлеб белый", price: 200, category: "Хлеб и выпечка" },
+      { name: "Лаваш", price: 150, category: "Хлеб и выпечка" },
+
+      { name: "Рис 1кг", price: 600, category: "Бакалея" },
+      { name: "Макароны", price: 400, category: "Бакалея" },
+
+      { name: "Сок апельсиновый", price: 450, category: "Напитки" },
+      { name: "Минеральная вода", price: 200, category: "Напитки" },
+
+      { name: "Моющее средство", price: 900, category: "Бытовая химия" },
+      { name: "Порошок стиральный", price: 1800, category: "Бытовая химия" },
+
+      { name: "Шоколад", price: 350, category: "Сладости" },
+      { name: "Печенье", price: 250, category: "Сладости" }
+    ]
+  },
+
+  mush: {
+    name: "Мուշ",
+    products: [
+      { name: "Картофель 1кг", price: 280, category: "Овощи и фрукты" },
+      { name: "Помидоры 1кг", price: 500, category: "Овощи и фрукты" },
+
+      { name: "Курица 1кг", price: 1750, category: "Мясо и рыба" },
+      { name: "Рыба свежая 1кг", price: 2550, category: "Мясо и рыба" },
+
+      { name: "Молоко 1л", price: 340, category: "Молочные продукты" },
+      { name: "Сыр 300г", price: 1150, category: "Молочные продукты" },
+
+      { name: "Хлеб", price: 190, category: "Хлеб и выпечка" },
+
+      { name: "Рис 1кг", price: 590, category: "Бакалея" },
+
+      { name: "Сок яблочный", price: 430, category: "Напитки" },
+
+      { name: "Порошок стиральный", price: 1750, category: "Бытовая химия" },
+
+      { name: "Шоколад", price: 330, category: "Сладости" }
+    ]
+  },
+
+  tonoyan: {
+    name: "Tonoyan",
+    products: [
+      { name: "Картофель 1кг", price: 310, category: "Овощи и фрукты" },
+      { name: "Яблоки 1кг", price: 420, category: "Овощи и фрукты" },
+
+      { name: "Говядина 1кг", price: 3250, category: "Мясо и рыба" },
+
+      { name: "Молоко 1л", price: 360, category: "Молочные продукты" },
+
+      { name: "Хлеб", price: 210, category: "Хлеб и выпечка" },
+
+      { name: "Макароны", price: 390, category: "Бакалея" },
+
+      { name: "Вода минеральная", price: 190, category: "Напитки" },
+
+      { name: "Моющее средство", price: 880, category: "Бытовая химия" },
+
+      { name: "Печенье", price: 240, category: "Сладости" }
+    ]
+  },
+
+  danielyan: {
+    name: "Danielyan",
+    products: [
+      { name: "Картофель 1кг", price: 295, category: "Овощи и фрукты" },
+      { name: "Бананы 1кг", price: 560, category: "Овощи и фрукты" },
+
+      { name: "Курица 1кг", price: 1780, category: "Мясо и рыба" },
+
+      { name: "Молоко 1л", price: 345, category: "Молочные продукты" },
+
+      { name: "Хлеб", price: 195, category: "Хлеб и выпечка" },
+
+      { name: "Рис 1кг", price: 605, category: "Бакалея" },
+
+      { name: "Сок", price: 440, category: "Напитки" },
+
+      { name: "Порошок стиральный", price: 1770, category: "Бытовая химия" },
+
+      { name: "Шоколад", price: 340, category: "Сладости" }
+    ]
+  },
+
+  edem: {
+    name: "Эдем (Цветы)",
+    products: [
+      { name: "Розы (1 шт)", price: 500, category: "Цветы" },
+      { name: "Тюльпаны (1 шт)", price: 400, category: "Цветы" },
+      { name: "Букет роз", price: 5000, category: "Букеты" },
+      { name: "Букет тюльпанов", price: 4500, category: "Букеты" },
+      { name: "Композиция в коробке", price: 7000, category: "Композиции" },
+      { name: "Подарочная открытка", price: 300, category: "Дополнительно" }
+    ]
+  }
+};
+
+/* ---------------- СОСТОЯНИЕ ---------------- */
+
+let currentStore = null;
+let currentCategory = null;
+let carts = {};
+
+/* ---------------- НАВИГАЦИЯ ---------------- */
+
+function hideAllPages() {
+  document.getElementById('home-page').classList.add('hidden');
+  document.getElementById('store-page').classList.add('hidden');
+}
+
+function goHome() {
+  hideAllPages();
+  document.getElementById('home-page').classList.remove('hidden');
+  window.scrollTo({ top: 0, behavior: 'smooth' });
+}
+
+function goBack() {
+  if (currentCategory) {
+    openStore(currentStore);
+  } else if (currentStore) {
+    goHome();
+  } else {
+    goHome();
+  }
+}
+
+/* ---------------- МАГАЗИНЫ ---------------- */
+
+function renderShops() {
+  const container = document.getElementById('shops-list');
+  container.innerHTML = '';
+
+  Object.keys(stores).forEach(key => {
+    const div = document.createElement('div');
+    div.className = 'card';
+    div.innerText = stores[key].name;
+    div.onclick = () => openStore(key);
+    container.appendChild(div);
+  });
+}
+
+function openStore(storeKey) {
+  currentStore = storeKey;
+  currentCategory = null;
+
+  hideAllPages();
+  document.getElementById('store-page').classList.remove('hidden');
+
+  document.getElementById('store-title').innerText = stores[storeKey].name;
+
+  const container = document.getElementById('store-products');
+  container.innerHTML = '';
+
+  const backBtn = document.createElement('button');
+  backBtn.className = 'back-btn';
+  backBtn.innerText = '← Назад';
+  backBtn.onclick = goHome;
+  container.appendChild(backBtn);
+
+  const categories = [...new Set(stores[storeKey].products.map(p => p.category))];
+
+  categories.forEach(category => {
+    const div = document.createElement('div');
+    div.className = 'card';
+    div.innerText = category;
+    div.onclick = () => openStoreCategory(storeKey, category);
+    container.appendChild(div);
+  });
+
+  document.getElementById('store-cart').classList.add('hidden');
+}
+
+function openStoreCategory(storeKey, categoryName) {
+  currentStore = storeKey;
+  currentCategory = categoryName;
+
+  const container = document.getElementById('store-products');
+  container.innerHTML = '';
+
+  const backBtn = document.createElement('button');
+  backBtn.className = 'back-btn';
+  backBtn.innerText = '← Назад к категориям';
+  backBtn.onclick = () => openStore(storeKey);
+  container.appendChild(backBtn);
+
+  const list = document.createElement('div');
+  list.className = 'products';
+
+  stores[storeKey].products.forEach(item => {
+    if (item.category === categoryName) {
+      const safeId = item.name.replace(/\s+/g,'');
+      const qty = carts[storeKey]?.[item.name]?.qty || 0;
+
+      const div = document.createElement('div');
+      div.className = 'product';
+      div.innerHTML = `
+        <div>
+          <h4>${item.name}</h4>
+          <p>${item.price} AMD</p>
+        </div>
+        <div class="qty-controls">
+          <button onclick="changeQty('${storeKey}', '${item.name}', ${item.price}, -1)">−</button>
+          <span class="qty-number" id="qty-${storeKey}-${safeId}">${qty}</span>
+          <button onclick="changeQty('${storeKey}', '${item.name}', ${item.price}, 1)">+</button>
+        </div>
+      `;
+      list.appendChild(div);
+    }
+  });
+
+  container.appendChild(list);
+  document.getElementById('store-cart').classList.remove('hidden');
+}
+
+/* ---------------- КОРЗИНА ---------------- */
+
+function changeQty(storeKey, productName, price, delta) {
+  if (!carts[storeKey]) carts[storeKey] = {};
+  if (!carts[storeKey][productName]) carts[storeKey][productName] = { qty: 0, price };
+
+  carts[storeKey][productName].qty += delta;
+  if (carts[storeKey][productName].qty < 0) carts[storeKey][productName].qty = 0;
+
+  const safeId = productName.replace(/\s+/g,'');
+  const qtyEl = document.getElementById(`qty-${storeKey}-${safeId}`);
+  if (qtyEl) qtyEl.innerText = carts[storeKey][productName].qty;
+
+  updateStoreCart();
+  renderGlobalCart();
+}
+
+function updateStoreCart() {
+  const cartBox = document.getElementById('store-cart');
+  const itemsBox = document.getElementById('store-cart-items');
+  const totalBox = document.getElementById('store-cart-total');
+
+  itemsBox.innerHTML = '';
+  let total = 0;
+
+  Object.entries(carts[currentStore] || {}).forEach(([name, data]) => {
+    if (data.qty > 0) {
+      const div = document.createElement('div');
+      div.className = 'cart-item';
+      div.innerHTML = `
+        <span>${name} × ${data.qty}</span>
+        <span>${data.qty * data.price} AMD</span>
+      `;
+      itemsBox.appendChild(div);
+      total += data.qty * data.price;
+    }
+  });
+
+  totalBox.innerText = `Итого: ${total} AMD`;
+  cartBox.classList.toggle('hidden', total === 0);
+}
+
+function renderGlobalCart() {
+  const container = document.getElementById('global-cart-items');
+  container.innerHTML = '';
+
+  let goodsTotal = 0;
+
+  Object.keys(carts).forEach(storeKey => {
+    Object.entries(carts[storeKey]).forEach(([name, data]) => {
+      if (data.qty > 0) {
+        const div = document.createElement('div');
+        div.className = 'cart-item';
+        div.innerHTML = `
+          <span>${stores[storeKey].name}: ${name} × ${data.qty}</span>
+          <span>${data.qty * data.price} AMD</span>
+        `;
+        container.appendChild(div);
+        goodsTotal += data.qty * data.price;
+      }
+    });
+  });
+
+  document.getElementById('global-cart-total').innerText = `Товары: ${goodsTotal} AMD`;
+
+  const district = document.getElementById('district').value;
+  let delivery = 0;
+  if (district === "Артик") delivery = 500;
+  if (district === "Арич") delivery = 700;
+  if (district === "Нор-Кянк") delivery = 1000;
+  if (district === "Пемзашен") delivery = 1000;
+
+  document.getElementById('delivery-total').innerText = `Доставка: ${delivery} AMD`;
+  document.getElementById('grand-total').innerText = `Итого: ${goodsTotal + delivery} AMD`;
+}
+
+/* ---------------- ЗАКАЗЫ ---------------- */
+
+function sendFormToWhatsApp() {
+  const name = document.getElementById('name').value;
+  const phone = document.getElementById('phone').value;
+  const address = document.getElementById('address').value;
+  const district = document.getElementById('district').value;
+  const comment = document.getElementById('comment').value;
+
+  let text = `🛒 Новый заказ Artik Food%0A%0A`;
+  text += `👤 Имя: ${name}%0A`;
+  text += `📞 Телефон: ${phone}%0A`;
+  text += `📍 Адрес: ${address} (${district})%0A`;
+  if (comment) text += `💬 Комментарий: ${comment}%0A`;
+  text += `%0A📦 Товары:%0A`;
+
+  Object.keys(carts).forEach(storeKey => {
+    Object.entries(carts[storeKey]).forEach(([name, data]) => {
+      if (data.qty > 0) {
+        text += `- ${stores[storeKey].name}: ${name} × ${data.qty} = ${data.qty * data.price} AMD%0A`;
+      }
+    });
+  });
+
+  window.open(`https://wa.me/37443797727?text=${text}`, '_blank');
+}
+
+function sendStoreToWhatsApp() {
+  let text = `🛒 Заказ из магазина ${stores[currentStore].name}%0A%0A`;
+
+  Object.entries(carts[currentStore]).forEach(([name, data]) => {
+    if (data.qty > 0) {
+      text += `- ${name} × ${data.qty} = ${data.qty * data.price} AMD%0A`;
+    }
+  });
+
+  window.open(`https://wa.me/37443797727?text=${text}`, '_blank');
+}
+
+function sendStoreToTelegram() {
+  let text = `🛒 Заказ из магазина ${stores[currentStore].name}\n\n`;
+
+  Object.entries(carts[currentStore]).forEach(([name, data]) => {
+    if (data.qty > 0) {
+      text += `- ${name} × ${data.qty} = ${data.qty * data.price} AMD\n`;
+    }
+  });
+
+  window.open(`https://t.me/share/url?url=&text=${encodeURIComponent(text)}`, '_blank');
+}
+
+/* ---------------- ИНИЦИАЛИЗАЦИЯ ---------------- */
+
+renderShops();
+goHome();
+</script>
+
+</body>
+</html>
