@@ -1,289 +1,223 @@
-// ===================
-// ДАННЫЕ МАГАЗИНОВ
-// ===================
+/* ---------------- АДМИН-ПАНЕЛЬ ---------------- */
 
-const stores = {
-  million: {
-    name: "Million",
-    products: [
-      { name: "Картофель 1 кг", price: 300, category: "Овощи и фрукты" },
-      { name: "Помидоры 1 кг", price: 600, category: "Овощи и фрукты" },
-      { name: "Куриное филе 1 кг", price: 1500, category: "Мясо и рыба" },
-      { name: "Молоко 1 л", price: 450, category: "Молочные продукты" },
-      { name: "Хлеб белый", price: 200, category: "Хлеб и выпечка" },
-      { name: "Сахар 1 кг", price: 450, category: "Бакалея" },
-      { name: "Вода 1.5 л", price: 300, category: "Напитки" },
-      { name: "Мыло", price: 250, category: "Бытовая химия" },
-      { name: "Шоколад", price: 500, category: "Сладости" }
-    ]
-  },
-  mush: {
-    name: "Մուշ",
-    products: [
-      { name: "Яблоки 1 кг", price: 350, category: "Овощи и фрукты" },
-      { name: "Огурцы 1 кг", price: 500, category: "Овощи и фрукты" },
-      { name: "Говядина 1 кг", price: 2500, category: "Мясо и рыба" },
-      { name: "Сыр 1 кг", price: 1800, category: "Молочные продукты" },
-      { name: "Лаваш", price: 200, category: "Хлеб и выпечка" },
-      { name: "Рис 1 кг", price: 600, category: "Бакалея" },
-      { name: "Сок 1 л", price: 400, category: "Напитки" },
-      { name: "Порошок", price: 900, category: "Бытовая химия" },
-      { name: "Печенье", price: 450, category: "Сладости" }
-    ]
-  },
-  tonoyan: {
-    name: "Tonoyan",
-    products: [
-      { name: "Бананы 1 кг", price: 600, category: "Овощи и фрукты" },
-      { name: "Капуста 1 кг", price: 250, category: "Овощи и фрукты" },
-      { name: "Рыба свежая 1 кг", price: 2000, category: "Мясо и рыба" },
-      { name: "Йогурт", price: 350, category: "Молочные продукты" },
-      { name: "Булочка", price: 150, category: "Хлеб и выпечка" },
-      { name: "Макароны", price: 400, category: "Бакалея" },
-      { name: "Газировка", price: 350, category: "Напитки" },
-      { name: "Губки", price: 200, category: "Бытовая химия" },
-      { name: "Конфеты", price: 600, category: "Сладости" }
-    ]
-  },
-  danielyan: {
-    name: "Danielyan",
-    products: [
-      { name: "Груши 1 кг", price: 450, category: "Овощи и фрукты" },
-      { name: "Морковь 1 кг", price: 250, category: "Овощи и фрукты" },
-      { name: "Свинина 1 кг", price: 2300, category: "Мясо и рыба" },
-      { name: "Творог", price: 700, category: "Молочные продукты" },
-      { name: "Багет", price: 300, category: "Хлеб и выпечка" },
-      { name: "Мука 1 кг", price: 400, category: "Бакалея" },
-      { name: "Чай", price: 600, category: "Напитки" },
-      { name: "Чистящее средство", price: 800, category: "Бытовая химия" },
-      { name: "Торт", price: 3000, category: "Сладости" }
-    ]
-  },
+// Пароль для входа (можете изменить)
+const ADMIN_PASSWORD = "artik123";
 
-  // 🌸 НОВЫЙ МАГАЗИН — ЭДЕМ
-  edem: {
-    name: "Эдем (цветы)",
-    products: [
-      { name: "Розы (букет)", price: 5000, category: "Сладости" },
-      { name: "Тюльпаны (букет)", price: 3500, category: "Сладости" },
-      { name: "Лилии (букет)", price: 7000, category: "Сладости" },
-      { name: "Хризантемы", price: 4500, category: "Сладости" },
-      { name: "Комнатное растение", price: 6000, category: "Сладости" },
-      { name: "Открытка", price: 500, category: "Сладости" },
-      { name: "Подарочная упаковка", price: 1000, category: "Сладости" }
-    ]
-  }
-};
+// Хранилище заказов (в реальном приложении нужно на бэкенде)
+let orders = JSON.parse(localStorage.getItem('artikFoodOrders')) || [];
+let couriers = JSON.parse(localStorage.getItem('artikFoodCouriers')) || [];
 
-// ===================
-// СОСТОЯНИЕ
-// ===================
-
-let currentStore = null;
-let currentCategory = null;
-let cart = JSON.parse(localStorage.getItem("cart")) || {};
-let storeCart = {};
-
-// ===================
-// РЕНДЕР МАГАЗИНОВ
-// ===================
-
-function renderStores() {
-  const container = document.getElementById("shops-list");
-  container.innerHTML = "";
-  Object.keys(stores).forEach(key => {
-    const store = stores[key];
-    const div = document.createElement("div");
-    div.className = "card";
-    div.innerText = store.name;
-    div.onclick = () => openStore(key);
-    container.appendChild(div);
-  });
-}
-
-// ===================
-// НАВИГАЦИЯ
-// ===================
-
-function goHome() {
-  hideAll();
-  document.getElementById("home-page").classList.remove("hidden");
-}
-
-function goBack() {
-  if (!document.getElementById("category-page").classList.contains("hidden")) {
-    openStore(currentStore);
-  } else if (!document.getElementById("store-page").classList.contains("hidden")) {
-    goHome();
+// Функции админки
+function showAdminLogin() {
+  const password = prompt("Введите пароль администратора:");
+  if (password === ADMIN_PASSWORD) {
+    showAdminPanel();
+  } else if (password) {
+    alert("Неверный пароль");
   }
 }
 
-function hideAll() {
-  document.getElementById("home-page").classList.add("hidden");
-  document.getElementById("store-page").classList.add("hidden");
-  document.getElementById("category-page").classList.add("hidden");
-  document.getElementById("admin-login").classList.add("hidden");
-  document.getElementById("admin-panel").classList.add("hidden");
-  document.getElementById("courier-panel").classList.add("hidden");
+function showAdminPanel() {
+  document.getElementById('admin-panel').classList.remove('hidden');
+  document.getElementById('admin-login-btn').style.display = 'none';
+  updateAdminStats();
 }
 
-// ===================
-// СТРАНИЦА МАГАЗИНА
-// ===================
-
-function openStore(storeKey) {
-  currentStore = storeKey;
-  storeCart = {};
-  hideAll();
-  document.getElementById("store-page").classList.remove("hidden");
-  document.getElementById("store-title").innerText = stores[storeKey].name;
-  renderStoreProducts();
+function hideAdminPanel() {
+  document.getElementById('admin-panel').classList.add('hidden');
+  document.getElementById('admin-login-btn').style.display = 'block';
 }
 
-function renderStoreProducts() {
-  const container = document.getElementById("store-products");
-  container.innerHTML = "";
-
-  const products = stores[currentStore].products;
-
-  products.forEach(product => {
-    const div = document.createElement("div");
-    div.className = "product";
+function updateAdminStats() {
+  // Статистика за сегодня
+  const today = new Date().toDateString();
+  const todayOrders = orders.filter(order => 
+    new Date(order.date).toDateString() === today
+  );
+  
+  document.getElementById('today-orders').textContent = todayOrders.length;
+  document.getElementById('today-amount').textContent = 
+    todayOrders.reduce((sum, order) => sum + order.total, 0);
+  document.getElementById('active-couriers').textContent = 
+    couriers.filter(c => c.status === 'active').length;
+  
+  // Последние заказы
+  const recentOrdersContainer = document.getElementById('recent-orders');
+  recentOrdersContainer.innerHTML = '';
+  
+  const lastOrders = orders.slice(-5).reverse();
+  lastOrders.forEach(order => {
+    const div = document.createElement('div');
+    div.style.padding = '8px';
+    div.style.borderBottom = '1px solid #eee';
     div.innerHTML = `
-      <strong>${product.name}</strong><br>
-      <span>${product.price} AMD</span>
-      <div class="qty-controls">
-        <button onclick="changeQty('${product.name}', -1)">-</button>
-        <span class="qty-number" id="qty-${product.name}">0</span>
-        <button onclick="changeQty('${product.name}', 1)">+</button>
-      </div>
+      <strong>${order.name}</strong> — ${order.total} AMD<br>
+      <small>${order.address} • ${order.date}</small>
     `;
-    container.appendChild(div);
+    recentOrdersContainer.appendChild(div);
+  });
+  
+  if (lastOrders.length === 0) {
+    recentOrdersContainer.innerHTML = '<p style="text-align:center; color:#777;">Нет заказов</p>';
+  }
+  
+  // Список курьеров
+  const couriersContainer = document.getElementById('couriers-list');
+  couriersContainer.innerHTML = '';
+  
+  couriers.forEach(courier => {
+    const div = document.createElement('div');
+    div.style.padding = '8px';
+    div.style.borderBottom = '1px solid #eee';
+    div.style.display = 'flex';
+    div.style.justifyContent = 'space-between';
+    div.innerHTML = `
+      <div>
+        <strong>${courier.name}</strong><br>
+        <small>📱 ${courier.phone} • ${courier.status === 'active' ? '🟢 Активен' : '🔴 Неактивен'}</small>
+      </div>
+      <button onclick="toggleCourierStatus(${courier.id})" style="font-size:12px;">
+        ${courier.status === 'active' ? 'Деактивировать' : 'Активировать'}
+      </button>
+    `;
+    couriersContainer.appendChild(div);
   });
 }
 
-// ===================
-// КАТЕГОРИИ
-// ===================
-
-function openCategory(categoryName) {
-  currentCategory = categoryName;
-  hideAll();
-  document.getElementById("category-page").classList.remove("hidden");
-  document.getElementById("category-title").innerText = categoryName;
-  renderCategoryProducts();
+// Сохранение заказа (добавьте в функцию sendFormToWhatsApp)
+function saveOrder(orderData) {
+  const order = {
+    id: Date.now(),
+    ...orderData,
+    date: new Date().toLocaleString(),
+    status: 'new',
+    courier: null
+  };
+  
+  orders.push(order);
+  localStorage.setItem('artikFoodOrders', JSON.stringify(orders));
+  updateAdminStats();
 }
 
-function renderCategoryProducts() {
-  const container = document.getElementById("category-products");
-  container.innerHTML = "";
+// Обновите функцию sendFormToWhatsApp:
+function sendFormToWhatsApp() {
+  const name = document.getElementById('name').value;
+  const phone = document.getElementById('phone').value;
+  const address = document.getElementById('address').value;
+  const district = document.getElementById('district').value;
+  const comment = document.getElementById('comment').value;
 
-  Object.keys(stores).forEach(storeKey => {
-    stores[storeKey].products.forEach(product => {
-      if (product.category === currentCategory) {
-        const div = document.createElement("div");
-        div.className = "product";
-        div.innerHTML = `
-          <strong>${product.name}</strong><br>
-          <span>${product.price} AMD — ${stores[storeKey].name}</span>
-          <div class="qty-controls">
-            <button onclick="changeQty('${product.name}', -1)">-</button>
-            <span class="qty-number" id="qty-${product.name}">0</span>
-            <button onclick="changeQty('${product.name}', 1)">+</button>
-          </div>
-        `;
-        container.appendChild(div);
+  let text = `🛒 Новый заказ Artik Food%0A%0A`;
+  text += `👤 Имя: ${name}%0A`;
+  text += `📞 Телефон: ${phone}%0A`;
+  text += `📍 Адрес: ${address} (${district})%0A`;
+  if (comment) text += `💬 Комментарий: ${comment}%0A`;
+  text += `%0A📦 Товары:%0A`;
+
+  let goodsTotal = 0;
+  Object.keys(carts).forEach(storeKey => {
+    Object.entries(carts[storeKey]).forEach(([name, data]) => {
+      if (data.qty > 0) {
+        text += `- ${stores[storeKey].name}: ${name} × ${data.qty} = ${data.qty * data.price} AMD%0A`;
+        goodsTotal += data.qty * data.price;
       }
     });
   });
-}
 
-// ===================
-// КОРЗИНА
-// ===================
+  const delivery = district === "Артик" ? 500 : 
+                   district === "Арич" ? 700 : 
+                   district === "Нор-Кянк" ? 1000 : 
+                   district === "Пемзашен" ? 1000 : 0;
+  const total = goodsTotal + delivery;
+  
+  text += `%0A💰 Итого товары: ${goodsTotal} AMD%0A`;
+  text += `🚚 Доставка: ${delivery} AMD%0A`;
+  text += `💵 К оплате: ${total} AMD%0A%0A`;
+  text += `_Заказ создан через сайт_`;
 
-function changeQty(productName, delta) {
-  const product = findProduct(productName);
-  if (!product) return;
-
-  if (!cart[productName]) cart[productName] = { ...product, qty: 0 };
-  cart[productName].qty += delta;
-
-  if (cart[productName].qty <= 0) delete cart[productName];
-
-  document.getElementById(`qty-${productName}`).innerText = cart[productName]?.qty || 0;
-
-  localStorage.setItem("cart", JSON.stringify(cart));
-  renderGlobalCart();
-  renderStoreCart();
-}
-
-function findProduct(name) {
-  for (const storeKey in stores) {
-    const product = stores[storeKey].products.find(p => p.name === name);
-    if (product) return { ...product, store: stores[storeKey].name };
-  }
-  return null;
-}
-
-function renderGlobalCart() {
-  const container = document.getElementById("global-cart-items");
-  container.innerHTML = "";
-  let total = 0;
-
-  Object.values(cart).forEach(item => {
-    const itemTotal = item.price * item.qty;
-    total += itemTotal;
-
-    const div = document.createElement("div");
-    div.className = "cart-item";
-    div.innerHTML = `
-      <span>${item.name} × ${item.qty}</span>
-      <span>${itemTotal} AMD</span>
-      <button onclick="removeFromCart('${item.name}')">✖</button>
-    `;
-    container.appendChild(div);
+  // Сохраняем заказ
+  saveOrder({
+    name, phone, address, district, comment,
+    items: JSON.parse(JSON.stringify(carts)),
+    total: total,
+    delivery: delivery
   });
 
-  document.getElementById("global-cart-total").innerText = `Товары: ${total} AMD`;
-
-  const district = document.getElementById("district")?.value || "";
-  const deliveryPrices = {
-    "Артик": 500,
-    "Арич": 700,
-    "Нор-Кянк": 1000,
-    "Пемзашен": 1000
-  };
-  const delivery = deliveryPrices[district] || 0;
-
-  document.getElementById("delivery-total").innerText = `Доставка: ${delivery} AMD`;
-  document.getElementById("grand-total").innerText = `Итого: ${total + delivery} AMD`;
-}
-
-function removeFromCart(productName) {
-  delete cart[productName];
-  localStorage.setItem("cart", JSON.stringify(cart));
+  window.open(`https://wa.me/37443797727?text=${text}`, '_blank');
+  
+  // Очищаем корзину после заказа
+  carts = {};
   renderGlobalCart();
+  if (currentStore) updateStoreCart();
+  document.getElementById('order-form').reset();
+  
+  alert('Заказ отправлен! Ожидайте звонка оператора.');
 }
 
-// ===================
-// КОРЗИНА МАГАЗИНА
-// ===================
+/* ---------------- УПРАВЛЕНИЕ КУРЬЕРАМИ ---------------- */
 
-function renderStoreCart() {
-  const container = document.getElementById("store-cart-items");
-  const cartBox = document.getElementById("store-cart");
-  container.innerHTML = "";
-  let total = 0;
+let nextCourierId = 1;
 
-  Object.values(cart).forEach(item => {
-    if (item.store === stores[currentStore].name) {
-      const itemTotal = item.price * item.qty;
-      total += itemTotal;
+function addCourier() {
+  const name = prompt("Имя курьера:");
+  if (!name) return;
+  
+  const phone = prompt("Телефон курьера:");
+  if (!phone) return;
+  
+  const courier = {
+    id: nextCourierId++,
+    name: name,
+    phone: phone,
+    status: 'active',
+    orders: []
+  };
+  
+  couriers.push(courier);
+  localStorage.setItem('artikFoodCouriers', JSON.stringify(couriers));
+  updateAdminStats();
+  alert(`Курьер ${name} добавлен!`);
+}
 
-      const div = document.createElement("div");
-      div.className = "cart-item";
-      div.innerHTML = `
-        <span>${item.name} × ${item.qty}</span>
-        <span>${itemTotal} AMD</span>
-      `;
+function toggleCourierStatus(courierId) {
+  const courier = couriers.find(c => c.id === courierId);
+  if (courier) {
+    courier.status = courier.status === 'active' ? 'inactive' : 'active';
+    localStorage.setItem('artikFoodCouriers', JSON.stringify(couriers));
+    updateAdminStats();
+  }
+}
+
+function manageCouriers() {
+  alert("Управление курьерами\n\nДобавлено курьеров: " + couriers.length + 
+        "\nАктивных: " + couriers.filter(c => c.status === 'active').length);
+}
+
+/* ---------------- ДРУГИЕ ФУНКЦИИ АДМИНКИ ---------------- */
+
+function addNewProduct() {
+  alert("Здесь будет добавление новых товаров.\nВ реальном приложении нужен бэкенд для управления товарами.");
+}
+
+function viewAllOrders() {
+  alert("Всего заказов: " + orders.length + 
+        "\nНа сумму: " + orders.reduce((sum, o) => sum + o.total, 0) + " AMD");
+}
+
+/* ---------------- ИНИЦИАЛИЗАЦИЯ АДМИНКИ ---------------- */
+
+// При загрузке страницы
+document.addEventListener('DOMContentLoaded', function() {
+  // Загружаем данные
+  const savedOrders = localStorage.getItem('artikFoodOrders');
+  const savedCouriers = localStorage.getItem('artikFoodCouriers');
+  
+  if (savedOrders) orders = JSON.parse(savedOrders);
+  if (savedCouriers) {
+    couriers = JSON.parse(savedCouriers);
+    // Находим максимальный ID для nextCourierId
+    if (couriers.length > 0) {
+      nextCourierId = Math.max(...couriers.map(c => c.id)) + 1;
+    }
+  }
+});
