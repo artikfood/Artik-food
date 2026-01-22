@@ -1355,3 +1355,29 @@ function backupData() {
   
   alert('Резервная копия создана и скачана!');
 }
+// Проверяем и показываем скрытые кнопки
+function showHiddenButtons() {
+  // Проверяем кнопку админа
+  const adminBtn = document.getElementById('admin-login-btn');
+  if (adminBtn && adminBtn.classList.contains('hidden')) {
+    adminBtn.classList.remove('hidden');
+    adminBtn.style.display = 'block';
+  }
+  
+  // Проверяем кнопку курьера
+  const courierBtn = document.getElementById('courier-login-btn');
+  if (courierBtn && courierBtn.classList.contains('hidden')) {
+    courierBtn.classList.remove('hidden');
+    courierBtn.style.display = 'block';
+  }
+}
+
+// Вызываем при загрузке
+document.addEventListener('DOMContentLoaded', function() {
+  showHiddenButtons();
+  
+  // Если кнопок нет, создаем их
+  if (!document.getElementById('admin-login-btn') && !document.getElementById('courier-login-btn')) {
+    addAdminAndCourierButtons();
+  }
+});
