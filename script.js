@@ -280,6 +280,8 @@ function renderShops() {
   });
 }
 
+/* ========= ОБНОВЛЁННАЯ ЛОГИКА МАГАЗИН → КАТЕГОРИИ → ТОВАРЫ ========= */
+
 function openStore(storeKey) {
   currentStore = storeKey;
 
@@ -295,6 +297,7 @@ function openStore(storeKey) {
   const container = document.getElementById('store-products');
   container.innerHTML = '';
 
+  // Показываем категории магазина
   const categories = [...new Set(stores[storeKey].products.map(p => p.category))];
 
   categories.forEach(category => {
@@ -309,6 +312,37 @@ function openStore(storeKey) {
   window.scrollTo({ top: 0, behavior: 'smooth' });
 }
 
+function openStoreCategory(storeKey, categoryName) {
+  currentStore = storeKey;
+
+  const container = document.getElementById('store-products');
+  container.innerHTML = '';
+
+  stores[storeKey].products.forEach(item => {
+    if (item.category === categoryName) {
+      const safeId = item.name.replace(/\s+/g,'');
+      const qty = carts[storeKey]?.[item.name]?.qty || 0;
+
+      const div = document.createElement('div');
+      div.className = 'product';
+      div.innerHTML = `
+        <h4>${item.name}</h4>
+        <p>Цена: ${item.price} AMD</p>
+        <div class="qty-controls">
+          <button onclick="changeQty('${storeKey}', '${item.name}', ${item.price}, -1)">−</button>
+          <span class="qty-number" id="qty-${storeKey}-${safeId}">${qty}</span>
+          <button onclick="changeQty('${storeKey}', '${item.name}', ${item.price}, 1)">+</button>
+        </div>
+      `;
+      container.appendChild(div);
+    }
+  });
+
+  document.getElementById('store-cart').classList.remove('hidden');
+}
+
+/* ================= NAVIGATION ================= */
+
 function goHome() {
   document.getElementById('store-page').classList.add('hidden');
   document.getElementById('category-page').classList.add('hidden');
@@ -320,6 +354,8 @@ function goHome() {
 }
 
 function goBack() { window.history.back(); }
+
+/* ================= CART ================= */
 
 function changeQty(storeKey, name, price, delta) {
   if (!carts[storeKey]) carts[storeKey] = {};
@@ -509,7 +545,7 @@ function saveOrder(storeName, items, total, status) {
   renderCourierOrders();
 }
 
-/* ================= CATEGORY ================= */
+/* ================= CATEGORY (ГЛОБАЛЬНЫЕ КАТЕГОРИИ С ГЛАВНОЙ) ================= */
 
 function openCategory(categoryName) {
   document.getElementById('home-page').classList.add('hidden');
@@ -729,52 +765,3 @@ function renderCourierOrders() {
     });
 
     div.innerHTML = `
-      <strong>Заказ #${order.id}</strong><br/>
-      Адрес: ${document.getElementById("address")?.value || "—"}<br/>
-      Сумма: ${order.total} AMD<br/>
-      Статус: <strong>${order.status}</strong><br/>
-      <div>${itemsText}</div>
-      <button onclick="updateOrderStatus(${order.id}, 'В пути')">В пути</button>
-      <button onclick="updateOrderStatus(${order.id}, 'Доставлен')" style="background:#0088cc;">Доставлен</button>
-    `;
-    container.appendChild(div);
-  });
-}
-
-/* ================= INIT ================= */
-
-renderShops();
-renderGlobalCart();
-applyLanguage();
-
-if ('serviceWorker' in navigator) {
-  navigator.serviceWorker.register('sw.js').catch(() => {});
-}
-function openStoreCategory(storeKey, categoryName) {
-  currentStore = storeKey;
-
-  const container = document.getElementById('store-products');
-  container.innerHTML = '';
-
-  stores[storeKey].products.forEach(item => {
-    if (item.category === categoryName) {
-      const safeId = item.name.replace(/\s+/g,'');
-      const qty = carts[storeKey]?.[item.name]?.qty || 0;
-
-      const div = document.createElement('div');
-      div.className = 'product';
-      div.innerHTML = `
-        <h4>${item.name}</h4>
-        <p>Цена: ${item.price} AMD</p>
-        <div class="qty-controls">
-          <button onclick="changeQty('${storeKey}', '${item.name}', ${item.price}, -1)">−</button>
-          <span class="qty-number" id="qty-${storeKey}-${safeId}">${qty}</span>
-          <button onclick="changeQty('${storeKey}', '${item.name}', ${item.price}, 1)">+</button>
-        </div>
-      `;
-      container.appendChild(div);
-    }
-  });
-
-  document.getElementById('store-cart').classList.remove('hidden');
-}
