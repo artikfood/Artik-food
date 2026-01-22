@@ -282,35 +282,30 @@ function renderShops() {
 
 function openStore(storeKey) {
   currentStore = storeKey;
+
   document.getElementById('home-page').classList.add('hidden');
   document.getElementById('category-page').classList.add('hidden');
   document.getElementById('admin-login').classList.add('hidden');
   document.getElementById('admin-panel').classList.add('hidden');
   document.getElementById('courier-panel').classList.add('hidden');
   document.getElementById('store-page').classList.remove('hidden');
+
   document.getElementById('store-title').innerText = stores[storeKey].name;
 
   const container = document.getElementById('store-products');
   container.innerHTML = '';
 
-  stores[storeKey].products.forEach((item) => {
-    const safeId = item.name.replace(/\s+/g,'');
-    const qty = carts[storeKey]?.[item.name]?.qty || 0;
+  const categories = [...new Set(stores[storeKey].products.map(p => p.category))];
+
+  categories.forEach(category => {
     const div = document.createElement('div');
-    div.className = 'product';
-    div.innerHTML = `
-      <h4>${item.name}</h4>
-      <p>Цена: ${item.price} AMD</p>
-      <div class="qty-controls">
-        <button onclick="changeQty('${storeKey}', '${item.name}', ${item.price}, -1)">−</button>
-        <span class="qty-number" id="qty-${storeKey}-${safeId}">${qty}</span>
-        <button onclick="changeQty('${storeKey}', '${item.name}', ${item.price}, 1)">+</button>
-      </div>
-    `;
+    div.className = 'card';
+    div.innerHTML = `<h4>${category}</h4>`;
+    div.onclick = () => openStoreCategory(storeKey, category);
     container.appendChild(div);
   });
 
-  renderStoreCart(storeKey);
+  document.getElementById('store-cart').classList.add('hidden');
   window.scrollTo({ top: 0, behavior: 'smooth' });
 }
 
@@ -754,4 +749,32 @@ applyLanguage();
 
 if ('serviceWorker' in navigator) {
   navigator.serviceWorker.register('sw.js').catch(() => {});
+}
+function openStoreCategory(storeKey, categoryName) {
+  currentStore = storeKey;
+
+  const container = document.getElementById('store-products');
+  container.innerHTML = '';
+
+  stores[storeKey].products.forEach(item => {
+    if (item.category === categoryName) {
+      const safeId = item.name.replace(/\s+/g,'');
+      const qty = carts[storeKey]?.[item.name]?.qty || 0;
+
+      const div = document.createElement('div');
+      div.className = 'product';
+      div.innerHTML = `
+        <h4>${item.name}</h4>
+        <p>Цена: ${item.price} AMD</p>
+        <div class="qty-controls">
+          <button onclick="changeQty('${storeKey}', '${item.name}', ${item.price}, -1)">−</button>
+          <span class="qty-number" id="qty-${storeKey}-${safeId}">${qty}</span>
+          <button onclick="changeQty('${storeKey}', '${item.name}', ${item.price}, 1)">+</button>
+        </div>
+      `;
+      container.appendChild(div);
+    }
+  });
+
+  document.getElementById('store-cart').classList.remove('hidden');
 }
