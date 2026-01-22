@@ -280,7 +280,7 @@ function renderShops() {
   });
 }
 
-/* ========= ОБНОВЛЁННАЯ ЛОГИКА МАГАЗИН → КАТЕГОРИИ → ТОВАРЫ ========= */
+/* ====== ИЗМЕНЁННАЯ ЛОГИКА ОТКРЫТИЯ МАГАЗИНА ====== */
 
 function openStore(storeKey) {
   currentStore = storeKey;
@@ -297,12 +297,11 @@ function openStore(storeKey) {
   const container = document.getElementById('store-products');
   container.innerHTML = '';
 
-  // Показываем категории магазина
   const categories = [...new Set(stores[storeKey].products.map(p => p.category))];
 
   categories.forEach(category => {
     const div = document.createElement('div');
-    div.className = 'card';
+    div.className = 'product'; // используем твой существующий стиль
     div.innerHTML = `<h4>${category}</h4>`;
     div.onclick = () => openStoreCategory(storeKey, category);
     container.appendChild(div);
@@ -341,7 +340,7 @@ function openStoreCategory(storeKey, categoryName) {
   document.getElementById('store-cart').classList.remove('hidden');
 }
 
-/* ================= NAVIGATION ================= */
+/* ====== ОСТАЛЬНОЙ КОД — БЕЗ ИЗМЕНЕНИЙ ====== */
 
 function goHome() {
   document.getElementById('store-page').classList.add('hidden');
@@ -354,8 +353,6 @@ function goHome() {
 }
 
 function goBack() { window.history.back(); }
-
-/* ================= CART ================= */
 
 function changeQty(storeKey, name, price, delta) {
   if (!carts[storeKey]) carts[storeKey] = {};
@@ -545,7 +542,7 @@ function saveOrder(storeName, items, total, status) {
   renderCourierOrders();
 }
 
-/* ================= CATEGORY (ГЛОБАЛЬНЫЕ КАТЕГОРИИ С ГЛАВНОЙ) ================= */
+/* ================= CATEGORY ================= */
 
 function openCategory(categoryName) {
   document.getElementById('home-page').classList.add('hidden');
@@ -765,3 +762,24 @@ function renderCourierOrders() {
     });
 
     div.innerHTML = `
+      <strong>Заказ #${order.id}</strong><br/>
+      Адрес: ${document.getElementById("address")?.value || "—"}<br/>
+      Сумма: ${order.total} AMD<br/>
+      Статус: <strong>${order.status}</strong><br/>
+      <div>${itemsText}</div>
+      <button onclick="updateOrderStatus(${order.id}, 'В пути')">В пути</button>
+      <button onclick="updateOrderStatus(${order.id}, 'Доставлен')" style="background:#0088cc;">Доставлен</button>
+    `;
+    container.appendChild(div);
+  });
+}
+
+/* ================= INIT ================= */
+
+renderShops();
+renderGlobalCart();
+applyLanguage();
+
+if ('serviceWorker' in navigator) {
+  navigator.serviceWorker.register('sw.js').catch(() => {});
+}
