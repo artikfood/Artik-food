@@ -58,18 +58,14 @@
     .product button { background: #2ecc71; color: white; border: none; padding: 6px 10px; border-radius: 6px; cursor: pointer; font-size: 14px; }
 
     .qty-controls { display:flex; justify-content:center; align-items:center; gap:8px; }
-    .qty-controls button { width:30px; height:30px; border-radius:50%; border:none; background:#2ecc71; color:white; font-weight:bold; cursor:pointer; transition: transform 0.2s; }
-    .qty-controls button:hover { transform: scale(1.1); background: #27ae60; }
+    .qty-controls button { width:30px; height:30px; border-radius:50%; border:none; background:#2ecc71; color:white; font-weight:bold; cursor:pointer; }
     .qty-number { min-width:20px; font-weight:bold; }
 
     .cart { background:white; padding:16px; border-radius:10px; max-width:500px; margin:20px auto; box-shadow:0 2px 6px rgba(0,0,0,0.1); }
     .cart h4 { margin-top:0; text-align:center; }
-    .cart-item { display:flex; justify-content:space-between; align-items:center; margin-bottom:8px; font-size:14px; gap:8px; padding:8px; border-radius:6px; background:#f8f9fa; }
+    .cart-item { display:flex; justify-content:space-between; align-items:center; margin-bottom:8px; font-size:14px; gap:8px; }
     .cart-total { font-weight:bold; margin-top:10px; text-align:center; }
     .cart button { width:100%; background:#27ae60; color:white; border:none; padding:10px; font-size:15px; border-radius:6px; cursor:pointer; margin-top:10px; }
-    
-    /* Кнопка очистки корзины */
-    .clear-cart-btn { background:#e74c3c; color:white; border:none; padding:8px 12px; border-radius:6px; cursor:pointer; margin-top:10px; font-size:14px; width:100%; }
 
     .order-form { background:white; padding:20px; border-radius:10px; max-width:500px; margin:auto; box-shadow:0 2px 6px rgba(0,0,0,0.1); }
     .order-form input, .order-form textarea, .order-form select { width:100%; padding:10px; margin-bottom:12px; border-radius:6px; border:1px solid #ccc; font-size:14px; }
@@ -93,12 +89,6 @@
       font-size: 14px;
     }
 
-    /* Подсветка активного магазина */
-    .card.active {
-      border: 2px solid #2ecc71;
-      background: #f0fff4;
-    }
-
     /* Floating nav */
     .floating-buttons {
       position: fixed;
@@ -120,45 +110,6 @@
       cursor: pointer;
     }
     .floating-buttons button:hover { background:#e65c00; }
-
-    /* Адаптивность для очень маленьких экранов */
-    @media (max-width: 480px) {
-      .shops, .categories {
-        grid-template-columns: 1fr;
-      }
-      
-      .product {
-        flex-direction: column;
-        text-align: center;
-        gap: 10px;
-      }
-      
-      header {
-        flex-direction: column;
-        text-align: center;
-        gap: 10px;
-      }
-      
-      nav {
-        display: flex;
-        justify-content: center;
-        flex-wrap: wrap;
-        gap: 10px;
-      }
-      
-      .floating-buttons {
-        bottom: 120px;
-      }
-      
-      .whatsapp-btn, .telegram-btn {
-        padding: 12px 16px;
-        font-size: 14px;
-      }
-      
-      .cart {
-        margin: 20px 10px;
-      }
-    }
   </style>
 </head>
 <body>
@@ -196,7 +147,6 @@
     <div class="cart-total" id="global-cart-total">Товары: 0 AMD</div>
     <div class="cart-total" id="delivery-total">Доставка: 0 AMD</div>
     <div class="cart-total" id="grand-total">Итого: 0 AMD</div>
-    <button class="clear-cart-btn" onclick="clearCart()">🗑️ Очистить корзину</button>
   </div>
 </section>
 
@@ -214,7 +164,6 @@
       <div class="cart-total" id="store-cart-total">Итого: 0 AMD</div>
       <button onclick="sendStoreToWhatsApp()">Заказать из этого магазина (WhatsApp)</button>
       <button onclick="sendStoreToTelegram()" style="background:#0088cc;">Заказать из этого магазина (Telegram)</button>
-      <button class="clear-cart-btn" onclick="clearStoreCart()">🗑️ Очистить корзину магазина</button>
     </div>
   </section>
 </div>
@@ -232,12 +181,6 @@
       <option value="Арич">Арич — 700 AMD</option>
       <option value="Нор-Кянк">Нор-Кянк — 1000 AMD</option>
       <option value="Пемзашен">Пемзашен — 1000 AMD</option>
-    </select>
-    <select id="payment">
-      <option value="">Способ оплаты</option>
-      <option value="Наличными">Наличными курьеру</option>
-      <option value="IDram">IDram</option>
-      <option value="Картой">Картой онлайн (скоро)</option>
     </select>
     <textarea rows="3" id="comment" placeholder="Комментарий к заказу"></textarea>
     <button type="submit">Отправить заказ</button>
@@ -259,7 +202,6 @@
 <div class="floating-buttons">
   <button onclick="goBack()">← Назад</button>
   <button onclick="goHome()">🏠 Главная</button>
-  <button onclick="document.getElementById('global-cart').scrollIntoView({behavior:'smooth'})">🛒 Корзина</button>
 </div>
 
 <footer>
@@ -389,31 +331,6 @@ let currentStore = null;
 let currentCategory = null;
 let carts = {};
 
-/* ---------------- СОХРАНЕНИЕ КОРЗИНЫ ---------------- */
-
-// Сохранение корзины в localStorage
-function saveCart() {
-    try {
-        localStorage.setItem('artikFoodCart', JSON.stringify(carts));
-    } catch (e) {
-        console.log('Не удалось сохранить корзину:', e);
-    }
-}
-
-// Загрузка корзины из localStorage
-function loadCart() {
-    try {
-        const saved = localStorage.getItem('artikFoodCart');
-        if (saved) {
-            carts = JSON.parse(saved);
-            renderGlobalCart();
-            if (currentStore) updateStoreCart();
-        }
-    } catch (e) {
-        console.log('Не удалось загрузить корзину:', e);
-    }
-}
-
 /* ---------------- НАВИГАЦИЯ ---------------- */
 
 function hideAllPages() {
@@ -425,7 +342,6 @@ function goHome() {
   hideAllPages();
   document.getElementById('home-page').classList.remove('hidden');
   window.scrollTo({ top: 0, behavior: 'smooth' });
-  renderShops();
 }
 
 function goBack() {
@@ -451,8 +367,6 @@ function renderShops() {
     div.onclick = () => openStore(key);
     container.appendChild(div);
   });
-  
-  loadCart(); // Загружаем сохраненную корзину
 }
 
 function openStore(storeKey) {
@@ -526,7 +440,6 @@ function openStoreCategory(storeKey, categoryName) {
 
   container.appendChild(list);
   document.getElementById('store-cart').classList.remove('hidden');
-  updateStoreCart();
 }
 
 /* ---------------- КОРЗИНА ---------------- */
@@ -544,7 +457,24 @@ function changeQty(storeKey, productName, price, delta) {
 
   updateStoreCart();
   renderGlobalCart();
-  saveCart(); // Сохраняем корзину после изменения
+}
+
+/* ---------------- УДАЛЕНИЕ ТОВАРА ИЗ КОРЗИНЫ ---------------- */
+
+function removeItemFromCart(storeKey, productName) {
+  if (!carts[storeKey] || !carts[storeKey][productName]) return;
+  
+  if (confirm(`Удалить "${productName}" из корзины?`)) {
+    delete carts[storeKey][productName];
+    
+    // Если в магазине больше нет товаров, удаляем магазин из корзины
+    if (Object.keys(carts[storeKey]).length === 0) {
+      delete carts[storeKey];
+    }
+    
+    updateStoreCart();
+    renderGlobalCart();
+  }
 }
 
 function updateStoreCart() {
@@ -562,6 +492,7 @@ function updateStoreCart() {
       div.innerHTML = `
         <span>${name} × ${data.qty}</span>
         <span>${data.qty * data.price} AMD</span>
+        <button onclick="removeItemFromCart('${currentStore}', '${name}')" style="color:red; margin-left:8px;">×</button>
       `;
       itemsBox.appendChild(div);
       total += data.qty * data.price;
@@ -586,6 +517,7 @@ function renderGlobalCart() {
         div.innerHTML = `
           <span>${stores[storeKey].name}: ${name} × ${data.qty}</span>
           <span>${data.qty * data.price} AMD</span>
+          <button onclick="removeItemFromCart('${storeKey}', '${name}')" style="color:red; margin-left:8px;">×</button>
         `;
         container.appendChild(div);
         goodsTotal += data.qty * data.price;
@@ -606,46 +538,6 @@ function renderGlobalCart() {
   document.getElementById('grand-total').innerText = `Итого: ${goodsTotal + delivery} AMD`;
 }
 
-/* ---------------- ОЧИСТКА КОРЗИНЫ ---------------- */
-
-function clearCart() {
-  if (Object.keys(carts).length === 0) {
-    alert('Корзина уже пуста');
-    return;
-  }
-  
-  if (confirm('Очистить всю корзину?')) {
-    carts = {};
-    saveCart();
-    renderGlobalCart();
-    if (currentStore) updateStoreCart();
-    alert('Корзина очищена');
-  }
-}
-
-function clearStoreCart() {
-  if (!currentStore || !carts[currentStore]) {
-    alert('Корзина магазина пуста');
-    return;
-  }
-  
-  if (confirm(`Очистить корзину магазина ${stores[currentStore].name}?`)) {
-    delete carts[currentStore];
-    saveCart();
-    updateStoreCart();
-    renderGlobalCart();
-    
-    // Обновляем отображение количеств в товарах
-    stores[currentStore].products.forEach(item => {
-      const safeId = item.name.replace(/\s+/g,'');
-      const qtyEl = document.getElementById(`qty-${currentStore}-${safeId}`);
-      if (qtyEl) qtyEl.innerText = '0';
-    });
-    
-    alert('Корзина магазина очищена');
-  }
-}
-
 /* ---------------- ЗАКАЗЫ ---------------- */
 
 function sendFormToWhatsApp() {
@@ -653,70 +545,46 @@ function sendFormToWhatsApp() {
   const phone = document.getElementById('phone').value;
   const address = document.getElementById('address').value;
   const district = document.getElementById('district').value;
-  const payment = document.getElementById('payment').value;
   const comment = document.getElementById('comment').value;
 
   let text = `🛒 Новый заказ Artik Food%0A%0A`;
   text += `👤 Имя: ${name}%0A`;
   text += `📞 Телефон: ${phone}%0A`;
   text += `📍 Адрес: ${address} (${district})%0A`;
-  if (payment) text += `💳 Оплата: ${payment}%0A`;
   if (comment) text += `💬 Комментарий: ${comment}%0A`;
   text += `%0A📦 Товары:%0A`;
 
-  let goodsTotal = 0;
   Object.keys(carts).forEach(storeKey => {
     Object.entries(carts[storeKey]).forEach(([name, data]) => {
       if (data.qty > 0) {
         text += `- ${stores[storeKey].name}: ${name} × ${data.qty} = ${data.qty * data.price} AMD%0A`;
-        goodsTotal += data.qty * data.price;
       }
     });
   });
-
-  const delivery = district === "Артик" ? 500 : 
-                   district === "Арич" ? 700 : 
-                   district === "Нор-Кянк" ? 1000 : 
-                   district === "Пемзашен" ? 1000 : 0;
-  
-  text += `%0A💰 Итого товары: ${goodsTotal} AMD%0A`;
-  text += `🚚 Доставка: ${delivery} AMD%0A`;
-  text += `💵 К оплате: ${goodsTotal + delivery} AMD%0A%0A`;
-  text += `_Заказ создан через сайт_`;
 
   window.open(`https://wa.me/37443797727?text=${text}`, '_blank');
 }
 
 function sendStoreToWhatsApp() {
   let text = `🛒 Заказ из магазина ${stores[currentStore].name}%0A%0A`;
-  let total = 0;
 
   Object.entries(carts[currentStore]).forEach(([name, data]) => {
     if (data.qty > 0) {
       text += `- ${name} × ${data.qty} = ${data.qty * data.price} AMD%0A`;
-      total += data.qty * data.price;
     }
   });
-
-  text += `%0A💰 Итого: ${total} AMD%0A`;
-  text += `_Заказ создан через сайт_`;
 
   window.open(`https://wa.me/37443797727?text=${text}`, '_blank');
 }
 
 function sendStoreToTelegram() {
   let text = `🛒 Заказ из магазина ${stores[currentStore].name}\n\n`;
-  let total = 0;
 
   Object.entries(carts[currentStore]).forEach(([name, data]) => {
     if (data.qty > 0) {
       text += `- ${name} × ${data.qty} = ${data.qty * data.price} AMD\n`;
-      total += data.qty * data.price;
     }
   });
-
-  text += `\n💰 Итого: ${total} AMD\n`;
-  text += `_Заказ создан через сайт_`;
 
   window.open(`https://t.me/share/url?url=&text=${encodeURIComponent(text)}`, '_blank');
 }
