@@ -40,3 +40,56 @@
   color: white;
   font-size: 16px;
 }
+
+/* Стили для уведомлений */
+.toast-notification {
+  position: fixed;
+  top: 20px;
+  right: 20px;
+  background: white;
+  padding: 15px;
+  border-radius: 8px;
+  box-shadow: 0 4px 12px rgba(0,0,0,0.15);
+  border-left: 4px solid #3498db;
+  z-index: 10002;
+  max-width: 300px;
+  animation: slideIn 0.3s ease-out;
+}
+
+.toast-notification strong {
+  display: block;
+  margin-bottom: 5px;
+  color: #2c3e50;
+}
+
+.toast-notification p {
+  margin: 0;
+  font-size: 14px;
+  color: #666;
+}
+
+.toast-notification button {
+  position: absolute;
+  top: 5px;
+  right: 5px;
+  background: none;
+  border: none;
+  color: #999;
+  cursor: pointer;
+  font-size: 12px;
+}
+
+@keyframes slideIn {
+  from {
+    transform: translateX(100%);
+    opacity: 0;
+  }
+  to {
+    transform: translateX(0);
+    opacity: 1;
+  }
+}
+
+.notification-item:hover {
+  background: #f0f8ff !important;
+}
