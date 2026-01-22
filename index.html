@@ -5,10 +5,8 @@
   <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
   <title>Artik Food — Доставка продуктов в Артике</title>
 
-  <!-- PWA -->
-  <link rel="manifest" href="manifest.json">
-  <meta name="theme-color" content="#2ecc71">
-  <link rel="apple-touch-icon" href="icon-192.png">
+  <!-- PWA MANIFEST INLINE -->
+  <link rel="manifest" id="manifest-placeholder">
 
   <style>
     body { font-family: Arial, sans-serif; margin: 0; background: #f8f8f8; color: #333; }
@@ -28,32 +26,16 @@
     .section { padding: 32px 16px; max-width: 1100px; margin: auto; }
     .section h3 { text-align: center; margin-bottom: 24px; }
 
-    .shops, .categories { display: grid; grid-template-columns: repeat(auto-fit, minmax(160px, 1fr)); gap: 16px; }
+    .shops, .categories, .products { display: grid; grid-template-columns: repeat(auto-fit, minmax(160px, 1fr)); gap: 16px; }
 
-    .card { background: white; padding: 16px; border-radius: 10px; box-shadow: 0 2px 6px rgba(0,0,0,0.1); text-align: center; cursor: pointer; }
+    .card, .product { background: white; padding: 16px; border-radius: 10px; box-shadow: 0 2px 6px rgba(0,0,0,0.1); text-align: center; cursor: pointer; }
+    .product button { background: #2ecc71; color: white; border: none; padding: 6px 10px; border-radius: 6px; cursor: pointer; font-size: 14px; }
 
-    /* ТОВАРЫ — СПИСКОМ */
-    .products { display: flex; flex-direction: column; gap: 12px; }
-    .product {
-      background: white;
-      padding: 12px 16px;
-      border-radius: 10px;
-      box-shadow: 0 2px 6px rgba(0,0,0,0.1);
-      display: flex;
-      justify-content: space-between;
-      align-items: center;
-      gap: 10px;
-    }
-    .product-info { display: flex; flex-direction: column; gap: 4px; }
-    .product-name { font-weight: bold; }
-    .product-price { font-size: 14px; color: #27ae60; }
+    .product-list { display:flex; flex-direction:column; gap:12px; }
 
-    .qty-controls { display:flex; align-items:center; gap:8px; }
-    .qty-controls button {
-      width:28px; height:28px; border-radius:50%;
-      border:none; background:#2ecc71; color:white; font-weight:bold; cursor:pointer;
-    }
-    .qty-number { min-width:20px; text-align:center; font-weight:bold; }
+    .qty-controls { display:flex; justify-content:center; align-items:center; gap:8px; margin-top:8px; }
+    .qty-controls button { width:28px; height:28px; border-radius:50%; border:none; background:#2ecc71; color:white; font-weight:bold; cursor:pointer; }
+    .qty-number { min-width:20px; font-weight:bold; }
 
     .cart { background:white; padding:16px; border-radius:10px; max-width:500px; margin:20px auto; box-shadow:0 2px 6px rgba(0,0,0,0.1); }
     .cart h4 { margin-top:0; text-align:center; }
@@ -64,9 +46,6 @@
     .order-form { background:white; padding:20px; border-radius:10px; max-width:500px; margin:auto; box-shadow:0 2px 6px rgba(0,0,0,0.1); }
     .order-form input, .order-form textarea, .order-form select { width:100%; padding:10px; margin-bottom:12px; border-radius:6px; border:1px solid #ccc; font-size:14px; }
     .order-form button { width:100%; background:#27ae60; color:white; border:none; padding:12px; font-size:16px; border-radius:6px; cursor:pointer; }
-
-    .whatsapp-btn { position:fixed; bottom:16px; right:16px; background:#25D366; color:white; padding:14px 18px; border-radius:50px; text-decoration:none; font-weight:bold; box-shadow:0 4px 10px rgba(0,0,0,0.2); font-size:15px; }
-    .telegram-btn { position:fixed; bottom:70px; right:16px; background:#0088cc; color:white; padding:14px 18px; border-radius:50px; text-decoration:none; font-weight:bold; box-shadow:0 4px 10px rgba(0,0,0,0.2); font-size:15px; display:flex; align-items:center; gap:6px; }
 
     footer { background:#2ecc71; color:white; text-align:center; padding:16px; margin-top:40px; font-size:14px; }
     .hidden { display:none; }
@@ -101,27 +80,79 @@
     .admin-panel .danger { background:#e74c3c; }
     .report-box { border:1px solid #ddd; padding:10px; border-radius:6px; margin-bottom:10px; font-size:14px; }
 
-    /* Floating nav */
+    /* Floating buttons */
     .floating-buttons {
       position: fixed;
-      bottom: 140px;
+      bottom: 100px;
       right: 16px;
       display: flex;
       flex-direction: column;
-      gap: 10px;
+      gap: 8px;
       z-index: 9999;
     }
     .floating-buttons button {
-      padding: 10px 14px;
+      padding: 8px 12px;
       border: none;
-      border-radius: 25px;
+      border-radius: 20px;
       background: #ff6b00;
       color: #fff;
-      font-size: 14px;
+      font-size: 13px;
       box-shadow: 0 4px 10px rgba(0,0,0,0.2);
       cursor: pointer;
     }
     .floating-buttons button:hover { background:#e65c00; }
+
+    .whatsapp-btn, .telegram-btn {
+      position:fixed;
+      right:16px;
+      padding:10px 14px;
+      border-radius:20px;
+      text-decoration:none;
+      font-weight:bold;
+      box-shadow:0 4px 10px rgba(0,0,0,0.2);
+      font-size:13px;
+      display:flex;
+      align-items:center;
+      gap:6px;
+      color:white;
+    }
+    .telegram-btn { bottom:16px; background:#0088cc; }
+    .whatsapp-btn { bottom:56px; background:#25D366; }
+
+    .search-box {
+      max-width:500px;
+      margin:10px auto;
+      display:flex;
+      gap:8px;
+    }
+    .search-box input {
+      flex:1;
+      padding:10px;
+      border-radius:6px;
+      border:1px solid #ccc;
+      font-size:14px;
+    }
+    .search-box button {
+      background:#27ae60;
+      color:white;
+      border:none;
+      border-radius:6px;
+      padding:10px 14px;
+      cursor:pointer;
+    }
+
+    .status-badge {
+      padding:4px 8px;
+      border-radius:6px;
+      font-size:12px;
+      color:white;
+    }
+    .status-new { background:#3498db; }
+    .status-processing { background:#f39c12; }
+    .status-onway { background:#9b59b6; }
+    .status-delivered { background:#2ecc71; }
+    .status-cancelled { background:#e74c3c; }
+
   </style>
 </head>
 <body>
@@ -133,715 +164,471 @@
   </div>
   <nav>
     <a href="#" onclick="goHome()">Главная</a>
-    <a href="#order">Заказать</a>
-    <a href="#contacts">Контакты</a>
-    <a href="#" onclick="openAdmin()">Админ</a>
-    <a href="#" onclick="openCourier()">Курьер</a>
+    <a href="#" onclick="showAdminLogin()">Админ</a>
+    <a href="#" onclick="showCourierPanel()">Курьер</a>
   </nav>
 </header>
 
-<!-- ГЛАВНАЯ -->
-<div id="home-page">
-
 <section class="hero">
-  <h2>Доставка продуктов в Артике</h2>
-  <p>Свежие продукты из супермаркетов — прямо к вашей двери</p>
-  <button onclick="document.getElementById('order').scrollIntoView({behavior:'smooth'});">Заказать сейчас</button>
+  <h2>Доставка продуктов и цветов в Артике</h2>
+  <p>Заказывайте из лучших супермаркетов города — быстро и удобно.</p>
+  <button onclick="scrollToShops()">Выбрать магазин</button>
 </section>
 
-<section class="section" id="shops">
-  <h3>Супермаркеты</h3>
-  <div class="shops" id="shops-list"></div>
+<div class="search-box">
+  <input type="text" id="searchInput" placeholder="Поиск по товарам...">
+  <button onclick="searchProducts()">Найти</button>
+</div>
+
+<section class="section" id="shops-section">
+  <h3>Магазины</h3>
+  <div class="shops" id="shops"></div>
 </section>
 
-<section class="section" id="catalog">
-  <h3>Категории товаров</h3>
-  <div class="categories">
-    <div class="card" onclick="openCategory('Овощи и фрукты')">🥦 Овощи и фрукты</div>
-    <div class="card" onclick="openCategory('Мясо и рыба')">🥩 Мясо и рыба</div>
-    <div class="card" onclick="openCategory('Молочные продукты')">🧀 Молочные продукты</div>
-    <div class="card" onclick="openCategory('Хлеб и выпечка')">🍞 Хлеб и выпечка</div>
-    <div class="card" onclick="openCategory('Бакалея')">🥫 Бакалея</div>
-    <div class="card" onclick="openCategory('Напитки')">🧃 Напитки</div>
-    <div class="card" onclick="openCategory('Бытовая химия')">🧼 Бытовая химия</div>
-    <div class="card" onclick="openCategory('Сладости')">🍰 Сладости</div>
-    <div class="card" onclick="openCategory('Цветы')">🌸 Цветы</div>
-  </div>
+<section class="section hidden" id="categories-section">
+  <button onclick="goBack()" style="margin-bottom:12px;">← Назад</button>
+  <h3 id="categories-title"></h3>
+  <div class="categories" id="categories"></div>
 </section>
 
-<section class="section">
-  <div class="cart" id="global-cart">
-    <h4>Корзина (все магазины)</h4>
-    <div id="global-cart-items"></div>
-    <div class="cart-total" id="global-cart-total">Товары: 0 AMD</div>
-    <div class="cart-total" id="delivery-total">Доставка: 0 AMD</div>
-    <div class="cart-total" id="grand-total">Итого: 0 AMD</div>
-  </div>
+<section class="section hidden" id="products-section">
+  <button onclick="goBackToCategories()" style="margin-bottom:12px;">← Назад</button>
+  <h3 id="products-title"></h3>
+  <div class="product-list" id="products"></div>
 </section>
 
-</div>
+<section class="cart hidden" id="cart-section">
+  <h4>Корзина</h4>
+  <div id="cart-items"></div>
+  <div class="cart-total" id="cart-total"></div>
+  <button onclick="showOrderForm()">Оформить заказ</button>
+</section>
 
-<!-- СТРАНИЦА СУПЕРМАРКЕТА -->
-<div id="store-page" class="hidden">
-  <section class="section">
-    <h3 id="store-title"></h3>
-    <div class="products" id="store-products"></div>
-
-    <div class="cart hidden" id="store-cart">
-      <h4>Корзина этого магазина</h4>
-      <div id="store-cart-items"></div>
-      <div class="cart-total" id="store-cart-total">Итого: 0 AMD</div>
-      <button onclick="sendStoreToWhatsApp()">Заказать из этого магазина (WhatsApp)</button>
-      <button onclick="sendStoreToTelegram()" style="background:#0088cc;">Заказать из этого магазина (Telegram)</button>
-    </div>
-  </section>
-</div>
-
-<!-- СТРАНИЦА КАТЕГОРИИ -->
-<div id="category-page" class="hidden">
-  <section class="section">
-    <h3 id="category-title"></h3>
-    <div class="products" id="category-products"></div>
-  </section>
-</div>
-
-<!-- АДМИН ЛОГИН -->
-<div id="admin-login" class="admin-login hidden">
-  <h3>Вход в админ панель</h3>
-  <input type="text" id="admin-user" placeholder="Логин" />
-  <input type="password" id="admin-pass" placeholder="Пароль" />
-  <button onclick="loginAdmin()">Войти</button>
-  <p id="admin-error" style="color:red; text-align:center;"></p>
-</div>
-
-<!-- АДМИН ПАНЕЛЬ -->
-<div id="admin-panel" class="admin-panel hidden">
-  <h3>Админ панель</h3>
-
-  <label>Выберите супермаркет:</label>
-  <select id="admin-store-select" onchange="loadAdminProducts()"></select>
-
-  <div id="admin-products-list"></div>
-
-  <h4>Добавить новый товар</h4>
-  <input type="text" id="new-product-name" placeholder="Название товара" />
-  <input type="number" id="new-product-price" placeholder="Цена (AMD)" />
-  <input type="text" id="new-product-category" placeholder="Категория (например: Бакалея)" />
-  <button onclick="addProduct()">Добавить товар</button>
-
-  <h4>📊 Отчёт по заказам</h4>
-  <div id="orders-report"></div>
-
-  <button class="danger" onclick="logoutAdmin()">Выйти из админки</button>
-</div>
-
-<!-- КУРЬЕР -->
-<div id="courier-panel" class="courier-panel hidden">
-  <h3>Панель курьера</h3>
-  <div id="courier-orders"></div>
-  <button onclick="goHome()">Вернуться на главную</button>
-</div>
-
-<!-- ОФОРМЛЕНИЕ -->
-<section class="section" id="order">
+<section class="order-form hidden" id="order-form">
   <h3>Оформление заказа</h3>
-  <form class="order-form" onsubmit="event.preventDefault(); sendFormToWhatsApp();">
-    <input type="text" id="name" placeholder="Ваше имя" required />
-    <input type="tel" id="phone" placeholder="Телефон" required />
-    <input type="text" id="address" placeholder="Адрес доставки" required />
-    <select id="district" required onchange="renderGlobalCart()">
-      <option value="">Выберите район доставки</option>
-      <option value="Артик">Артик — 500 AMD</option>
-      <option value="Арич">Арич — 700 AMD</option>
-      <option value="Нор-Кянк">Нор-Кянк — 1000 AMD</option>
-      <option value="Пемзашен">Пемзашен — 1000 AMD</option>
-    </select>
-    <textarea rows="3" id="comment" placeholder="Комментарий к заказу"></textarea>
-    <button type="submit">Отправить заказ</button>
-  </form>
+  <input type="text" id="customer-name" placeholder="Ваше имя">
+  <input type="text" id="customer-phone" placeholder="Телефон">
+  <input type="text" id="customer-address" placeholder="Адрес доставки">
+  <textarea id="customer-comment" placeholder="Комментарий"></textarea>
+  <button onclick="submitOrder()">Отправить заказ</button>
 </section>
 
-<section class="section" id="contacts">
-  <h3>Контакты</h3>
-  <div class="card" style="max-width:400px; margin:auto;">
-    <p>📞 Телефон / WhatsApp: <a href="tel:+37443797727" style="color:#27ae60; font-weight:bold;">+374 43 79 77 27</a></p>
-    <p>✈️ Telegram: @artikfood</p>
-    <p>📍 Артик, Ширак, Армения</p>
-  </div>
+<!-- ADMIN -->
+<section class="admin-login hidden" id="admin-login">
+  <h3>Вход администратора</h3>
+  <input type="password" id="admin-password" placeholder="Пароль">
+  <button onclick="loginAdmin()">Войти</button>
 </section>
 
-<a class="whatsapp-btn" href="https://wa.me/37443797727" target="_blank">💬 WhatsApp</a>
-<a class="telegram-btn" href="https://t.me/artikfood" target="_blank"><span>✈️</span> Telegram</a>
+<section class="admin-panel hidden" id="admin-panel">
+  <h3>Админ панель</h3>
+  <button class="danger" onclick="logoutAdmin()">Выйти</button>
 
-<!-- Floating buttons -->
+  <h4>Все заказы</h4>
+  <div id="admin-orders"></div>
+</section>
+
+<!-- COURIER -->
+<section class="courier-panel hidden" id="courier-panel">
+  <h3>Панель курьера</h3>
+  <input type="text" id="courier-name" placeholder="Имя курьера">
+  <button onclick="loginCourier()">Войти</button>
+
+  <div id="courier-orders" class="hidden"></div>
+</section>
+
 <div class="floating-buttons">
-  <button onclick="goBack()">← Назад</button>
-  <button onclick="goHome()">🏠 Главная</button>
+  <button onclick="scrollToTop()">⬆️ Наверх</button>
+  <button onclick="scrollToShops()">🏪 Магазины</button>
+  <button onclick="scrollToCart()">🛒 Корзина</button>
 </div>
+
+<a href="https://t.me/yourtelegram" target="_blank" class="telegram-btn">📨 Telegram</a>
+<a href="https://wa.me/37400000000" target="_blank" class="whatsapp-btn">💬 WhatsApp</a>
 
 <footer>
-  <p>© 2026 Artik Food — Доставка продуктов в Артике</p>
+  © 2026 Artik Food — Доставка продуктов и цветов в Артике
 </footer>
 
 <script>
-/* ==========================
-   ДАННЫЕ МАГАЗИНОВ И ТОВАРОВ
-========================== */
-let stores = {
+/* =================== DATA =================== */
+const stores = {
   million: {
     name: "Million",
-    products: [
-      { name: "Картофель 1кг", price: 300, category: "Овощи и фрукты" },
-      { name: "Лук 1кг", price: 250, category: "Овощи и фрукты" },
-      { name: "Яблоки 1кг", price: 500, category: "Овощи и фрукты" },
-      { name: "Говядина 1кг", price: 3500, category: "Мясо и рыба" },
-      { name: "Курица 1кг", price: 1800, category: "Мясо и рыба" },
-      { name: "Молоко 1л", price: 450, category: "Молочные продукты" },
-      { name: "Сыр 200г", price: 900, category: "Молочные продукты" },
-      { name: "Хлеб", price: 250, category: "Хлеб и выпечка" },
-      { name: "Булочка", price: 150, category: "Хлеб и выпечка" },
-      { name: "Рис 1кг", price: 700, category: "Бакалея" },
-      { name: "Макароны", price: 450, category: "Бакалея" },
-      { name: "Сок 1л", price: 500, category: "Напитки" }
-    ]
+    categories: {
+      "Овощи и фрукты": [
+        { name: "Картофель 1кг", price: 300 },
+        { name: "Лук 1кг", price: 250 },
+        { name: "Помидоры 1кг", price: 600 },
+        { name: "Яблоки 1кг", price: 400 }
+      ],
+      "Молочные продукты": [
+        { name: "Молоко 1л", price: 450 },
+        { name: "Сметана", price: 500 },
+        { name: "Сыр", price: 1200 }
+      ],
+      "Хлеб и выпечка": [
+        { name: "Хлеб белый", price: 200 },
+        { name: "Лаваш", price: 150 }
+      ]
+    }
   },
   mush: {
     name: "Մուշ",
-    products: [
-      { name: "Картофель 1кг", price: 290, category: "Овощи и фрукты" },
-      { name: "Помидоры 1кг", price: 650, category: "Овощи и фрукты" },
-      { name: "Бананы 1кг", price: 700, category: "Овощи и фрукты" },
-      { name: "Свинина 1кг", price: 3200, category: "Мясо и рыба" },
-      { name: "Рыба свежая 1кг", price: 2800, category: "Мясо и рыба" },
-      { name: "Кефир 1л", price: 480, category: "Молочные продукты" },
-      { name: "Йогурт", price: 350, category: "Молочные продукты" },
-      { name: "Батон", price: 260, category: "Хлеб и выпечка" },
-      { name: "Лаваш", price: 200, category: "Хлеб и выпечка" },
-      { name: "Гречка 1кг", price: 750, category: "Бакалея" },
-      { name: "Чай", price: 900, category: "Бакалея" },
-      { name: "Вода 1.5л", price: 300, category: "Напитки" }
-    ]
+    categories: {
+      "Овощи и фрукты": [
+        { name: "Бананы 1кг", price: 650 },
+        { name: "Апельсины 1кг", price: 550 }
+      ],
+      "Напитки": [
+        { name: "Кола 1.5л", price: 450 },
+        { name: "Сок 1л", price: 500 }
+      ]
+    }
   },
   tonoyan: {
     name: "Tonoyan",
-    products: [
-      { name: "Огурцы 1кг", price: 600, category: "Овощи и фрукты" },
-      { name: "Капуста 1кг", price: 280, category: "Овощи и фрукты" },
-      { name: "Апельсины 1кг", price: 650, category: "Овощи и фрукты" },
-      { name: "Фарш 1кг", price: 3000, category: "Мясо и рыба" },
-      { name: "Колбаса", price: 2200, category: "Мясо и рыба" },
-      { name: "Сметана", price: 500, category: "Молочные продукты" },
-      { name: "Творог", price: 600, category: "Молочные продукты" },
-      { name: "Багет", price: 300, category: "Хлеб и выпечка" },
-      { name: "Круассан", price: 250, category: "Хлеб и выпечка" },
-      { name: "Сахар 1кг", price: 650, category: "Бакалея" },
-      { name: "Соль", price: 150, category: "Бакалея" },
-      { name: "Газировка", price: 400, category: "Напитки" }
-    ]
+    categories: {
+      "Мясо и рыба": [
+        { name: "Курица 1кг", price: 1400 },
+        { name: "Говядина 1кг", price: 3000 }
+      ],
+      "Бакалея": [
+        { name: "Рис 1кг", price: 500 },
+        { name: "Макароны", price: 400 }
+      ]
+    }
   },
   danielyan: {
     name: "Danielyan",
-    products: [
-      { name: "Картофель 1кг", price: 310, category: "Овощи и фрукты" },
-      { name: "Морковь 1кг", price: 260, category: "Овощи и фрукты" },
-      { name: "Груши 1кг", price: 700, category: "Овощи и фрукты" },
-      { name: "Куриные окорочка", price: 1900, category: "Мясо и рыба" },
-      { name: "Сосиски", price: 2100, category: "Мясо и рыба" },
-      { name: "Масло сливочное", price: 1200, category: "Молочные продукты" },
-      { name: "Молоко 1л", price: 460, category: "Молочные продукты" },
-      { name: "Хлеб ржаной", price: 280, category: "Хлеб и выпечка" },
-      { name: "Пирожок", price: 200, category: "Хлеб и выпечка" },
-      { name: "Мука 1кг", price: 500, category: "Бакалея" },
-      { name: "Масло подсолнечное", price: 950, category: "Бакалея" },
-      { name: "Компот", price: 450, category: "Напитки" }
-    ]
+    categories: {
+      "Сладости": [
+        { name: "Торт", price: 3500 },
+        { name: "Печенье", price: 600 },
+        { name: "Конфеты", price: 800 }
+      ],
+      "Напитки": [
+        { name: "Кофе", price: 1500 },
+        { name: "Чай", price: 700 }
+      ]
+    }
   },
   edem: {
     name: "Эдем (цветы)",
-    products: [
-      { name: "Розы (1 шт)", price: 600, category: "Цветы" },
-      { name: "Букет роз", price: 5000, category: "Цветы" },
-      { name: "Тюльпаны (1 шт)", price: 400, category: "Цветы" },
-      { name: "Букет тюльпанов", price: 3500, category: "Цветы" },
-      { name: "Лилии", price: 1200, category: "Цветы" },
-      { name: "Хризантемы", price: 900, category: "Цветы" }
-    ]
+    categories: {
+      "Букеты": [
+        { name: "Букет роз", price: 6000 },
+        { name: "Букет тюльпанов", price: 5000 }
+      ],
+      "Композиции": [
+        { name: "Цветочная коробка", price: 8000 },
+        { name: "Композиция с лилиями", price: 9000 }
+      ]
+    }
   }
 };
 
-/* ==========================
-   СОСТОЯНИЕ
-========================== */
-let currentStoreKey = null;
-let globalCart = JSON.parse(localStorage.getItem("globalCart")) || {};
-let storeCarts = JSON.parse(localStorage.getItem("storeCarts")) || {};
-let orders = JSON.parse(localStorage.getItem("orders")) || [];
+let currentStore = null;
+let currentCategory = null;
+let cart = {};
+let orders = JSON.parse(localStorage.getItem("orders") || "[]");
 
-/* ==========================
-   РЕНДЕР
-========================== */
-function renderShops() {
-  const container = document.getElementById("shops-list");
-  container.innerHTML = "";
-  for (let key in stores) {
-    const card = document.createElement("div");
-    card.className = "card";
-    card.textContent = stores[key].name;
-    card.onclick = () => openStore(key);
-    container.appendChild(card);
-  }
+/* =================== INIT =================== */
+renderShops();
+
+/* =================== UI FUNCTIONS =================== */
+function scrollToShops() {
+  document.getElementById("shops-section").scrollIntoView({ behavior: "smooth" });
 }
-
-function renderProductsList(products, containerId, storeKey = null) {
-  const container = document.getElementById(containerId);
-  container.innerHTML = "";
-
-  products.forEach((product, index) => {
-    const row = document.createElement("div");
-    row.className = "product";
-
-    const info = document.createElement("div");
-    info.className = "product-info";
-    info.innerHTML = `
-      <div class="product-name">${product.name}</div>
-      <div class="product-price">${product.price} AMD</div>
-      <div style="font-size:12px; color:#777;">${product.category}</div>
-    `;
-
-    const controls = document.createElement("div");
-    controls.className = "qty-controls";
-
-    const minus = document.createElement("button");
-    minus.textContent = "−";
-    minus.onclick = () => changeQty(product.name, -1, storeKey);
-
-    const qty = document.createElement("span");
-    qty.className = "qty-number";
-    qty.textContent = getQty(product.name, storeKey);
-
-    const plus = document.createElement("button");
-    plus.textContent = "+";
-    plus.onclick = () => changeQty(product.name, 1, storeKey);
-
-    controls.appendChild(minus);
-    controls.appendChild(qty);
-    controls.appendChild(plus);
-
-    row.appendChild(info);
-    row.appendChild(controls);
-    container.appendChild(row);
-  });
+function scrollToTop() {
+  window.scrollTo({ top: 0, behavior: "smooth" });
 }
-
-/* ==========================
-   НАВИГАЦИЯ
-========================== */
-let pageStack = [];
-
-function showPage(pageId) {
-  document.getElementById("home-page").classList.add("hidden");
-  document.getElementById("store-page").classList.add("hidden");
-  document.getElementById("category-page").classList.add("hidden");
-  document.getElementById("admin-login").classList.add("hidden");
-  document.getElementById("admin-panel").classList.add("hidden");
-  document.getElementById("courier-panel").classList.add("hidden");
-
-  document.getElementById(pageId).classList.remove("hidden");
+function scrollToCart() {
+  document.getElementById("cart-section").scrollIntoView({ behavior: "smooth" });
 }
 
 function goHome() {
-  pageStack = [];
-  showPage("home-page");
+  document.getElementById("shops-section").classList.remove("hidden");
+  document.getElementById("categories-section").classList.add("hidden");
+  document.getElementById("products-section").classList.add("hidden");
+  document.getElementById("cart-section").classList.remove("hidden");
+  document.getElementById("order-form").classList.add("hidden");
+  document.getElementById("admin-login").classList.add("hidden");
+  document.getElementById("admin-panel").classList.add("hidden");
+  document.getElementById("courier-panel").classList.add("hidden");
 }
 
-function goBack() {
-  if (pageStack.length > 0) {
-    const last = pageStack.pop();
-    showPage(last);
-  } else {
-    goHome();
+/* =================== SHOPS =================== */
+function renderShops() {
+  const shopsDiv = document.getElementById("shops");
+  shopsDiv.innerHTML = "";
+  for (let key in stores) {
+    const store = stores[key];
+    const card = document.createElement("div");
+    card.className = "card";
+    card.innerText = store.name;
+    card.onclick = () => openStore(key);
+    shopsDiv.appendChild(card);
   }
 }
 
 function openStore(storeKey) {
-  pageStack.push("home-page");
-  currentStoreKey = storeKey;
-  document.getElementById("store-title").textContent = stores[storeKey].name;
-  renderProductsList(stores[storeKey].products, "store-products", storeKey);
-  renderStoreCart();
-  showPage("store-page");
-}
-
-function openCategory(categoryName) {
-  pageStack.push("home-page");
-  document.getElementById("category-title").textContent = categoryName;
-
-  let allProducts = [];
-  for (let key in stores) {
-    allProducts = allProducts.concat(
-      stores[key].products.filter(p => p.category === categoryName)
-    );
+  currentStore = storeKey;
+  const store = stores[storeKey];
+  document.getElementById("categories-title").innerText = store.name;
+  const categoriesDiv = document.getElementById("categories");
+  categoriesDiv.innerHTML = "";
+  for (let category in store.categories) {
+    const card = document.createElement("div");
+    card.className = "card";
+    card.innerText = category;
+    card.onclick = () => openCategory(category);
+    categoriesDiv.appendChild(card);
   }
-
-  renderProductsList(allProducts, "category-products", null);
-  showPage("category-page");
+  document.getElementById("shops-section").classList.add("hidden");
+  document.getElementById("categories-section").classList.remove("hidden");
+  document.getElementById("products-section").classList.add("hidden");
 }
 
-/* ==========================
-   КОРЗИНЫ
-========================== */
-function getQty(productName, storeKey) {
-  if (storeKey) {
-    return storeCarts[storeKey]?.[productName]?.qty || 0;
-  } else {
-    return globalCart[productName]?.qty || 0;
-  }
-}
+/* =================== CATEGORIES =================== */
+function openCategory(category) {
+  currentCategory = category;
+  const store = stores[currentStore];
+  const products = store.categories[category];
+  const productsDiv = document.getElementById("products");
+  document.getElementById("products-title").innerText = category;
+  productsDiv.innerHTML = "";
 
-function changeQty(productName, delta, storeKey) {
-  if (storeKey) {
-    if (!storeCarts[storeKey]) storeCarts[storeKey] = {};
-    if (!storeCarts[storeKey][productName]) storeCarts[storeKey][productName] = { qty: 0, price: getProductPrice(productName, storeKey), store: storeKey };
-
-    storeCarts[storeKey][productName].qty += delta;
-    if (storeCarts[storeKey][productName].qty <= 0) delete storeCarts[storeKey][productName];
-  }
-
-  if (!globalCart[productName]) globalCart[productName] = { qty: 0, price: getProductPrice(productName, storeKey), store: storeKey };
-  globalCart[productName].qty += delta;
-  if (globalCart[productName].qty <= 0) delete globalCart[productName];
-
-  saveCarts();
-  refreshAllViews();
-}
-
-function getProductPrice(productName, storeKey) {
-  if (storeKey && stores[storeKey]) {
-    const product = stores[storeKey].products.find(p => p.name === productName);
-    if (product) return product.price;
-  }
-  for (let key in stores) {
-    const product = stores[key].products.find(p => p.name === productName);
-    if (product) return product.price;
-  }
-  return 0;
-}
-
-function saveCarts() {
-  localStorage.setItem("globalCart", JSON.stringify(globalCart));
-  localStorage.setItem("storeCarts", JSON.stringify(storeCarts));
-}
-
-function renderGlobalCart() {
-  const container = document.getElementById("global-cart-items");
-  container.innerHTML = "";
-  let total = 0;
-
-  for (let name in globalCart) {
-    const item = globalCart[name];
-    const line = document.createElement("div");
-    line.className = "cart-item";
-    line.innerHTML = `
-      <span>${name} × ${item.qty}</span>
-      <span>${item.qty * item.price} AMD</span>
+  products.forEach(product => {
+    const div = document.createElement("div");
+    div.className = "product";
+    div.innerHTML = `
+      <div><strong>${product.name}</strong></div>
+      <div>${product.price} драм</div>
+      <div class="qty-controls">
+        <button onclick="changeQty('${currentStore}', '${category}', '${product.name}', -1)">−</button>
+        <span class="qty-number" id="qty-${currentStore}-${category}-${product.name}">0</span>
+        <button onclick="changeQty('${currentStore}', '${category}', '${product.name}', 1)">+</button>
+      </div>
     `;
-    container.appendChild(line);
-    total += item.qty * item.price;
-  }
-
-  document.getElementById("global-cart-total").textContent = `Товары: ${total} AMD`;
-
-  const district = document.getElementById("district").value;
-  let delivery = 0;
-  if (district === "Артик") delivery = 500;
-  if (district === "Арич") delivery = 700;
-  if (district === "Нор-Кянк") delivery = 1000;
-  if (district === "Пемзашен") delivery = 1000;
-
-  document.getElementById("delivery-total").textContent = `Доставка: ${delivery} AMD`;
-  document.getElementById("grand-total").textContent = `Итого: ${total + delivery} AMD`;
-}
-
-function renderStoreCart() {
-  const cart = storeCarts[currentStoreKey];
-  const container = document.getElementById("store-cart-items");
-  const cartBox = document.getElementById("store-cart");
-
-  if (!cart || Object.keys(cart).length === 0) {
-    cartBox.classList.add("hidden");
-    return;
-  }
-
-  cartBox.classList.remove("hidden");
-  container.innerHTML = "";
-  let total = 0;
-
-  for (let name in cart) {
-    const item = cart[name];
-    const line = document.createElement("div");
-    line.className = "cart-item";
-    line.innerHTML = `
-      <span>${name} × ${item.qty}</span>
-      <span>${item.qty * item.price} AMD</span>
-    `;
-    container.appendChild(line);
-    total += item.qty * item.price;
-  }
-
-  document.getElementById("store-cart-total").textContent = `Итого: ${total} AMD`;
-}
-
-/* ==========================
-   ОБНОВЛЕНИЕ ИНТЕРФЕЙСА
-========================== */
-function refreshAllViews() {
-  if (currentStoreKey) {
-    renderProductsList(stores[currentStoreKey].products, "store-products", currentStoreKey);
-    renderStoreCart();
-  }
-  renderGlobalCart();
-}
-
-/* ==========================
-   ЗАКАЗЫ
-========================== */
-function sendFormToWhatsApp() {
-  if (Object.keys(globalCart).length === 0) {
-    alert("Корзина пуста!");
-    return;
-  }
-
-  const name = document.getElementById("name").value;
-  const phone = document.getElementById("phone").value;
-  const address = document.getElementById("address").value;
-  const district = document.getElementById("district").value;
-  const comment = document.getElementById("comment").value;
-
-  let message = `🛒 Новый заказ%0A%0A`;
-  message += `👤 Имя: ${name}%0A`;
-  message += `📞 Телефон: ${phone}%0A`;
-  message += `📍 Адрес: ${address}%0A`;
-  message += `🏘 Район: ${district}%0A%0A`;
-  message += `📦 Товары:%0A`;
-
-  let total = 0;
-  for (let name in globalCart) {
-    const item = globalCart[name];
-    message += `- ${name} × ${item.qty} = ${item.qty * item.price} AMD%0A`;
-    total += item.qty * item.price;
-  }
-
-  let delivery = 0;
-  if (district === "Артик") delivery = 500;
-  if (district === "Арич") delivery = 700;
-  if (district === "Нор-Кянк") delivery = 1000;
-  if (district === "Пемзашен") delivery = 1000;
-
-  message += `%0A🚚 Доставка: ${delivery} AMD%0A`;
-  message += `💰 Итого: ${total + delivery} AMD%0A`;
-  if (comment) message += `%0A💬 Комментарий: ${comment}`;
-
-  window.open(`https://wa.me/37443797727?text=${message}`, "_blank");
-
-  orders.push({
-    date: new Date().toLocaleString(),
-    name, phone, address, district, comment,
-    items: { ...globalCart },
-    total: total + delivery
+    productsDiv.appendChild(div);
   });
+
+  document.getElementById("categories-section").classList.add("hidden");
+  document.getElementById("products-section").classList.remove("hidden");
+  document.getElementById("cart-section").classList.remove("hidden");
+}
+
+/* =================== NAV BACK =================== */
+function goBack() {
+  document.getElementById("categories-section").classList.add("hidden");
+  document.getElementById("shops-section").classList.remove("hidden");
+}
+function goBackToCategories() {
+  document.getElementById("products-section").classList.add("hidden");
+  document.getElementById("categories-section").classList.remove("hidden");
+}
+
+/* =================== CART =================== */
+function changeQty(store, category, name, delta) {
+  const key = `${store}|${category}|${name}`;
+  if (!cart[key]) cart[key] = { store, category, name, qty: 0, price: getProductPrice(store, category, name) };
+  cart[key].qty += delta;
+  if (cart[key].qty <= 0) delete cart[key];
+  updateQtyDisplay(store, category, name);
+  renderCart();
+}
+
+function updateQtyDisplay(store, category, name) {
+  const key = `${store}|${category}|${name}`;
+  const span = document.getElementById(`qty-${store}-${category}-${name}`);
+  if (span) span.innerText = cart[key]?.qty || 0;
+}
+
+function getProductPrice(store, category, name) {
+  const products = stores[store].categories[category];
+  const product = products.find(p => p.name === name);
+  return product ? product.price : 0;
+}
+
+function renderCart() {
+  const cartSection = document.getElementById("cart-section");
+  const cartItemsDiv = document.getElementById("cart-items");
+  const cartTotalDiv = document.getElementById("cart-total");
+
+  cartItemsDiv.innerHTML = "";
+  let total = 0;
+
+  for (let key in cart) {
+    const item = cart[key];
+    const itemTotal = item.qty * item.price;
+    total += itemTotal;
+    const div = document.createElement("div");
+    div.className = "cart-item";
+    div.innerHTML = `
+      <span>${item.name} × ${item.qty}</span>
+      <span>${itemTotal} драм</span>
+    `;
+    cartItemsDiv.appendChild(div);
+  }
+
+  cartTotalDiv.innerText = `Итого: ${total} драм`;
+  if (Object.keys(cart).length > 0) cartSection.classList.remove("hidden");
+  else cartSection.classList.add("hidden");
+}
+
+/* =================== ORDER =================== */
+function showOrderForm() {
+  document.getElementById("order-form").classList.remove("hidden");
+}
+
+function submitOrder() {
+  const name = document.getElementById("customer-name").value;
+  const phone = document.getElementById("customer-phone").value;
+  const address = document.getElementById("customer-address").value;
+  const comment = document.getElementById("customer-comment").value;
+
+  if (!name || !phone || !address) {
+    alert("Пожалуйста, заполните все обязательные поля.");
+    return;
+  }
+
+  const order = {
+    id: Date.now(),
+    name,
+    phone,
+    address,
+    comment,
+    items: Object.values(cart),
+    status: "new",
+    courier: null,
+    date: new Date().toLocaleString()
+  };
+
+  orders.push(order);
   localStorage.setItem("orders", JSON.stringify(orders));
-
-  globalCart = {};
-  storeCarts = {};
-  saveCarts();
-  refreshAllViews();
-  alert("Заказ отправлен!");
+  cart = {};
+  renderCart();
+  document.getElementById("order-form").classList.add("hidden");
+  alert("Ваш заказ принят! Мы скоро свяжемся с вами.");
 }
 
-function sendStoreToWhatsApp() {
-  const cart = storeCarts[currentStoreKey];
-  if (!cart || Object.keys(cart).length === 0) {
-    alert("Корзина этого магазина пуста!");
-    return;
-  }
-
-  let message = `🛒 Заказ из магазина: ${stores[currentStoreKey].name}%0A%0A`;
-  let total = 0;
-
-  for (let name in cart) {
-    const item = cart[name];
-    message += `- ${name} × ${item.qty} = ${item.qty * item.price} AMD%0A`;
-    total += item.qty * item.price;
-  }
-
-  message += `%0A💰 Итого: ${total} AMD`;
-
-  window.open(`https://wa.me/37443797727?text=${message}`, "_blank");
-}
-
-function sendStoreToTelegram() {
-  const cart = storeCarts[currentStoreKey];
-  if (!cart || Object.keys(cart).length === 0) {
-    alert("Корзина этого магазина пуста!");
-    return;
-  }
-
-  let message = `🛒 Заказ из магазина: ${stores[currentStoreKey].name}\n\n`;
-  let total = 0;
-
-  for (let name in cart) {
-    const item = cart[name];
-    message += `- ${name} × ${item.qty} = ${item.qty * item.price} AMD\n`;
-    total += item.qty * item.price;
-  }
-
-  message += `\n💰 Итого: ${total} AMD`;
-
-  window.open(`https://t.me/artikfood?text=${encodeURIComponent(message)}`, "_blank");
-}
-
-/* ==========================
-   АДМИНКА
-========================== */
-function openAdmin() {
-  pageStack.push("home-page");
-  showPage("admin-login");
+/* =================== ADMIN =================== */
+function showAdminLogin() {
+  goHome();
+  document.getElementById("admin-login").classList.remove("hidden");
 }
 
 function loginAdmin() {
-  const user = document.getElementById("admin-user").value;
-  const pass = document.getElementById("admin-pass").value;
-
-  if (user === "admin" && pass === "1234") {
-    showPage("admin-panel");
-    document.getElementById("admin-error").textContent = "";
-    loadAdminStores();
-    loadOrdersReport();
+  const password = document.getElementById("admin-password").value;
+  if (password === "1234") {
+    document.getElementById("admin-login").classList.add("hidden");
+    document.getElementById("admin-panel").classList.remove("hidden");
+    renderAdminOrders();
   } else {
-    document.getElementById("admin-error").textContent = "Неверный логин или пароль";
+    alert("Неверный пароль");
   }
 }
 
 function logoutAdmin() {
+  document.getElementById("admin-panel").classList.add("hidden");
+}
+
+function renderAdminOrders() {
+  const div = document.getElementById("admin-orders");
+  div.innerHTML = "";
+
+  orders.forEach(order => {
+    const box = document.createElement("div");
+    box.className = "report-box";
+    box.innerHTML = `
+      <strong>Заказ №${order.id}</strong><br>
+      ${order.date}<br>
+      Клиент: ${order.name}, ${order.phone}<br>
+      Адрес: ${order.address}<br>
+      Статус: <span class="status-badge status-${order.status}">${getStatusText(order.status)}</span><br>
+      Курьер: ${order.courier || "не назначен"}<br>
+      <hr>
+      ${order.items.map(i => `${i.name} × ${i.qty}`).join("<br>")}
+      <hr>
+      <select onchange="updateOrderStatus(${order.id}, this.value)">
+        <option value="new" ${order.status==="new"?"selected":""}>Новый</option>
+        <option value="processing" ${order.status==="processing"?"selected":""}>Готовится</option>
+        <option value="onway" ${order.status==="onway"?"selected":""}>В пути</option>
+        <option value="delivered" ${order.status==="delivered"?"selected":""}>Доставлен</option>
+        <option value="cancelled" ${order.status==="cancelled"?"selected":""}>Отменён</option>
+      </select>
+    `;
+    div.appendChild(box);
+  });
+}
+
+function updateOrderStatus(orderId, status) {
+  const order = orders.find(o => o.id === orderId);
+  if (order) {
+    order.status = status;
+    localStorage.setItem("orders", JSON.stringify(orders));
+    renderAdminOrders();
+  }
+}
+
+/* =================== COURIER =================== */
+function showCourierPanel() {
   goHome();
+  document.getElementById("courier-panel").classList.remove("hidden");
 }
 
-function loadAdminStores() {
-  const select = document.getElementById("admin-store-select");
-  select.innerHTML = "";
-  for (let key in stores) {
-    const option = document.createElement("option");
-    option.value = key;
-    option.textContent = stores[key].name;
-    select.appendChild(option);
+function loginCourier() {
+  const name = document.getElementById("courier-name").value;
+  if (!name) {
+    alert("Введите имя курьера");
+    return;
   }
-  loadAdminProducts();
+  document.getElementById("courier-orders").classList.remove("hidden");
+  renderCourierOrders(name);
 }
 
-function loadAdminProducts() {
-  const storeKey = document.getElementById("admin-store-select").value;
-  const list = document.getElementById("admin-products-list");
-  list.innerHTML = "";
+function renderCourierOrders(courierName) {
+  const div = document.getElementById("courier-orders");
+  div.innerHTML = "<h4>Доступные заказы</h4>";
 
-  stores[storeKey].products.forEach((product, index) => {
-    const box = document.createElement("div");
-    box.className = "report-box";
-    box.innerHTML = `
-      <strong>${product.name}</strong> — ${product.price} AMD (${product.category})
-      <button style="margin-top:6px;" onclick="deleteProduct('${storeKey}', ${index})">Удалить</button>
-    `;
-    list.appendChild(box);
+  orders.forEach(order => {
+    if (!order.courier || order.courier === courierName) {
+      const box = document.createElement("div");
+      box.className = "report-box";
+      box.innerHTML = `
+        <strong>Заказ №${order.id}</strong><br>
+        ${order.date}<br>
+        Клиент: ${order.name}<br>
+        Адрес: ${order.address}<br>
+        Статус: <span class="status-badge status-${order.status}">${getStatusText(order.status)}</span><br>
+        Курьер: ${order.courier || "не назначен"}<br>
+        <hr>
+        ${order.items.map(i => `${i.name} × ${i.qty}`).join("<br>")}
+        <hr>
+        ${order.courier ? "" : `<button onclick="assignCourier(${order.id}, '${courierName}')">Взять заказ</button>`}
+        <select onchange="courierUpdateStatus(${order.id}, this.value)">
+          <option value="">Изменить статус</option>
+          <option value="processing">Готовится</option>
+          <option value="onway">В пути</option>
+          <option value="delivered">Доставлен</option>
+        </select>
+      `;
+      div.appendChild(box);
+    }
   });
 }
 
-function addProduct() {
-  const storeKey = document.getElementById("admin-store-select").value;
-  const name = document.getElementById("new-product-name").value;
-  const price = parseInt(document.getElementById("new-product-price").value);
-  const category = document.getElementById("new-product-category").value;
-
-  if (!name || !price || !category) {
-    alert("Заполните все поля!");
-    return;
-  }
-
-  stores[storeKey].products.push({ name, price, category });
-  document.getElementById("new-product-name").value = "";
-  document.getElementById("new-product-price").value = "";
-  document.getElementById("new-product-category").value = "";
-
-  loadAdminProducts();
-  alert("Товар добавлен!");
-}
-
-function deleteProduct(storeKey, index) {
-  if (confirm("Удалить этот товар?")) {
-    stores[storeKey].products.splice(index, 1);
-    loadAdminProducts();
+function assignCourier(orderId, courierName) {
+  const order = orders.find(o => o.id === orderId);
+  if (order) {
+    order.courier = courierName;
+    localStorage.setItem("orders", JSON.stringify(orders));
+    renderCourierOrders(courierName);
   }
 }
 
-function loadOrdersReport() {
-  const container = document.getElementById("orders-report");
-  container.innerHTML = "";
-
-  if (orders.length === 0) {
-    container.innerHTML = "<p>Пока нет заказов.</p>";
-    return;
-  }
-
-  orders.forEach((order, index) => {
-    const box = document.createElement("div");
-    box.className = "report-box";
-    box.innerHTML = `
-      <strong>Заказ #${index + 1}</strong><br>
-      📅 ${order.date}<br>
-      👤 ${order.name} (${order.phone})<br>
-      📍 ${order.address}, ${order.district}<br>
-      💬 ${order.comment || "-"}<br>
-      💰 Итого: ${order.total} AMD
-    `;
-    container.appendChild(box);
-  });
-}
-
-/* ==========================
-   КУРЬЕР
-========================== */
-function openCourier() {
-  pageStack.push("home-page");
-  showPage("courier-panel");
-  loadCourierOrders();
-}
-
-function loadCourierOrders() {
-  const container = document.getElementById("courier-orders");
-  container.innerHTML = "";
-
-  if (orders.length === 0) {
-    container.innerHTML = "<p>Нет активных заказов.</p>";
-    return;
-  }
-
-  orders.forEach((order, index) => {
-    const box = document.createElement("div");
-    box.className = "report-box";
-    box.innerHTML = `
-      <strong>Заказ #${index + 1}</strong><br>
-      👤 ${order.name} (${order.phone})<br>
-      📍 ${order.address}, ${order.district}<br>
-      💰 ${order.total} AMD
-    `;
-    container.appendChild(box);
-  });
-}
-
-/* ==========================
-   ИНИЦИАЛИЗАЦИЯ
-========================== */
-renderShops();
-renderGlobalCart();
-</script>
-
-</body>
-</html>
+function courierUpdateStatus(orderId, status) {
+  if (!status) return;
+  const order = orders.find(o => o.id === orderId);
+  if (order) {
