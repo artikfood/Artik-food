@@ -81,6 +81,18 @@
     .cart h4 { margin-top:0; text-align:center; }
     .cart-item { display:flex; justify-content:space-between; align-items:center; margin-bottom:8px; font-size:14px; gap:8px; }
     .cart-total { font-weight:bold; margin-top:10px; text-align:center; }
+
+    /* ❌ Убрали зелёный фон у кнопки X */
+    .cart-item button {
+      background: transparent !important;
+      border: none;
+      color: #e74c3c;
+      font-size: 16px;
+      cursor: pointer;
+      padding: 0 6px;
+    }
+    .cart-item button:hover { color: #c0392b; }
+
     .cart button { width:100%; background:#27ae60; color:white; border:none; padding:10px; font-size:15px; border-radius:6px; cursor:pointer; margin-top:10px; }
 
     .order-form { background:white; padding:20px; border-radius:10px; max-width:500px; margin:auto; box-shadow:0 2px 6px rgba(0,0,0,0.1); }
@@ -258,7 +270,11 @@
       <h4>Корзина этого магазина</h4>
       <div id="store-cart-items"></div>
       <div class="cart-total" id="store-cart-total">Итого: 0 AMD</div>
-      <!-- КНОПКИ WhatsApp и Telegram УДАЛЕНЫ ПО ЗАПРОСУ -->
+      <!-- Кнопки заказа показываются не для всех магазинов -->
+      <div id="store-order-buttons">
+        <button onclick="sendStoreToWhatsApp()">Заказать из этого магазина (WhatsApp)</button>
+        <button onclick="sendStoreToTelegram()" style="background:#0088cc;">Заказать из этого магазина (Telegram)</button>
+      </div>
     </div>
   </section>
 </div>
@@ -480,7 +496,7 @@ const stores = {
   },
 
   mush: {
-    name: "Мուշ",
+    name: "Մուշ",
     products: [
       { name: "Картофель 1кг", price: 280, category: "Овощи и фрукты" },
       { name: "Помидоры 1кг", price: 500, category: "Овощи и фрукты" },
@@ -634,6 +650,14 @@ function openStore(storeKey) {
     container.appendChild(div);
   });
 
+  // Показываем/скрываем кнопки заказа для магазина
+  const orderButtons = document.getElementById('store-order-buttons');
+  if (storeKey === "tonoyans_sity") {
+    orderButtons.style.display = "none";
+  } else {
+    orderButtons.style.display = "block";
+  }
+
   document.getElementById('store-cart').classList.add('hidden');
 }
 
@@ -727,7 +751,7 @@ function updateStoreCart() {
       div.innerHTML = `
         <span>${name} × ${data.qty}</span>
         <span>${data.qty * data.price} AMD</span>
-        <button onclick="removeItemFromCart('${currentStore}', '${name}')" style="color:red; margin-left:8px;">×</button>
+        <button onclick="removeItemFromCart('${currentStore}', '${name}')">×</button>
       `;
       itemsBox.appendChild(div);
       total += data.qty * data.price;
@@ -752,7 +776,7 @@ function renderGlobalCart() {
         div.innerHTML = `
           <span>${stores[storeKey].name}: ${name} × ${data.qty}</span>
           <span>${data.qty * data.price} AMD</span>
-          <button onclick="removeItemFromCart('${storeKey}', '${name}')" style="color:red; margin-left:8px;">×</button>
+          <button onclick="removeItemFromCart('${storeKey}', '${name}')">×</button>
         `;
         container.appendChild(div);
         goodsTotal += data.qty * data.price;
@@ -920,9 +944,6 @@ function sendFormToWhatsApp() {
   
   alert('Заказ отправлен! Ожидайте звонка оператора.');
 }
-
-/* Функции sendStoreToWhatsApp и sendStoreToTelegram оставлены,
-   но кнопок в корзине больше нет — они не используются. */
 
 function sendStoreToWhatsApp() {
   let text = `🛒 Заказ из магазина ${stores[currentStore].name}%0A%0A`;
