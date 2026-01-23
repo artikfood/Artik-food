@@ -655,13 +655,206 @@
       background: rgba(255,255,255,0.04);
     }
 
+    /* ===================== МОБИЛЬНАЯ АДАПТАЦИЯ (ТОЛЬКО СТИЛИ) ===================== */
+
+    @media (max-width: 900px) {
+      header {
+        flex-direction: column;
+        align-items: stretch;
+        gap: 10px;
+      }
+
+      header .logo-box {
+        justify-content: center;
+      }
+
+      nav {
+        justify-content: center;
+        flex-wrap: wrap;
+        gap: 10px;
+      }
+    }
+
     @media (max-width: 600px) {
-      .hero h2 { font-size: 32px; }
-      .hero p { font-size: 15px; }
-      header h1 { font-size: 20px; }
-      nav a { font-size: 13px; }
-      .floating-buttons { bottom: 150px; right: 14px; }
-      .floating-icons { bottom: 16px; right: 14px; }
+      header {
+        padding: 10px 14px;
+      }
+
+      header h1 {
+        font-size: 18px;
+      }
+
+      header img {
+        height: 34px;
+      }
+
+      nav a {
+        font-size: 13px;
+        padding: 5px 8px;
+      }
+
+      .theme-toggle {
+        width: 36px;
+        height: 36px;
+        font-size: 16px;
+      }
+
+      .hero {
+        padding: 50px 16px 40px;
+      }
+
+      .hero h2 {
+        font-size: 28px;
+      }
+
+      .hero p {
+        font-size: 14px;
+      }
+
+      .hero button {
+        padding: 12px 22px;
+        font-size: 14px;
+      }
+
+      .section {
+        padding: 36px 14px;
+      }
+
+      .section h3 {
+        font-size: 22px;
+        margin-bottom: 20px;
+      }
+
+      .shops, .categories {
+        grid-template-columns: repeat(2, 1fr);
+        gap: 12px;
+      }
+
+      .card {
+        padding: 14px 12px;
+        border-radius: 16px;
+      }
+
+      .card img {
+        max-width: 70px;
+        max-height: 55px;
+      }
+
+      .card .icon {
+        font-size: 30px;
+      }
+
+      .product {
+        flex-direction: column;
+        align-items: flex-start;
+        gap: 10px;
+        padding: 14px;
+      }
+
+      .product img {
+        width: 54px;
+        height: 54px;
+      }
+
+      .product h4 {
+        font-size: 15px;
+      }
+
+      .product p {
+        font-size: 13px;
+      }
+
+      .product button {
+        align-self: stretch;
+        width: 100%;
+        padding: 10px;
+        font-size: 14px;
+      }
+
+      .qty-controls {
+        width: 100%;
+        justify-content: space-between;
+      }
+
+      .qty-controls button {
+        width: 36px;
+        height: 36px;
+      }
+
+      .cart {
+        padding: 16px 14px;
+        border-radius: 16px;
+      }
+
+      .cart h4 {
+        font-size: 18px;
+      }
+
+      .cart-item {
+        font-size: 13px;
+      }
+
+      .cart-total {
+        font-size: 14px;
+      }
+
+      .cart button {
+        font-size: 14px;
+        padding: 12px;
+      }
+
+      .order-form {
+        padding: 18px 16px;
+        border-radius: 16px;
+      }
+
+      .order-form input,
+      .order-form textarea,
+      .order-form select {
+        font-size: 13px;
+        padding: 10px 12px;
+      }
+
+      .order-form button {
+        font-size: 15px;
+        padding: 13px;
+      }
+
+      .floating-buttons {
+        bottom: 120px;
+        right: 12px;
+        gap: 10px;
+      }
+
+      .floating-buttons button {
+        padding: 8px 14px;
+        font-size: 13px;
+      }
+
+      .floating-icons {
+        bottom: 16px;
+        right: 12px;
+        gap: 8px;
+      }
+
+      .floating-icons a {
+        width: 40px;
+        height: 40px;
+        font-size: 16px;
+      }
+
+      footer {
+        font-size: 12px;
+        padding: 16px;
+      }
+
+      #admin-panel .admin-card {
+        padding: 14px;
+      }
+
+      #admin-panel h3 {
+        font-size: 18px;
+      }
     }
   </style>
 </head>
@@ -672,8 +865,8 @@
     <img src="logo.png" alt="Artik Food">
     <h1>Artik Food</h1>
     <div class="search-container">
-  <input type="text" id="searchInput" placeholder="🔍 Поиск товаров..." />
-
+      <input type="text" id="searchInput" placeholder="🔍 Поиск товаров..." />
+    </div>
   </div>
   <nav>
     <a href="#" onclick="goHome()">Главная</a>
@@ -1189,128 +1382,189 @@ function openStoreCategory(storeKey, categoryName) {
   backBtn.onclick = () => openStore(storeKey);
   container.appendChild(backBtn);
 
-  const list = document.createElement('div');
-  list.className = 'products';
+  const products = stores[storeKey].products.filter(p => p.category === categoryName);
 
-  stores[storeKey].products.forEach(item => {
-    if (item.category === categoryName) {
-      const safeId = item.name.replace(/\s+/g,'');
-      const qty = carts[storeKey]?.[item.name]?.qty || 0;
+  products.forEach(product => {
+    const div = document.createElement('div');
+    div.className = 'product';
 
-      const div = document.createElement('div');
-      div.className = 'product';
-      div.innerHTML = `
-        <img src="https://via.placeholder.com/60x60?text=🍪" alt="${item.name}">
-        <div style="flex:1;">
-          <h4>${item.name}</h4>
-          <p>${item.price} AMD</p>
+    div.innerHTML = `
+      <div style="display:flex; gap:12px; align-items:center;">
+        <img src="https://via.placeholder.com/60" alt="${product.name}">
+        <div>
+          <h4>${product.name}</h4>
+          <p>${product.price} AMD</p>
         </div>
-        <div class="qty-controls">
-          <button onclick="changeQty('${storeKey}', '${item.name}', ${item.price}, -1)">−</button>
-          <span class="qty-number" id="qty-${storeKey}-${safeId}">${qty}</span>
-          <button onclick="changeQty('${storeKey}', '${item.name}', ${item.price}, 1)">+</button>
-        </div>
-      `;
-      list.appendChild(div);
-    }
+      </div>
+      <div class="qty-controls">
+        <button onclick="changeQty('${storeKey}', '${product.name}', -1)">−</button>
+        <span class="qty-number" id="qty-${storeKey}-${product.name}">0</span>
+        <button onclick="changeQty('${storeKey}', '${product.name}', 1)">+</button>
+      </div>
+    `;
+
+    container.appendChild(div);
   });
 
-  container.appendChild(list);
   document.getElementById('store-cart').classList.remove('hidden');
+  renderStoreCart(storeKey);
 }
 
 /* ---------------- КОРЗИНА ---------------- */
 
-function changeQty(storeKey, productName, price, delta) {
+function changeQty(storeKey, productName, delta) {
   if (!carts[storeKey]) carts[storeKey] = {};
-  if (!carts[storeKey][productName]) carts[storeKey][productName] = { qty: 0, price };
 
-  carts[storeKey][productName].qty += delta;
-  if (carts[storeKey][productName].qty < 0) carts[storeKey][productName].qty = 0;
-
-  const safeId = productName.replace(/\s+/g,'');
-  const qtyEl = document.getElementById(`qty-${storeKey}-${safeId}`);
-  if (qtyEl) qtyEl.innerText = carts[storeKey][productName].qty;
-
-  updateStoreCart();
-  renderGlobalCart();
-}
-
-function removeItemFromCart(storeKey, productName) {
-  if (!carts[storeKey] || !carts[storeKey][productName]) return;
-  
-  delete carts[storeKey][productName];
-  
-  if (Object.keys(carts[storeKey]).length === 0) {
-    delete carts[storeKey];
+  if (!carts[storeKey][productName]) {
+    carts[storeKey][productName] = 0;
   }
-  
-  updateStoreCart();
+
+  carts[storeKey][productName] += delta;
+
+  if (carts[storeKey][productName] < 0) {
+    carts[storeKey][productName] = 0;
+  }
+
+  document.getElementById(`qty-${storeKey}-${productName}`).innerText = carts[storeKey][productName];
+
+  renderStoreCart(storeKey);
   renderGlobalCart();
 }
 
-function updateStoreCart() {
-  const cartBox = document.getElementById('store-cart');
-  const itemsBox = document.getElementById('store-cart-items');
-  const totalBox = document.getElementById('store-cart-total');
+function renderStoreCart(storeKey) {
+  const cartDiv = document.getElementById('store-cart-items');
+  const totalDiv = document.getElementById('store-cart-total');
+  cartDiv.innerHTML = '';
 
-  itemsBox.innerHTML = '';
   let total = 0;
 
-  Object.entries(carts[currentStore] || {}).forEach(([name, data]) => {
-    if (data.qty > 0) {
-      const div = document.createElement('div');
-      div.className = 'cart-item';
-      div.innerHTML = `
-        <span>${name} × ${data.qty}</span>
-        <span>${data.qty * data.price} AMD</span>
-        <button onclick="removeItemFromCart('${currentStore}', '${name}')">✕</button>
-      `;
-      itemsBox.appendChild(div);
-      total += data.qty * data.price;
-    }
-  });
+  if (carts[storeKey]) {
+    Object.keys(carts[storeKey]).forEach(productName => {
+      const qty = carts[storeKey][productName];
+      if (qty > 0) {
+        const product = stores[storeKey].products.find(p => p.name === productName);
+        const price = product.price * qty;
+        total += price;
 
-  totalBox.innerText = `Итого: ${total} AMD`;
-  cartBox.classList.toggle('hidden', total === 0);
+        const item = document.createElement('div');
+        item.className = 'cart-item';
+        item.innerHTML = `
+          <div>${productName} × ${qty}</div>
+          <span>${price} AMD</span>
+          <button onclick="removeFromCart('${storeKey}', '${productName}')">✕</button>
+        `;
+        cartDiv.appendChild(item);
+      }
+    });
+  }
+
+  totalDiv.innerText = `Итого: ${total} AMD`;
+}
+
+function removeFromCart(storeKey, productName) {
+  if (carts[storeKey] && carts[storeKey][productName]) {
+    carts[storeKey][productName] = 0;
+    const qtyEl = document.getElementById(`qty-${storeKey}-${productName}`);
+    if (qtyEl) qtyEl.innerText = 0;
+    renderStoreCart(storeKey);
+    renderGlobalCart();
+  }
 }
 
 function renderGlobalCart() {
-  const container = document.getElementById('global-cart-items');
-  container.innerHTML = '';
+  const cartDiv = document.getElementById('global-cart-items');
+  const totalDiv = document.getElementById('global-cart-total');
+  const deliveryDiv = document.getElementById('delivery-total');
+  const grandTotalDiv = document.getElementById('grand-total');
+  cartDiv.innerHTML = '';
 
-  let goodsTotal = 0;
+  let total = 0;
 
   Object.keys(carts).forEach(storeKey => {
-    Object.entries(carts[storeKey]).forEach(([name, data]) => {
-      if (data.qty > 0) {
-        const div = document.createElement('div');
-        div.className = 'cart-item';
-        div.innerHTML = `
-          <span>${stores[storeKey].name}: ${name} × ${data.qty}</span>
-          <span>${data.qty * data.price} AMD</span>
-          <button onclick="removeItemFromCart('${storeKey}', '${name}')">✕</button>
+    Object.keys(carts[storeKey]).forEach(productName => {
+      const qty = carts[storeKey][productName];
+      if (qty > 0) {
+        const product = stores[storeKey].products.find(p => p.name === productName);
+        const price = product.price * qty;
+        total += price;
+
+        const item = document.createElement('div');
+        item.className = 'cart-item';
+        item.innerHTML = `
+          <div>${productName} × ${qty}</div>
+          <span>${price} AMD</span>
+          <button onclick="removeFromCart('${storeKey}', '${productName}')">✕</button>
         `;
-        container.appendChild(div);
-        goodsTotal += data.qty * data.price;
+        cartDiv.appendChild(item);
       }
     });
   });
 
-  document.getElementById('global-cart-total').innerText = `Товары: ${goodsTotal} AMD`;
+  totalDiv.innerText = `Товары: ${total} AMD`;
 
   const district = document.getElementById('district').value;
   let delivery = 0;
-  if (district === "Артик") delivery = 500;
-  if (district === "Арич") delivery = 700;
-  if (district === "Нор-Кянк") delivery = 1000;
-  if (district === "Пемзашен") delivery = 1000;
 
-  document.getElementById('delivery-total').innerText = `Доставка: ${delivery} AMD`;
-  document.getElementById('grand-total').innerText = `Итого: ${goodsTotal + delivery} AMD`;
+  if (district === "Артик") delivery = 500;
+  else if (district === "Арич") delivery = 700;
+  else if (district === "Нор-Кянк") delivery = 1000;
+  else if (district === "Пемзашен") delivery = 1000;
+
+  deliveryDiv.innerText = `Доставка: ${delivery} AMD`;
+  grandTotalDiv.innerText = `Итого: ${total + delivery} AMD`;
 }
 
-/* ---------------- ЗАКАЗ ---------------- */
+/* ---------------- ПОИСК ---------------- */
+
+const searchInput = document.getElementById('searchInput');
+
+searchInput.addEventListener('input', () => {
+  const query = searchInput.value.toLowerCase().trim();
+  if (!query) {
+    goHome();
+    return;
+  }
+
+  hideAllPages();
+  document.getElementById('store-page').classList.remove('hidden');
+
+  const container = document.getElementById('store-products');
+  container.innerHTML = '';
+
+  const backBtn = document.createElement('button');
+  backBtn.className = 'back-btn';
+  backBtn.innerText = '← Назад';
+  backBtn.onclick = goHome;
+  container.appendChild(backBtn);
+
+  Object.keys(stores).forEach(storeKey => {
+    stores[storeKey].products.forEach(product => {
+      if (product.name.toLowerCase().includes(query)) {
+        const div = document.createElement('div');
+        div.className = 'product';
+
+        div.innerHTML = `
+          <div style="display:flex; gap:12px; align-items:center;">
+            <img src="https://via.placeholder.com/60" alt="${product.name}">
+            <div>
+              <h4>${product.name}</h4>
+              <p>${product.price} AMD</p>
+              <p style="font-size:12px; color: var(--text-muted);">${stores[storeKey].name}</p>
+            </div>
+          </div>
+          <div class="qty-controls">
+            <button onclick="changeQty('${storeKey}', '${product.name}', -1)">−</button>
+            <span class="qty-number" id="qty-${storeKey}-${product.name}">0</span>
+            <button onclick="changeQty('${storeKey}', '${product.name}', 1)">+</button>
+          </div>
+        `;
+        container.appendChild(div);
+      }
+    });
+  });
+});
+
+/* ---------------- WHATSAPP ---------------- */
 
 function sendFormToWhatsApp() {
   const name = document.getElementById('name').value;
@@ -1320,40 +1574,44 @@ function sendFormToWhatsApp() {
   const payment = document.getElementById('payment').value;
   const comment = document.getElementById('comment').value;
 
-  let message = `🛒 *Новый заказ Artik Food*%0A%0A`;
+  let message = `🛒 *Новый заказ — Artik Food*%0A%0A`;
   message += `👤 Имя: ${name}%0A`;
   message += `📞 Телефон: ${phone}%0A`;
-  message += `📍 Адрес: ${address} (${district})%0A`;
-  message += `💳 Оплата: ${payment}%0A%0A`;
-  message += `🧾 Заказ:%0A`;
+  message += `📍 Адрес: ${address}%0A`;
+  message += `🏘 Район: ${district}%0A`;
+  message += `💳 Оплата: ${payment}%0A`;
+  if (comment) message += `📝 Комментарий: ${comment}%0A`;
+  message += `%0A📦 *Товары:*%0A`;
 
   let total = 0;
 
   Object.keys(carts).forEach(storeKey => {
-    Object.entries(carts[storeKey]).forEach(([product, data]) => {
-      if (data.qty > 0) {
-        const sum = data.qty * data.price;
-        total += sum;
-        message += `• ${stores[storeKey].name}: ${product} × ${data.qty} = ${sum} AMD%0A`;
+    Object.keys(carts[storeKey]).forEach(productName => {
+      const qty = carts[storeKey][productName];
+      if (qty > 0) {
+        const product = stores[storeKey].products.find(p => p.name === productName);
+        const price = product.price * qty;
+        total += price;
+        message += `- ${productName} × ${qty} = ${price} AMD%0A`;
       }
     });
   });
 
-  const districtFee = district === "Артик" ? 500 :
-                      district === "Арич" ? 700 :
-                      district === "Нор-Кянк" ? 1000 :
-                      district === "Пемзашен" ? 1000 : 0;
+  let delivery = 0;
+  if (district === "Артик") delivery = 500;
+  else if (district === "Арич") delivery = 700;
+  else if (district === "Нор-Кянк") delivery = 1000;
+  else if (district === "Пемзашен") delivery = 1000;
 
-  message += `%0A🚚 Доставка: ${districtFee} AMD%0A`;
-  message += `💰 Итого: ${total + districtFee} AMD%0A%0A`;
+  message += `%0A🚚 Доставка: ${delivery} AMD%0A`;
+  message += `💰 *Итого: ${total + delivery} AMD*`;
 
-  if (comment) message += `💬 Комментарий: ${comment}%0A`;
-
-  const whatsappUrl = `https://wa.me/37443797727?text=${message}`;
-  window.open(whatsappUrl, '_blank');
+  const whatsappNumber = "37443797727";
+  const url = `https://wa.me/${whatsappNumber}?text=${message}`;
+  window.open(url, "_blank");
 }
 
-/* ---------------- АДМИН ---------------- */
+/* ---------------- АДМИНКА ---------------- */
 
 function showAdminPanel() {
   document.getElementById('admin-panel').classList.remove('hidden');
@@ -1363,94 +1621,11 @@ function hideAdminPanel() {
   document.getElementById('admin-panel').classList.add('hidden');
 }
 
-/* Заглушки админ-функций */
-function addNewProduct() { alert("Добавление товара (заглушка)"); }
-function viewAllOrders() { alert("Все заказы (заглушка)"); }
-function manageCouriers() { alert("Управление курьерами (заглушка)"); }
-function addCourier() { alert("Добавить курьера (заглушка)"); }
-
 /* ---------------- ИНИЦИАЛИЗАЦИЯ ---------------- */
 
 renderShops();
 renderGlobalCart();
-goHome();
 </script>
-<script>
-/* ---------------- ПОИСК ПО ТОВАРАМ ---------------- */
-
-const searchInput = document.getElementById("searchInput");
-
-searchInput.addEventListener("input", function () {
-  const query = this.value.trim().toLowerCase();
-
-  // Если пусто — возвращаемся домой
-  if (!query) {
-    goHome();
-    return;
-  }
-
-  hideAllPages();
-  document.getElementById("store-page").classList.remove("hidden");
-
-  const container = document.getElementById("store-products");
-  container.innerHTML = "";
-
-  const backBtn = document.createElement("button");
-  backBtn.className = "back-btn";
-  backBtn.innerText = "← Назад";
-  backBtn.onclick = goHome;
-  container.appendChild(backBtn);
-
-  const results = document.createElement("div");
-  results.className = "products";
-
-  let found = false;
-
-  // Перебираем все магазины
-  Object.keys(stores).forEach(storeKey => {
-    const store = stores[storeKey];
-
-    // Перебираем все товары в магазине
-    store.products.forEach(item => {
-      if (item.name.toLowerCase().includes(query)) {
-        found = true;
-
-        const safeId = item.name.replace(/\s+/g, "");
-        const qty = carts[storeKey]?.[item.name]?.qty || 0;
-
-        const div = document.createElement("div");
-        div.className = "product";
-        div.innerHTML = `
-          <img src="https://via.placeholder.com/60x60?text=🍪" alt="${item.name}">
-          <div style="flex:1;">
-            <h4>${item.name}</h4>
-            <p>${item.price} AMD • <span style="color:var(--accent-gold);">${store.name}</span></p>
-          </div>
-          <div class="qty-controls">
-            <button onclick="changeQty('${storeKey}', '${item.name}', ${item.price}, -1)">−</button>
-            <span class="qty-number" id="qty-${storeKey}-${safeId}">${qty}</span>
-            <button onclick="changeQty('${storeKey}', '${item.name}', ${item.price}, 1)">+</button>
-          </div>
-        `;
-        results.appendChild(div);
-      }
-    });
-  });
-
-  if (!found) {
-    const empty = document.createElement("div");
-    empty.style.textAlign = "center";
-    empty.style.padding = "20px";
-    empty.style.color = "var(--text-muted)";
-    empty.innerText = "😕 Ничего не найдено";
-    container.appendChild(empty);
-  } else {
-    container.appendChild(results);
-  }
-});
-
-</script>
-<script>
 
 </body>
 </html>
