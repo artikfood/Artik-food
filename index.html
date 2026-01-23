@@ -258,8 +258,7 @@
       <h4>Корзина этого магазина</h4>
       <div id="store-cart-items"></div>
       <div class="cart-total" id="store-cart-total">Итого: 0 AMD</div>
-      <button onclick="sendStoreToWhatsApp()">Заказать из этого магазина (WhatsApp)</button>
-      <button onclick="sendStoreToTelegram()" style="background:#0088cc;">Заказать из этого магазина (Telegram)</button>
+      <!-- КНОПКИ WhatsApp и Telegram УДАЛЕНЫ ПО ЗАПРОСУ -->
     </div>
   </section>
 </div>
@@ -921,6 +920,9 @@ function sendFormToWhatsApp() {
   
   alert('Заказ отправлен! Ожидайте звонка оператора.');
 }
+
+/* Функции sendStoreToWhatsApp и sendStoreToTelegram оставлены,
+   но кнопок в корзине больше нет — они не используются. */
 
 function sendStoreToWhatsApp() {
   let text = `🛒 Заказ из магазина ${stores[currentStore].name}%0A%0A`;
