@@ -82,7 +82,7 @@
     .cart-item { display:flex; justify-content:space-between; align-items:center; margin-bottom:8px; font-size:14px; gap:8px; }
     .cart-total { font-weight:bold; margin-top:10px; text-align:center; }
 
-    /* ❌ Убрали зелёный фон у кнопки X */
+    /* ❌ Кнопка удаления: только красный крестик, всегда видна, справа */
     .cart-item button {
       background: transparent !important;
       border: none;
@@ -90,6 +90,8 @@
       font-size: 16px;
       cursor: pointer;
       padding: 0 6px;
+      margin-left: auto;
+      line-height: 1;
     }
     .cart-item button:hover { color: #c0392b; }
 
@@ -160,8 +162,6 @@
 
     .floating-icons a:hover { transform: scale(1.1); }
 
-    .floating-icons .whatsapp-icon { background: #25D366; color: white; }
-    .floating-icons .telegram-icon { background: #0088cc; color: white; }
     .floating-icons .cart-icon { background: #2ecc71; color: white; font-size: 16px; }
 
     #admin-panel {
@@ -270,11 +270,8 @@
       <h4>Корзина этого магазина</h4>
       <div id="store-cart-items"></div>
       <div class="cart-total" id="store-cart-total">Итого: 0 AMD</div>
-      <!-- Кнопки заказа показываются не для всех магазинов -->
-      <div id="store-order-buttons">
-        <button onclick="sendStoreToWhatsApp()">Заказать из этого магазина (WhatsApp)</button>
-        <button onclick="sendStoreToTelegram()" style="background:#0088cc;">Заказать из этого магазина (Telegram)</button>
-      </div>
+      <!-- Кнопки заказа УДАЛЕНЫ -->
+      <div id="store-order-buttons" style="display:none;"></div>
     </div>
   </section>
 </div>
@@ -324,8 +321,6 @@
 
 <div class="floating-icons">
   <a href="#order" class="cart-icon" title="Оформить заказ">🛒</a>
-  <a href="https://t.me/artikfood" class="telegram-icon" target="_blank" title="Telegram">✈️</a>
-  <a href="https://wa.me/37443797727" class="whatsapp-icon" target="_blank" title="WhatsApp">💬</a>
 </div>
 
 <div class="floating-buttons">
@@ -384,15 +379,8 @@
 
 const stores = {
   tonoyans_sity: {
-    name: "Tonoyan’s Sity",
-    logoInline: `
-      <svg width="80" height="40" viewBox="0 0 200 80" xmlns="http://www.w3.org/2000/svg">
-        <rect rx="12" ry="12" width="200" height="80" fill="#2ecc71"/>
-        <text x="100" y="50" text-anchor="middle" font-size="28" fill="white" font-family="Arial" font-weight="bold">
-          Tonoyan’s
-        </text>
-      </svg>
-    `,
+    name: "Tonoyan City",
+    logo: "tonoyan-city.png",
     categories: {
       "Печенье": { icon: "🍪" },
       "Вафли": { icon: "🧇" },
@@ -594,14 +582,14 @@ function renderShops() {
     const div = document.createElement('div');
     div.className = 'card';
 
-    if (stores[key].logoInline) {
-      div.innerHTML = `
-        ${stores[key].logoInline}
-        <div>${stores[key].name}</div>
-      `;
-    } else if (stores[key].logo) {
+    if (stores[key].logo) {
       div.innerHTML = `
         <img src="${stores[key].logo}" alt="${stores[key].name}">
+        <div>${stores[key].name}</div>
+      `;
+    } else if (stores[key].logoInline) {
+      div.innerHTML = `
+        ${stores[key].logoInline}
         <div>${stores[key].name}</div>
       `;
     } else {
@@ -649,14 +637,6 @@ function openStore(storeKey) {
     div.onclick = () => openStoreCategory(storeKey, category);
     container.appendChild(div);
   });
-
-  // Показываем/скрываем кнопки заказа для магазина
-  const orderButtons = document.getElementById('store-order-buttons');
-  if (storeKey === "tonoyans_sity") {
-    orderButtons.style.display = "none";
-  } else {
-    orderButtons.style.display = "block";
-  }
 
   document.getElementById('store-cart').classList.add('hidden');
 }
@@ -943,40 +923,6 @@ function sendFormToWhatsApp() {
   document.getElementById('order-form').reset();
   
   alert('Заказ отправлен! Ожидайте звонка оператора.');
-}
-
-function sendStoreToWhatsApp() {
-  let text = `🛒 Заказ из магазина ${stores[currentStore].name}%0A%0A`;
-  let total = 0;
-
-  Object.entries(carts[currentStore]).forEach(([name, data]) => {
-    if (data.qty > 0) {
-      text += `- ${name} × ${data.qty} = ${data.qty * data.price} AMD%0A`;
-      total += data.qty * data.price;
-    }
-  });
-
-  text += `%0A💰 Итого: ${total} AMD%0A`;
-  text += `_Заказ создан через сайт_`;
-
-  window.open(`https://wa.me/37443797727?text=${text}`, '_blank');
-}
-
-function sendStoreToTelegram() {
-  let text = `🛒 Заказ из магазина ${stores[currentStore].name}\n\n`;
-  let total = 0;
-
-  Object.entries(carts[currentStore]).forEach(([name, data]) => {
-    if (data.qty > 0) {
-      text += `- ${name} × ${data.qty} = ${data.qty * data.price} AMD\n`;
-      total += data.qty * data.price;
-    }
-  });
-
-  text += `\n💰 Итого: ${total} AMD\n`;
-  text += `_Заказ создан через сайт_`;
-
-  window.open(`https://t.me/share/url?url=&text=${encodeURIComponent(text)}`, '_blank');
 }
 
 /* ---------------- УПРАВЛЕНИЕ КУРЬЕРАМИ ---------------- */
