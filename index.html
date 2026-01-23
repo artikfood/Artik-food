@@ -1,3 +1,4 @@
+
 <!DOCTYPE html>
 <html lang="ru">
 <head>
@@ -87,7 +88,7 @@
       background: transparent !important;
       border: none;
       color: #e74c3c;
-      font-size: 16px;
+      font-size: 18px;
       cursor: pointer;
       padding: 0 6px;
       margin-left: auto;
@@ -587,11 +588,6 @@ function renderShops() {
         <img src="${stores[key].logo}" alt="${stores[key].name}">
         <div>${stores[key].name}</div>
       `;
-    } else if (stores[key].logoInline) {
-      div.innerHTML = `
-        ${stores[key].logoInline}
-        <div>${stores[key].name}</div>
-      `;
     } else {
       div.innerText = stores[key].name;
     }
@@ -704,16 +700,14 @@ function changeQty(storeKey, productName, price, delta) {
 function removeItemFromCart(storeKey, productName) {
   if (!carts[storeKey] || !carts[storeKey][productName]) return;
   
-  if (confirm(`Удалить "${productName}" из корзины?`)) {
-    delete carts[storeKey][productName];
-    
-    if (Object.keys(carts[storeKey]).length === 0) {
-      delete carts[storeKey];
-    }
-    
-    updateStoreCart();
-    renderGlobalCart();
+  delete carts[storeKey][productName];
+  
+  if (Object.keys(carts[storeKey]).length === 0) {
+    delete carts[storeKey];
   }
+  
+  updateStoreCart();
+  renderGlobalCart();
 }
 
 function updateStoreCart() {
