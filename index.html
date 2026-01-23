@@ -378,6 +378,7 @@
       color: var(--text-main);
     }
 
+    /* УМЕНЬШЕННАЯ КНОПКА УДАЛЕНИЯ */
     .cart-item button {
       background: rgba(255,255,255,0.12) !important;
       border: 1px solid rgba(255,255,255,0.25);
@@ -1491,7 +1492,10 @@ function renderGlobalCart() {
         const item = document.createElement('div');
         item.className = 'cart-item';
         item.innerHTML = `
-          <div>${productName} × ${qty}</div>
+          <div>
+            ${productName} × ${qty}
+            <div style="font-size:12px; color: var(--text-muted);">${stores[storeKey].name}</div>
+          </div>
           <span>${price} AMD</span>
           <button onclick="removeFromCart('${storeKey}', '${productName}')">✕</button>
         `;
@@ -1592,7 +1596,7 @@ function sendFormToWhatsApp() {
         const product = stores[storeKey].products.find(p => p.name === productName);
         const price = product.price * qty;
         total += price;
-        message += `- ${productName} × ${qty} = ${price} AMD%0A`;
+        message += `- ${productName} (${stores[storeKey].name}) × ${qty} = ${price} AMD%0A`;
       }
     });
   });
