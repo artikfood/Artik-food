@@ -30,7 +30,6 @@
       --radius-md: 12px;
     }
 
-    /* 🌞 Светлая тема */
     body.light-theme {
       --bg-main: #f7f7f9;
       --bg-secondary: #ffffff;
@@ -86,6 +85,7 @@
       align-items:center;
       gap:12px;
       cursor:pointer;
+      user-select:none;
     }
 
     header img {
@@ -122,7 +122,6 @@
       color: var(--accent-gold);
     }
 
-    /* 🌙/☀️ Переключатель темы */
     .theme-toggle {
       width: 42px;
       height: 42px;
@@ -379,7 +378,6 @@
       color: var(--text-main);
     }
 
-    /* ❌ Маленькая, но заметная кнопка X */
     .cart-item button {
       background: rgba(255,255,255,0.12) !important;
       border: 1px solid rgba(255,255,255,0.25);
@@ -657,7 +655,6 @@
       background: rgba(255,255,255,0.04);
     }
 
-    /* Мобильная адаптация */
     @media (max-width: 600px) {
       .hero h2 { font-size: 32px; }
       .hero p { font-size: 15px; }
@@ -671,7 +668,7 @@
 <body>
 
 <header>
-  <div class="logo-box" onclick="goHome()">
+  <div class="logo-box" id="logoBox" onclick="goHome()">
     <img src="logo.png" alt="Artik Food">
     <h1>Artik Food</h1>
   </div>
@@ -819,9 +816,6 @@
   </div>
 </div>
 
-<button id="admin-login-btn" onclick="showAdminLogin()" style="position:fixed; top:12px; left:12px; background: linear-gradient(135deg, #34495e, #5f7c99); color:white; border:none; padding:8px 12px; border-radius:999px; font-size:12px; z-index:10000; font-weight:600; box-shadow: 0 6px 18px rgba(0,0,0,0.35); cursor:pointer;">🔧 Админ</button>
-
-<!-- 📲 КНОПКА УСТАНОВКИ ПРИЛОЖЕНИЯ -->
 <button id="install-btn" style="
   position: fixed;
   bottom: 100px;
@@ -863,7 +857,6 @@ themeToggle.addEventListener('click', () => {
   setTheme(isLight ? 'dark' : 'light');
 });
 
-// Инициализация темы при загрузке
 (function initTheme() {
   const savedTheme = localStorage.getItem('artikTheme');
   if (savedTheme) {
@@ -872,6 +865,20 @@ themeToggle.addEventListener('click', () => {
     setTheme('dark');
   }
 })();
+
+/* ---------------- СКРЫТАЯ АДМИНКА (5 кликов по логотипу) ---------------- */
+
+let logoClickCount = 0;
+const logoBox = document.getElementById('logoBox');
+
+logoBox.addEventListener('click', () => {
+  logoClickCount++;
+  if (logoClickCount === 5) {
+    showAdminLogin();
+    logoClickCount = 0;
+  }
+  setTimeout(() => { logoClickCount = 0; }, 1200);
+});
 
 /* ---------------- ДАННЫЕ ---------------- */
 
@@ -1260,15 +1267,15 @@ function renderGlobalCart() {
   const district = document.getElementById('district').value;
   let delivery = 0;
   if (district === "Артик") delivery = 500;
-  if (district === "Арич") delivery = 700;
-  if (district === "Нор-Кянк") delivery = 1000;
-  if (district === "Пемзашен") delivery = 1000;
+  else if (district === "Арич") delivery = 700;
+  else if (district === "Нор-Кянк") delivery = 1000;
+  else if (district === "Пемзашен") delivery = 1000;
 
   document.getElementById('delivery-total').innerText = `Доставка: ${delivery} AMD`;
   document.getElementById('grand-total').innerText = `Итого: ${goodsTotal + delivery} AMD`;
 }
 
-/* ---------------- ЗАКАЗ ---------------- */
+/* ---------------- ОТПРАВКА ЗАКАЗА ---------------- */
 
 function sendFormToWhatsApp() {
   const name = document.getElementById('name').value;
@@ -1278,35 +1285,49 @@ function sendFormToWhatsApp() {
   const payment = document.getElementById('payment').value;
   const comment = document.getElementById('comment').value;
 
-  let message = `🛒 *Новый заказ Artik Food*%0A%0A`;
-  message += `👤 Имя: ${name}%0A`;
-  message += `📞 Телефон: ${phone}%0A`;
-  message += `📍 Адрес: ${address}%0A`;
-  message += `🏘 Район: ${district}%0A`;
-  message += `💳 Оплата: ${payment}%0A`;
-  if (comment) message += `📝 Комментарий: ${comment}%0A%0A`;
+  let message = `🛒 *Новый заказ — Artik Food*\n\n`;
+  message += `👤 Имя: ${name}\n`;
+  message += `📞 Телефон: ${phone}\n`;
+  message += `📍 Адрес: ${address}\n`;
+  message += `🏘 Район: ${district}\n`;
+  message += `💳 Оплата: ${payment}\n\n`;
+  message += `📦 Товары:\n`;
+
+  let goodsTotal = 0;
 
   Object.keys(carts).forEach(storeKey => {
-    message += `🏬 ${stores[storeKey].name}:%0A`;
     Object.entries(carts[storeKey]).forEach(([name, data]) => {
       if (data.qty > 0) {
-        message += `• ${name} × ${data.qty} = ${data.qty * data.price} AMD%0A`;
+        message += `• ${stores[storeKey].name}: ${name} × ${data.qty} = ${data.qty * data.price} AMD\n`;
+        goodsTotal += data.qty * data.price;
       }
     });
-    message += `%0A`;
   });
 
-  const total = document.getElementById('grand-total').innerText;
-  message += `💰 ${total}`;
+  let delivery = 0;
+  if (district === "Артик") delivery = 500;
+  else if (district === "Арич") delivery = 700;
+  else if (district === "Нор-Кянк") delivery = 1000;
+  else if (district === "Пемзашен") delivery = 1000;
+
+  message += `\n🚚 Доставка: ${delivery} AMD\n`;
+  message += `💰 Итого: ${goodsTotal + delivery} AMD\n\n`;
+  if (comment) message += `📝 Комментарий: ${comment}`;
 
   const phoneNumber = "37443797727";
-  window.open(`https://wa.me/${phoneNumber}?text=${message}`, "_blank");
+  const url = `https://wa.me/${phoneNumber}?text=${encodeURIComponent(message)}`;
+  window.open(url, '_blank');
 }
 
-/* ---------------- АДМИНКА (ЗАГЛУШКИ) ---------------- */
+/* ---------------- АДМИН ---------------- */
 
 function showAdminLogin() {
-  alert("Админ-панель в разработке 😎");
+  const password = prompt("Введите пароль администратора:");
+  if (password === "1234") {
+    document.getElementById('admin-panel').classList.remove('hidden');
+  } else if (password !== null) {
+    alert("Неверный пароль");
+  }
 }
 
 function hideAdminPanel() {
@@ -1314,15 +1335,19 @@ function hideAdminPanel() {
 }
 
 function addNewProduct() {
-  alert("Добавление товара — скоро 😉");
+  alert("Функция добавления товара (в разработке)");
 }
 
 function viewAllOrders() {
-  alert("Просмотр всех заказов — скоро 😉");
+  alert("Просмотр всех заказов (в разработке)");
 }
 
 function manageCouriers() {
-  alert("Управление курьерами — скоро 😉");
+  alert("Управление курьерами (в разработке)");
+}
+
+function addCourier() {
+  alert("Добавление курьера (в разработке)");
 }
 
 /* ---------------- ИНИЦИАЛИЗАЦИЯ ---------------- */
@@ -1330,31 +1355,23 @@ function manageCouriers() {
 renderShops();
 renderGlobalCart();
 
-/* ---------------- SERVICE WORKER ---------------- */
-
-if ("serviceWorker" in navigator) {
-  navigator.serviceWorker.register("service-worker.js")
-    .then(() => console.log("Service Worker зарегистрирован"))
-    .catch(err => console.error("Ошибка Service Worker:", err));
-}
-
-/* ---------------- УСТАНОВКА PWA ---------------- */
+/* ---------------- PWA УСТАНОВКА ---------------- */
 
 let deferredPrompt;
-const installBtn = document.getElementById("install-btn");
+const installBtn = document.getElementById('install-btn');
 
-window.addEventListener("beforeinstallprompt", (e) => {
+window.addEventListener('beforeinstallprompt', (e) => {
   e.preventDefault();
   deferredPrompt = e;
-  installBtn.style.display = "block";
+  installBtn.style.display = 'block';
 });
 
-installBtn.addEventListener("click", async () => {
+installBtn.addEventListener('click', async () => {
   if (!deferredPrompt) return;
   deferredPrompt.prompt();
   const { outcome } = await deferredPrompt.userChoice;
   deferredPrompt = null;
-  installBtn.style.display = "none";
+  installBtn.style.display = 'none';
 });
 </script>
 
