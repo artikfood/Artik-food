@@ -86,6 +86,7 @@
       gap:12px;
       cursor:pointer;
       user-select:none;
+      flex-wrap: wrap;
     }
 
     header img {
@@ -100,6 +101,33 @@
       font-size: 22px;
       letter-spacing: 0.5px;
       color: var(--accent-gold);
+    }
+
+    /* ✅ Поиск (раньше стилей не было) */
+    .search-container{
+      display:flex;
+      align-items:center;
+      margin-left: 10px;
+    }
+    .search-container input{
+      width: 260px;
+      max-width: 60vw;
+      padding: 10px 12px;
+      border-radius: 999px;
+      border: 1px solid var(--border-glass);
+      background: rgba(255,255,255,0.06);
+      color: var(--text-main);
+      outline: none;
+      transition: border-color .15s, box-shadow .15s;
+      font-size: 14px;
+    }
+    body.light-theme .search-container input{
+      background: rgba(0,0,0,0.04);
+      border: 1px solid rgba(0,0,0,0.12);
+    }
+    .search-container input:focus{
+      border-color: rgba(212,175,55,0.6);
+      box-shadow: 0 0 0 3px rgba(212,175,55,0.15);
     }
 
     nav {
@@ -263,6 +291,7 @@
       text-align: left;
       gap: 14px;
       padding: 16px 18px;
+      cursor: default;
     }
 
     .product img {
@@ -285,24 +314,6 @@
       margin: 6px 0 0;
       font-size: 14px;
       color: var(--text-muted);
-    }
-
-    .product button {
-      background: linear-gradient(135deg, #2ecc71, #6df0a0);
-      color: #0f1115;
-      border: none;
-      padding: 8px 14px;
-      border-radius: 999px;
-      cursor: pointer;
-      font-size: 14px;
-      font-weight: 600;
-      box-shadow: 0 6px 18px rgba(46,204,113,0.35);
-      transition: transform 0.15s, box-shadow 0.15s;
-    }
-
-    .product button:hover {
-      transform: translateY(-1px);
-      box-shadow: 0 10px 26px rgba(46,204,113,0.5);
     }
 
     .qty-controls {
@@ -378,7 +389,6 @@
       color: var(--text-main);
     }
 
-    /* УМЕНЬШЕННАЯ КНОПКА УДАЛЕНИЯ */
     .cart-item button {
       background: rgba(255,255,255,0.12) !important;
       border: 1px solid rgba(255,255,255,0.25);
@@ -656,8 +666,6 @@
       background: rgba(255,255,255,0.04);
     }
 
-    /* ===================== МОБИЛЬНАЯ АДАПТАЦИЯ (ТОЛЬКО СТИЛИ) ===================== */
-
     @media (max-width: 900px) {
       header {
         flex-direction: column;
@@ -763,13 +771,6 @@
 
       .product p {
         font-size: 13px;
-      }
-
-      .product button {
-        align-self: stretch;
-        width: 100%;
-        padding: 10px;
-        font-size: 14px;
       }
 
       .qty-controls {
@@ -878,31 +879,29 @@
 </header>
 
 <div id="home-page">
+  <section class="hero">
+    <h2>Premium доставка в Артике</h2>
+    <p>Свежие продукты и цветы из лучших магазинов — быстро, удобно и с заботой о деталях.</p>
+    <button onclick="document.getElementById('order').scrollIntoView({behavior:'smooth'});">Заказать сейчас</button>
+  </section>
 
-<section class="hero">
-  <h2>Premium доставка в Артике</h2>
-  <p>Свежие продукты и цветы из лучших магазинов — быстро, удобно и с заботой о деталях.</p>
-  <button onclick="document.getElementById('order').scrollIntoView({behavior:'smooth'});">Заказать сейчас</button>
-</section>
+  <section class="section" id="shops">
+    <h3>Магазины-партнёры</h3>
+    <div class="shops" id="shops-list"></div>
+  </section>
 
-<section class="section" id="shops">
-  <h3>Магазины-партнёры</h3>
-  <div class="shops" id="shops-list"></div>
-</section>
-
-<section class="section">
-  <div class="cart" id="global-cart">
-    <h4>Ваша корзина</h4>
-    <div id="global-cart-items"></div>
-    <div class="cart-total" id="global-cart-total">Товары: 0 AMD</div>
-    <div class="cart-total" id="delivery-total">Доставка: 0 AMD</div>
-    <div class="cart-total" id="grand-total">Итого: 0 AMD</div>
-  </div>
-</section>
-
+  <section class="section">
+    <div class="cart" id="global-cart">
+      <h4>Ваша корзина</h4>
+      <div id="global-cart-items"></div>
+      <div class="cart-total" id="global-cart-total">Товары: 0 AMD</div>
+      <div class="cart-total" id="delivery-total">Доставка: 0 AMD</div>
+      <div class="cart-total" id="grand-total">Итого: 0 AMD</div>
+    </div>
+  </section>
 </div>
 
-<section class="section">
+<!-- ✅ ВАЖНО: store-page вынесен отдельно (правильная структура) -->
 <div id="store-page" class="hidden">
   <section class="section">
     <h3 id="store-"></h3>
@@ -1035,23 +1034,20 @@
 let deferredPrompt;
 const installBtn = document.getElementById("install-btn");
 
-// Android / Chrome / Edge
 window.addEventListener("beforeinstallprompt", (e) => {
   e.preventDefault();
   deferredPrompt = e;
   installBtn.style.display = "block";
 });
 
-// Кнопка
 installBtn.addEventListener("click", async () => {
   if (!deferredPrompt) return;
   deferredPrompt.prompt();
-  const { outcome } = await deferredPrompt.userChoice;
+  await deferredPrompt.userChoice;
   deferredPrompt = null;
   installBtn.style.display = "none";
 });
 
-// iOS (Safari) — показываем инструкцию
 const isIOS = /iphone|ipad|ipod/i.test(navigator.userAgent);
 const isInStandaloneMode = window.matchMedia("(display-mode: standalone)").matches;
 
@@ -1064,10 +1060,8 @@ if (isIOS && !isInStandaloneMode) {
 }
 </script>
 
-
 <script>
 /* ---------------- ТЕМА ---------------- */
-
 const themeToggle = document.getElementById('themeToggle');
 
 function setTheme(theme) {
@@ -1088,15 +1082,11 @@ themeToggle.addEventListener('click', () => {
 
 (function initTheme() {
   const savedTheme = localStorage.getItem('artikTheme');
-  if (savedTheme) {
-    setTheme(savedTheme);
-  } else {
-    setTheme('dark');
-  }
+  if (savedTheme) setTheme(savedTheme);
+  else setTheme('dark');
 })();
 
 /* ---------------- СКРЫТАЯ АДМИНКА (5 кликов по логотипу) ---------------- */
-
 let logoClickCount = 0;
 const logoBox = document.getElementById('logoBox');
 
@@ -1109,8 +1099,13 @@ logoBox.addEventListener('click', () => {
   setTimeout(() => { logoClickCount = 0; }, 1200);
 });
 
-/* ---------------- ДАННЫЕ ---------------- */
+/* ✅ ВАЖНО: поиск не должен “кликать” логотип */
+const searchInput = document.getElementById('searchInput');
+['click','mousedown','keydown','keyup','input','focus'].forEach(evt=>{
+  searchInput.addEventListener(evt, (e)=> e.stopPropagation());
+});
 
+/* ---------------- ДАННЫЕ ---------------- */
 const stores = {
   tonoyans_sity: {
     name: "Tonoyan City",
@@ -1277,37 +1272,62 @@ const stores = {
   }
 };
 
-/* ---------------- СОСТОЯНИЕ ---------------- */
+/* ---------------- localStorage (корзина) ---------------- */
+const CARTS_KEY = "artik_carts_v1";
 
+function saveCarts() {
+  try {
+    localStorage.setItem(CARTS_KEY, JSON.stringify(carts));
+  } catch (e) {}
+}
+
+function loadCarts() {
+  try {
+    const raw = localStorage.getItem(CARTS_KEY);
+    if (!raw) return;
+    const parsed = JSON.parse(raw);
+    if (parsed && typeof parsed === "object") carts = parsed;
+  } catch (e) {}
+}
+
+/* ---------------- ВСПОМОГАТЕЛЬНОЕ: безопасный id для qty ---------------- */
+function safeKey(str) {
+  return String(str)
+    .toLowerCase()
+    .trim()
+    .replace(/\s+/g, "_")
+    .replace(/[^a-z0-9_\-]+/gi, "_");
+}
+function qtyId(storeKey, productName) {
+  return `qty-${storeKey}-${safeKey(productName)}`;
+}
+
+/* ---------------- СОСТОЯНИЕ ---------------- */
 let currentStore = null;
 let currentCategory = null;
 let carts = {};
 
 /* ---------------- НАВИГАЦИЯ ---------------- */
-
 function hideAllPages() {
   document.getElementById('home-page').classList.add('hidden');
   document.getElementById('store-page').classList.add('hidden');
 }
 
 function goHome() {
+  currentStore = null;
+  currentCategory = null;
   hideAllPages();
   document.getElementById('home-page').classList.remove('hidden');
   window.scrollTo({ top: 0, behavior: 'smooth' });
 }
 
 function goBack() {
-  if (currentCategory) {
-    openStore(currentStore);
-  } else if (currentStore) {
-    goHome();
-  } else {
-    goHome();
-  }
+  if (currentCategory) openStore(currentStore);
+  else if (currentStore) goHome();
+  else goHome();
 }
 
 /* ---------------- МАГАЗИНЫ ---------------- */
-
 function renderShops() {
   const container = document.getElementById('shops-list');
   container.innerHTML = '';
@@ -1389,6 +1409,9 @@ function openStoreCategory(storeKey, categoryName) {
     const div = document.createElement('div');
     div.className = 'product';
 
+    const id = qtyId(storeKey, product.name);
+    const curQty = (carts[storeKey] && carts[storeKey][product.name]) ? carts[storeKey][product.name] : 0;
+
     div.innerHTML = `
       <div style="display:flex; gap:12px; align-items:center;">
         <img src="https://via.placeholder.com/60" alt="${product.name}">
@@ -1398,9 +1421,9 @@ function openStoreCategory(storeKey, categoryName) {
         </div>
       </div>
       <div class="qty-controls">
-        <button onclick="changeQty('${storeKey}', '${product.name}', -1)">−</button>
-        <span class="qty-number" id="qty-${storeKey}-${product.name}">0</span>
-        <button onclick="changeQty('${storeKey}', '${product.name}', 1)">+</button>
+        <button type="button" onclick="changeQty('${storeKey}', ${JSON.stringify(product.name)}, -1)">−</button>
+        <span class="qty-number" id="${id}">${curQty}</span>
+        <button type="button" onclick="changeQty('${storeKey}', ${JSON.stringify(product.name)}, 1)">+</button>
       </div>
     `;
 
@@ -1412,22 +1435,17 @@ function openStoreCategory(storeKey, categoryName) {
 }
 
 /* ---------------- КОРЗИНА ---------------- */
-
 function changeQty(storeKey, productName, delta) {
   if (!carts[storeKey]) carts[storeKey] = {};
-
-  if (!carts[storeKey][productName]) {
-    carts[storeKey][productName] = 0;
-  }
+  if (!carts[storeKey][productName]) carts[storeKey][productName] = 0;
 
   carts[storeKey][productName] += delta;
+  if (carts[storeKey][productName] < 0) carts[storeKey][productName] = 0;
 
-  if (carts[storeKey][productName] < 0) {
-    carts[storeKey][productName] = 0;
-  }
+  const el = document.getElementById(qtyId(storeKey, productName));
+  if (el) el.innerText = carts[storeKey][productName];
 
-  document.getElementById(`qty-${storeKey}-${productName}`).innerText = carts[storeKey][productName];
-
+  saveCarts();
   renderStoreCart(storeKey);
   renderGlobalCart();
 }
@@ -1444,6 +1462,7 @@ function renderStoreCart(storeKey) {
       const qty = carts[storeKey][productName];
       if (qty > 0) {
         const product = stores[storeKey].products.find(p => p.name === productName);
+        if (!product) return;
         const price = product.price * qty;
         total += price;
 
@@ -1452,7 +1471,7 @@ function renderStoreCart(storeKey) {
         item.innerHTML = `
           <div>${productName} × ${qty}</div>
           <span>${price} AMD</span>
-          <button onclick="removeFromCart('${storeKey}', '${productName}')">✕</button>
+          <button type="button" onclick="removeFromCart('${storeKey}', ${JSON.stringify(productName)})">✕</button>
         `;
         cartDiv.appendChild(item);
       }
@@ -1463,10 +1482,13 @@ function renderStoreCart(storeKey) {
 }
 
 function removeFromCart(storeKey, productName) {
-  if (carts[storeKey] && carts[storeKey][productName]) {
+  if (carts[storeKey] && typeof carts[storeKey][productName] !== "undefined") {
     carts[storeKey][productName] = 0;
-    const qtyEl = document.getElementById(`qty-${storeKey}-${productName}`);
+
+    const qtyEl = document.getElementById(qtyId(storeKey, productName));
     if (qtyEl) qtyEl.innerText = 0;
+
+    saveCarts();
     renderStoreCart(storeKey);
     renderGlobalCart();
   }
@@ -1486,6 +1508,7 @@ function renderGlobalCart() {
       const qty = carts[storeKey][productName];
       if (qty > 0) {
         const product = stores[storeKey].products.find(p => p.name === productName);
+        if (!product) return;
         const price = product.price * qty;
         total += price;
 
@@ -1497,7 +1520,7 @@ function renderGlobalCart() {
             <div style="font-size:12px; color: var(--text-muted);">${stores[storeKey].name}</div>
           </div>
           <span>${price} AMD</span>
-          <button onclick="removeFromCart('${storeKey}', '${productName}')">✕</button>
+          <button type="button" onclick="removeFromCart('${storeKey}', ${JSON.stringify(productName)})">✕</button>
         `;
         cartDiv.appendChild(item);
       }
@@ -1519,9 +1542,6 @@ function renderGlobalCart() {
 }
 
 /* ---------------- ПОИСК ---------------- */
-
-const searchInput = document.getElementById('searchInput');
-
 searchInput.addEventListener('input', () => {
   const query = searchInput.value.toLowerCase().trim();
   if (!query) {
@@ -1538,7 +1558,7 @@ searchInput.addEventListener('input', () => {
   const backBtn = document.createElement('button');
   backBtn.className = 'back-btn';
   backBtn.innerText = '← Назад';
-  backBtn.onclick = goHome;
+  backBtn.onclick = () => { searchInput.value=""; goHome(); };
   container.appendChild(backBtn);
 
   Object.keys(stores).forEach(storeKey => {
@@ -1546,6 +1566,9 @@ searchInput.addEventListener('input', () => {
       if (product.name.toLowerCase().includes(query)) {
         const div = document.createElement('div');
         div.className = 'product';
+
+        const id = qtyId(storeKey, product.name);
+        const curQty = (carts[storeKey] && carts[storeKey][product.name]) ? carts[storeKey][product.name] : 0;
 
         div.innerHTML = `
           <div style="display:flex; gap:12px; align-items:center;">
@@ -1557,19 +1580,20 @@ searchInput.addEventListener('input', () => {
             </div>
           </div>
           <div class="qty-controls">
-            <button onclick="changeQty('${storeKey}', '${product.name}', -1)">−</button>
-            <span class="qty-number" id="qty-${storeKey}-${product.name}">0</span>
-            <button onclick="changeQty('${storeKey}', '${product.name}', 1)">+</button>
+            <button type="button" onclick="changeQty('${storeKey}', ${JSON.stringify(product.name)}, -1)">−</button>
+            <span class="qty-number" id="${id}">${curQty}</span>
+            <button type="button" onclick="changeQty('${storeKey}', ${JSON.stringify(product.name)}, 1)">+</button>
           </div>
         `;
         container.appendChild(div);
       }
     });
   });
+
+  document.getElementById('store-cart').classList.add('hidden');
 });
 
 /* ---------------- WHATSAPP ---------------- */
-
 function sendFormToWhatsApp() {
   const name = document.getElementById('name').value;
   const phone = document.getElementById('phone').value;
@@ -1594,6 +1618,7 @@ function sendFormToWhatsApp() {
       const qty = carts[storeKey][productName];
       if (qty > 0) {
         const product = stores[storeKey].products.find(p => p.name === productName);
+        if (!product) return;
         const price = product.price * qty;
         total += price;
         message += `- ${productName} (${stores[storeKey].name}) × ${qty} = ${price} AMD%0A`;
@@ -1616,17 +1641,21 @@ function sendFormToWhatsApp() {
 }
 
 /* ---------------- АДМИНКА ---------------- */
-
 function showAdminPanel() {
   document.getElementById('admin-panel').classList.remove('hidden');
 }
-
 function hideAdminPanel() {
   document.getElementById('admin-panel').classList.add('hidden');
 }
 
-/* ---------------- ИНИЦИАЛИЗАЦИЯ ---------------- */
+/* Заглушки кнопок админки (чтобы не было ошибок в консоли) */
+function addNewProduct(){ alert("Скоро: добавление товара (админка)"); }
+function viewAllOrders(){ alert("Скоро: все заказы (админка)"); }
+function manageCouriers(){ alert("Скоро: курьеры (админка)"); }
+function addCourier(){ alert("Скоро: добавить курьера (админка)"); }
 
+/* ---------------- ИНИЦИАЛИЗАЦИЯ ---------------- */
+loadCarts();
 renderShops();
 renderGlobalCart();
 </script>
