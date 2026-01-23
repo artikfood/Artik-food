@@ -32,9 +32,7 @@
       --shadow-soft: 0 8px 24px rgba(0,0,0,0.08);
     }
 
-    * {
-      box-sizing: border-box;
-    }
+    * { box-sizing: border-box; }
 
     body {
       margin: 0;
@@ -509,8 +507,6 @@
       box-shadow: 0 10px 28px rgba(212,175,55,0.45);
     }
 
-    /* --- Search --- */
-
     .search-box {
       max-width: 480px;
       margin: 20px auto 0;
@@ -538,8 +534,6 @@
       border-color: rgba(212,175,55,0.6);
       box-shadow: 0 0 0 3px rgba(212,175,55,0.15);
     }
-
-    /* --- Admin panel (hidden trigger) --- */
 
     #admin-login-btn {
       position: fixed;
@@ -688,8 +682,6 @@
       background: rgba(0,0,0,0.03);
     }
 
-    /* --- Mobile tweaks --- */
-
     @media (max-width: 480px) {
       .hero h2 { font-size: 28px; }
       .hero p { font-size: 15px; }
@@ -751,7 +743,7 @@
 <section class="section">
   <div id="store-page" class="hidden">
     <section class="section">
-      <h3 id="store-"></h3>
+      <h3 id="store-title"></h3>
       <div class="products" id="store-products"></div>
 
       <div class="cart hidden" id="store-cart">
@@ -1035,7 +1027,7 @@ const stores = {
 
 let currentStore = null;
 let currentCategory = null;
-let carts = {};
+let carts = JSON.parse(localStorage.getItem('artikFoodCarts')) || {};
 
 /* ---------------- НАВИГАЦИЯ ---------------- */
 
@@ -1045,6 +1037,8 @@ function hideAllPages() {
 }
 
 function goHome() {
+  currentStore = null;
+  currentCategory = null;
   hideAllPages();
   document.getElementById('home-page').classList.remove('hidden');
   window.scrollTo({ top: 0, behavior: 'smooth' });
@@ -1091,7 +1085,7 @@ function openStore(storeKey) {
   hideAllPages();
   document.getElementById('store-page').classList.remove('hidden');
 
-  document.getElementById('store-').innerText = stores[storeKey].name;
+  document.getElementById('store-title').innerText = stores[storeKey].name;
 
   const container = document.getElementById('store-products');
   container.innerHTML = '';
@@ -1121,7 +1115,7 @@ function openStore(storeKey) {
     container.appendChild(div);
   });
 
-  document.getElementById('store-cart').classList.add('hidden');
+  updateStoreCart();
 }
 
 function openStoreCategory(storeKey, categoryName) {
@@ -1164,10 +1158,14 @@ function openStoreCategory(storeKey, categoryName) {
   });
 
   container.appendChild(list);
-  document.getElementById('store-cart').classList.remove('hidden');
+  updateStoreCart();
 }
 
 /* ---------------- КОРЗИНА ---------------- */
+
+function saveCarts() {
+  localStorage.setItem('artikFoodCarts', JSON.stringify(carts));
+}
 
 function changeQty(storeKey, productName, price, delta) {
   if (!carts[storeKey]) carts[storeKey] = {};
@@ -1180,6 +1178,7 @@ function changeQty(storeKey, productName, price, delta) {
   const qtyEl = document.getElementById(`qty-${storeKey}-${safeId}`);
   if (qtyEl) qtyEl.innerText = carts[storeKey][productName].qty;
 
+  saveCarts();
   updateStoreCart();
   renderGlobalCart();
 }
@@ -1193,6 +1192,7 @@ function removeItemFromCart(storeKey, productName) {
     delete carts[storeKey];
   }
   
+  saveCarts();
   updateStoreCart();
   renderGlobalCart();
 }
@@ -1201,6 +1201,11 @@ function updateStoreCart() {
   const cartBox = document.getElementById('store-cart');
   const itemsBox = document.getElementById('store-cart-items');
   const totalBox = document.getElementById('store-cart-total');
+
+  if (!currentStore) {
+    cartBox.classList.add('hidden');
+    return;
+  }
 
   itemsBox.innerHTML = '';
   let total = 0;
@@ -1257,7 +1262,7 @@ function renderGlobalCart() {
   document.getElementById('delivery-total').innerText = `Доставка: ${delivery} AMD`;
   document.getElementById('grand-total').innerText = `Итого: ${goodsTotal + delivery} AMD`;
 }
-<script>
+
 /* ---------------- ПОИСК ---------------- */
 
 const searchInput = document.getElementById("searchInput");
@@ -1266,7 +1271,6 @@ if (searchInput) {
   searchInput.addEventListener("input", function () {
     const query = this.value.trim().toLowerCase();
 
-    // ⛔ Не ищем, пока меньше 2 символов
     if (query.length < 2) {
       if (currentStore) {
         if (currentCategory) {
@@ -1343,7 +1347,89 @@ if (searchInput) {
     }
   });
 }
-</script>
+
+/* ---------------- ТЕМА ---------------- */
+
+function toggleTheme() {
+  document.body.classList.toggle('light-theme');
+  localStorage.setItem('artikFoodTheme', document.body.classList.contains('light-theme') ? 'light' : 'dark');
+}
+
+/* ---------------- ОФОРМЛЕНИЕ ЗАКАЗА ---------------- */
+
+function sendFormToWhatsApp() {
+  if (Object.keys(carts).length === 0) {
+    alert("Корзина пуста!");
+    return;
+  }
+
+  const name = document.getElementById('name').value;
+  const phone = document.getElementById('phone').value;
+  const address = document.getElementById('address').value;
+  const district = document.getElementById('district').value;
+  const payment = document.getElementById('payment').value;
+  const comment = document.getElementById('comment').value;
+
+  let message = `🛒 Новый заказ%0A%0A`;
+  message += `👤 Имя: ${name}%0A`;
+  message += `📞 Телефон: ${phone}%0A`;
+  message += `📍 Адрес: ${address}%0A`;
+  message += `🏘 Район: ${district}%0A`;
+  message += `💳 Оплата: ${payment}%0A`;
+  if (comment) message += `💬 Комментарий: ${comment}%0A`;
+  message += `%0A📦 Товары:%0A`;
+
+  let goodsTotal = 0;
+
+  Object.keys(carts).forEach(storeKey => {
+    Object.entries(carts[storeKey]).forEach(([name, data]) => {
+      if (data.qty > 0) {
+        message += `• ${stores[storeKey].name}: ${name} × ${data.qty} = ${data.qty * data.price} AMD%0A`;
+        goodsTotal += data.qty * data.price;
+      }
+    });
+  });
+
+  let delivery = 0;
+  if (district === "Артик") delivery = 500;
+  if (district === "Арич") delivery = 700;
+  if (district === "Нор-Кянк") delivery = 1000;
+  if (district === "Пемзашен") delivery = 1000;
+
+  const grandTotal = goodsTotal + delivery;
+
+  message += `%0A💰 Товары: ${goodsTotal} AMD%0A`;
+  message += `🚚 Доставка: ${delivery} AMD%0A`;
+  message += `🧾 Итого: ${grandTotal} AMD%0A`;
+
+  const phoneNumber = "37443797727";
+  const url = `https://wa.me/${phoneNumber}?text=${message}`;
+
+  window.open(url, "_blank");
+
+  // Сохраняем заказ в историю
+  const order = {
+    date: new Date().toISOString(),
+    name,
+    phone,
+    address,
+    district,
+    payment,
+    comment,
+    carts,
+    total: grandTotal
+  };
+
+  orders.push(order);
+  localStorage.setItem('artikFoodOrders', JSON.stringify(orders));
+
+  // Очищаем корзину
+  carts = {};
+  saveCarts();
+  renderGlobalCart();
+  updateStoreCart();
+  alert("Заказ отправлен! Спасибо 🙏");
+}
 
 /* ---------------- АДМИН-ПАНЕЛЬ ---------------- */
 
@@ -1365,6 +1451,8 @@ function showAdminPanel() {
   document.getElementById('admin-panel').classList.remove('hidden');
   document.getElementById('admin-login-btn').style.display = 'none';
   updateAdminStats();
+  renderRecentOrders();
+  renderCouriers();
 }
 
 function hideAdminPanel() {
@@ -1374,198 +1462,98 @@ function hideAdminPanel() {
 
 function updateAdminStats() {
   const today = new Date().toDateString();
-  const todayOrders = orders.filter(order => 
-    new Date(order.date).toDateString() === today
-  );
-  
-  document.getElementById('today-orders').textContent = todayOrders.length;
-  document.getElementById('today-amount').textContent = 
-    todayOrders.reduce((sum, order) => sum + order.total, 0);
-  document.getElementById('active-couriers').textContent = 
-    couriers.filter(c => c.status === 'active').length;
-  
-  const recentOrdersContainer = document.getElementById('recent-orders');
-  recentOrdersContainer.innerHTML = '';
-  
-  const lastOrders = orders.slice(-5).reverse();
-  lastOrders.forEach(order => {
+  const todayOrders = orders.filter(o => new Date(o.date).toDateString() === today);
+
+  const totalAmount = todayOrders.reduce((sum, o) => sum + o.total, 0);
+
+  document.getElementById('today-orders').innerText = todayOrders.length;
+  document.getElementById('today-amount').innerText = totalAmount;
+  document.getElementById('active-couriers').innerText = couriers.length;
+}
+
+function renderRecentOrders() {
+  const container = document.getElementById('recent-orders');
+  container.innerHTML = '';
+
+  if (orders.length === 0) {
+    container.innerHTML = '<p style="text-align:center; color:var(--text-muted);">Нет заказов</p>';
+    return;
+  }
+
+  orders.slice(-10).reverse().forEach(order => {
     const div = document.createElement('div');
-    div.style.padding = '8px';
-    div.style.borderBottom = '1px solid var(--border-soft)';
+    div.style.borderBottom = "1px dashed var(--border-soft)";
+    div.style.padding = "6px 0";
     div.innerHTML = `
       <strong>${order.name}</strong> — ${order.total} AMD<br>
-      <small>${order.address} • ${order.date}</small>
+      <span style="color:var(--text-muted); font-size:12px;">${new Date(order.date).toLocaleString()}</span>
     `;
-    recentOrdersContainer.appendChild(div);
+    container.appendChild(div);
   });
-  
-  if (lastOrders.length === 0) {
-    recentOrdersContainer.innerHTML = '<p style="text-align:center; color:var(--text-muted);">Нет заказов</p>';
+}
+
+function renderCouriers() {
+  const container = document.getElementById('couriers-list');
+  container.innerHTML = '';
+
+  if (couriers.length === 0) {
+    container.innerHTML = '<p style="text-align:center; color:var(--text-muted);">Нет активных курьеров</p>';
+    return;
   }
-  
-  const couriersContainer = document.getElementById('couriers-list');
-  couriersContainer.innerHTML = '';
-  
-  couriers.forEach(courier => {
+
+  couriers.forEach((courier, index) => {
     const div = document.createElement('div');
-    div.style.padding = '8px';
-    div.style.borderBottom = '1px solid var(--border-soft)';
-    div.style.display = 'flex';
-    div.style.justifyContent = 'space-between';
+    div.style.borderBottom = "1px dashed var(--border-soft)";
+    div.style.padding = "6px 0";
     div.innerHTML = `
-      <div>
-        <strong>${courier.name}</strong><br>
-        <small>📱 ${courier.phone} • ${courier.status === 'active' ? '🟢 Активен' : '🔴 Неактивен'}</small>
-      </div>
-      <button onclick="toggleCourierStatus(${courier.id})" style="font-size:12px;">
-        ${courier.status === 'active' ? 'Деактивировать' : 'Активировать'}
-      </button>
+      🚴 ${courier.name} (${courier.phone})
+      <button onclick="removeCourier(${index})" style="float:right; background:none; border:none; color:#e74c3c; cursor:pointer;">✕</button>
     `;
-    couriersContainer.appendChild(div);
+    container.appendChild(div);
   });
 }
-
-function saveOrder(orderData) {
-  const order = {
-    id: Date.now(),
-    ...orderData,
-    date: new Date().toLocaleString(),
-    status: 'new',
-    courier: null
-  };
-  
-  orders.push(order);
-  localStorage.setItem('artikFoodOrders', JSON.stringify(orders));
-  updateAdminStats();
-}
-
-/* ---------------- ЗАКАЗЫ ---------------- */
-
-function sendFormToWhatsApp() {
-  const name = document.getElementById('name').value;
-  const phone = document.getElementById('phone').value;
-  const address = document.getElementById('address').value;
-  const district = document.getElementById('district').value;
-  const comment = document.getElementById('comment').value;
-
-  let text = `🛒 Новый заказ Artik Food%0A%0A`;
-  text += `👤 Имя: ${name}%0A`;
-  text += `📞 Телефон: ${phone}%0A`;
-  text += `📍 Адрес: ${address} (${district})%0A`;
-  if (comment) text += `💬 Комментарий: ${comment}%0A`;
-  text += `%0A📦 Товары:%0A`;
-
-  let goodsTotal = 0;
-  Object.keys(carts).forEach(storeKey => {
-    Object.entries(carts[storeKey]).forEach(([name, data]) => {
-      if (data.qty > 0) {
-        text += `- ${stores[storeKey].name}: ${name} × ${data.qty} = ${data.qty * data.price} AMD%0A`;
-        goodsTotal += data.qty * data.price;
-      }
-    });
-  });
-
-  const delivery = district === "Артик" ? 500 : 
-                   district === "Арич" ? 700 : 
-                   district === "Нор-Кянк" ? 1000 : 
-                   district === "Пемзашен" ? 1000 : 0;
-  const total = goodsTotal + delivery;
-  
-  text += `%0A💰 Итого товары: ${goodsTotal} AMD%0A`;
-  text += `🚚 Доставка: ${delivery} AMD%0A`;
-  text += `💵 К оплате: ${total} AMD%0A%0A`;
-  text += `_Заказ создан через сайт_`;
-
-  saveOrder({
-    name, phone, address, district, comment,
-    items: JSON.parse(JSON.stringify(carts)),
-    total: total,
-    delivery: delivery
-  });
-
-  window.open(`https://wa.me/37443797727?text=${text}`, '_blank');
-  
-  carts = {};
-  renderGlobalCart();
-  if (currentStore) updateStoreCart();
-  document.getElementById('order-form').reset();
-  
-  alert('Заказ отправлен! Ожидайте звонка оператора.');
-}
-
-/* ---------------- УПРАВЛЕНИЕ КУРЬЕРАМИ ---------------- */
-
-let nextCourierId = 1;
 
 function addCourier() {
   const name = prompt("Имя курьера:");
   if (!name) return;
-  
   const phone = prompt("Телефон курьера:");
   if (!phone) return;
-  
-  const courier = {
-    id: nextCourierId++,
-    name: name,
-    phone: phone,
-    status: 'active',
-    orders: []
-  };
-  
-  couriers.push(courier);
+
+  couriers.push({ name, phone });
   localStorage.setItem('artikFoodCouriers', JSON.stringify(couriers));
+  renderCouriers();
   updateAdminStats();
-  alert(`Курьер ${name} добавлен!`);
 }
 
-function toggleCourierStatus(courierId) {
-  const courier = couriers.find(c => c.id === courierId);
-  if (courier) {
-    courier.status = courier.status === 'active' ? 'inactive' : 'active';
-    localStorage.setItem('artikFoodCouriers', JSON.stringify(couriers));
-    updateAdminStats();
-  }
-}
-
-function manageCouriers() {
-  alert("Управление курьеров\n\nДобавлено курьеров: " + couriers.length + 
-        "\nАктивных: " + couriers.filter(c => c.status === 'active').length);
+function removeCourier(index) {
+  couriers.splice(index, 1);
+  localStorage.setItem('artikFoodCouriers', JSON.stringify(couriers));
+  renderCouriers();
+  updateAdminStats();
 }
 
 function addNewProduct() {
-  alert("Здесь будет добавление новых товаров.\nВ реальном приложении нужен бэкенд для управления товарами.");
+  alert("Функция добавления товаров будет добавлена в следующей версии 😊");
 }
 
 function viewAllOrders() {
-  alert("Всего заказов: " + orders.length + 
-        "\nНа сумму: " + orders.reduce((sum, o) => sum + o.total, 0) + " AMD");
+  alert("Список всех заказов будет добавлен в следующей версии 😊");
 }
 
-/* ---------------- ТЕМА ---------------- */
-
-function toggleTheme() {
-  document.body.classList.toggle('light-theme');
-  const isLight = document.body.classList.contains('light-theme');
-  localStorage.setItem('artikTheme', isLight ? 'light' : 'dark');
-  document.querySelector('.theme-toggle').textContent = isLight ? '🌞' : '🌙';
+function manageCouriers() {
+  alert("Управление курьерами уже доступно ниже 👇");
 }
 
 /* ---------------- ИНИЦИАЛИЗАЦИЯ ---------------- */
 
-document.addEventListener('DOMContentLoaded', function() {
-  const savedOrders = localStorage.getItem('artikFoodOrders');
-  const savedCouriers = localStorage.getItem('artikFoodCouriers');
-  const savedTheme = localStorage.getItem('artikTheme');
-  
-  if (savedOrders) orders = JSON.parse(savedOrders);
-  if (savedCouriers) couriers = JSON.parse(savedCouriers);
-  if (savedTheme === 'light') {
-    document.body.classList.add('light-theme');
-    document.querySelector('.theme-toggle').textContent = '🌞';
-  }
-
+document.addEventListener("DOMContentLoaded", () => {
   renderShops();
   renderGlobalCart();
+
+  const savedTheme = localStorage.getItem('artikFoodTheme');
+  if (savedTheme === 'light') {
+    document.body.classList.add('light-theme');
+  }
 });
 </script>
 
