@@ -924,11 +924,9 @@ if (isIOS && !isInStandaloneMode) {
 
 <!-- App Script -->
 <script>
-/* ===================== DISPATCHER (Cloudflare Worker) ===================== */
-/* ВАЖНО: если не хочешь светить API_KEY в html — скажи, сделаем по-другому.
-   Сейчас оставляю так, как ты просил: “цельный файл, чтоб работало”. */
+/* ===================== НАСТРОЙКИ DISPATCHER (Cloudflare Worker) ===================== */
 const WORKER_URL = "https://artikfood-dispatcher.edulik844.workers.dev/orders";
-const API_KEY = "artikfood_Secret_2026!";
+const API_KEY = "artikfood_Secret_2026!"; // x-api-key
 
 /* ---------------- ТЕМА ---------------- */
 const themeToggle = document.getElementById('themeToggle');
@@ -971,6 +969,11 @@ logoBox.addEventListener('click', () => {
 /* ---------------- FIX: безопасный ID для qty (чтобы +/− работали) ---------------- */
 function qtyId(storeKey, productName) {
   return `qty-${storeKey}-${encodeURIComponent(productName).replace(/%/g, '_')}`;
+}
+
+/* FIX: безопасная строка для onclick (если в названии товара есть апостроф) */
+function jsSafe(str) {
+  return String(str).replace(/\\/g, "\\\\").replace(/'/g, "\\'");
 }
 
 /* ---------------- ДАННЫЕ ---------------- */
@@ -1245,6 +1248,8 @@ function openStoreCategory(storeKey, categoryName) {
     const div = document.createElement('div');
     div.className = 'product';
 
+    const safeName = jsSafe(product.name);
+
     div.innerHTML = `
       <div style="display:flex; gap:12px; align-items:center;">
         <img src="https://via.placeholder.com/60" alt="${product.name}">
@@ -1254,9 +1259,9 @@ function openStoreCategory(storeKey, categoryName) {
         </div>
       </div>
       <div class="qty-controls">
-        <button onclick="changeQty('${storeKey}', '${product.name}', -1)">−</button>
+        <button onclick="changeQty('${storeKey}', '${safeName}', -1)">−</button>
         <span class="qty-number" id="${qtyId(storeKey, product.name)}">0</span>
-        <button onclick="changeQty('${storeKey}', '${product.name}', 1)">+</button>
+        <button onclick="changeQty('${storeKey}', '${safeName}', 1)">+</button>
       </div>
     `;
 
@@ -1269,14 +1274,18 @@ function openStoreCategory(storeKey, categoryName) {
 
 /* ---------------- КОРЗИНА ---------------- */
 function changeQty(storeKey, productName, delta) {
+  // Важно: productName может прийти уже "безопасный" (экранированный), но в carts храним реальное имя.
+  // Поэтому ищем товар по имени "как в каталоге":
+  const realName = productName.replace(/\\'/g, "'").replace(/\\\\/g, "\\"); // обратно
+
   if (!carts[storeKey]) carts[storeKey] = {};
-  if (!carts[storeKey][productName]) carts[storeKey][productName] = 0;
+  if (!carts[storeKey][realName]) carts[storeKey][realName] = 0;
 
-  carts[storeKey][productName] += delta;
-  if (carts[storeKey][productName] < 0) carts[storeKey][productName] = 0;
+  carts[storeKey][realName] += delta;
+  if (carts[storeKey][realName] < 0) carts[storeKey][realName] = 0;
 
-  const el = document.getElementById(qtyId(storeKey, productName));
-  if (el) el.innerText = carts[storeKey][productName];
+  const el = document.getElementById(qtyId(storeKey, realName));
+  if (el) el.innerText = carts[storeKey][realName];
 
   renderStoreCart(storeKey);
   renderGlobalCart();
@@ -1294,6 +1303,7 @@ function renderStoreCart(storeKey) {
       const qty = carts[storeKey][productName];
       if (qty > 0) {
         const product = stores[storeKey].products.find(p => p.name === productName);
+        if (!product) return;
         const price = product.price * qty;
         total += price;
 
@@ -1302,7 +1312,7 @@ function renderStoreCart(storeKey) {
         item.innerHTML = `
           <div>${productName} × ${qty}</div>
           <span>${price} AMD</span>
-          <button onclick="removeFromCart('${storeKey}', '${productName}')">✕</button>
+          <button onclick="removeFromCart('${storeKey}', '${jsSafe(productName)}')">✕</button>
         `;
         cartDiv.appendChild(item);
       }
@@ -1313,9 +1323,11 @@ function renderStoreCart(storeKey) {
 }
 
 function removeFromCart(storeKey, productName) {
-  if (carts[storeKey] && carts[storeKey][productName]) {
-    carts[storeKey][productName] = 0;
-    const qtyEl = document.getElementById(qtyId(storeKey, productName));
+  const realName = productName.replace(/\\'/g, "'").replace(/\\\\/g, "\\");
+
+  if (carts[storeKey] && carts[storeKey][realName]) {
+    carts[storeKey][realName] = 0;
+    const qtyEl = document.getElementById(qtyId(storeKey, realName));
     if (qtyEl) qtyEl.innerText = 0;
     renderStoreCart(storeKey);
     renderGlobalCart();
@@ -1336,6 +1348,7 @@ function renderGlobalCart() {
       const qty = carts[storeKey][productName];
       if (qty > 0) {
         const product = stores[storeKey].products.find(p => p.name === productName);
+        if (!product) return;
         const price = product.price * qty;
         total += price;
 
@@ -1347,7 +1360,7 @@ function renderGlobalCart() {
             <div style="font-size:12px; color: var(--text-muted);">${stores[storeKey].name}</div>
           </div>
           <span>${price} AMD</span>
-          <button onclick="removeFromCart('${storeKey}', '${productName}')">✕</button>
+          <button onclick="removeFromCart('${storeKey}', '${jsSafe(productName)}')">✕</button>
         `;
         cartDiv.appendChild(item);
       }
@@ -1396,6 +1409,8 @@ searchInput.addEventListener('input', () => {
         const div = document.createElement('div');
         div.className = 'product';
 
+        const safeName = jsSafe(product.name);
+
         div.innerHTML = `
           <div style="display:flex; gap:12px; align-items:center;">
             <img src="https://via.placeholder.com/60" alt="${product.name}">
@@ -1406,9 +1421,9 @@ searchInput.addEventListener('input', () => {
             </div>
           </div>
           <div class="qty-controls">
-            <button onclick="changeQty('${storeKey}', '${product.name}', -1)">−</button>
+            <button onclick="changeQty('${storeKey}', '${safeName}', -1)">−</button>
             <span class="qty-number" id="${qtyId(storeKey, product.name)}">0</span>
-            <button onclick="changeQty('${storeKey}', '${product.name}', 1)">+</button>
+            <button onclick="changeQty('${storeKey}', '${safeName}', 1)">+</button>
           </div>
         `;
         container.appendChild(div);
@@ -1417,7 +1432,21 @@ searchInput.addEventListener('input', () => {
   });
 });
 
-/* ---------------- WHATSAPP + DISPATCHER ---------------- */
+/* ---------------- WHATSAPP + TELEGRAM (через Worker) ---------------- */
+async function sendOrderToWorker(payload) {
+  // Не мешаем WhatsApp — даже если воркер упадёт, заказ всё равно уйдёт в WA
+  try {
+    await fetch(WORKER_URL, {
+      method: "POST",
+      headers: {
+        "Content-Type": "application/json",
+        "x-api-key": API_KEY
+      },
+      body: JSON.stringify(payload)
+    });
+  } catch (e) {}
+}
+
 function sendFormToWhatsApp() {
   const name = document.getElementById('name').value;
   const phone = document.getElementById('phone').value;
@@ -1442,6 +1471,7 @@ function sendFormToWhatsApp() {
       const qty = carts[storeKey][productName];
       if (qty > 0) {
         const product = stores[storeKey].products.find(p => p.name === productName);
+        if (!product) return;
         const price = product.price * qty;
         total += price;
         message += `- ${productName} (${stores[storeKey].name}) × ${qty} = ${price} AMD%0A`;
@@ -1458,20 +1488,17 @@ function sendFormToWhatsApp() {
   message += `%0A🚚 Доставка: ${delivery} AMD%0A`;
   message += `💰 *Итого: ${total + delivery} AMD*`;
 
-  // ====== SEND TO DISPATCHER (Cloudflare Worker) — НЕ ЛОМАЕТ WhatsApp ======
-  fetch(WORKER_URL, {
-    method: "POST",
-    headers: {
-      "Content-Type": "application/json",
-      "x-api-key": API_KEY
-    },
-    body: JSON.stringify({
-      name, phone, address, district, payment, comment,
-      carts
-    })
-  }).catch(() => {});
-  // ====== END SEND TO DISPATCHER ======
+  // ✅ Отправка в Telegram через Worker
+  sendOrderToWorker({
+    source: "site",
+    createdAt: new Date().toISOString(),
+    name, phone, address, district, payment, comment,
+    carts,
+    storesCatalog: stores,
+    totals: { itemsTotal: total, delivery, grandTotal: total + delivery }
+  });
 
+  // ✅ WhatsApp остаётся как был
   const whatsappNumber = "37443797727";
   const url = `https://wa.me/${whatsappNumber}?text=${message}`;
   window.open(url, "_blank");
@@ -1481,6 +1508,7 @@ function sendFormToWhatsApp() {
 function showAdminPanel() {
   document.getElementById('admin-panel').classList.remove('hidden');
 }
+
 function hideAdminPanel() {
   document.getElementById('admin-panel').classList.add('hidden');
 }
@@ -1490,5 +1518,3 @@ renderShops();
 renderGlobalCart();
 </script>
 
-</body>
-</html>
