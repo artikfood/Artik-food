@@ -860,7 +860,7 @@ const isInStandaloneMode = window.matchMedia("(display-mode: standalone)").match
 
 if (isIOS && !isInStandaloneMode) {
   installBtn.style.display = "block";
-  installBtn.innerText = "➕ Добавить на экран";
+  installBtn.innerText = "➕ Установить приложение";
   installBtn.onclick = () => {
     alert("Нажми кнопку «Поделиться» в Safari → «На экран Домой»");
   };
