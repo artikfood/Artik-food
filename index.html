@@ -977,7 +977,20 @@ function jsSafe(str) {
 }
 
 /* ---------------- ДАННЫЕ ---------------- */
-const stores = {
+<script>
+(function showErrorsOnScreen(){
+  const box = document.createElement('div');
+  box.style.cssText = "position:fixed;left:10px;right:10px;bottom:10px;max-height:45vh;overflow:auto;z-index:999999;background:rgba(0,0,0,.85);color:#fff;padding:10px;border-radius:12px;font:12px/1.4 monospace;white-space:pre-wrap;display:none";
+  document.addEventListener('DOMContentLoaded', () => document.body.appendChild(box));
+  function log(msg){
+    box.style.display = "block";
+    box.textContent += msg + "\n\n";
+  }
+  window.addEventListener('error', (e) => log("JS ERROR: " + (e.message || e.error) + "\n" + (e.filename||"") + ":" + (e.lineno||"") + ":" + (e.colno||"")));
+  window.addEventListener('unhandledrejection', (e) => log("PROMISE ERROR: " + (e.reason && (e.reason.stack || e.reason.message || e.reason)) ));
+})();
+</script>
+  const stores = {
   tonoyans_sity: {
     name: "Tonoyan City",
     logo: "tonoyan-city.png",
