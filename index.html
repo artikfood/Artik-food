@@ -5,6 +5,7 @@
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
   <title>Artik Food — Доставка продуктов в Артике</title>
+<link rel="stylesheet" href="style.css">
 
   <meta name="theme-color" content="#2ecc71">
   <link rel="apple-touch-icon" href="data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAAMgAAADICAMAAACahl6sAAAAA1BMVEUAAACnej3aAAAASElEQVR4nO3BMQEAAADCoPVPbQ0PoAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAALwKcKAAAQyTtWAAAAAElFTkSuQmCC">
@@ -264,7 +265,7 @@
 <section class="section">
 <div id="store-page" class="hidden">
   <section class="section">
-    <h3 id="store-title"></h3>
+    <h3 id="store-"></h3>
     <div class="products" id="store-products"></div>
 
     <div class="cart hidden" id="store-cart">
@@ -321,7 +322,7 @@
 </section>
 
 <div class="floating-icons">
-  <a href="#order" class="cart-icon" title="Оформить заказ">🛒</a>
+  <a href="#order" class="cart-icon" ="Оформить заказ">🛒</a>
 </div>
 
 <div class="floating-buttons">
@@ -604,7 +605,7 @@ function openStore(storeKey) {
   hideAllPages();
   document.getElementById('store-page').classList.remove('hidden');
 
-  document.getElementById('store-title').innerText = stores[storeKey].name;
+  document.getElementById('store-').innerText = stores[storeKey].name;
 
   const container = document.getElementById('store-products');
   container.innerHTML = '';
