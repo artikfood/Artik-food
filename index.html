@@ -779,7 +779,7 @@
 <div id="admin-panel" class="hidden">
   <div style="background: linear-gradient(180deg, rgba(15,17,21,0.95), rgba(15,17,21,0.9)); color:inherit; padding:12px 16px; display:flex; justify-content:space-between; align-items:center; border-bottom: 1px solid var(--border-glass);">
     <h3 style="margin:0; font-family:'Playfair Display', serif; font-weight:600; color: var(--accent-gold);">Панель администратора</h3>
-    <button onclick="hideAdminPanel()" style="background: rgba(255,107,107,0.15); color:#ff6b6b; border: 1px solid rgba(255,107,107,0.4); width:26px; height:26px; border-radius:50%; font-weight:700; cursor:pointer; display:flex; align-items:center; justify-content:center; font-size:13px;">✕</button>
+    <button onclick="hideAdminPanel()" style="background: rgba(255,107,107,0.15); color:#ff6b6b; border: 1px solid rgba(255,107,107,0.4); width:22px; height:22px; border-radius:50%; font-weight:700; cursor:pointer; display:flex; align-items:center; justify-content:center; font-size:12px;">✕</button>
   </div>
 
   <div style="padding:20px; max-width:900px; margin:auto;">
@@ -874,7 +874,7 @@ const logoBox = document.getElementById('logoBox');
 logoBox.addEventListener('click', () => {
   logoClickCount++;
   if (logoClickCount === 5) {
-    showAdminLogin();
+    showAdminPanel();
     logoClickCount = 0;
   }
   setTimeout(() => { logoClickCount = 0; }, 1200);
@@ -1267,15 +1267,15 @@ function renderGlobalCart() {
   const district = document.getElementById('district').value;
   let delivery = 0;
   if (district === "Артик") delivery = 500;
-  else if (district === "Арич") delivery = 700;
-  else if (district === "Нор-Кянк") delivery = 1000;
-  else if (district === "Пемзашен") delivery = 1000;
+  if (district === "Арич") delivery = 700;
+  if (district === "Нор-Кянк") delivery = 1000;
+  if (district === "Пемзашен") delivery = 1000;
 
   document.getElementById('delivery-total').innerText = `Доставка: ${delivery} AMD`;
   document.getElementById('grand-total').innerText = `Итого: ${goodsTotal + delivery} AMD`;
 }
 
-/* ---------------- ОТПРАВКА ЗАКАЗА ---------------- */
+/* ---------------- ЗАКАЗ ---------------- */
 
 function sendFormToWhatsApp() {
   const name = document.getElementById('name').value;
@@ -1285,94 +1285,60 @@ function sendFormToWhatsApp() {
   const payment = document.getElementById('payment').value;
   const comment = document.getElementById('comment').value;
 
-  let message = `🛒 *Новый заказ — Artik Food*\n\n`;
-  message += `👤 Имя: ${name}\n`;
-  message += `📞 Телефон: ${phone}\n`;
-  message += `📍 Адрес: ${address}\n`;
-  message += `🏘 Район: ${district}\n`;
-  message += `💳 Оплата: ${payment}\n\n`;
-  message += `📦 Товары:\n`;
+  let message = `🛒 *Новый заказ Artik Food*%0A%0A`;
+  message += `👤 Имя: ${name}%0A`;
+  message += `📞 Телефон: ${phone}%0A`;
+  message += `📍 Адрес: ${address} (${district})%0A`;
+  message += `💳 Оплата: ${payment}%0A%0A`;
+  message += `🧾 Заказ:%0A`;
 
-  let goodsTotal = 0;
+  let total = 0;
 
   Object.keys(carts).forEach(storeKey => {
-    Object.entries(carts[storeKey]).forEach(([name, data]) => {
+    Object.entries(carts[storeKey]).forEach(([product, data]) => {
       if (data.qty > 0) {
-        message += `• ${stores[storeKey].name}: ${name} × ${data.qty} = ${data.qty * data.price} AMD\n`;
-        goodsTotal += data.qty * data.price;
+        const sum = data.qty * data.price;
+        total += sum;
+        message += `• ${stores[storeKey].name}: ${product} × ${data.qty} = ${sum} AMD%0A`;
       }
     });
   });
 
-  let delivery = 0;
-  if (district === "Артик") delivery = 500;
-  else if (district === "Арич") delivery = 700;
-  else if (district === "Нор-Кянк") delivery = 1000;
-  else if (district === "Пемзашен") delivery = 1000;
+  const districtFee = district === "Артик" ? 500 :
+                      district === "Арич" ? 700 :
+                      district === "Нор-Кянк" ? 1000 :
+                      district === "Пемзашен" ? 1000 : 0;
 
-  message += `\n🚚 Доставка: ${delivery} AMD\n`;
-  message += `💰 Итого: ${goodsTotal + delivery} AMD\n\n`;
-  if (comment) message += `📝 Комментарий: ${comment}`;
+  message += `%0A🚚 Доставка: ${districtFee} AMD%0A`;
+  message += `💰 Итого: ${total + districtFee} AMD%0A%0A`;
 
-  const phoneNumber = "37443797727";
-  const url = `https://wa.me/${phoneNumber}?text=${encodeURIComponent(message)}`;
-  window.open(url, '_blank');
+  if (comment) message += `💬 Комментарий: ${comment}%0A`;
+
+  const whatsappUrl = `https://wa.me/37443797727?text=${message}`;
+  window.open(whatsappUrl, '_blank');
 }
 
 /* ---------------- АДМИН ---------------- */
 
-function showAdminLogin() {
-  const password = prompt("Введите пароль администратора:");
-  if (password === "1234") {
-    document.getElementById('admin-panel').classList.remove('hidden');
-  } else if (password !== null) {
-    alert("Неверный пароль");
-  }
+function showAdminPanel() {
+  document.getElementById('admin-panel').classList.remove('hidden');
 }
 
 function hideAdminPanel() {
   document.getElementById('admin-panel').classList.add('hidden');
 }
 
-function addNewProduct() {
-  alert("Функция добавления товара (в разработке)");
-}
-
-function viewAllOrders() {
-  alert("Просмотр всех заказов (в разработке)");
-}
-
-function manageCouriers() {
-  alert("Управление курьерами (в разработке)");
-}
-
-function addCourier() {
-  alert("Добавление курьера (в разработке)");
-}
+/* Заглушки админ-функций */
+function addNewProduct() { alert("Добавление товара (заглушка)"); }
+function viewAllOrders() { alert("Все заказы (заглушка)"); }
+function manageCouriers() { alert("Управление курьерами (заглушка)"); }
+function addCourier() { alert("Добавить курьера (заглушка)"); }
 
 /* ---------------- ИНИЦИАЛИЗАЦИЯ ---------------- */
 
 renderShops();
 renderGlobalCart();
-
-/* ---------------- PWA УСТАНОВКА ---------------- */
-
-let deferredPrompt;
-const installBtn = document.getElementById('install-btn');
-
-window.addEventListener('beforeinstallprompt', (e) => {
-  e.preventDefault();
-  deferredPrompt = e;
-  installBtn.style.display = 'block';
-});
-
-installBtn.addEventListener('click', async () => {
-  if (!deferredPrompt) return;
-  deferredPrompt.prompt();
-  const { outcome } = await deferredPrompt.userChoice;
-  deferredPrompt = null;
-  installBtn.style.display = 'none';
-});
+goHome();
 </script>
 
 </body>
