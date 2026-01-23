@@ -9,7 +9,6 @@
   <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&family=Playfair+Display:wght@500;600;700&display=swap" rel="stylesheet">
 
   <meta name="theme-color" content="#0f1115">
-  <link rel="apple-touch-icon" href="data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAAMgAAADICAMAAACahl6sAAAAA1BMVEUAAACnej3aAAAASElEQVR4nO3BMQEAAADCoPVPbQ0PoAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAALwKcKAAAQyTtWAAAAAElFTkSuQmCC">
 
   <style>
     :root {
@@ -29,6 +28,21 @@
       --radius-md: 12px;
     }
 
+    /* 🌞 Светлая тема */
+    body.light-theme {
+      --bg-main: #f7f7f9;
+      --bg-secondary: #ffffff;
+      --bg-card: rgba(0,0,0,0.04);
+      --bg-glass: rgba(0,0,0,0.05);
+      --border-glass: rgba(0,0,0,0.12);
+      --accent-gold: #b08a1f;
+      --accent-green: #27ae60;
+      --text-main: #1c1c1e;
+      --text-muted: #6e6e73;
+      --shadow-soft: 0 8px 24px rgba(0,0,0,0.08);
+      --shadow-hover: 0 14px 34px rgba(0,0,0,0.12);
+    }
+
     * { box-sizing: border-box; }
 
     body {
@@ -37,6 +51,11 @@
       background: radial-gradient(1200px 600px at 20% -10%, #1b1f2b 0%, #0f1115 50%, #0b0d12 100%);
       color: var(--text-main);
       line-height: 1.5;
+      transition: background 0.3s ease, color 0.3s ease;
+    }
+
+    body.light-theme {
+      background: radial-gradient(1200px 600px at 20% -10%, #ffffff 0%, #f2f2f6 50%, #ececf1 100%);
     }
 
     a { color: var(--accent-gold); text-decoration: none; }
@@ -54,6 +73,10 @@
       justify-content: space-between;
       align-items: center;
       flex-wrap: wrap;
+    }
+
+    body.light-theme header {
+      background: linear-gradient(180deg, rgba(255,255,255,0.95), rgba(255,255,255,0.85));
     }
 
     header .logo-box {
@@ -97,6 +120,30 @@
       color: var(--accent-gold);
     }
 
+    /* 🌙/☀️ Переключатель темы */
+    .theme-toggle {
+      width: 42px;
+      height: 42px;
+      border-radius: 50%;
+      border: 1px solid var(--border-glass);
+      background: var(--bg-glass);
+      color: var(--text-main);
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      font-size: 18px;
+      cursor: pointer;
+      box-shadow: var(--shadow-soft);
+      transition: background 0.2s, box-shadow 0.2s, transform 0.15s;
+    }
+
+    .theme-toggle:hover {
+      transform: translateY(-1px);
+      box-shadow: var(--shadow-hover);
+      background: rgba(212,175,55,0.15);
+      color: var(--accent-gold);
+    }
+
     .hero {
       padding: 70px 20px 60px;
       text-align: center;
@@ -111,6 +158,10 @@
       margin-bottom: 12px;
       letter-spacing: 0.5px;
       color: #ffffff;
+    }
+
+    body.light-theme .hero h2 {
+      color: #1c1c1e;
     }
 
     .hero p {
@@ -169,7 +220,7 @@
     }
 
     .card, .product {
-      background: linear-gradient(180deg, rgba(255,255,255,0.08), rgba(255,255,255,0.03));
+      background: linear-gradient(180deg, var(--bg-glass), rgba(255,255,255,0.02));
       border: 1px solid var(--border-glass);
       border-radius: var(--radius-xl);
       padding: 18px 16px;
@@ -226,7 +277,7 @@
       margin: 0;
       font-size: 16px;
       font-weight: 600;
-      color: #ffffff;
+      color: var(--text-main);
     }
 
     .product p {
@@ -282,11 +333,11 @@
       min-width:24px;
       font-weight:600;
       text-align:center;
-      color:#ffffff;
+      color: var(--text-main);
     }
 
     .cart {
-      background: linear-gradient(180deg, rgba(255,255,255,0.08), rgba(255,255,255,0.04));
+      background: linear-gradient(180deg, var(--bg-glass), rgba(255,255,255,0.02));
       border: 1px solid var(--border-glass);
       padding: 18px 16px;
       border-radius: var(--radius-xl);
@@ -323,24 +374,33 @@
       font-weight:600;
       margin-top:10px;
       text-align:center;
-      color: #ffffff;
+      color: var(--text-main);
     }
 
-    /* ❌ Кнопка удаления: только крестик, всегда справа */
+    /* ❌ Маленькая, но заметная кнопка X */
     .cart-item button {
-      background: transparent !important;
-      border: none;
+      background: rgba(255,255,255,0.12) !important;
+      border: 1px solid rgba(255,255,255,0.25);
       color: #ff6b6b;
-      font-size: 18px;
+      width: 22px;
+      height: 22px;
+      border-radius: 50%;
+      font-size: 12px;
       cursor: pointer;
-      padding: 0 6px;
+      padding: 0;
       margin-left: auto;
       line-height: 1;
-      transition: color 0.15s;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      transition: background 0.15s, transform 0.15s, box-shadow 0.15s;
+      box-shadow: 0 4px 10px rgba(0,0,0,0.25);
     }
 
     .cart-item button:hover {
-      color: #ff9b9b;
+      background: rgba(255,107,107,0.15) !important;
+      transform: scale(1.05);
+      box-shadow: 0 6px 14px rgba(255,107,107,0.35);
     }
 
     .cart button {
@@ -364,7 +424,7 @@
     }
 
     .order-form {
-      background: linear-gradient(180deg, rgba(255,255,255,0.08), rgba(255,255,255,0.04));
+      background: linear-gradient(180deg, var(--bg-glass), rgba(255,255,255,0.02));
       border: 1px solid var(--border-glass);
       padding: 22px 20px;
       border-radius: var(--radius-xl);
@@ -382,15 +442,22 @@
       border-radius:12px;
       border: 1px solid rgba(255,255,255,0.15);
       background: rgba(255,255,255,0.06);
-      color: #ffffff;
+      color: var(--text-main);
       font-size:14px;
       outline: none;
       transition: border-color 0.15s, box-shadow 0.15s;
     }
 
+    body.light-theme .order-form input,
+    body.light-theme .order-form textarea,
+    body.light-theme .order-form select {
+      background: rgba(0,0,0,0.04);
+      border: 1px solid rgba(0,0,0,0.12);
+    }
+
     .order-form input::placeholder,
     .order-form textarea::placeholder {
-      color: rgba(255,255,255,0.5);
+      color: var(--text-muted);
     }
 
     .order-form input:focus,
@@ -429,14 +496,18 @@
       border-top: 1px solid var(--border-glass);
     }
 
+    body.light-theme footer {
+      background: linear-gradient(180deg, rgba(255,255,255,0.9), rgba(255,255,255,1));
+    }
+
     .hidden { display:none; }
 
     .back-btn {
       display: inline-block;
       margin-bottom: 14px;
-      background: rgba(255,255,255,0.08);
-      color: #ffffff;
-      border: 1px solid rgba(255,255,255,0.15);
+      background: var(--bg-glass);
+      color: var(--text-main);
+      border: 1px solid var(--border-glass);
       padding: 8px 16px;
       border-radius: 999px;
       cursor: pointer;
@@ -521,8 +592,13 @@
       color: #ffffff;
     }
 
+    body.light-theme #admin-panel {
+      background: radial-gradient(1200px 600px at 20% -10%, #ffffff 0%, #f2f2f6 50%, #ececf1 100%);
+      color: #1c1c1e;
+    }
+
     .admin-card {
-      background: linear-gradient(180deg, rgba(255,255,255,0.08), rgba(255,255,255,0.04));
+      background: linear-gradient(180deg, var(--bg-glass), rgba(255,255,255,0.02));
       border: 1px solid var(--border-glass);
       padding: 16px;
       border-radius: var(--radius-lg);
@@ -566,7 +642,7 @@
       border: 1px solid rgba(255,255,255,0.12);
       padding: 8px;
       text-align: left;
-      color: #ffffff;
+      color: inherit;
     }
 
     .admin-table th {
@@ -601,6 +677,7 @@
     <a href="#" onclick="goHome()">Главная</a>
     <a href="#order">Заказать</a>
     <a href="#contacts">Контакты</a>
+    <button class="theme-toggle" id="themeToggle" title="Сменить тему">🌙</button>
   </nav>
 </header>
 
@@ -667,7 +744,7 @@
     <button type="submit">Отправить заказ</button>
   </form>
 
-  <div style="margin-top: 30px; background: rgba(255,255,255,0.06); padding: 16px; border-radius: 16px; border: 1px solid rgba(255,255,255,0.12); max-width: 540px; margin-left: auto; margin-right: auto;">
+  <div style="margin-top: 30px; background: var(--bg-glass); padding: 16px; border-radius: 16px; border: 1px solid var(--border-glass); max-width: 540px; margin-left: auto; margin-right: auto;">
     <p style="margin: 0 0 8px; font-size: 14px; color: var(--accent-gold); font-weight:600;">Как происходит оплата:</p>
     <ul style="margin: 0; padding-left: 20px; font-size: 14px; color: var(--text-muted);">
       <li>Выбираете удобный способ оплаты при оформлении заказа</li>
@@ -701,9 +778,9 @@
 </footer>
 
 <div id="admin-panel" class="hidden">
-  <div style="background: linear-gradient(180deg, rgba(15,17,21,0.95), rgba(15,17,21,0.9)); color:white; padding:12px 16px; display:flex; justify-content:space-between; align-items:center; border-bottom: 1px solid rgba(255,255,255,0.12);">
+  <div style="background: linear-gradient(180deg, rgba(15,17,21,0.95), rgba(15,17,21,0.9)); color:inherit; padding:12px 16px; display:flex; justify-content:space-between; align-items:center; border-bottom: 1px solid var(--border-glass);">
     <h3 style="margin:0; font-family:'Playfair Display', serif; font-weight:600; color: var(--accent-gold);">Панель администратора</h3>
-    <button onclick="hideAdminPanel()" style="background: linear-gradient(135deg, #ff6b6b, #ff9b9b); color:#0f1115; border:none; padding:6px 14px; border-radius:999px; font-weight:600; cursor:pointer;">✕ Закрыть</button>
+    <button onclick="hideAdminPanel()" style="background: rgba(255,107,107,0.15); color:#ff6b6b; border: 1px solid rgba(255,107,107,0.4); width:26px; height:26px; border-radius:50%; font-weight:700; cursor:pointer; display:flex; align-items:center; justify-content:center; font-size:13px;">✕</button>
   </div>
 
   <div style="padding:20px; max-width:900px; margin:auto;">
@@ -743,6 +820,36 @@
 <button id="admin-login-btn" onclick="showAdminLogin()" style="position:fixed; top:12px; left:12px; background: linear-gradient(135deg, #34495e, #5f7c99); color:white; border:none; padding:8px 12px; border-radius:999px; font-size:12px; z-index:10000; font-weight:600; box-shadow: 0 6px 18px rgba(0,0,0,0.35); cursor:pointer;">🔧 Админ</button>
 
 <script>
+/* ---------------- ТЕМА ---------------- */
+
+const themeToggle = document.getElementById('themeToggle');
+
+function setTheme(theme) {
+  if (theme === 'light') {
+    document.body.classList.add('light-theme');
+    themeToggle.textContent = '🌞';
+  } else {
+    document.body.classList.remove('light-theme');
+    themeToggle.textContent = '🌙';
+  }
+  localStorage.setItem('artikTheme', theme);
+}
+
+themeToggle.addEventListener('click', () => {
+  const isLight = document.body.classList.contains('light-theme');
+  setTheme(isLight ? 'dark' : 'light');
+});
+
+// Инициализация темы при загрузке
+(function initTheme() {
+  const savedTheme = localStorage.getItem('artikTheme');
+  if (savedTheme) {
+    setTheme(savedTheme);
+  } else {
+    setTheme('dark');
+  }
+})();
+
 /* ---------------- ДАННЫЕ ---------------- */
 
 const stores = {
@@ -1092,7 +1199,7 @@ function updateStoreCart() {
       div.innerHTML = `
         <span>${name} × ${data.qty}</span>
         <span>${data.qty * data.price} AMD</span>
-        <button onclick="removeItemFromCart('${currentStore}', '${name}')">×</button>
+        <button onclick="removeItemFromCart('${currentStore}', '${name}')">✕</button>
       `;
       itemsBox.appendChild(div);
       total += data.qty * data.price;
@@ -1117,7 +1224,7 @@ function renderGlobalCart() {
         div.innerHTML = `
           <span>${stores[storeKey].name}: ${name} × ${data.qty}</span>
           <span>${data.qty * data.price} AMD</span>
-          <button onclick="removeItemFromCart('${storeKey}', '${name}')">×</button>
+          <button onclick="removeItemFromCart('${storeKey}', '${name}')">✕</button>
         `;
         container.appendChild(div);
         goodsTotal += data.qty * data.price;
@@ -1184,16 +1291,16 @@ function updateAdminStats() {
   lastOrders.forEach(order => {
     const div = document.createElement('div');
     div.style.padding = '8px';
-    div.style.borderBottom = '1px solid rgba(255,255,255,0.12)';
+    div.style.borderBottom = '1px solid var(--border-glass)';
     div.innerHTML = `
       <strong>${order.name}</strong> — ${order.total} AMD<br>
-      <small style="color:#aaa;">${order.address} • ${order.date}</small>
+      <small style="color:var(--text-muted);">${order.address} • ${order.date}</small>
     `;
     recentOrdersContainer.appendChild(div);
   });
   
   if (lastOrders.length === 0) {
-    recentOrdersContainer.innerHTML = '<p style="text-align:center; color:#777;">Нет заказов</p>';
+    recentOrdersContainer.innerHTML = '<p style="text-align:center; color:var(--text-muted);">Нет заказов</p>';
   }
   
   const couriersContainer = document.getElementById('couriers-list');
@@ -1202,13 +1309,13 @@ function updateAdminStats() {
   couriers.forEach(courier => {
     const div = document.createElement('div');
     div.style.padding = '8px';
-    div.style.borderBottom = '1px solid rgba(255,255,255,0.12)';
+    div.style.borderBottom = '1px solid var(--border-glass)';
     div.style.display = 'flex';
     div.style.justifyContent = 'space-between';
     div.innerHTML = `
       <div>
         <strong>${courier.name}</strong><br>
-        <small style="color:#aaa;">📱 ${courier.phone} • ${courier.status === 'active' ? '🟢 Активен' : '🔴 Неактивен'}</small>
+        <small style="color:var(--text-muted);">📱 ${courier.phone} • ${courier.status === 'active' ? '🟢 Активен' : '🔴 Неактивен'}</small>
       </div>
       <button onclick="toggleCourierStatus(${courier.id})" style="font-size:12px;">
         ${courier.status === 'active' ? 'Деактивировать' : 'Активировать'}
@@ -1239,113 +1346,66 @@ function sendFormToWhatsApp() {
   const phone = document.getElementById('phone').value;
   const address = document.getElementById('address').value;
   const district = document.getElementById('district').value;
+  const payment = document.getElementById('payment').value;
   const comment = document.getElementById('comment').value;
 
-  let text = `🛒 Новый заказ Artik Food%0A%0A`;
-  text += `👤 Имя: ${name}%0A`;
-  text += `📞 Телефон: ${phone}%0A`;
-  text += `📍 Адрес: ${address} (${district})%0A`;
-  if (comment) text += `💬 Комментарий: ${comment}%0A`;
-  text += `%0A📦 Товары:%0A`;
+  let orderText = `🛒 Новый заказ%0A`;
+  orderText += `👤 Имя: ${name}%0A`;
+  orderText += `📞 Телефон: ${phone}%0A`;
+  orderText += `📍 Адрес: ${address}%0A`;
+  orderText += `🏘 Район: ${district}%0A`;
+  orderText += `💳 Оплата: ${payment}%0A%0A`;
+  orderText += `📦 Товары:%0A`;
 
-  let goodsTotal = 0;
+  let total = 0;
+
   Object.keys(carts).forEach(storeKey => {
-    Object.entries(carts[storeKey]).forEach(([name, data]) => {
+    Object.entries(carts[storeKey]).forEach(([product, data]) => {
       if (data.qty > 0) {
-        text += `- ${stores[storeKey].name}: ${name} × ${data.qty} = ${data.qty * data.price} AMD%0A`;
-        goodsTotal += data.qty * data.price;
+        const sum = data.qty * data.price;
+        orderText += `• ${stores[storeKey].name}: ${product} × ${data.qty} = ${sum} AMD%0A`;
+        total += sum;
       }
     });
   });
 
-  const delivery = district === "Артик" ? 500 : 
-                   district === "Арич" ? 700 : 
-                   district === "Нор-Кянк" ? 1000 : 
-                   district === "Пемзашен" ? 1000 : 0;
-  const total = goodsTotal + delivery;
-  
-  text += `%0A💰 Итого товары: ${goodsTotal} AMD%0A`;
-  text += `🚚 Доставка: ${delivery} AMD%0A`;
-  text += `💵 К оплате: ${total} AMD%0A%0A`;
-  text += `_Заказ создан через сайт_`;
+  let delivery = 0;
+  if (district === "Артик") delivery = 500;
+  if (district === "Арич") delivery = 700;
+  if (district === "Нор-Кянк") delivery = 1000;
+  if (district === "Пемзашен") delivery = 1000;
+
+  const grandTotal = total + delivery;
+  orderText += `%0A🚚 Доставка: ${delivery} AMD%0A`;
+  orderText += `💰 Итого: ${grandTotal} AMD%0A`;
+  if (comment) orderText += `%0A📝 Комментарий: ${comment}`;
+
+  const phoneNumber = "37443797727";
+  const whatsappUrl = `https://wa.me/${phoneNumber}?text=${orderText}`;
+  window.open(whatsappUrl, "_blank");
 
   saveOrder({
-    name, phone, address, district, comment,
+    name,
+    phone,
+    address,
+    district,
+    payment,
+    comment,
     items: JSON.parse(JSON.stringify(carts)),
-    total: total,
-    delivery: delivery
+    total: grandTotal
   });
 
-  window.open(`https://wa.me/37443797727?text=${text}`, '_blank');
-  
   carts = {};
   renderGlobalCart();
-  if (currentStore) updateStoreCart();
-  document.getElementById('order-form').reset();
-  
-  alert('Заказ отправлен! Ожидайте звонка оператора.');
-}
-
-/* ---------------- УПРАВЛЕНИЕ КУРЬЕРАМИ ---------------- */
-
-let nextCourierId = 1;
-
-function addCourier() {
-  const name = prompt("Имя курьера:");
-  if (!name) return;
-  
-  const phone = prompt("Телефон курьера:");
-  if (!phone) return;
-  
-  const courier = {
-    id: nextCourierId++,
-    name: name,
-    phone: phone,
-    status: 'active',
-    orders: []
-  };
-  
-  couriers.push(courier);
-  localStorage.setItem('artikFoodCouriers', JSON.stringify(couriers));
-  updateAdminStats();
-  alert(`Курьер ${name} добавлен!`);
-}
-
-function toggleCourierStatus(courierId) {
-  const courier = couriers.find(c => c.id === courierId);
-  if (courier) {
-    courier.status = courier.status === 'active' ? 'inactive' : 'active';
-    localStorage.setItem('artikFoodCouriers', JSON.stringify(couriers));
-    updateAdminStats();
-  }
-}
-
-function manageCouriers() {
-  alert("Управление курьеров\n\nДобавлено курьеров: " + couriers.length + 
-        "\nАктивных: " + couriers.filter(c => c.status === 'active').length);
-}
-
-function addNewProduct() {
-  alert("Здесь будет добавление новых товаров.\nВ реальном приложении нужен бэкенд для управления товарами.");
-}
-
-function viewAllOrders() {
-  alert("Всего заказов: " + orders.length + 
-        "\nНа сумму: " + orders.reduce((sum, o) => sum + o.total, 0) + " AMD");
+  updateStoreCart();
+  alert("Ваш заказ отправлен! Спасибо 😊");
 }
 
 /* ---------------- ИНИЦИАЛИЗАЦИЯ ---------------- */
 
-document.addEventListener('DOMContentLoaded', function() {
-  const savedOrders = localStorage.getItem('artikFoodOrders');
-  const savedCouriers = localStorage.getItem('artikFoodCouriers');
-  
-  if (savedOrders) orders = JSON.parse(savedOrders);
-  if (savedCouriers) couriers = JSON.parse(savedCouriers);
+renderShops();
+renderGlobalCart();
 
-  renderShops();
-  renderGlobalCart();
-});
 </script>
 
 </body>
