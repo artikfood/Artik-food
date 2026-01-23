@@ -1616,7 +1616,7 @@ function sendFormToWhatsApp() {
   message += `💰 *Итого: ${total + delivery} AMD*`;
   // ====== SEND TO DISPATCHER (Cloudflare Worker) — НЕ ЛОМАЕТ WhatsApp ======
   // Вставь сюда URL своего Worker после деплоя:
-  const WORKER_URL = "https://YOUR_WORKER_SUBDOMAIN.workers.dev/orders";
+  const WORKER_URL = "https://https://dash.cloudflare.com/4c407dcdfc7ae928232986b960b01684/workers/services/view/artik-food"; 
   const API_KEY = "PUT_YOUR_API_KEY_HERE";
 
   fetch(WORKER_URL, {
