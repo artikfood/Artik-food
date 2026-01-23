@@ -1,6 +1,11 @@
 <!DOCTYPE html>
 <html lang="ru">
 <head>
+  ...
+  <link rel="manifest" href="manifest.json">
+  <meta name="theme-color" content="#0f172a">
+</head>
+
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
   <title>Artik Food — Premium Delivery</title>
@@ -1406,6 +1411,50 @@ function sendFormToWhatsApp() {
 renderShops();
 renderGlobalCart();
 
+</script>
+<script>
+if ("serviceWorker" in navigator) {
+  navigator.serviceWorker.register("service-worker.js")
+    .then(() => console.log("Service Worker зарегистрирован"))
+    .catch(err => console.error("Ошибка Service Worker:", err));
+}
+</script>
+<button id="install-btn" style="
+  position: fixed;
+  bottom: 80px;
+  left: 50%;
+  transform: translateX(-50%);
+  background: #22c55e;
+  color: white;
+  border: none;
+  padding: 14px 20px;
+  border-radius: 999px;
+  font-size: 16px;
+  font-weight: bold;
+  box-shadow: 0 10px 30px rgba(0,0,0,0.25);
+  z-index: 10000;
+  display: none;
+">
+  📲 Установить приложение
+</button>
+
+<script>
+let deferredPrompt;
+const installBtn = document.getElementById("install-btn");
+
+window.addEventListener("beforeinstallprompt", (e) => {
+  e.preventDefault();
+  deferredPrompt = e;
+  installBtn.style.display = "block";
+});
+
+installBtn.addEventListener("click", async () => {
+  if (!deferredPrompt) return;
+  deferredPrompt.prompt();
+  const { outcome } = await deferredPrompt.userChoice;
+  deferredPrompt = null;
+  installBtn.style.display = "none";
+});
 </script>
 
 </body>
