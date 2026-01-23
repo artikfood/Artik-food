@@ -1375,6 +1375,21 @@ renderShops();
 renderGlobalCart();
 goHome();
 </script>
+<script>
+const searchInput = document.getElementById("searchInput");
+
+if (searchInput) {
+  searchInput.addEventListener("input", function () {
+    const query = this.value.toLowerCase();
+    const products = document.querySelectorAll(".product-card, .product-item, .product");
+
+    products.forEach(product => {
+      const text = product.innerText.toLowerCase();
+      product.style.display = text.includes(query) ? "" : "none";
+    });
+  });
+}
+</script>
 
 </body>
 </html>
