@@ -1,1412 +1,757 @@
 <!DOCTYPE html>
 <html lang="hy">
 <head>
-  <meta charset="UTF-8" />
-  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
-  <title>Artik Food — Պրեմիում առաքում</title>
-
-  <!-- PWA -->
-  <link rel="manifest" href="manifest.json">
-  <meta name="theme-color" content="#0f1115">
-
-  <!-- Google Fonts -->
-  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&family=Playfair+Display:wght@500;600;700&display=swap" rel="stylesheet">
-
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Artik Food — Premium Delivery</title>
   <style>
+    /* Основные стили */
     :root {
-      --bg-main: #0f1115;
-      --bg-secondary: #151822;
-      --bg-card: rgba(255,255,255,0.06);
-      --bg-glass: rgba(255,255,255,0.08);
-      --border-glass: rgba(255,255,255,0.12);
-      --accent-gold: #d4af37;
-      --accent-green: #2ecc71;
-      --text-main: #f4f4f4;
-      --text-muted: #b3b3b3;
-      --shadow-soft: 0 10px 30px rgba(0,0,0,0.35);
-      --shadow-hover: 0 16px 40px rgba(0,0,0,0.5);
-      --radius-xl: 20px;
-      --radius-lg: 16px;
-      --radius-md: 12px;
+      --bg-dark: #1a1a2e;
+      --bg-light: #f8f9fa;
+      --text-dark: #e6e6e6;
+      --text-light: #333;
+      --accent-blue: #4cc9f0;
+      --accent-gold: #f8961e;
+      --card-bg-dark: #16213e;
+      --card-bg-light: #ffffff;
+      --text-muted: #888;
     }
 
-    body.light-theme {
-      --bg-main: #f7f7f9;
-      --bg-secondary: #ffffff;
-      --bg-card: rgba(0,0,0,0.04);
-      --bg-glass: rgba(0,0,0,0.05);
-      --border-glass: rgba(0,0,0,0.12);
-      --accent-gold: #b08a1f;
-      --accent-green: #27ae60;
-      --text-main: #1c1c1e;
-      --text-muted: #6e6e73;
-      --shadow-soft: 0 8px 24px rgba(0,0,0,0.08);
-      --shadow-hover: 0 14px 34px rgba(0,0,0,0.12);
+    * {
+      margin: 0;
+      padding: 0;
+      box-sizing: border-box;
+      font-family: 'Inter', sans-serif;
+      transition: background-color 0.3s, color 0.3s;
     }
-
-    * { box-sizing: border-box; }
 
     body {
-      margin: 0;
-      font-family: "Inter", sans-serif;
-      background: radial-gradient(1200px 600px at 20% -10%, #1b1f2b 0%, #0f1115 50%, #0b0d12 100%);
-      color: var(--text-main);
-      line-height: 1.5;
-      transition: background 0.3s ease, color 0.3s ease;
+      background-color: var(--bg-dark);
+      color: var(--text-dark);
+      min-height: 100vh;
     }
 
     body.light-theme {
-      background: radial-gradient(1200px 600px at 20% -10%, #ffffff 0%, #f2f2f6 50%, #ececf1 100%);
+      background-color: var(--bg-light);
+      color: var(--text-light);
     }
 
-    a { color: var(--accent-gold); text-decoration: none; }
-    a:hover { text-decoration: underline; }
-
     header {
+      background-color: rgba(26, 26, 46, 0.9);
+      padding: 15px 20px;
       position: sticky;
       top: 0;
-      z-index: 1000;
-      background: linear-gradient(180deg, rgba(15,17,21,0.95), rgba(15,17,21,0.85));
-      backdrop-filter: blur(10px);
-      border-bottom: 1px solid var(--border-glass);
-      padding: 14px 20px;
-      display: flex;
-      justify-content: space-between;
-      align-items: center;
-      flex-wrap: wrap;
+      z-index: 100;
+      box-shadow: 0 2px 10px rgba(0, 0, 0, 0.2);
     }
 
     body.light-theme header {
-      background: linear-gradient(180deg, rgba(255,255,255,0.95), rgba(255,255,255,0.85));
+      background-color: rgba(248, 249, 250, 0.9);
     }
 
-    header .logo-box {
-      display:flex;
-      align-items:center;
-      gap:12px;
-      cursor:pointer;
-      user-select:none;
+    .logo-box {
+      display: flex;
+      align-items: center;
+      gap: 15px;
+      cursor: pointer;
     }
 
-    header img {
+    .logo-box img {
       height: 40px;
-      filter: drop-shadow(0 0 6px rgba(212,175,55,0.35));
-    }
-
-    header h1 {
-      margin: 0;
-      font-family: "Playfair Display", serif;
-      font-weight: 600;
-      font-size: 22px;
-      letter-spacing: 0.5px;
-      color: var(--accent-gold);
+      border-radius: 50%;
     }
 
     nav {
       display: flex;
+      justify-content: space-between;
       align-items: center;
-      gap: 14px;
+      margin-top: 15px;
     }
 
-    nav a, nav button, nav select {
-      color: var(--text-main);
-      font-weight: 500;
-      font-size: 14px;
-      padding: 6px 10px;
-      border-radius: 10px;
-      transition: background 0.2s, color 0.2s;
-      background: transparent;
-      border: none;
-      cursor: pointer;
+    nav a {
+      color: var(--text-dark);
+      text-decoration: none;
+      padding: 8px 12px;
+      border-radius: 5px;
+    }
+
+    body.light-theme nav a {
+      color: var(--text-light);
     }
 
     nav a:hover {
-      background: var(--bg-glass);
-      color: var(--accent-gold);
+      background-color: rgba(76, 201, 240, 0.2);
     }
 
     .theme-toggle {
-      width: 42px;
-      height: 42px;
-      border-radius: 50%;
-      border: 1px solid var(--border-glass);
-      background: var(--bg-glass);
-      color: var(--text-main);
-      display: flex;
-      align-items: center;
-      justify-content: center;
-      font-size: 18px;
+      background: none;
+      border: none;
+      font-size: 24px;
       cursor: pointer;
-      box-shadow: var(--shadow-soft);
-      transition: background 0.2s, box-shadow 0.2s, transform 0.15s;
+      color: var(--text-dark);
     }
 
-    .theme-toggle:hover {
-      transform: translateY(-1px);
-      box-shadow: var(--shadow-hover);
-      background: rgba(212,175,55,0.15);
-      color: var(--accent-gold);
+    body.light-theme .theme-toggle {
+      color: var(--text-light);
+    }
+
+    .search-container {
+      flex-grow: 1;
+      margin: 0 20px;
+    }
+
+    #searchInput {
+      width: 100%;
+      padding: 10px 15px;
+      border-radius: 20px;
+      border: none;
+      background-color: rgba(255, 255, 255, 0.1);
+      color: var(--text-dark);
+    }
+
+    body.light-theme #searchInput {
+      background-color: rgba(0, 0, 0, 0.05);
+      color: var(--text-light);
+    }
+
+    #searchInput::placeholder {
+      color: var(--text-muted);
+    }
+
+    .container {
+      padding: 20px;
+      max-width: 1200px;
+      margin: 0 auto;
+    }
+
+    .hidden {
+      display: none !important;
+    }
+
+    /* Главная страница */
+    #home-page {
+      padding: 20px;
     }
 
     .hero {
-      padding: 70px 20px 60px;
       text-align: center;
-      background:
-        radial-gradient(600px 300px at 50% -10%, rgba(212,175,55,0.18), transparent 70%),
-        radial-gradient(800px 400px at 80% 0%, rgba(46,204,113,0.15), transparent 70%);
+      padding: 40px 20px;
+      background: linear-gradient(135deg, rgba(76, 201, 240, 0.1), rgba(26, 26, 46, 0.9));
+      border-radius: 16px;
+      margin: 20px 0;
     }
 
     .hero h2 {
-      font-family: "Playfair Display", serif;
-      font-size: 40px;
-      margin-bottom: 12px;
-      letter-spacing: 0.5px;
-      color: #ffffff;
-    }
-
-    body.light-theme .hero h2 {
-      color: #1c1c1e;
+      font-size: 2rem;
+      margin-bottom: 10px;
+      color: var(--accent-blue);
     }
 
     .hero p {
-      font-size: 17px;
+      font-size: 1rem;
       color: var(--text-muted);
-      margin-bottom: 26px;
-      max-width: 600px;
-      margin-left: auto;
-      margin-right: auto;
+      margin-bottom: 20px;
     }
 
     .hero button {
-      background: linear-gradient(135deg, #d4af37, #f1d67a);
-      color: #0f1115;
+      background-color: var(--accent-gold);
+      color: white;
       border: none;
-      padding: 14px 28px;
-      font-size: 15px;
-      border-radius: 999px;
+      padding: 10px 20px;
+      border-radius: 20px;
       cursor: pointer;
-      font-weight: 600;
-      box-shadow: 0 8px 24px rgba(212,175,55,0.35);
-      transition: transform 0.15s, box-shadow 0.15s;
+      font-size: 1rem;
     }
 
-    .hero button:hover {
-      transform: translateY(-1px);
-      box-shadow: 0 12px 30px rgba(212,175,55,0.5);
-    }
-
-    .section {
-      padding: 48px 20px;
-      max-width: 1200px;
-      margin: auto;
-    }
-
-    .section h3 {
-      text-align: center;
-      margin-bottom: 30px;
-      font-family: "Playfair Display", serif;
-      font-weight: 600;
-      font-size: 28px;
-      letter-spacing: 0.4px;
-      color: var(--accent-gold);
-    }
-
-    .shops, .categories {
+    .shops-container {
       display: grid;
-      grid-template-columns: repeat(auto-fit, minmax(180px, 1fr));
-      gap: 18px;
+      grid-template-columns: repeat(auto-fill, minmax(300px, 1fr));
+      gap: 20px;
+      margin-top: 20px;
+    }
+
+    .shop-card {
+      background-color: var(--card-bg-dark);
+      border-radius: 10px;
+      padding: 20px;
+      cursor: pointer;
+      box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+    }
+
+    body.light-theme .shop-card {
+      background-color: var(--card-bg-light);
+    }
+
+    .shop-card:hover {
+      transform: translateY(-5px);
+      box-shadow: 0 6px 12px rgba(0, 0, 0, 0.15);
+    }
+
+    .shop-card h3 {
+      color: var(--accent-blue);
+      margin-bottom: 10px;
+    }
+
+    /* Страница магазина */
+    #store-page {
+      padding: 20px;
+    }
+
+    .back-btn {
+      background-color: var(--accent-blue);
+      color: white;
+      border: none;
+      padding: 8px 15px;
+      border-radius: 5px;
+      cursor: pointer;
+      margin-bottom: 20px;
+    }
+
+    .categories {
+      display: flex;
+      gap: 10px;
+      margin-bottom: 20px;
+      flex-wrap: wrap;
+    }
+
+    .category-btn {
+      background-color: var(--card-bg-dark);
+      border: none;
+      padding: 8px 15px;
+      border-radius: 20px;
+      cursor: pointer;
+      color: var(--text-dark);
+    }
+
+    body.light-theme .category-btn {
+      background-color: var(--card-bg-light);
+      color: var(--text-light);
+    }
+
+    .category-btn.active {
+      background-color: var(--accent-blue);
+      color: white;
     }
 
     .products {
-      display: flex;
-      flex-direction: column;
-      gap: 14px;
-    }
-
-    .card, .product {
-      background: linear-gradient(180deg, var(--bg-glass), rgba(255,255,255,0.02));
-      border: 1px solid var(--border-glass);
-      border-radius: var(--radius-xl);
-      padding: 18px 16px;
-      box-shadow: var(--shadow-soft);
-      text-align: center;
-      cursor: pointer;
-      transition: transform 0.18s ease, box-shadow 0.18s ease, border-color 0.18s ease;
-    }
-
-    .card:hover, .product:hover {
-      transform: translateY(-2px);
-      box-shadow: var(--shadow-hover);
-      border-color: rgba(212,175,55,0.4);
-    }
-
-    .card img {
-      max-width: 90px;
-      max-height: 70px;
-      object-fit: contain;
-      margin-bottom: 10px;
-      filter: drop-shadow(0 0 8px rgba(212,175,55,0.25));
-    }
-
-    .card .icon {
-      font-size: 38px;
-      margin-bottom: 8px;
-      display: block;
-    }
-
-    .card div {
-      font-weight: 600;
-      letter-spacing: 0.2px;
+      display: grid;
+      grid-template-columns: repeat(auto-fill, minmax(300px, 1fr));
+      gap: 15px;
     }
 
     .product {
+      background-color: var(--card-bg-dark);
+      border-radius: 10px;
+      padding: 15px;
       display: flex;
-      justify-content: space-between;
       align-items: center;
-      text-align: left;
-      gap: 14px;
-      padding: 16px 18px;
+      gap: 15px;
+    }
+
+    body.light-theme .product {
+      background-color: var(--card-bg-light);
     }
 
     .product img {
       width: 60px;
       height: 60px;
       object-fit: cover;
-      border-radius: 14px;
-      background: rgba(255,255,255,0.1);
-      box-shadow: inset 0 0 0 1px rgba(255,255,255,0.15);
+      border-radius: 5px;
     }
 
-    .product h4 {
-      margin: 0;
-      font-size: 16px;
-      font-weight: 600;
-      color: var(--text-main);
+    .product-info {
+      flex: 1;
     }
 
-    .product p {
-      margin: 6px 0 0;
-      font-size: 14px;
+    .product-info h4 {
+      margin-bottom: 5px;
+    }
+
+    .product-info p {
       color: var(--text-muted);
-    }
-
-    .product button {
-      background: linear-gradient(135deg, #2ecc71, #6df0a0);
-      color: #0f1115;
-      border: none;
-      padding: 8px 14px;
-      border-radius: 999px;
-      cursor: pointer;
-      font-size: 14px;
-      font-weight: 600;
-      box-shadow: 0 6px 18px rgba(46,204,113,0.35);
-      transition: transform 0.15s, box-shadow 0.15s;
-    }
-
-    .product button:hover {
-      transform: translateY(-1px);
-      box-shadow: 0 10px 26px rgba(46,204,113,0.5);
     }
 
     .qty-controls {
-      display:flex;
-      justify-content:center;
-      align-items:center;
-      gap:10px;
+      display: flex;
+      align-items: center;
+      gap: 5px;
     }
 
-    .qty-controls button {
-      width:32px;
-      height:32px;
-      border-radius:50%;
-      border:none;
-      background: linear-gradient(135deg, #2ecc71, #6df0a0);
-      color:#0f1115;
-      font-weight:700;
-      cursor:pointer;
-      box-shadow: 0 4px 14px rgba(46,204,113,0.35);
-      transition: transform 0.15s, box-shadow 0.15s;
-    }
-
-    .qty-controls button:hover {
-      transform: scale(1.05);
-      box-shadow: 0 8px 22px rgba(46,204,113,0.55);
-    }
-
-    .qty-number {
-      min-width:24px;
-      font-weight:600;
-      text-align:center;
-      color: var(--text-main);
-    }
-
-    .cart {
-      background: linear-gradient(180deg, var(--bg-glass), rgba(255,255,255,0.02));
-      border: 1px solid var(--border-glass);
-      padding: 18px 16px;
-      border-radius: var(--radius-xl);
-      max-width: 540px;
-      margin: 20px auto;
-      box-shadow: var(--shadow-soft);
-    }
-
-    .cart h4 {
-      margin-top:0;
-      text-align:center;
-      font-family: "Playfair Display", serif;
-      font-weight: 600;
-      font-size: 20px;
-      color: var(--accent-gold);
-      margin-bottom: 14px;
-    }
-
-    .cart-item {
-      display:flex;
-      justify-content:space-between;
-      align-items:center;
-      margin-bottom:10px;
-      font-size:14px;
-      gap:10px;
-      color: var(--text-main);
-    }
-
-    .cart-item span {
-      color: var(--text-muted);
-    }
-
-    .cart-total {
-      font-weight:600;
-      margin-top:10px;
-      text-align:center;
-      color: var(--text-main);
-    }
-
-    /* УМЕНЬШЕННАЯ КНОПКА УДАЛЕНИЯ */
-    .cart-item button {
-      background: rgba(255,255,255,0.12) !important;
-      border: 1px solid rgba(255,255,255,0.25);
-      color: #ff6b6b;
-      width: 22px;
-      height: 22px;
+    .qty-btn {
+      width: 25px;
+      height: 25px;
       border-radius: 50%;
-      font-size: 12px;
+      border: none;
+      background-color: var(--accent-blue);
+      color: white;
       cursor: pointer;
-      padding: 0;
-      margin-left: auto;
-      line-height: 1;
       display: flex;
       align-items: center;
       justify-content: center;
-      transition: background 0.15s, transform 0.15s, box-shadow 0.15s;
-      box-shadow: 0 4px 10px rgba(0,0,0,0.25);
     }
 
-    .cart-item button:hover {
-      background: rgba(255,107,107,0.15) !important;
-      transform: scale(1.05);
-      box-shadow: 0 6px 14px rgba(255,107,107,0.35);
+    .qty-number {
+      min-width: 20px;
+      text-align: center;
     }
 
-    .cart button {
-      width:100%;
-      background: linear-gradient(135deg, #d4af37, #f1d67a);
-      color:#0f1115;
-      border:none;
-      padding:12px;
-      font-size:15px;
-      border-radius:999px;
-      cursor:pointer;
-      margin-top:14px;
-      font-weight:600;
-      box-shadow: 0 8px 24px rgba(212,175,55,0.35);
-      transition: transform 0.15s, box-shadow 0.15s;
-    }
-
-    .cart button:hover {
-      transform: translateY(-1px);
-      box-shadow: 0 12px 30px rgba(212,175,55,0.5);
-    }
-
-    .order-form {
-      background: linear-gradient(180deg, var(--bg-glass), rgba(255,255,255,0.02));
-      border: 1px solid var(--border-glass);
-      padding: 22px 20px;
-      border-radius: var(--radius-xl);
-      max-width: 540px;
-      margin: auto;
-      box-shadow: var(--shadow-soft);
-    }
-
-    .order-form input,
-    .order-form textarea,
-    .order-form select {
-      width:100%;
-      padding:12px 14px;
-      margin-bottom:14px;
-      border-radius:12px;
-      border: 1px solid rgba(255,255,255,0.15);
-      background: rgba(255,255,255,0.06);
-      color: var(--text-main);
-      font-size:14px;
-      outline: none;
-      transition: border-color 0.15s, box-shadow 0.15s;
-    }
-
-    body.light-theme .order-form input,
-    body.light-theme .order-form textarea,
-    body.light-theme .order-form select {
-      background: rgba(0,0,0,0.04);
-      border: 1px solid rgba(0,0,0,0.12);
-    }
-
-    .order-form input::placeholder,
-    .order-form textarea::placeholder {
-      color: var(--text-muted);
-    }
-
-    .order-form input:focus,
-    .order-form textarea:focus,
-    .order-form select:focus {
-      border-color: rgba(212,175,55,0.6);
-      box-shadow: 0 0 0 3px rgba(212,175,55,0.15);
-    }
-
-    .order-form button {
-      width:100%;
-      background: linear-gradient(135deg, #2ecc71, #6df0a0);
-      color:#0f1115;
-      border:none;
-      padding:14px;
-      font-size:16px;
-      border-radius:999px;
-      cursor:pointer;
-      font-weight:600;
-      box-shadow: 0 8px 24px rgba(46,204,113,0.35);
-      transition: transform 0.15s, box-shadow 0.15s;
-    }
-
-    .order-form button:hover {
-      transform: translateY(-1px);
-      box-shadow: 0 12px 30px rgba(46,204,113,0.55);
-    }
-
-    footer {
-      background: linear-gradient(180deg, rgba(15,17,21,0.9), rgba(15,17,21,1));
-      color: var(--text-muted);
-      text-align:center;
-      padding:20px;
-      margin-top:60px;
-      font-size:13px;
-      border-top: 1px solid var(--border-glass);
-    }
-
-    body.light-theme footer {
-      background: linear-gradient(180deg, rgba(255,255,255,0.9), rgba(255,255,255,1));
-    }
-
-    .hidden { display:none; }
-
-    .back-btn {
-      display: inline-block;
-      margin-bottom: 14px;
-      background: var(--bg-glass);
-      color: var(--text-main);
-      border: 1px solid var(--border-glass);
-      padding: 8px 16px;
-      border-radius: 999px;
-      cursor: pointer;
-      font-size: 14px;
-      font-weight: 500;
-      transition: background 0.15s, border-color 0.15s, color 0.15s;
-    }
-
-    .back-btn:hover {
-      background: rgba(212,175,55,0.15);
-      border-color: rgba(212,175,55,0.4);
-      color: var(--accent-gold);
-    }
-
-    .floating-buttons {
-      position: fixed;
-      bottom: 160px;
-      right: 18px;
-      display: flex;
-      flex-direction: column;
-      gap: 12px;
-      z-index: 9999;
-    }
-
-    .floating-buttons button {
-      padding: 10px 16px;
-      border: none;
-      border-radius: 999px;
-      background: linear-gradient(135deg, #d4af37, #f1d67a);
-      color: #0f1115;
-      font-size: 14px;
-      font-weight: 600;
-      box-shadow: 0 8px 24px rgba(212,175,55,0.35);
-      cursor: pointer;
-      transition: transform 0.15s, box-shadow 0.15s;
-    }
-
-    .floating-buttons button:hover {
-      transform: translateY(-1px);
-      box-shadow: 0 12px 30px rgba(212,175,55,0.55);
-    }
-
-    .floating-icons {
+    /* Корзина */
+    .cart-btn {
       position: fixed;
       bottom: 20px;
+      right: 20px;
+      background-color: var(--accent-gold);
+      color: white;
+      width: 60px;
+      height: 60px;
+      border-radius: 50%;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      font-size: 20px;
+      cursor: pointer;
+      box-shadow: 0 4px 10px rgba(0, 0, 0, 0.2);
+      z-index: 90;
+    }
+
+    .cart-count {
+      position: absolute;
+      top: -5px;
+      right: -5px;
+      background-color: var(--accent-blue);
+      color: white;
+      width: 25px;
+      height: 25px;
+      border-radius: 50%;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      font-size: 14px;
+    }
+
+    /* Языковые кнопки */
+    .language-buttons {
+      position: fixed;
+      bottom: 100px;
       right: 20px;
       display: flex;
       flex-direction: column;
       gap: 10px;
-      z-index: 9999;
+      z-index: 90;
     }
 
-    .floating-icons a {
-      width: 44px;
-      height: 44px;
-      border-radius: 50%;
-      display: flex;
-      align-items: center;
-      justify-content: center;
-      text-decoration: none;
-      font-size: 18px;
-      background: linear-gradient(135deg, #2ecc71, #6df0a0);
-      color: #0f1115;
-      box-shadow: 0 8px 24px rgba(46,204,113,0.35);
-      transition: transform 0.15s, box-shadow 0.15s;
-    }
-
-    .floating-icons a:hover {
-      transform: scale(1.05);
-      box-shadow: 0 12px 30px rgba(46,204,113,0.55);
-    }
-
-    #admin-panel {
-      position: fixed;
-      top: 0;
-      left: 0;
-      width: 100%;
-      height: 100%;
-      background: radial-gradient(1200px 600px at 20% -10%, #1b1f2b 0%, #0f1115 50%, #0b0d12 100%);
-      z-index: 10001;
-      overflow-y: auto;
-      color: #ffffff;
-    }
-
-    body.light-theme #admin-panel {
-      background: radial-gradient(1200px 600px at 20% -10%, #ffffff 0%, #f2f2f6 50%, #ececf1 100%);
-      color: #1c1c1e;
-    }
-
-    .admin-card {
-      background: linear-gradient(180deg, var(--bg-glass), rgba(255,255,255,0.02));
-      border: 1px solid var(--border-glass);
-      padding: 16px;
-      border-radius: var(--radius-lg);
-      box-shadow: var(--shadow-soft);
-    }
-
-    .admin-card h4 {
-      margin-top: 0;
-      color: var(--accent-gold);
-      border-bottom: 1px solid var(--border-glass);
-      padding-bottom: 8px;
-      font-family: "Playfair Display", serif;
-      font-weight: 600;
-    }
-
-    .admin-card button {
-      background: linear-gradient(135deg, #3498db, #6fbfff);
-      color: #0f1115;
+    .language-btn {
+      background-color: var(--accent-blue);
+      color: white;
       border: none;
-      padding: 8px 12px;
-      border-radius: 999px;
+      padding: 10px 15px;
+      border-radius: 20px;
       cursor: pointer;
-      font-weight: 600;
-      box-shadow: 0 6px 18px rgba(52,152,219,0.35);
-      transition: transform 0.15s, box-shadow 0.15s;
+      font-weight: bold;
+      box-shadow: 0 4px 10px rgba(0, 0, 0, 0.2);
     }
 
-    .admin-card button:hover {
-      transform: translateY(-1px);
-      box-shadow: 0 10px 26px rgba(52,152,219,0.55);
-    }
-
-    .admin-table {
-      width: 100%;
-      border-collapse: collapse;
-      margin-top: 10px;
-      font-size: 14px;
-    }
-
-    .admin-table th, .admin-table td {
-      border: 1px solid rgba(255,255,255,0.12);
-      padding: 8px;
-      text-align: left;
-      color: inherit;
-    }
-
-    .admin-table th {
-      background: rgba(255,255,255,0.08);
-      color: var(--accent-gold);
-      font-weight: 600;
-    }
-
-    .admin-table tr:nth-child(even) {
-      background: rgba(255,255,255,0.04);
-    }
-
-    /* ===================== МОБИЛЬНАЯ АДАПТАЦИЯ (ТОЛЬКО СТИЛИ) ===================== */
-
-    @media (max-width: 900px) {
-      header {
-        flex-direction: column;
-        align-items: stretch;
-        gap: 10px;
+    /* Адаптивность */
+    @media (max-width: 768px) {
+      .shops-container, .products {
+        grid-template-columns: repeat(auto-fill, minmax(250px, 1fr));
       }
-
-      header .logo-box {
-        justify-content: center;
-      }
-
+      
       nav {
-        justify-content: center;
-        flex-wrap: wrap;
-        gap: 10px;
-      }
-    }
-
-    @media (max-width: 600px) {
-      header {
-        padding: 10px 14px;
-      }
-
-      header h1 {
-        font-size: 18px;
-      }
-
-      header img {
-        height: 34px;
-      }
-
-      nav a {
-        font-size: 13px;
-        padding: 5px 8px;
-      }
-
-      .theme-toggle {
-        width: 36px;
-        height: 36px;
-        font-size: 16px;
-      }
-
-      .hero {
-        padding: 50px 16px 40px;
-      }
-
-      .hero h2 {
-        font-size: 28px;
-      }
-
-      .hero p {
-        font-size: 14px;
-      }
-
-      .hero button {
-        padding: 12px 22px;
-        font-size: 14px;
-      }
-
-      .section {
-        padding: 36px 14px;
-      }
-
-      .section h3 {
-        font-size: 22px;
-        margin-bottom: 20px;
-      }
-
-      .shops, .categories {
-        grid-template-columns: repeat(2, 1fr);
-        gap: 12px;
-      }
-
-      .card {
-        padding: 14px 12px;
-        border-radius: 16px;
-      }
-
-      .card img {
-        max-width: 70px;
-        max-height: 55px;
-      }
-
-      .card .icon {
-        font-size: 30px;
-      }
-
-      .product {
         flex-direction: column;
-        align-items: flex-start;
-        gap: 10px;
-        padding: 14px;
-      }
-
-      .product img {
-        width: 54px;
-        height: 54px;
-      }
-
-      .product h4 {
-        font-size: 15px;
-      }
-
-      .product p {
-        font-size: 13px;
-      }
-
-      .product button {
-        align-self: stretch;
-        width: 100%;
-        padding: 10px;
-        font-size: 14px;
-      }
-
-      .qty-controls {
-        width: 100%;
-        justify-content: space-between;
-      }
-
-      .qty-controls button {
-        width: 36px;
-        height: 36px;
-      }
-
-      .cart {
-        padding: 16px 14px;
-        border-radius: 16px;
-      }
-
-      .cart h4 {
-        font-size: 18px;
-      }
-
-      .cart-item {
-        font-size: 13px;
-      }
-
-      .cart-total {
-        font-size: 14px;
-      }
-
-      .cart button {
-        font-size: 14px;
-        padding: 12px;
-      }
-
-      .order-form {
-        padding: 18px 16px;
-        border-radius: 16px;
-      }
-
-      .order-form input,
-      .order-form textarea,
-      .order-form select {
-        font-size: 13px;
-        padding: 10px 12px;
-      }
-
-      .order-form button {
-        font-size: 15px;
-        padding: 13px;
-      }
-
-      .floating-buttons {
-        bottom: 120px;
-        right: 12px;
         gap: 10px;
       }
-
-      .floating-buttons button {
-        padding: 8px 14px;
-        font-size: 13px;
-      }
-
-      .floating-icons {
-        bottom: 16px;
-        right: 12px;
-        gap: 8px;
-      }
-
-      .floating-icons a {
-        width: 40px;
-        height: 40px;
-        font-size: 16px;
-      }
-
-      footer {
-        font-size: 12px;
-        padding: 16px;
-      }
-
-      #admin-panel .admin-card {
-        padding: 14px;
-      }
-
-      #admin-panel h3 {
-        font-size: 18px;
+      
+      .search-container {
+        margin: 10px 0;
+        width: 100%;
       }
     }
   </style>
 </head>
 <body>
-
-<header>
-  <div class="logo-box" id="logoBox" onclick="goHome()">
-    <img src="logo.png" alt="Artik Food">
-    <h1>Artik Food</h1>
-
-    <div class="search-container" style="margin-left:12px;">
-      <input type="text" id="searchInput" placeholder="🔍 Որոնել ապրանքներ..." />
-    </div>
-  </div>
-  <nav>
-    <a href="#" id="nav-home" onclick="goHome()">Գլխավոր</a>
-    <a href="#order" id="nav-order">Պատվիրել</a>
-    <a href="#contacts" id="nav-contacts">Կապ</a>
-
-    <select id="langSelect" title="Ընտրեք լեզուն" onchange="setLang(this.value)" style="background:var(--bg-glass); border:1px solid var(--border-glass); padding:6px 8px;">
-      <option value="hy">Հայ</option>
-      <option value="ru">Рус</option>
-      <option value="en">Eng</option>
-    </select>
-
-    <button class="theme-toggle" id="themeToggle" title="Փոխել թեման">🌙</button>
-  </nav>
-</header>
-
-<div id="home-page">
-
-<section class="hero">
-  <h2 id="hero-h2">Պրեմիում առաքում Արտիկում</h2>
-  <p id="hero-p">Թարմ մթերք և ծաղիկներ՝ լավագույն խանութներից — արագ, հարմար և մանրուքների խնամքով.</p>
-  <button id="hero-button" onclick="document.getElementById('order').scrollIntoView({behavior:'smooth'});">Պատվիրել հիմա</button>
-</section>
-
-<section class="section" id="shops">
-  <h3 id="shops-title">Գործընկեր Խանութներ</h3>
-  <div class="shops" id="shops-list"></div>
-</section>
-
-<section class="section">
-  <div class="cart" id="global-cart">
-    <h4 id="global-cart-title">Ձեր զամբյուղը</h4>
-    <div id="global-cart-items"></div>
-    <div class="cart-total" id="global-cart-total"><span id="label-items">Ապրանքներ:</span> <span id="items-value">0 AMD</span></div>
-    <div class="cart-total" id="delivery-total"><span id="label-delivery">Առաքում:</span> <span id="delivery-value">0 AMD</span></div>
-    <div class="cart-total" id="grand-total"><span id="label-total">Ընդհանուր:</span> <span id="grand-value">0 AMD</span></div>
-  </div>
-</section>
-
-</div>
-
-<section class="section">
-<div id="store-page" class="hidden">
-  <section class="section">
-    <h3 id="store-name"></h3>
-    <div class="products" id="store-products"></div>
-
-    <div class="cart hidden" id="store-cart">
-      <h4 id="store-cart-title">Զամբյուղը խանութի համար</h4>
-      <div id="store-cart-items"></div>
-      <div class="cart-total" id="store-cart-total">Ընդհանուր: 0 AMD</div>
-      <div id="store-order-buttons" style="display:none;"></div>
-    </div>
-  </section>
-</div>
-
-<section class="section" id="order">
-  <h3 id="order-title">Պատվերի ձևակերպում</h3>
-  <form class="order-form" id="order-form" onsubmit="event.preventDefault(); sendFormToWhatsApp();">
-    <input type="text" id="name" placeholder="Ձեր անունը" required />
-    <input type="tel" id="phone" placeholder="Հեռախոսը" required />
-    <input type="text" id="address" placeholder="Առաքման հասցեն" required />
-    <select id="district" required onchange="renderGlobalCart()">
-      <option value=""><?!-- placeholder filled by JS --></option>
-      <option value="Արտիկ">Արտիկ — 500 AMD</option>
-      <option value="Արիչ">Արիչ — 700 AMD</option>
-      <option value="Նոր-Քյանք">Նոր-Քյանք — 1000 AMD</option>
-      <option value="Պեմզաշեն">Պեմզաշեն — 1000 AMD</option>
-    </select>
-    <select id="payment" required style="margin-bottom:12px;">
-      <option value=""><?!-- placeholder filled by JS --></option>
-      <option value="К наличным курьеру">💵 Կանխիկ՝ курьерին</option>
-      <option value="IDram">🏦 IDram</option>
-      <option value="Картой онлайн">💳 Էլ. վճարում (շուտով)</option>
-    </select>
-    <textarea rows="3" id="comment" placeholder="Մեկնաբանություն պատվերին"></textarea>
-    <button type="submit" id="submit-order-btn">Ուղարկել պատվերը</button>
-  </form>
-
-  <div style="margin-top: 30px; background: var(--bg-glass); padding: 16px; border-radius: 16px; border: 1px solid var(--border-glass); max-width: 540px; margin-left: auto; margin-right: auto;">
-    <p style="margin: 0 0 8px; font-size: 14px; color: var(--accent-gold); font-weight:600;" id="payment-info-title">Ինչպես է կատարվում վճարումը:</p>
-    <ul style="margin: 0; padding-left: 20px; font-size: 14px; color: var(--text-muted);" id="payment-info-list">
-      <li>Ընտրում եք հարմար վճարման եղանակը պատվերի պահին</li>
-      <li>Եթե վճարում եք կանխիկ — գումարը փոխանցում եք կուրսերին ստանալու ժամանակ</li>
-      <li>Եթե առցանց — ստանում եք հղում հաստատումից հետո</li>
-      <li>Վճարումից հետո ստանում եքချ ⟨English/Russian translation will show when selected⟩</li>
-    </ul>
-  </div>
-</section>
-
-<section class="section" id="contacts">
-  <h3 id="contacts-title">Կապ</h3>
-  <div class="card" style="max-width:420px; margin:auto;">
-    <p id="contact-phone">📞 Հեռախոս / WhatsApp: <a href="tel:+37443797727">+374 43 79 77 27</a></p>
-    <p id="contact-telegram">✈️ Telegram: @artikfood</p>
-    <p id="contact-location">📍 Արտիկ, Շիրակ, Հայաստան</p>
-  </div>
-</section>
-
-<div class="floating-icons">
-  <a href="#order" class="cart-icon" title="Պատվիրել">🛒</a>
-</div>
-
-<div class="floating-buttons">
-  <button onclick="goBack()" id="btn-back">← Վերադառնալ</button>
-  <button onclick="goHome()" id="btn-home">🏠 Գլխավոր</button>
-</div>
-
-<footer>
-  <p id="footer-text">© 2026 Artik Food — Պրեմիում առաքում Արտիկում</p>
-</footer>
-
-<div id="admin-panel" class="hidden" aria-hidden="true">
-  <div style="background: linear-gradient(180deg, rgba(15,17,21,0.95), rgba(15,17,21,0.9)); color:inherit; padding:12px 16px; display:flex; justify-content:space-between; align-items:center;">
-    <h3 style="margin:0; font-family:'Playfair Display', serif; font-weight:600; color: var(--accent-gold);" id="admin-title">Վահանակ</h3>
-    <button onclick="hideAdminPanel()" style="background: rgba(255,107,107,0.15); color:#ff6b6b; border: 1px solid rgba(255,107,107,0.4); width:22px; height:22px; border-radius:50%; font-weight:700;">×</button>
-  </div>
-
-  <div style="padding:20px; max-width:900px; margin:auto;">
-    <div style="display:grid; grid-template-columns:1fr 1fr; gap:20px; margin-bottom:30px;">
-      <div class="admin-card">
-        <h4 id="admin-stats-title">📊 Վիճակագրություն այսօր</h4>
-        <p>Պատվերներ: <span id="today-orders">0</span></p>
-        <p>Գումար: <span id="today-amount">0</span> AMD</p>
-        <p>Ակտիվ կուրսեր: <span id="active-couriers">0</span></p>
-      </div>
-
-      <div class="admin-card">
-        <h4 id="admin-quick-actions-title">🚀 Արագ գործողություններ</h4>
-        <button onclick="addNewProduct()" style="width:100%; margin:6px 0;" id="btn-add-product">➕ Ավելացնել ապրանք</button>
-        <button onclick="viewAllOrders()" style="width:100%; margin:6px 0;" id="btn-view-orders">📋 Բոլոր պատվերները</button>
-        <button onclick="manageCouriers()" style="width:100%; margin:6px 0;" id="btn-manage-couriers">🚴 Կուրսերի կառավարում</button>
+  <header>
+    <div class="logo-box" id="logoBox" onclick="goHome()">
+      <img src="logo.png" alt="Artik Food">
+      <h1 id="header-title">Artik Food</h1>
+      <div class="search-container">
+        <input type="text" id="searchInput" placeholder="🔍 Որոնել ապրանքներ...">
       </div>
     </div>
+    <nav>
+      <a href="#" onclick="goHome()" id="nav-home">Գլխավոր</a>
+      <a href="#order" id="nav-order">Պատվիրել</a>
+      <a href="#contacts" id="nav-contacts">Կապ</a>
+      <button class="theme-toggle" id="themeToggle" title="Փոխել թեման">🌙</button>
+    </nav>
+  </header>
 
-    <div class="admin-card" style="margin-bottom:20px;">
-      <h4 id="admin-latest-orders-title">📦 Վերջին պատվերները</h4>
-      <p id="admin-latest-placeholder" style="color:var(--text-muted);">Առկա տվյալներ դեռ չկան։</p>
-    </div>
+  <div class="container">
+    <!-- Главная страница -->
+    <section id="home-page">
+      <div class="hero">
+        <h2 id="home-title">Premium առաքում Արթիկում</h2>
+        <p id="home-subtitle">Թարմ մթերքներ և ծաղիկներ լավագույն խանութներից — արագ, հարմար և մանրամասն ուշադրությամբ:</p>
+        <button onclick="document.getElementById('order').scrollIntoView({behavior:'smooth'});" id="order-now-btn">Պատվիրել հիմա</button>
+      </div>
+
+      <section id="shops">
+        <h3 id="shops-title">Գործընկեր խանութներ</h3>
+        <div class="shops-container" id="shops-container"></div>
+      </section>
+    </section>
+
+    <!-- Страница магазина -->
+    <section id="store-page" class="hidden">
+      <div id="store-products"></div>
+    </section>
   </div>
-</div>
 
-<script>
-  // Простая система локализации: HY (default), RU, EN
-  const i18n = {
-    hy: {
-      title: "Artik Food — Պրեմիում առաքում",
-      nav: { home: "Գլխավոր", order: "Պատվիրել", contacts: "Կապ" },
-      themeToggleTitle: "Փոխել թեման",
-      searchPlaceholder: "🔍 Որոնել ապրանքներ...",
-      hero: {
-        h2: "Պրեմիում առաքում Արտիկում",
-        p: "Թարմ մթերք և ծաղիկներ՝ լավագույն խանութներից — արագ, հարմար և ուշադրությամբ.",
-        button: "Պատվիրել հիմա"
+  <!-- Кнопка корзины -->
+  <div class="cart-btn" onclick="openCart()">
+    🛒
+    <span class="cart-count" id="cartCount">0</span>
+  </div>
+
+  <!-- Языковые кнопки -->
+  <div class="language-buttons">
+    <button class="language-btn" onclick="changeLanguage('hy')">🇦🇲 Հայերեն</button>
+    <button class="language-btn" onclick="changeLanguage('ru')">🇷🇺 Русский</button>
+    <button class="language-btn" onclick="changeLanguage('en')">🇺🇸 English</button>
+  </div>
+
+  <script>
+    // Глобальные переменные
+    let currentStore = null;
+    let currentCategory = null;
+    const carts = {};
+    let currentLanguage = 'hy';
+
+    // Данные магазинов
+    const stores = {
+      tonoyan: {
+        name: "Tonoyan Market",
+        categories: {
+          "Պеченье": { icon: "🍪" },
+          "Վաֆլի": { icon: "🧇" },
+          "Կրեկերներ": { icon: "🥨" }
+        },
+        products: [
+          { name: "Պеченье լցոնված", price: 450, category: "Պеченье" },
+          { name: "Պеченьե կարամելով", price: 500, category: "Պеченье" },
+          { name: "Վաֆլի Daroini", price: 400, category: "Վաֆլի" }
+        ]
       },
-      shopsTitle: "Գործընկեր Խանութներ",
-      cartTitle: "Ձեր զամբյուղը",
-      itemsLabel: "Ապրանքներ",
-      deliveryLabel: "Առաքում",
-      totalLabel: "Ընդհանուր",
-      storeCartTitle: "Զամբյուղը խանութի համար",
-      orderTitle: "Պատվերի ձևակերպում",
-      placeholders: {
-        name: "Ձեր անունը",
-        phone: "Հեռախոսը",
-        address: "Առաքման հասցեն",
-        districtDefault: "Ընտրեք առաքման շրջան",
-        paymentDefault: "Ընտրեք վճարման եղանակը",
-        comment: "Մեկնաբանություն պատվերին"
-      },
-      districts: ["Արտիկ — 500 AMD","Արիչ — 700 AMD","Նոր-Քյանք — 1000 AMD","Պեմզաշեն — 1000 AMD"],
-      payments: ["💵 Կանխիկ՝ курьерին","�� IDram","💳 Էլ. վճարում (շուտով)"],
-      submitOrder: "Ուղարկել պատվերը",
-      paymentInfoTitle: "Ինչպես է կատարվում վճարումը:",
-      paymentInfoList: [
-        "Ընտրում եք հարմար վճարման եղանակը պատվերի պահին",
-        "Եթե վճարում եք կանխիկ — գումարը փոխանցում եք կուրսերին ստանալու ժամանակ",
-        "Եթե առցանց — ստանում եք հղում հաստատումից հետո",
-        "Վճարումը հաստատելուն պես կստանաք հաշիվ էլ․ հասցեով կամ մեսենջերվով"
-      ],
-      contacts: {
-        phone: "📞 Հեռախոս / WhatsApp: +374 43 79 77 27",
-        telegram: "✈️ Telegram: @artikfood",
-        location: "📍 Արտիկ, Շիրակ, Հայաստան"
-      },
-      floatingCartTitle: "Պատվիրել",
-      btnBack: "← Վերադառնալ",
-      btnHome: "🏠 Գլխավոր",
-      footer: "© 2026 Artik Food — Պրեմիում առաքում Արտիկում",
-      admin: {
-        title: "Վահանակ",
-        statsTitle: "📊 Վիճակագրություն այսօր",
-        quickActionsTitle: "🚀 Արագ գործողություններ",
-        addProduct: "➕ Ավելացնել ապրանք",
-        viewOrders: "📋 Բոլոր պատվերները",
-        manageCouriers: "🚴 Կուրսերի կառավարում",
-        latestOrdersTitle: "📦 Վերջին պատվերները",
-        latestPlaceholder: "Առկա տվյալներ դեռ չկան։"
+      million: {
+        name: "Million",
+        products: [
+          { name: "Կարտոֆիլ 1կգ", price: 300, category: "Բանջարեղեն" },
+          { name: "Խնձոր 1կգ", price: 400, category: "Մրգեր" }
+        ]
       }
-    },
+    };
 
-    ru: {
-      title: "Artik Food — Premium доставка",
-      nav: { home: "Главная", order: "Заказать", contacts: "Контакты" },
-      themeToggleTitle: "Сменить тему",
-      searchPlaceholder: "🔍 Поиск товаров...",
-      hero: {
-        h2: "Premium доставка в Артике",
-        p: "Свежие продукты и цветы из лучших магазинов — быстро, удобно и с заботой о деталях.",
-        button: "Заказать сейчас"
+    // Переводы
+    const translations = {
+      hy: {
+        searchPlaceholder: "🔍 Որոնել ապրանքներ...",
+        home: "Գլխավոր",
+        order: "Պատվիրել",
+        contacts: "Կապ",
+        themeToggle: "🌙",
+        homeTitle: "Premium առաքում Արթիկում",
+        homeSubtitle: "Թարմ մթերքներ և ծաղիկներ լավագույն խանութներից — արագ, հարմար և մանրամասն ուշադրությամբ:",
+        shopsTitle: "Գործընկեր խանութներ",
+        orderNow: "Պատվիրել հիմա",
+        back: "← Հետ",
+        noResults: "😕 Ոչինչ չի գտնվել"
       },
-      shopsTitle: "Магазины-партнёры",
-      cartTitle: "Ваша корзина",
-      itemsLabel: "Товары",
-      deliveryLabel: "Доставка",
-      totalLabel: "Итого",
-      storeCartTitle: "Корзина магазина",
-      orderTitle: "Оформление заказа",
-      placeholders: {
-        name: "Ваше имя",
-        phone: "Телефон",
-        address: "Адрес доставки",
-        districtDefault: "Выберите район доставки",
-        paymentDefault: "Выберите способ оплаты",
-        comment: "Комментарий к заказу"
+      ru: {
+        searchPlaceholder: "🔍 Поиск товаров...",
+        home: "Главная",
+        order: "Заказать",
+        contacts: "Контакты",
+        themeToggle: "🌙",
+        homeTitle: "Premium доставка в Артике",
+        homeSubtitle: "Свежие продукты и цветы из лучших магазинов — быстро, удобно и с вниманием к деталям.",
+        shopsTitle: "Магазины-партнеры",
+        orderNow: "Заказать сейчас",
+        back: "← Назад",
+        noResults: "😕 Ничего не найдено"
       },
-      districts: ["Артик — 500 AMD","Арич — 700 AMD","Нор-Кянк — 1000 AMD","Пемзашен — 1000 AMD"],
-      payments: ["💵 Наличными курьеру","🏦 IDram","💳 Картой онлайн (скоро)"],
-      submitOrder: "Отправить заказ",
-      paymentInfoTitle: "Как происходит оплата:",
-      paymentInfoList: [
-        "Выбираете удобный способ оплаты при оформлении заказа",
-        "При оплате наличными — передаете деньги курьеру при получении",
-        "При онлайн-оплате — получаете ссылку после подтверждения заказа",
-        "После оплаты получаете чек на email или в мессенджер"
-      ],
-      contacts: {
-        phone: "📞 Телефон / WhatsApp: +374 43 79 77 27",
-        telegram: "✈️ Telegram: @artikfood",
-        location: "📍 Артик, Ширак, Армения"
-      },
-      floatingCartTitle: "Оформить заказ",
-      btnBack: "← Назад",
-      btnHome: "🏠 Главная",
-      footer: "© 2026 Artik Food — Premium доставка продуктов в Артике",
-      admin: {
-        title: "Панель администратора",
-        statsTitle: "📊 Статистика за сегодня",
-        quickActionsTitle: "🚀 Быстрые действия",
-        addProduct: "➕ Добавить товар",
-        viewOrders: "📋 Все заказы",
-        manageCouriers: "🚴 Управление курьерами",
-        latestOrdersTitle: "📦 Последние заказы",
-        latestPlaceholder: "Данных пока нет."
+      en: {
+        searchPlaceholder: "🔍 Search products...",
+        home: "Home",
+        order: "Order",
+        contacts: "Contacts",
+        themeToggle: "🌙",
+        homeTitle: "Premium delivery in Artik",
+        homeSubtitle: "Fresh products and flowers from the best stores — fast, convenient, and with attention to detail.",
+        shopsTitle: "Partner stores",
+        orderNow: "Order now",
+        back: "← Back",
+        noResults: "😕 Nothing found"
       }
-    },
+    };
 
-    en: {
-      title: "Artik Food — Premium Delivery",
-      nav: { home: "Home", order: "Order", contacts: "Contacts" },
-      themeToggleTitle: "Toggle theme",
-      searchPlaceholder: "🔍 Search products...",
-      hero: {
-        h2: "Premium delivery in Artik",
-        p: "Fresh groceries and flowers from top stores — fast, convenient and attentive to details.",
-        button: "Order Now"
-      },
-      shopsTitle: "Partner Stores",
-      cartTitle: "Your Cart",
-      itemsLabel: "Items",
-      deliveryLabel: "Delivery",
-      totalLabel: "Total",
-      storeCartTitle: "Store Cart",
-      orderTitle: "Checkout",
-      placeholders: {
-        name: "Your name",
-        phone: "Phone",
-        address: "Delivery address",
-        districtDefault: "Choose delivery district",
-        paymentDefault: "Choose payment method",
-        comment: "Order comment"
-      },
-      districts: ["Artik — 500 AMD","Arich — 700 AMD","Nor-Kyank — 1000 AMD","Pemzashen — 1000 AMD"],
-      payments: ["💵 Cash to courier","🏦 IDram","💳 Card online (soon)"],
-      submitOrder: "Submit Order",
-      paymentInfoTitle: "How payment works:",
-      paymentInfoList: [
-        "Choose a convenient payment method when placing the order",
-        "For cash payments — give money to the courier on delivery",
-        "For online payments — you'll receive a payment link after confirmation",
-        "After payment you'll receive a receipt by email or messenger"
-      ],
-      contacts: {
-        phone: "📞 Phone / WhatsApp: +374 43 79 77 27",
-        telegram: "✈️ Telegram: @artikfood",
-        location: "📍 Artik, Shirak, Armenia"
-      },
-      floatingCartTitle: "Checkout",
-      btnBack: "← Back",
-      btnHome: "🏠 Home",
-      footer: "© 2026 Artik Food — Premium delivery in Artik",
-      admin: {
-        title: "Admin panel",
-        statsTitle: "📊 Today's stats",
-        quickActionsTitle: "🚀 Quick actions",
-        addProduct: "➕ Add product",
-        viewOrders: "📋 All orders",
-        manageCouriers: "🚴 Manage couriers",
-        latestOrdersTitle: "📦 Latest orders",
-        latestPlaceholder: "No data yet."
-      }
-    }
-  };
-
-  // Apply translations to the page
-  function applyTranslations(lang) {
-    const t = i18n[lang] || i18n.hy;
-
-    document.documentElement.lang = (lang === 'hy' ? 'hy' : (lang === 'ru' ? 'ru' : 'en'));
-    document.title = t.title;
-
-    // Header/nav
-    document.getElementById('nav-home').textContent = t.nav.home;
-    document.getElementById('nav-order').textContent = t.nav.order;
-    document.getElementById('nav-contacts').textContent = t.nav.contacts;
-    document.getElementById('themeToggle').title = t.themeToggleTitle;
-    document.getElementById('searchInput').placeholder = t.searchPlaceholder;
-
-    // Hero
-    document.getElementById('hero-h2').textContent = t.hero.h2;
-    document.getElementById('hero-p').textContent = t.hero.p;
-    document.getElementById('hero-button').textContent = t.hero.button;
-
-    // Shops
-    document.getElementById('shops-title').textContent = t.shopsTitle;
-
-    // Cart labels
-    document.getElementById('global-cart-title').textContent = t.cartTitle;
-    document.getElementById('label-items').textContent = t.itemsLabel + ":";
-    document.getElementById('label-delivery').textContent = t.deliveryLabel + ":";
-    document.getElementById('label-total').textContent = t.totalLabel + ":";
-
-    // Store page
-    document.getElementById('store-cart-title').textContent = t.storeCartTitle;
-
-    // Order form
-    document.getElementById('order-title').textContent = t.orderTitle;
-    document.getElementById('name').placeholder = t.placeholders.name;
-    document.getElementById('phone').placeholder = t.placeholders.phone;
-    document.getElementById('address').placeholder = t.placeholders.address;
-
-    // district select placeholder and options
-    const district = document.getElementById('district');
-    district.options[0].text = t.placeholders.districtDefault;
-    // Keep existing values but update labels
-    for (let i = 0; i < t.districts.length; i++) {
-      if (district.options[i+1]) district.options[i+1].text = t.districts[i];
-    }
-
-    const payment = document.getElementById('payment');
-    payment.options[0].text = t.placeholders.paymentDefault;
-    for (let i = 0; i < t.payments.length; i++) {
-      if (payment.options[i+1]) payment.options[i+1].text = t.payments[i];
-    }
-
-    document.getElementById('comment').placeholder = t.placeholders.comment;
-    document.getElementById('submit-order-btn').textContent = t.submitOrder;
-
-    // Payment info
-    document.getElementById('payment-info-title').textContent = t.paymentInfoTitle;
-    const list = document.getElementById('payment-info-list');
-    list.innerHTML = '';
-    t.paymentInfoList.forEach(li => {
-      const el = document.createElement('li');
-      el.textContent = li;
-      list.appendChild(el);
+    // Инициализация при загрузке
+    document.addEventListener('DOMContentLoaded', () => {
+      initTheme();
+      applyTranslations();
+      renderShops();
     });
 
-    // Contacts
-    document.getElementById('contacts-title').textContent = t.nav.contacts || t.contactsTitle;
-    document.getElementById('contact-phone').innerHTML = t.contacts.phone.replace(/\+374 43 79 77 27/, '<a href="tel:+37443797727">+374 43 79 77 27</a>');
-    document.getElementById('contact-telegram').textContent = t.contacts.telegram;
-    document.getElementById('contact-location').textContent = t.contacts.location;
-
-    // Floating & buttons
-    document.querySelector('.cart-icon').title = t.floatingCartTitle;
-    document.getElementById('btn-back').textContent = t.btnBack;
-    document.getElementById('btn-home').textContent = t.btnHome;
-
-    // Footer
-    document.getElementById('footer-text').textContent = t.footer;
-
-    // Admin
-    document.getElementById('admin-title').textContent = t.admin.title;
-    document.getElementById('admin-stats-title').textContent = t.admin.statsTitle;
-    document.getElementById('admin-quick-actions-title').textContent = t.admin.quickActionsTitle;
-    document.getElementById('btn-add-product').textContent = t.admin.addProduct;
-    document.getElementById('btn-view-orders').textContent = t.admin.viewOrders;
-    document.getElementById('btn-manage-couriers').textContent = t.admin.manageCouriers;
-    document.getElementById('admin-latest-orders-title').textContent = t.admin.latestOrdersTitle;
-    document.getElementById('admin-latest-placeholder').textContent = t.admin.latestPlaceholder;
-
-    // Update selected option in language select
-    document.getElementById('langSelect').value = lang;
-  }
-
-  function setLang(lang) {
-    localStorage.setItem('site_lang', lang);
-    applyTranslations(lang);
-  }
-
-  // Default language: Armenian (hy)
-  (function initLang() {
-    const saved = localStorage.getItem('site_lang');
-    const lang = saved || 'hy';
-    applyTranslations(lang);
-    document.getElementById('langSelect').value = lang;
-  })();
-
-  // Theme toggle
-  (function initTheme() {
-    const btn = document.getElementById('themeToggle');
-    const saved = localStorage.getItem('site_theme') || 'dark';
-    if (saved === 'light') document.body.classList.add('light-theme');
-    btn.addEventListener('click', () => {
-      document.body.classList.toggle('light-theme');
-      localStorage.setItem('site_theme', document.body.classList.contains('light-theme') ? 'light' : 'dark');
-    });
-  })();
-
-  // Basic navigation helpers
-  function goHome() {
-    document.getElementById('home-page').scrollIntoView({behavior:'smooth'});
-  }
-  function goBack() {
-    if (window.history.length > 1) history.back();
-    else goHome();
-  }
-
-  // Admin panel helpers (placeholders)
-  function hideAdminPanel() {
-    const ap = document.getElementById('admin-panel');
-    ap.classList.add('hidden');
-    ap.setAttribute('aria-hidden','true');
-  }
-  function addNewProduct(){ alert('Add product (placeholder)'); }
-  function viewAllOrders(){ alert('View all orders (placeholder)'); }
-  function manageCouriers(){ alert('Manage couriers (placeholder)'); }
-
-  // Simple form -> WhatsApp sender
-  function sendFormToWhatsApp() {
-    const lang = localStorage.getItem('site_lang') || 'hy';
-    const t = i18n[lang];
-    const name = document.getElementById('name').value.trim();
-    const phone = document.getElementById('phone').value.trim();
-    const address = document.getElementById('address').value.trim();
-    const districtSel = document.getElementById('district');
-    const district = districtSel.options[districtSel.selectedIndex].text || '';
-    const paymentSel = document.getElementById('payment');
-    const payment = paymentSel.options[paymentSel.selectedIndex].text || '';
-    const comment = document.getElementById('comment').value.trim();
-
-    let messageLines = [];
-    if (lang === 'hy') {
-      messageLines.push("Բարեւ։ Կցանկանայինք պատվիրել՝");
-      messageLines.push("Անուն: " + name);
-      messageLines.push("Հեռախոս: " + phone);
-      messageLines.push("Հասցե: " + address);
-      if (district) messageLines.push("Ռեսթ: " + district);
-      if (payment) messageLines.push("Վճարում: " + payment);
-      if (comment) messageLines.push("Մեկնաբանություն: " + comment);
-    } else if (lang === 'ru') {
-      messageLines.push("Здравствуйте, хочу сделать заказ:");
-      messageLines.push("Имя: " + name);
-      messageLines.push("Телефон: " + phone);
-      messageLines.push("Адрес: " + address);
-      if (district) messageLines.push("Район: " + district);
-      if (payment) messageLines.push("Оплата: " + payment);
-      if (comment) messageLines.push("Комментарий: " + comment);
-    } else {
-      messageLines.push("Hello, I'd like to place an order:");
-      messageLines.push("Name: " + name);
-      messageLines.push("Phone: " + phone);
-      messageLines.push("Address: " + address);
-      if (district) messageLines.push("District: " + district);
-      if (payment) messageLines.push("Payment: " + payment);
-      if (comment) messageLines.push("Comment: " + comment);
+    // Функция смены языка
+    function changeLanguage(lang) {
+      currentLanguage = lang;
+      applyTranslations();
+      renderShops();
+      if (currentStore) {
+        renderStorePage(currentStore);
+      }
     }
 
-    const message = encodeURIComponent(messageLines.join('\n'));
-    // Open WhatsApp (number from contact)
-    const phoneNumber = '+37443797727';
-    const url = `https://wa.me/${phoneNumber.replace(/\D/g,'')}?text=${message}`;
-    window.open(url, '_blank');
-  }
+    // Применение переводов
+    function applyTranslations() {
+      const t = translations[currentLanguage];
+      
+      document.getElementById('searchInput').placeholder = t.searchPlaceholder;
+      document.getElementById('nav-home').textContent = t.home;
+      document.getElementById('nav-order').textContent = t.order;
+      document.getElementById('nav-contacts').textContent = t.contacts;
+      document.getElementById('home-title').textContent = t.homeTitle;
+      document.getElementById('home-subtitle').textContent = t.homeSubtitle;
+      document.getElementById('shops-title').textContent = t.shopsTitle;
+      document.getElementById('order-now-btn').textContent = t.orderNow;
+      
+      const isLight = document.body.classList.contains('light-theme');
+      document.getElementById('themeToggle').textContent = isLight ? '🌞' : t.themeToggle;
+    }
 
-  // Placeholder rendering for shops/products (keeps visual structure)
-  document.addEventListener('DOMContentLoaded', () => {
-    const shopsList = document.getElementById('shops-list');
-    const sampleShops = [
-      {name: "Մրգ-Բանջարեղեն", img: "shop1.png"},
-      {name: "Ծաղկի խանութ", img: "shop2.png"},
-      {name: "Գլուխառ սնունդ", img: "shop3.png"},
-      {name: "Սուպերմարկետ", img: "shop4.png"}
-    ];
-    shopsList.innerHTML = '';
-    sampleShops.forEach(s => {
-      const card = document.createElement('div');
-      card.className = 'card';
-      card.innerHTML = `
-        <img src="${s.img}" alt="${s.name}">
-        <div>${s.name}</div>
-      `;
-      shopsList.appendChild(card);
+    // Работа с темой
+    function initTheme() {
+      const savedTheme = localStorage.getItem('artikTheme') || 'dark';
+      setTheme(savedTheme);
+    }
+
+    function setTheme(theme) {
+      if (theme === 'light') {
+        document.body.classList.add('light-theme');
+        document.getElementById('themeToggle').textContent = '🌞';
+      } else {
+        document.body.classList.remove('light-theme');
+        document.getElementById('themeToggle').textContent = translations[currentLanguage].themeToggle;
+      }
+      localStorage.setItem('artikTheme', theme);
+    }
+
+    document.getElementById('themeToggle').addEventListener('click', () => {
+      const isLight = document.body.classList.contains('light-theme');
+      setTheme(isLight ? 'dark' : 'light');
     });
-  });
 
-  // renderGlobalCart placeholder (updates totals based on district selection)
-  function renderGlobalCart() {
-    const districtSel = document.getElementById('district');
-    const idx = districtSel.selectedIndex;
-    let delivery = 0;
-    if (idx === 1) delivery = 500;
-    if (idx === 2) delivery = 700;
-    if (idx === 3 || idx === 4) delivery = 1000;
-    document.getElementById('delivery-value').textContent = delivery + ' AMD';
-    // items & grand are placeholders; if you have cart logic, connect here
-    const items = 0;
-    document.getElementById('items-value').textContent = items + ' AMD';
-    document.getElementById('grand-value').textContent = (items + delivery) + ' AMD';
-  }
+    // Навигация
+    function hideAllPages() {
+      document.getElementById('home-page').classList.add('hidden');
+      document.getElementById('store-page').classList.add('hidden');
+    }
 
-  // Ensure cart render on load
-  document.addEventListener('DOMContentLoaded', renderGlobalCart);
-</script>
+    function goHome() {
+      hideAllPages();
+      document.getElementById('home-page').classList.remove('hidden');
+      currentStore = null;
+      currentCategory = null;
+      window.scrollTo({ top: 0, behavior: 'smooth' });
+    }
 
+    // Рендер магазинов
+    function renderShops() {
+      const container = document.getElementById('shops-container');
+      container.innerHTML = '';
+
+      Object.keys(stores).forEach(storeKey => {
+        const store = stores[storeKey];
+        const card = document.createElement('div');
+        card.className = 'shop-card';
+        card.onclick = () => renderStorePage(storeKey);
+        
+        card.innerHTML = `
+          <h3>${store.name}</h3>
+          <p>${store.products.length} ${currentLanguage === 'hy' ? 'ապրանք' : currentLanguage === 'ru' ? 'товаров' : 'products'}</p>
+        `;
+        
+        container.appendChild(card);
+      });
+    }
+
+    // Рендер страницы магазина
+    function renderStorePage(storeKey) {
+      currentStore = storeKey;
+      hideAllPages();
+      document.getElementById('store-page').classList.remove('hidden');
+      
+      const container = document.getElementById('store-products');
+      container.innerHTML = '';
+      
+      const store = stores[storeKey];
+      const t = translations[currentLanguage];
+      
+      // Кнопка назад
+      const backBtn = document.createElement('button');
+      backBtn.className = 'back-btn';
+      backBtn.innerHTML = t.back;
+      backBtn.onclick = goHome;
+      container.appendChild(backBtn);
+      
+      // Заголовок
+      const title = document.createElement('h2');
+      title.textContent = store.name;
+      container.appendChild(title);
+      
+      // Категории
+      if (store.categories) {
+        const categoriesDiv = document.createElement('div');
+        categoriesDiv.className = 'categories';
+        
+        Object.keys(store.categories).forEach(catName => {
+          const btn = document.createElement('button');
+          btn.className = 'category-btn';
+          btn.innerHTML = `${store.categories[catName].icon} ${catName}`;
+          btn.onclick = () => renderCategory(storeKey, catName);
+          categoriesDiv.appendChild(btn);
+        });
+        
+        container.appendChild(categoriesDiv);
+      }
+      
+      // Товары
+      const productsDiv = document.createElement('div');
+      productsDiv.className = 'products';
+      
+      store.products.forEach(product => {
+        const productDiv = document.createElement('div');
+        productDiv.className = 'product';
+        
+        const productId = `${storeKey}-${product.name.replace(/\s+/g, '-')}`;
+        const qty = carts[storeKey]?.[product.name]?.qty || 0;
+        
+        productDiv.innerHTML = `
+          <img src="https://via.placeholder.com/60x60?text=🍪" alt="${product.name}">
+          <div class="product-info">
+            <h4>${product.name}</h4>
+            <p>${product.price} AMD</p>
+          </div>
+          <div class="qty-controls">
+            <button class="qty-btn" onclick="updateCart('${storeKey}', '${product.name}', ${product.price}, -1)">−</button>
+            <span class="qty-number" id="qty-${productId}">${qty}</span>
+            <button class="qty-btn" onclick="updateCart('${storeKey}', '${product.name}', ${product.price}, 1)">+</button>
+          </div>
+        `;
+        
+        productsDiv.appendChild(productDiv);
+      });
+      
+      container.appendChild(productsDiv);
+    }
+
+    // Рендер категории
+    function renderCategory(storeKey, categoryName) {
+      currentCategory = categoryName;
+      const store = stores[storeKey];
+      const container = document.getElementById('store-products');
+      
+      // Очищаем только продукты
+      const productsDiv = container.querySelector('.products');
+      if (productsDiv) productsDiv.innerHTML = '';
+      
+      // Обновляем активную категорию
+      const categoryBtns = container.querySelectorAll('.category-btn');
+      categoryBtns.forEach(btn => {
+        btn.classList.remove('active');
+        if (btn.textContent.includes(categoryName)) {
+          btn.classList.add('active');
+        }
+      });
+      
+      // Фильтруем товары
+      const filteredProducts = store.products.filter(
+        product => product.category === categoryName
+      );
+      
+      // Рендерим товары категории
+      const productsContainer = container.querySelector('.products') || document.createElement('div');
+      productsContainer.className = 'products';
+      
+      filteredProducts.forEach(product => {
+        const productDiv = document.createElement('div');
+        productDiv.className = 'product';
+        
+        const productId = `${storeKey}-${product.name.replace(/\s+/g, '-')}`;
+        const qty = carts[storeKey]?.[product.name]?.qty || 0;
+        
+        productDiv.innerHTML = `
+          <img src="https://via.placeholder.com/60x60?text=🍪" alt="${product.name}">
+          <div class="product-info">
+            <h4>${product.name}</h4>
+            <p>${product.price} AMD</p>
+          </div>
+          <div class="qty-controls">
+            <button class="qty-btn" onclick="updateCart('${storeKey}', '${product.name}', ${product.price}, -1)">−</button>
+            <span class="qty-number" id="qty-${productId}">${qty}</span>
+            <button class="qty-btn" onclick="updateCart('${storeKey}', '${product.name}', ${product.price}, 1)">+</button>
+          </div>
+        `;
+        
+        productsContainer.appendChild(productDiv);
+      });
+      
+      if (!container.querySelector('.products')) {
+        container.appendChild(productsContainer);
+      }
+    }
+
+    // Работа с корзиной
+    function updateCart(storeKey, productName, price, delta) {
+      if (!carts[storeKey]) carts[storeKey] = {};
+      if (!carts[storeKey][productName]) {
+        carts[storeKey][productName] = { qty: 0, price: price };
+      }
+      
+      carts[storeKey][productName].qty += delta;
+      if (carts[storeKey][productName].qty < 0) carts[storeKey][productName].qty = 0;
+      
+      // Обновляем отображение
+      const productId = `${storeKey}-${productName.replace(/\s+/g, '-')}`;
+      const qtyElement = document.getElementById(`qty-${productId}`);
+      if (qtyElement) qtyElement.textContent = carts[storeKey][productName].qty;
+      
+      updateCartCount();
+    }
+
+    function updateCartCount() {
+      let total = 0;
+      Object.values(carts).forEach(store => {
+        Object.values(store).forEach(item => {
+          total += item.qty;
+        });
+      });
+      document.getElementById('cartCount').textContent = total;
+    }
+
+    function openCart() {
+      const t = translations[currentLanguage];
+      alert(t.noResults); // Временное сообщение
+    }
+
+    // Поиск
+    document.getElementById('searchInput').addEventListener('input', function(e) {
+      const query = e.target.value.toLowerCase();
+      if (query.length < 2) return;
+      
+      // Здесь можно добавить логику поиска
+      console.log("Search query:", query);
+    });
+  </script>
 </body>
 </html>
