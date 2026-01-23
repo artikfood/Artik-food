@@ -818,23 +818,55 @@
 
 <button id="install-btn" style="
   position: fixed;
-  bottom: 100px;
-  left: 50%;
-  transform: translateX(-50%);
-  background: linear-gradient(135deg, #2ecc71, #6df0a0);
-  color: #0f1115;
+  top: 12px;
+  right: 12px;
+  background: linear-gradient(135deg, #22c55e, #16a34a);
+  color: white;
   border: none;
-  padding: 14px 22px;
+  padding: 10px 14px;
   border-radius: 999px;
-  font-size: 15px;
+  font-size: 14px;
   font-weight: 600;
-  box-shadow: 0 10px 30px rgba(46,204,113,0.35);
+  box-shadow: 0 10px 25px rgba(0,0,0,0.25);
   z-index: 10000;
   display: none;
-  cursor: pointer;
 ">
-  📲 Установить приложение
+  📲 Установить
 </button>
+
+<script>
+let deferredPrompt;
+const installBtn = document.getElementById("install-btn");
+
+// Android / Chrome / Edge
+window.addEventListener("beforeinstallprompt", (e) => {
+  e.preventDefault();
+  deferredPrompt = e;
+  installBtn.style.display = "block";
+});
+
+// Кнопка
+installBtn.addEventListener("click", async () => {
+  if (!deferredPrompt) return;
+  deferredPrompt.prompt();
+  const { outcome } = await deferredPrompt.userChoice;
+  deferredPrompt = null;
+  installBtn.style.display = "none";
+});
+
+// iOS (Safari) — показываем инструкцию
+const isIOS = /iphone|ipad|ipod/i.test(navigator.userAgent);
+const isInStandaloneMode = window.matchMedia("(display-mode: standalone)").matches;
+
+if (isIOS && !isInStandaloneMode) {
+  installBtn.style.display = "block";
+  installBtn.innerText = "➕ Добавить на экран";
+  installBtn.onclick = () => {
+    alert("Нажми кнопку «Поделиться» в Safari → «На экран Домой»");
+  };
+}
+</script>
+
 
 <script>
 /* ---------------- ТЕМА ---------------- */
