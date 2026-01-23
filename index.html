@@ -1,1634 +1,577 @@
 <!DOCTYPE html>
-<html lang="ru">
+<html lang="hy">
 <head>
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
-  <title>Artik Food — Premium Delivery</title>
-
-  <!-- PWA -->
-  <link rel="manifest" href="manifest.json">
-  <meta name="theme-color" content="#0f1115">
-
-  <!-- Google Fonts -->
-  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&family=Playfair+Display:wght@500;600;700&display=swap" rel="stylesheet">
+  <title>Artik Food — Առաքում Արթիկում</title>
 
   <style>
-    :root {
-      --bg-main: #0f1115;
-      --bg-secondary: #151822;
-      --bg-card: rgba(255,255,255,0.06);
-      --bg-glass: rgba(255,255,255,0.08);
-      --border-glass: rgba(255,255,255,0.12);
-      --accent-gold: #d4af37;
-      --accent-green: #2ecc71;
-      --text-main: #f4f4f4;
-      --text-muted: #b3b3b3;
-      --shadow-soft: 0 10px 30px rgba(0,0,0,0.35);
-      --shadow-hover: 0 16px 40px rgba(0,0,0,0.5);
-      --radius-xl: 20px;
-      --radius-lg: 16px;
-      --radius-md: 12px;
-    }
-
-    body.light-theme {
-      --bg-main: #f7f7f9;
-      --bg-secondary: #ffffff;
-      --bg-card: rgba(0,0,0,0.04);
-      --bg-glass: rgba(0,0,0,0.05);
-      --border-glass: rgba(0,0,0,0.12);
-      --accent-gold: #b08a1f;
-      --accent-green: #27ae60;
-      --text-main: #1c1c1e;
-      --text-muted: #6e6e73;
-      --shadow-soft: 0 8px 24px rgba(0,0,0,0.08);
-      --shadow-hover: 0 14px 34px rgba(0,0,0,0.12);
-    }
-
-    * { box-sizing: border-box; }
-
     body {
+      font-family: system-ui, sans-serif;
       margin: 0;
-      font-family: "Inter", sans-serif;
-      background: radial-gradient(1200px 600px at 20% -10%, #1b1f2b 0%, #0f1115 50%, #0b0d12 100%);
-      color: var(--text-main);
-      line-height: 1.5;
-      transition: background 0.3s ease, color 0.3s ease;
+      background: #f5f5f5;
     }
-
-    body.light-theme {
-      background: radial-gradient(1200px 600px at 20% -10%, #ffffff 0%, #f2f2f6 50%, #ececf1 100%);
-    }
-
-    a { color: var(--accent-gold); text-decoration: none; }
-    a:hover { text-decoration: underline; }
 
     header {
-      position: sticky;
-      top: 0;
-      z-index: 1000;
-      background: linear-gradient(180deg, rgba(15,17,21,0.95), rgba(15,17,21,0.85));
-      backdrop-filter: blur(10px);
-      border-bottom: 1px solid var(--border-glass);
-      padding: 14px 20px;
+      background: #2ecc71;
+      color: white;
+      padding: 10px 14px;
       display: flex;
       justify-content: space-between;
       align-items: center;
-      flex-wrap: wrap;
     }
 
-    body.light-theme header {
-      background: linear-gradient(180deg, rgba(255,255,255,0.95), rgba(255,255,255,0.85));
-    }
-
-    header .logo-box {
-      display:flex;
-      align-items:center;
-      gap:12px;
-      cursor:pointer;
-      user-select:none;
-    }
-
-    header img {
-      height: 40px;
-      filter: drop-shadow(0 0 6px rgba(212,175,55,0.35));
-    }
-
-    header h1 {
-      margin: 0;
-      font-family: "Playfair Display", serif;
-      font-weight: 600;
-      font-size: 22px;
-      letter-spacing: 0.5px;
-      color: var(--accent-gold);
-    }
-
-    nav {
-      display: flex;
-      align-items: center;
-      gap: 14px;
-    }
-
-    nav a {
-      color: var(--text-main);
-      font-weight: 500;
-      font-size: 14px;
-      padding: 6px 10px;
-      border-radius: 10px;
-      transition: background 0.2s, color 0.2s;
-    }
-
-    nav a:hover {
-      background: var(--bg-glass);
-      color: var(--accent-gold);
-    }
-
-    .theme-toggle {
-      width: 42px;
-      height: 42px;
-      border-radius: 50%;
-      border: 1px solid var(--border-glass);
-      background: var(--bg-glass);
-      color: var(--text-main);
-      display: flex;
-      align-items: center;
-      justify-content: center;
-      font-size: 18px;
-      cursor: pointer;
-      box-shadow: var(--shadow-soft);
-      transition: background 0.2s, box-shadow 0.2s, transform 0.15s;
-    }
-
-    .theme-toggle:hover {
-      transform: translateY(-1px);
-      box-shadow: var(--shadow-hover);
-      background: rgba(212,175,55,0.15);
-      color: var(--accent-gold);
-    }
-
-    .hero {
-      padding: 70px 20px 60px;
-      text-align: center;
-      background:
-        radial-gradient(600px 300px at 50% -10%, rgba(212,175,55,0.18), transparent 70%),
-        radial-gradient(800px 400px at 80% 0%, rgba(46,204,113,0.15), transparent 70%);
-    }
-
-    .hero h2 {
-      font-family: "Playfair Display", serif;
-      font-size: 40px;
-      margin-bottom: 12px;
-      letter-spacing: 0.5px;
-      color: #ffffff;
-    }
-
-    body.light-theme .hero h2 {
-      color: #1c1c1e;
-    }
-
-    .hero p {
-      font-size: 17px;
-      color: var(--text-muted);
-      margin-bottom: 26px;
-      max-width: 600px;
-      margin-left: auto;
-      margin-right: auto;
-    }
-
-    .hero button {
-      background: linear-gradient(135deg, #d4af37, #f1d67a);
-      color: #0f1115;
+    .lang-switch button {
+      margin-left: 6px;
       border: none;
-      padding: 14px 28px;
-      font-size: 15px;
-      border-radius: 999px;
+      background: white;
+      color: #2ecc71;
+      border-radius: 6px;
+      padding: 4px 8px;
+      font-size: 13px;
       cursor: pointer;
-      font-weight: 600;
-      box-shadow: 0 8px 24px rgba(212,175,55,0.35);
-      transition: transform 0.15s, box-shadow 0.15s;
     }
 
-    .hero button:hover {
-      transform: translateY(-1px);
-      box-shadow: 0 12px 30px rgba(212,175,55,0.5);
+    .container {
+      padding: 10px;
     }
 
-    .section {
-      padding: 48px 20px;
-      max-width: 1200px;
-      margin: auto;
+    h2 {
+      margin-top: 12px;
+      margin-bottom: 8px;
     }
 
-    .section h3 {
-      text-align: center;
-      margin-bottom: 30px;
-      font-family: "Playfair Display", serif;
-      font-weight: 600;
-      font-size: 28px;
-      letter-spacing: 0.4px;
-      color: var(--accent-gold);
-    }
-
-    .shops, .categories {
-      display: grid;
-      grid-template-columns: repeat(auto-fit, minmax(180px, 1fr));
-      gap: 18px;
-    }
-
-    .products {
+    .store-list, .category-list, .product-list {
       display: flex;
       flex-direction: column;
-      gap: 14px;
+      gap: 8px;
     }
 
-    .card, .product {
-      background: linear-gradient(180deg, var(--bg-glass), rgba(255,255,255,0.02));
-      border: 1px solid var(--border-glass);
-      border-radius: var(--radius-xl);
-      padding: 18px 16px;
-      box-shadow: var(--shadow-soft);
-      text-align: center;
+    .card {
+      background: white;
+      padding: 10px;
+      border-radius: 10px;
+      box-shadow: 0 1px 3px rgba(0,0,0,0.1);
       cursor: pointer;
-      transition: transform 0.18s ease, box-shadow 0.18s ease, border-color 0.18s ease;
-    }
-
-    .card:hover, .product:hover {
-      transform: translateY(-2px);
-      box-shadow: var(--shadow-hover);
-      border-color: rgba(212,175,55,0.4);
-    }
-
-    .card img {
-      max-width: 90px;
-      max-height: 70px;
-      object-fit: contain;
-      margin-bottom: 10px;
-      filter: drop-shadow(0 0 8px rgba(212,175,55,0.25));
-    }
-
-    .card .icon {
-      font-size: 38px;
-      margin-bottom: 8px;
-      display: block;
-    }
-
-    .card div {
-      font-weight: 600;
-      letter-spacing: 0.2px;
     }
 
     .product {
       display: flex;
       justify-content: space-between;
       align-items: center;
-      text-align: left;
-      gap: 14px;
-      padding: 16px 18px;
-    }
-
-    .product img {
-      width: 60px;
-      height: 60px;
-      object-fit: cover;
-      border-radius: 14px;
-      background: rgba(255,255,255,0.1);
-      box-shadow: inset 0 0 0 1px rgba(255,255,255,0.15);
-    }
-
-    .product h4 {
-      margin: 0;
-      font-size: 16px;
-      font-weight: 600;
-      color: var(--text-main);
-    }
-
-    .product p {
-      margin: 6px 0 0;
-      font-size: 14px;
-      color: var(--text-muted);
-    }
-
-    .product button {
-      background: linear-gradient(135deg, #2ecc71, #6df0a0);
-      color: #0f1115;
-      border: none;
-      padding: 8px 14px;
-      border-radius: 999px;
-      cursor: pointer;
-      font-size: 14px;
-      font-weight: 600;
-      box-shadow: 0 6px 18px rgba(46,204,113,0.35);
-      transition: transform 0.15s, box-shadow 0.15s;
-    }
-
-    .product button:hover {
-      transform: translateY(-1px);
-      box-shadow: 0 10px 26px rgba(46,204,113,0.5);
+      gap: 6px;
     }
 
     .qty-controls {
-      display:flex;
-      justify-content:center;
-      align-items:center;
-      gap:10px;
+      display: flex;
+      align-items: center;
+      gap: 6px;
     }
 
     .qty-controls button {
-      width:32px;
-      height:32px;
-      border-radius:50%;
-      border:none;
-      background: linear-gradient(135deg, #2ecc71, #6df0a0);
-      color:#0f1115;
-      font-weight:700;
-      cursor:pointer;
-      box-shadow: 0 4px 14px rgba(46,204,113,0.35);
-      transition: transform 0.15s, box-shadow 0.15s;
+      width: 28px;
+      height: 28px;
+      border: none;
+      border-radius: 50%;
+      background: #2ecc71;
+      color: white;
+      font-size: 16px;
+      cursor: pointer;
     }
 
-    .qty-controls button:hover {
-      transform: scale(1.05);
-      box-shadow: 0 8px 22px rgba(46,204,113,0.55);
+    .qty-controls span {
+      min-width: 18px;
+      text-align: center;
+      font-weight: bold;
     }
 
-    .qty-number {
-      min-width:24px;
-      font-weight:600;
-      text-align:center;
-      color: var(--text-main);
-    }
-
-    .cart {
-      background: linear-gradient(180deg, var(--bg-glass), rgba(255,255,255,0.02));
-      border: 1px solid var(--border-glass);
-      padding: 18px 16px;
-      border-radius: var(--radius-xl);
-      max-width: 540px;
-      margin: 20px auto;
-      box-shadow: var(--shadow-soft);
-    }
-
-    .cart h4 {
-      margin-top:0;
-      text-align:center;
-      font-family: "Playfair Display", serif;
-      font-weight: 600;
-      font-size: 20px;
-      color: var(--accent-gold);
-      margin-bottom: 14px;
+    .cart-panel {
+      position: fixed;
+      bottom: 0;
+      left: 0;
+      right: 0;
+      background: white;
+      border-top: 1px solid #ddd;
+      max-height: 60vh;
+      overflow-y: auto;
+      padding: 10px;
+      box-shadow: 0 -2px 6px rgba(0,0,0,0.1);
     }
 
     .cart-item {
-      display:flex;
-      justify-content:space-between;
-      align-items:center;
-      margin-bottom:10px;
-      font-size:14px;
-      gap:10px;
-      color: var(--text-main);
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      margin-bottom: 6px;
+      gap: 6px;
     }
 
-    .cart-item span {
-      color: var(--text-muted);
+    .cart-item-main {
+      display: flex;
+      flex-direction: column;
+      font-size: 14px;
+    }
+
+    .cart-store {
+      font-size: 12px;
+      color: #777;
+    }
+
+    .remove-btn {
+      font-size: 14px;
+      padding: 4px 8px;
+      border-radius: 50%;
+      line-height: 1;
+      width: 28px;
+      height: 28px;
+      min-width: unset;
+      min-height: unset;
+      border: none;
+      background: #e74c3c;
+      color: white;
+      cursor: pointer;
     }
 
     .cart-total {
-      font-weight:600;
-      margin-top:10px;
-      text-align:center;
-      color: var(--text-main);
+      font-weight: bold;
+      margin-top: 8px;
     }
 
-    /* УМЕНЬШЕННАЯ КНОПКА УДАЛЕНИЯ */
-    .cart-item button {
-      background: rgba(255,255,255,0.12) !important;
-      border: 1px solid rgba(255,255,255,0.25);
-      color: #ff6b6b;
-      width: 22px;
-      height: 22px;
-      border-radius: 50%;
-      font-size: 12px;
-      cursor: pointer;
-      padding: 0;
-      margin-left: auto;
-      line-height: 1;
-      display: flex;
-      align-items: center;
-      justify-content: center;
-      transition: background 0.15s, transform 0.15s, box-shadow 0.15s;
-      box-shadow: 0 4px 10px rgba(0,0,0,0.25);
-    }
-
-    .cart-item button:hover {
-      background: rgba(255,107,107,0.15) !important;
-      transform: scale(1.05);
-      box-shadow: 0 6px 14px rgba(255,107,107,0.35);
-    }
-
-    .cart button {
-      width:100%;
-      background: linear-gradient(135deg, #d4af37, #f1d67a);
-      color:#0f1115;
-      border:none;
-      padding:12px;
-      font-size:15px;
-      border-radius:999px;
-      cursor:pointer;
-      margin-top:14px;
-      font-weight:600;
-      box-shadow: 0 8px 24px rgba(212,175,55,0.35);
-      transition: transform 0.15s, box-shadow 0.15s;
-    }
-
-    .cart button:hover {
-      transform: translateY(-1px);
-      box-shadow: 0 12px 30px rgba(212,175,55,0.5);
-    }
-
-    .order-form {
-      background: linear-gradient(180deg, var(--bg-glass), rgba(255,255,255,0.02));
-      border: 1px solid var(--border-glass);
-      padding: 22px 20px;
-      border-radius: var(--radius-xl);
-      max-width: 540px;
-      margin: auto;
-      box-shadow: var(--shadow-soft);
-    }
-
-    .order-form input,
-    .order-form textarea,
-    .order-form select {
-      width:100%;
-      padding:12px 14px;
-      margin-bottom:14px;
-      border-radius:12px;
-      border: 1px solid rgba(255,255,255,0.15);
-      background: rgba(255,255,255,0.06);
-      color: var(--text-main);
-      font-size:14px;
-      outline: none;
-      transition: border-color 0.15s, box-shadow 0.15s;
-    }
-
-    body.light-theme .order-form input,
-    body.light-theme .order-form textarea,
-    body.light-theme .order-form select {
-      background: rgba(0,0,0,0.04);
-      border: 1px solid rgba(0,0,0,0.12);
-    }
-
-    .order-form input::placeholder,
-    .order-form textarea::placeholder {
-      color: var(--text-muted);
-    }
-
-    .order-form input:focus,
-    .order-form textarea:focus,
-    .order-form select:focus {
-      border-color: rgba(212,175,55,0.6);
-      box-shadow: 0 0 0 3px rgba(212,175,55,0.15);
-    }
-
-    .order-form button {
-      width:100%;
-      background: linear-gradient(135deg, #2ecc71, #6df0a0);
-      color:#0f1115;
-      border:none;
-      padding:14px;
-      font-size:16px;
-      border-radius:999px;
-      cursor:pointer;
-      font-weight:600;
-      box-shadow: 0 8px 24px rgba(46,204,113,0.35);
-      transition: transform 0.15s, box-shadow 0.15s;
-    }
-
-    .order-form button:hover {
-      transform: translateY(-1px);
-      box-shadow: 0 12px 30px rgba(46,204,113,0.55);
-    }
-
-    footer {
-      background: linear-gradient(180deg, rgba(15,17,21,0.9), rgba(15,17,21,1));
-      color: var(--text-muted);
-      text-align:center;
-      padding:20px;
-      margin-top:60px;
-      font-size:13px;
-      border-top: 1px solid var(--border-glass);
-    }
-
-    body.light-theme footer {
-      background: linear-gradient(180deg, rgba(255,255,255,0.9), rgba(255,255,255,1));
-    }
-
-    .hidden { display:none; }
-
-    .back-btn {
-      display: inline-block;
-      margin-bottom: 14px;
-      background: var(--bg-glass);
-      color: var(--text-main);
-      border: 1px solid var(--border-glass);
-      padding: 8px 16px;
-      border-radius: 999px;
-      cursor: pointer;
-      font-size: 14px;
-      font-weight: 500;
-      transition: background 0.15s, border-color 0.15s, color 0.15s;
-    }
-
-    .back-btn:hover {
-      background: rgba(212,175,55,0.15);
-      border-color: rgba(212,175,55,0.4);
-      color: var(--accent-gold);
-    }
-
-    .floating-buttons {
-      position: fixed;
-      bottom: 160px;
-      right: 18px;
-      display: flex;
-      flex-direction: column;
-      gap: 12px;
-      z-index: 9999;
-    }
-
-    .floating-buttons button {
-      padding: 10px 16px;
-      border: none;
-      border-radius: 999px;
-      background: linear-gradient(135deg, #d4af37, #f1d67a);
-      color: #0f1115;
-      font-size: 14px;
-      font-weight: 600;
-      box-shadow: 0 8px 24px rgba(212,175,55,0.35);
-      cursor: pointer;
-      transition: transform 0.15s, box-shadow 0.15s;
-    }
-
-    .floating-buttons button:hover {
-      transform: translateY(-1px);
-      box-shadow: 0 12px 30px rgba(212,175,55,0.55);
-    }
-
-    .floating-icons {
-      position: fixed;
-      bottom: 20px;
-      right: 20px;
-      display: flex;
-      flex-direction: column;
-      gap: 10px;
-      z-index: 9999;
-    }
-
-    .floating-icons a {
-      width: 44px;
-      height: 44px;
-      border-radius: 50%;
-      display: flex;
-      align-items: center;
-      justify-content: center;
-      text-decoration: none;
-      font-size: 18px;
-      background: linear-gradient(135deg, #2ecc71, #6df0a0);
-      color: #0f1115;
-      box-shadow: 0 8px 24px rgba(46,204,113,0.35);
-      transition: transform 0.15s, box-shadow 0.15s;
-    }
-
-    .floating-icons a:hover {
-      transform: scale(1.05);
-      box-shadow: 0 12px 30px rgba(46,204,113,0.55);
-    }
-
-    #admin-panel {
-      position: fixed;
-      top: 0;
-      left: 0;
-      width: 100%;
-      height: 100%;
-      background: radial-gradient(1200px 600px at 20% -10%, #1b1f2b 0%, #0f1115 50%, #0b0d12 100%);
-      z-index: 10001;
-      overflow-y: auto;
-      color: #ffffff;
-    }
-
-    body.light-theme #admin-panel {
-      background: radial-gradient(1200px 600px at 20% -10%, #ffffff 0%, #f2f2f6 50%, #ececf1 100%);
-      color: #1c1c1e;
-    }
-
-    .admin-card {
-      background: linear-gradient(180deg, var(--bg-glass), rgba(255,255,255,0.02));
-      border: 1px solid var(--border-glass);
-      padding: 16px;
-      border-radius: var(--radius-lg);
-      box-shadow: var(--shadow-soft);
-    }
-
-    .admin-card h4 {
-      margin-top: 0;
-      color: var(--accent-gold);
-      border-bottom: 1px solid var(--border-glass);
-      padding-bottom: 8px;
-      font-family: "Playfair Display", serif;
-      font-weight: 600;
-    }
-
-    .admin-card button {
-      background: linear-gradient(135deg, #3498db, #6fbfff);
-      color: #0f1115;
-      border: none;
-      padding: 8px 12px;
-      border-radius: 999px;
-      cursor: pointer;
-      font-weight: 600;
-      box-shadow: 0 6px 18px rgba(52,152,219,0.35);
-      transition: transform 0.15s, box-shadow 0.15s;
-    }
-
-    .admin-card button:hover {
-      transform: translateY(-1px);
-      box-shadow: 0 10px 26px rgba(52,152,219,0.55);
-    }
-
-    .admin-table {
-      width: 100%;
-      border-collapse: collapse;
+    .order-btn {
       margin-top: 10px;
+      width: 100%;
+      padding: 10px;
+      background: #2ecc71;
+      color: white;
+      border: none;
+      border-radius: 8px;
+      font-size: 16px;
+      cursor: pointer;
+    }
+
+    .nav-buttons {
+      display: flex;
+      gap: 8px;
+      margin-bottom: 8px;
+    }
+
+    .nav-buttons button {
+      border: none;
+      background: #eee;
+      border-radius: 8px;
+      padding: 6px 10px;
       font-size: 14px;
-    }
-
-    .admin-table th, .admin-table td {
-      border: 1px solid rgba(255,255,255,0.12);
-      padding: 8px;
-      text-align: left;
-      color: inherit;
-    }
-
-    .admin-table th {
-      background: rgba(255,255,255,0.08);
-      color: var(--accent-gold);
-      font-weight: 600;
-    }
-
-    .admin-table tr:nth-child(even) {
-      background: rgba(255,255,255,0.04);
-    }
-
-    /* ===================== МОБИЛЬНАЯ АДАПТАЦИЯ (ТОЛЬКО СТИЛИ) ===================== */
-
-    @media (max-width: 900px) {
-      header {
-        flex-direction: column;
-        align-items: stretch;
-        gap: 10px;
-      }
-
-      header .logo-box {
-        justify-content: center;
-      }
-
-      nav {
-        justify-content: center;
-        flex-wrap: wrap;
-        gap: 10px;
-      }
-    }
-
-    @media (max-width: 600px) {
-      header {
-        padding: 10px 14px;
-      }
-
-      header h1 {
-        font-size: 18px;
-      }
-
-      header img {
-        height: 34px;
-      }
-
-      nav a {
-        font-size: 13px;
-        padding: 5px 8px;
-      }
-
-      .theme-toggle {
-        width: 36px;
-        height: 36px;
-        font-size: 16px;
-      }
-
-      .hero {
-        padding: 50px 16px 40px;
-      }
-
-      .hero h2 {
-        font-size: 28px;
-      }
-
-      .hero p {
-        font-size: 14px;
-      }
-
-      .hero button {
-        padding: 12px 22px;
-        font-size: 14px;
-      }
-
-      .section {
-        padding: 36px 14px;
-      }
-
-      .section h3 {
-        font-size: 22px;
-        margin-bottom: 20px;
-      }
-
-      .shops, .categories {
-        grid-template-columns: repeat(2, 1fr);
-        gap: 12px;
-      }
-
-      .card {
-        padding: 14px 12px;
-        border-radius: 16px;
-      }
-
-      .card img {
-        max-width: 70px;
-        max-height: 55px;
-      }
-
-      .card .icon {
-        font-size: 30px;
-      }
-
-      .product {
-        flex-direction: column;
-        align-items: flex-start;
-        gap: 10px;
-        padding: 14px;
-      }
-
-      .product img {
-        width: 54px;
-        height: 54px;
-      }
-
-      .product h4 {
-        font-size: 15px;
-      }
-
-      .product p {
-        font-size: 13px;
-      }
-
-      .product button {
-        align-self: stretch;
-        width: 100%;
-        padding: 10px;
-        font-size: 14px;
-      }
-
-      .qty-controls {
-        width: 100%;
-        justify-content: space-between;
-      }
-
-      .qty-controls button {
-        width: 36px;
-        height: 36px;
-      }
-
-      .cart {
-        padding: 16px 14px;
-        border-radius: 16px;
-      }
-
-      .cart h4 {
-        font-size: 18px;
-      }
-
-      .cart-item {
-        font-size: 13px;
-      }
-
-      .cart-total {
-        font-size: 14px;
-      }
-
-      .cart button {
-        font-size: 14px;
-        padding: 12px;
-      }
-
-      .order-form {
-        padding: 18px 16px;
-        border-radius: 16px;
-      }
-
-      .order-form input,
-      .order-form textarea,
-      .order-form select {
-        font-size: 13px;
-        padding: 10px 12px;
-      }
-
-      .order-form button {
-        font-size: 15px;
-        padding: 13px;
-      }
-
-      .floating-buttons {
-        bottom: 120px;
-        right: 12px;
-        gap: 10px;
-      }
-
-      .floating-buttons button {
-        padding: 8px 14px;
-        font-size: 13px;
-      }
-
-      .floating-icons {
-        bottom: 16px;
-        right: 12px;
-        gap: 8px;
-      }
-
-      .floating-icons a {
-        width: 40px;
-        height: 40px;
-        font-size: 16px;
-      }
-
-      footer {
-        font-size: 12px;
-        padding: 16px;
-      }
-
-      #admin-panel .admin-card {
-        padding: 14px;
-      }
-
-      #admin-panel h3 {
-        font-size: 18px;
-      }
+      cursor: pointer;
     }
   </style>
 </head>
 <body>
 
 <header>
-  <div class="logo-box" id="logoBox" onclick="goHome()">
-    <img src="logo.png" alt="Artik Food">
-    <h1>Artik Food</h1>
-    <div class="search-container">
-      <input type="text" id="searchInput" placeholder="🔍 Поиск товаров..." />
-    </div>
+  <div data-i18n="title">Artik Food — Առաքում Արթիկում</div>
+  <div class="lang-switch">
+    <button onclick="applyLanguage('hy')">🇦🇲 Հայ</button>
+    <button onclick="applyLanguage('ru')">🇷🇺 Рус</button>
+    <button onclick="applyLanguage('en')">🇬🇧 Eng</button>
   </div>
-  <nav>
-    <a href="#" onclick="goHome()">Главная</a>
-    <a href="#order">Заказать</a>
-    <a href="#contacts">Контакты</a>
-    <button class="theme-toggle" id="themeToggle" title="Сменить тему">🌙</button>
-  </nav>
 </header>
 
-<div id="home-page">
+<div class="container">
 
-<section class="hero">
-  <h2>Premium доставка в Артике</h2>
-  <p>Свежие продукты и цветы из лучших магазинов — быстро, удобно и с заботой о деталях.</p>
-  <button onclick="document.getElementById('order').scrollIntoView({behavior:'smooth'});">Заказать сейчас</button>
-</section>
-
-<section class="section" id="shops">
-  <h3>Магазины-партнёры</h3>
-  <div class="shops" id="shops-list"></div>
-</section>
-
-<section class="section">
-  <div class="cart" id="global-cart">
-    <h4>Ваша корзина</h4>
-    <div id="global-cart-items"></div>
-    <div class="cart-total" id="global-cart-total">Товары: 0 AMD</div>
-    <div class="cart-total" id="delivery-total">Доставка: 0 AMD</div>
-    <div class="cart-total" id="grand-total">Итого: 0 AMD</div>
+  <div class="nav-buttons">
+    <button onclick="goHome()" data-i18n="home">Գլխավոր</button>
+    <button onclick="goBack()" data-i18n="back">Վերադառնալ</button>
   </div>
-</section>
+
+  <h2 data-i18n="stores">Խանութներ</h2>
+  <div id="storeList" class="store-list"></div>
+
+  <h2 id="categoryTitle" style="display:none;" data-i18n="categories">Կատեգորիաներ</h2>
+  <div id="categoryList" class="category-list"></div>
+
+  <h2 id="productTitle" style="display:none;" data-i18n="products">Ապրանքներ</h2>
+  <div id="productList" class="product-list"></div>
 
 </div>
 
-<section class="section">
-<div id="store-page" class="hidden">
-  <section class="section">
-    <h3 id="store-"></h3>
-    <div class="products" id="store-products"></div>
-
-    <div class="cart hidden" id="store-cart">
-      <h4>Корзина магазина</h4>
-      <div id="store-cart-items"></div>
-      <div class="cart-total" id="store-cart-total">Итого: 0 AMD</div>
-      <div id="store-order-buttons" style="display:none;"></div>
-    </div>
-  </section>
+<div id="cartPanel" class="cart-panel">
+  <h3 data-i18n="cart">Զամբյուղ</h3>
+  <div id="cartItems"></div>
+  <div class="cart-total" id="cartTotal"></div>
+  <button class="order-btn" onclick="orderNow()" data-i18n="order">Պատվիրել</button>
 </div>
-
-<section class="section" id="order">
-  <h3>Оформление заказа</h3>
-  <form class="order-form" id="order-form" onsubmit="event.preventDefault(); sendFormToWhatsApp();">
-    <input type="text" id="name" placeholder="Ваше имя" required />
-    <input type="tel" id="phone" placeholder="Телефон" required />
-    <input type="text" id="address" placeholder="Адрес доставки" required />
-    <select id="district" required onchange="renderGlobalCart()">
-      <option value="">Выберите район доставки</option>
-      <option value="Артик">Артик — 500 AMD</option>
-      <option value="Арич">Арич — 700 AMD</option>
-      <option value="Нор-Кянк">Нор-Кянк — 1000 AMD</option>
-      <option value="Пемзашен">Пемзашен — 1000 AMD</option>
-    </select>
-    <select id="payment" required style="margin-bottom:12px;">
-      <option value="">Выберите способ оплаты</option>
-      <option value="Наличными курьеру">💵 Наличными курьеру</option>
-      <option value="IDram">🏦 IDram</option>
-      <option value="Картой онлайн">💳 Картой онлайн (скоро)</option>
-    </select>
-    <textarea rows="3" id="comment" placeholder="Комментарий к заказу"></textarea>
-    <button type="submit">Отправить заказ</button>
-  </form>
-
-  <div style="margin-top: 30px; background: var(--bg-glass); padding: 16px; border-radius: 16px; border: 1px solid var(--border-glass); max-width: 540px; margin-left: auto; margin-right: auto;">
-    <p style="margin: 0 0 8px; font-size: 14px; color: var(--accent-gold); font-weight:600;">Как происходит оплата:</p>
-    <ul style="margin: 0; padding-left: 20px; font-size: 14px; color: var(--text-muted);">
-      <li>Выбираете удобный способ оплаты при оформлении заказа</li>
-      <li>При оплате наличными — передаете деньги курьеру при получении</li>
-      <li>При онлайн-оплате — получаете ссылку после подтверждения заказа</li>
-      <li>После оплаты получаете чек на email или в мессенджер</li>
-    </ul>
-  </div>
-</section>
-
-<section class="section" id="contacts">
-  <h3>Контакты</h3>
-  <div class="card" style="max-width:420px; margin:auto;">
-    <p>📞 Телефон / WhatsApp: <a href="tel:+37443797727">+374 43 79 77 27</a></p>
-    <p>✈️ Telegram: @artikfood</p>
-    <p>📍 Артик, Ширак, Армения</p>
-  </div>
-</section>
-
-<div class="floating-icons">
-  <a href="#order" class="cart-icon" title="Оформить заказ">🛒</a>
-</div>
-
-<div class="floating-buttons">
-  <button onclick="goBack()">← Назад</button>
-  <button onclick="goHome()">🏠 Главная</button>
-</div>
-
-<footer>
-  <p>© 2026 Artik Food — Premium доставка продуктов в Артике</p>
-</footer>
-
-<div id="admin-panel" class="hidden">
-  <div style="background: linear-gradient(180deg, rgba(15,17,21,0.95), rgba(15,17,21,0.9)); color:inherit; padding:12px 16px; display:flex; justify-content:space-between; align-items:center; border-bottom: 1px solid var(--border-glass);">
-    <h3 style="margin:0; font-family:'Playfair Display', serif; font-weight:600; color: var(--accent-gold);">Панель администратора</h3>
-    <button onclick="hideAdminPanel()" style="background: rgba(255,107,107,0.15); color:#ff6b6b; border: 1px solid rgba(255,107,107,0.4); width:22px; height:22px; border-radius:50%; font-weight:700; cursor:pointer; display:flex; align-items:center; justify-content:center; font-size:12px;">✕</button>
-  </div>
-
-  <div style="padding:20px; max-width:900px; margin:auto;">
-    <div style="display:grid; grid-template-columns:1fr 1fr; gap:20px; margin-bottom:30px;">
-      <div class="admin-card">
-        <h4>📊 Статистика за сегодня</h4>
-        <p>Заказов: <span id="today-orders">0</span></p>
-        <p>Сумма: <span id="today-amount">0</span> AMD</p>
-        <p>Курьеров активно: <span id="active-couriers">0</span></p>
-      </div>
-
-      <div class="admin-card">
-        <h4>🚀 Быстрые действия</h4>
-        <button onclick="addNewProduct()" style="width:100%; margin:6px 0;">➕ Добавить товар</button>
-        <button onclick="viewAllOrders()" style="width:100%; margin:6px 0;">📋 Все заказы</button>
-        <button onclick="manageCouriers()" style="width:100%; margin:6px 0;">🚴 Управление курьерами</button>
-      </div>
-    </div>
-
-    <div class="admin-card" style="margin-bottom:20px;">
-      <h4>📦 Последние заказы</h4>
-      <div id="recent-orders" style="font-size:14px;">
-        <p style="text-align:center; color:#777;">Загрузка...</p>
-      </div>
-    </div>
-
-    <div class="admin-card">
-      <h4>🚴 Активные курьеры</h4>
-      <div id="couriers-list" style="font-size:14px;">
-        <p style="text-align:center; color:#777;">Нет активных курьеров</p>
-      </div>
-      <button onclick="addCourier()" style="margin-top:12px;">➕ Добавить курьера</button>
-    </div>
-  </div>
-</div>
-
-<button id="install-btn" style="
-  position: fixed;
-  top: 12px;
-  right: 12px;
-  background: linear-gradient(135deg, #22c55e, #16a34a);
-  color: white;
-  border: none;
-  padding: 10px 14px;
-  border-radius: 999px;
-  font-size: 14px;
-  font-weight: 600;
-  box-shadow: 0 10px 25px rgba(0,0,0,0.25);
-  z-index: 10000;
-  display: none;
-">
-  📲 Установить
-</button>
 
 <script>
-let deferredPrompt;
-const installBtn = document.getElementById("install-btn");
-
-// Android / Chrome / Edge
-window.addEventListener("beforeinstallprompt", (e) => {
-  e.preventDefault();
-  deferredPrompt = e;
-  installBtn.style.display = "block";
-});
-
-// Кнопка
-installBtn.addEventListener("click", async () => {
-  if (!deferredPrompt) return;
-  deferredPrompt.prompt();
-  const { outcome } = await deferredPrompt.userChoice;
-  deferredPrompt = null;
-  installBtn.style.display = "none";
-});
-
-// iOS (Safari) — показываем инструкцию
-const isIOS = /iphone|ipad|ipod/i.test(navigator.userAgent);
-const isInStandaloneMode = window.matchMedia("(display-mode: standalone)").matches;
-
-if (isIOS && !isInStandaloneMode) {
-  installBtn.style.display = "block";
-  installBtn.innerText = "➕ Установить приложение";
-  installBtn.onclick = () => {
-    alert("Нажми кнопку «Поделиться» в Safari → «На экран Домой»");
-  };
-}
-</script>
-
-
-<script>
-/* ---------------- ТЕМА ---------------- */
-
-const themeToggle = document.getElementById('themeToggle');
-
-function setTheme(theme) {
-  if (theme === 'light') {
-    document.body.classList.add('light-theme');
-    themeToggle.textContent = '🌞';
-  } else {
-    document.body.classList.remove('light-theme');
-    themeToggle.textContent = '🌙';
-  }
-  localStorage.setItem('artikTheme', theme);
-}
-
-themeToggle.addEventListener('click', () => {
-  const isLight = document.body.classList.contains('light-theme');
-  setTheme(isLight ? 'dark' : 'light');
-});
-
-(function initTheme() {
-  const savedTheme = localStorage.getItem('artikTheme');
-  if (savedTheme) {
-    setTheme(savedTheme);
-  } else {
-    setTheme('dark');
-  }
-})();
-
-/* ---------------- СКРЫТАЯ АДМИНКА (5 кликов по логотипу) ---------------- */
-
-let logoClickCount = 0;
-const logoBox = document.getElementById('logoBox');
-
-logoBox.addEventListener('click', () => {
-  logoClickCount++;
-  if (logoClickCount === 5) {
-    showAdminPanel();
-    logoClickCount = 0;
-  }
-  setTimeout(() => { logoClickCount = 0; }, 1200);
-});
-
-/* ---------------- ДАННЫЕ ---------------- */
-
-const stores = {
-  tonoyans_sity: {
-    name: "Tonoyan City",
-    logo: "tonoyan-city.png",
-    categories: {
-      "Печенье": { icon: "🍪" },
-      "Вафли": { icon: "🧇" },
-      "Крекеры": { icon: "🥨" },
-      "Батончики и снеки": { icon: "🍫" },
-      "Ореховые сладости": { icon: "🥜" },
-      "Детские сладости": { icon: "🍭" }
-    },
-    products: [
-      { name: "Cookies с начинкой", price: 450, category: "Печенье" },
-      { name: "Cookies с карамелью", price: 500, category: "Печенье" },
-      { name: "Sandwich печенье", price: 420, category: "Печенье" },
-      { name: "Choco Bite", price: 540, category: "Печенье" },
-      { name: "Пряники глазированные", price: 350, category: "Печенье" },
-      { name: "Песочное печенье", price: 400, category: "Печенье" },
-      { name: "Овсяное печенье", price: 380, category: "Печенье" },
-      { name: "Печенье с кремом", price: 460, category: "Печенье" },
-      { name: "Детское печенье", price: 200, category: "Печенье" },
-      { name: "Ассорти печенья", price: 600, category: "Печенье" },
-
-      { name: "Вафли Daroini", price: 400, category: "Вафли" },
-      { name: "Вафли Krispi", price: 420, category: "Вафли" },
-      { name: "Вафли с шоколадом", price: 450, category: "Вафли" },
-      { name: "Вафли с орехом", price: 480, category: "Вафли" },
-      { name: "Вафли рулетики", price: 390, category: "Вафли" },
-      { name: "Вафли ванильные", price: 410, category: "Вафли" },
-      { name: "Вафли карамельные", price: 460, category: "Вафли" },
-      { name: "Вафли клубничные", price: 440, category: "Вафли" },
-      { name: "Мини-вафли", price: 300, category: "Вафли" },
-      { name: "Вафли ассорти", price: 550, category: "Вафли" },
-
-      { name: "Crackers Classic", price: 430, category: "Крекеры" },
-      { name: "Crackers Cheese", price: 500, category: "Крекеры" },
-      { name: "Crackers Peanut", price: 300, category: "Крекеры" },
-      { name: "Крекеры солёные", price: 350, category: "Крекеры" },
-      { name: "Крекеры с кунжутом", price: 380, category: "Крекеры" },
-      { name: "Крекеры с паприкой", price: 420, category: "Крекеры" },
-      { name: "Крекеры с зеленью", price: 410, category: "Крекеры" },
-      { name: "Крекеры с чесноком", price: 390, category: "Крекеры" },
-      { name: "Крекеры ассорти", price: 550, category: "Крекеры" },
-      { name: "Крекеры большие", price: 600, category: "Крекеры" },
-
-      { name: "Шоколадный батончик", price: 200, category: "Батончики и снеки" },
-      { name: "Батончик с карамелью", price: 220, category: "Батончики и снеки" },
-      { name: "Батончик с орехами", price: 250, category: "Батончики и снеки" },
-      { name: "Сладкие палочки", price: 300, category: "Батончики и снеки" },
-      { name: "Кукурузные снеки", price: 380, category: "Батончики и снеки" },
-      { name: "Снеки в шоколаде", price: 420, category: "Батончики и снеки" },
-      { name: "Сладкие подушечки", price: 350, category: "Батончики и снеки" },
-      { name: "Мини-батончики", price: 180, category: "Батончики и снеки" },
-      { name: "Снеки с карамелью", price: 400, category: "Батончики и снеки" },
-      { name: "Ассорти батончиков", price: 600, category: "Батончики и снеки" },
-
-      { name: "Козинак классический", price: 300, category: "Ореховые сладости" },
-      { name: "Козинак арахисовый", price: 350, category: "Ореховые сладости" },
-      { name: "Козинак кунжутный", price: 320, category: "Ореховые сладости" },
-      { name: "Арахис в глазури", price: 450, category: "Ореховые сладости" },
-      { name: "Миндаль в шоколаде", price: 600, category: "Ореховые сладости" },
-      { name: "Фундук в шоколаде", price: 650, category: "Ореховые сладости" },
-      { name: "Ореховое ассорти", price: 700, category: "Ореховые сладости" },
-      { name: "Семечки в карамели", price: 380, category: "Ореховые сладости" },
-      { name: "Кешью в глазури", price: 680, category: "Ореховые сладости" },
-      { name: "Ореховый микс", price: 750, category: "Ореховые сладости" },
-
-      { name: "Детское печенье", price: 110, category: "Детские сладости" },
-      { name: "Мини-вафли", price: 170, category: "Детские сладости" },
-      { name: "Печенье с героями", price: 200, category: "Детские сладости" },
-      { name: "Шоколадные фигурки", price: 250, category: "Детские сладости" },
-      { name: "Конфеты детские", price: 180, category: "Детские сладости" },
-      { name: "Печенье с молочной начинкой", price: 220, category: "Детские сладости" },
-      { name: "Сладкие трубочки", price: 190, category: "Детские сладости" },
-      { name: "Мини-крекеры", price: 160, category: "Детские сладости" },
-      { name: "Шоколадные шарики", price: 230, category: "Детские сладости" },
-      { name: "Детское ассорти", price: 300, category: "Детские сладости" }
-    ]
+/* ============================
+   🔹 ЯЗЫКИ / TRANSLATIONS
+============================ */
+const translations = {
+  hy: {
+    title: "Artik Food — Առաքում Արթիկում",
+    home: "Գլխավոր",
+    back: "Վերադառնալ",
+    stores: "Խանութներ",
+    categories: "Կատեգորիաներ",
+    products: "Ապրանքներ",
+    cart: "Զամբյուղ",
+    total: "Ընդամենը",
+    order: "Պատվիրել",
+    emptyCart: "Զամբյուղը դատարկ է",
+    store: "Խանութ",
+    quantity: "Քանակ"
   },
-
-  million: {
-    name: "Million",
-    products: [
-      { name: "Картофель 1кг", price: 300, category: "Овощи и фрукты" },
-      { name: "Яблоки 1кг", price: 400, category: "Овощи и фрукты" },
-      { name: "Бананы 1кг", price: 550, category: "Овощи и фрукты" },
-      { name: "Говядина 1кг", price: 3200, category: "Мясо и рыба" },
-      { name: "Курица 1кг", price: 1800, category: "Мясо и рыба" },
-      { name: "Рыба свежая 1кг", price: 2600, category: "Мясо и рыба" },
-      { name: "Молоко 1л", price: 350, category: "Молочные продукты" },
-      { name: "Сыр 300г", price: 1200, category: "Молочные продукты" },
-      { name: "Йогурт", price: 200, category: "Молочные продукты" },
-      { name: "Хлеб белый", price: 200, category: "Хлеб и выпечка" },
-      { name: "Лаваш", price: 150, category: "Хлеб и выпечка" },
-      { name: "Рис 1кг", price: 600, category: "Бакалея" },
-      { name: "Макароны", price: 400, category: "Бакалея" },
-      { name: "Сок апельсиновый", price: 450, category: "Напитки" },
-      { name: "Минеральная вода", price: 200, category: "Напитки" },
-      { name: "Моющее средство", price: 900, category: "Бытовая химия" },
-      { name: "Порошок стиральный", price: 1800, category: "Бытовая химия" },
-      { name: "Шоколад", price: 350, category: "Сладости" },
-      { name: "Печенье", price: 250, category: "Сладости" }
-    ]
+  ru: {
+    title: "Artik Food — Доставка в Артике",
+    home: "Главная",
+    back: "Назад",
+    stores: "Магазины",
+    categories: "Категории",
+    products: "Товары",
+    cart: "Корзина",
+    total: "Итого",
+    order: "Заказать",
+    emptyCart: "Корзина пуста",
+    store: "Магазин",
+    quantity: "Количество"
   },
-
-  mush: {
-    name: "Մուշ",
-    products: [
-      { name: "Картофель 1кг", price: 280, category: "Овощи и фрукты" },
-      { name: "Помидоры 1кг", price: 500, category: "Овощи и фрукты" },
-      { name: "Курица 1кг", price: 1750, category: "Мясо и рыба" },
-      { name: "Рыба свежая 1кг", price: 2550, category: "Мясо и рыба" },
-      { name: "Молоко 1л", price: 340, category: "Молочные продукты" },
-      { name: "Сыр 300г", price: 1150, category: "Молочные продукты" },
-      { name: "Хлеб", price: 190, category: "Хлеб и выпечка" },
-      { name: "Рис 1кг", price: 590, category: "Бакалея" },
-      { name: "Сок яблочный", price: 430, category: "Напитки" },
-      { name: "Порошок стиральный", price: 1750, category: "Бытовая химия" },
-      { name: "Шоколад", price: 330, category: "Сладости" }
-    ]
-  },
-
-  tonoyan: {
-    name: "Tonoyan",
-    products: [
-      { name: "Картофель 1кг", price: 310, category: "Овощи и фрукты" },
-      { name: "Яблоки 1кг", price: 420, category: "Овощи и фрукты" },
-      { name: "Говядина 1кг", price: 3250, category: "Мясо и рыба" },
-      { name: "Молоко 1л", price: 360, category: "Молочные продукты" },
-      { name: "Хлеб", price: 210, category: "Хлеб и выпечка" },
-      { name: "Макароны", price: 390, category: "Бакалея" },
-      { name: "Вода минеральная", price: 190, category: "Напитки" },
-      { name: "Моющее средство", price: 880, category: "Бытовая химия" },
-      { name: "Печенье", price: 240, category: "Сладости" }
-    ]
-  },
-
-  danielyan: {
-    name: "Danielyan",
-    products: [
-      { name: "Картофель 1кг", price: 295, category: "Овощи и фрукты" },
-      { name: "Бананы 1кг", price: 560, category: "Овощи и фрукты" },
-      { name: "Курица 1кг", price: 1780, category: "Мясо и рыба" },
-      { name: "Молоко 1л", price: 345, category: "Молочные продукты" },
-      { name: "Хлеб", price: 195, category: "Хлеб и выпечка" },
-      { name: "Рис 1кг", price: 605, category: "Бакалея" },
-      { name: "Сок", price: 440, category: "Напитки" },
-      { name: "Порошок стиральный", price: 1770, category: "Бытовая химия" },
-      { name: "Шоколад", price: 340, category: "Сладости" }
-    ]
-  },
-
-  edem: {
-    name: "Эдем (Цветы)",
-    products: [
-      { name: "Розы (1 шт)", price: 500, category: "Цветы" },
-      { name: "Тюльпаны (1 шт)", price: 400, category: "Цветы" },
-      { name: "Букет роз", price: 5000, category: "Букеты" },
-      { name: "Букет тюльпанов", price: 4500, category: "Букеты" },
-      { name: "Композиция в коробке", price: 7000, category: "Композиции" },
-      { name: "Подарочная открытка", price: 300, category: "Дополнительно" }
-    ]
+  en: {
+    title: "Artik Food — Delivery in Artik",
+    home: "Home",
+    back: "Back",
+    stores: "Stores",
+    categories: "Categories",
+    products: "Products",
+    cart: "Cart",
+    total: "Total",
+    order: "Order",
+    emptyCart: "Cart is empty",
+    store: "Store",
+    quantity: "Quantity"
   }
 };
 
-/* ---------------- СОСТОЯНИЕ ---------------- */
+let currentLang = "hy";
 
-let currentStore = null;
-let currentCategory = null;
-let carts = {};
+/* ============================
+   🔹 ПРИМЕНЕНИЕ ЯЗЫКА
+============================ */
+function applyLanguage(lang) {
+  currentLang = lang;
+  const t = translations[lang];
 
-/* ---------------- НАВИГАЦИЯ ---------------- */
+  document.title = t.title;
 
-function hideAllPages() {
-  document.getElementById('home-page').classList.add('hidden');
-  document.getElementById('store-page').classList.add('hidden');
+  document.querySelectorAll("[data-i18n]").forEach(el => {
+    const key = el.getAttribute("data-i18n");
+    if (t[key]) el.textContent = t[key];
+  });
+
+  renderCart();
 }
 
+/* ============================
+   🔹 ДАННЫЕ МАГАЗИНОВ
+============================ */
+const stores = {
+  million: {
+    name: "Million",
+    categories: {
+      vegetables: {
+        name: "Բանջարեղեն և մրգեր",
+        products: [
+          { name: "Կարտոֆիլ 1կգ", price: 300 },
+          { name: "Սոխ 1կգ", price: 250 },
+          { name: "Խնձոր 1կգ", price: 400 }
+        ]
+      },
+      dairy: {
+        name: "Կաթնամթերք",
+        products: [
+          { name: "Կաթ 1լ", price: 450 },
+          { name: "Պանիր 1կգ", price: 1800 },
+          { name: "Մածուն 1լ", price: 350 }
+        ]
+      }
+    }
+  },
+  sas: {
+    name: "SAS",
+    categories: {
+      bakery: {
+        name: "Հաց և թխվածք",
+        products: [
+          { name: "Լավաշ", price: 150 },
+          { name: "Սև հաց", price: 200 },
+          { name: "Բուլկի", price: 120 }
+        ]
+      },
+      drinks: {
+        name: "Ըմպելիքներ",
+        products: [
+          { name: "Ջուր 1.5լ", price: 200 },
+          { name: "Հյութ", price: 350 },
+          { name: "Կոլա", price: 400 }
+        ]
+      }
+    }
+  },
+  city: {
+    name: "City",
+    categories: {
+      sweets: {
+        name: "Քաղցրավենիք",
+        products: [
+          { name: "Շոկոլադ", price: 500 },
+          { name: "Բիսկվիտ", price: 300 },
+          { name: "Քաղցր կոնֆետ", price: 250 }
+        ]
+      },
+      snacks: {
+        name: "Խորտիկներ",
+        products: [
+          { name: "Չիպս", price: 350 },
+          { name: "Ընկույզ", price: 600 },
+          { name: "Պոպկորն", price: 300 }
+        ]
+      }
+    }
+  },
+  edem: {
+    name: "Էդեմ",
+    categories: {
+      flowers: {
+        name: "Ծաղիկներ",
+        products: [
+          { name: "Վարդ", price: 800 },
+          { name: "Ծաղկեփունջ", price: 5000 },
+          { name: "Խոլորձ", price: 6000 }
+        ]
+      }
+    }
+  }
+};
+
+/* ============================
+   🔹 СОСТОЯНИЕ
+============================ */
+let currentStoreKey = null;
+let currentCategoryKey = null;
+let cart = JSON.parse(localStorage.getItem("cart")) || [];
+
+/* ============================
+   🔹 НАВИГАЦИЯ
+============================ */
 function goHome() {
-  hideAllPages();
-  document.getElementById('home-page').classList.remove('hidden');
-  window.scrollTo({ top: 0, behavior: 'smooth' });
+  currentStoreKey = null;
+  currentCategoryKey = null;
+  renderStores();
 }
 
 function goBack() {
-  if (currentCategory) {
-    openStore(currentStore);
-  } else if (currentStore) {
-    goHome();
-  } else {
-    goHome();
+  if (currentCategoryKey) {
+    currentCategoryKey = null;
+    renderCategories();
+  } else if (currentStoreKey) {
+    currentStoreKey = null;
+    renderStores();
   }
 }
 
-/* ---------------- МАГАЗИНЫ ---------------- */
+/* ============================
+   🔹 РЕНДЕР МАГАЗИНОВ
+============================ */
+function renderStores() {
+  document.getElementById("categoryTitle").style.display = "none";
+  document.getElementById("productTitle").style.display = "none";
+  document.getElementById("categoryList").innerHTML = "";
+  document.getElementById("productList").innerHTML = "";
 
-function renderShops() {
-  const container = document.getElementById('shops-list');
-  container.innerHTML = '';
+  const storeList = document.getElementById("storeList");
+  storeList.innerHTML = "";
 
-  Object.keys(stores).forEach(key => {
-    const div = document.createElement('div');
-    div.className = 'card';
-
-    if (stores[key].logo) {
-      div.innerHTML = `
-        <img src="${stores[key].logo}" alt="${stores[key].name}">
-        <div>${stores[key].name}</div>
-      `;
-    } else {
-      div.innerText = stores[key].name;
-    }
-
-    div.onclick = () => openStore(key);
-    container.appendChild(div);
-  });
+  for (const key in stores) {
+    const store = stores[key];
+    const div = document.createElement("div");
+    div.className = "card";
+    div.textContent = store.name;
+    div.onclick = () => {
+      currentStoreKey = key;
+      renderCategories();
+    };
+    storeList.appendChild(div);
+  }
 }
 
-function openStore(storeKey) {
-  currentStore = storeKey;
-  currentCategory = null;
+/* ============================
+   🔹 РЕНДЕР КАТЕГОРИЙ
+============================ */
+function renderCategories() {
+  document.getElementById("storeList").innerHTML = "";
+  document.getElementById("productList").innerHTML = "";
+  document.getElementById("productTitle").style.display = "none";
 
-  hideAllPages();
-  document.getElementById('store-page').classList.remove('hidden');
+  const categoryTitle = document.getElementById("categoryTitle");
+  categoryTitle.style.display = "block";
 
-  document.getElementById('store-').innerText = stores[storeKey].name;
+  const categoryList = document.getElementById("categoryList");
+  categoryList.innerHTML = "";
 
-  const container = document.getElementById('store-products');
-  container.innerHTML = '';
-
-  const backBtn = document.createElement('button');
-  backBtn.className = 'back-btn';
-  backBtn.innerText = '← Назад';
-  backBtn.onclick = goHome;
-  container.appendChild(backBtn);
-
-  const categories = [...new Set(stores[storeKey].products.map(p => p.category))];
-
-  categories.forEach(category => {
-    const div = document.createElement('div');
-    div.className = 'card';
-
-    if (stores[storeKey].categories && stores[storeKey].categories[category]) {
-      div.innerHTML = `
-        <span class="icon">${stores[storeKey].categories[category].icon}</span>
-        <div>${category}</div>
-      `;
-    } else {
-      div.innerText = category;
-    }
-
-    div.onclick = () => openStoreCategory(storeKey, category);
-    container.appendChild(div);
-  });
-
-  document.getElementById('store-cart').classList.add('hidden');
+  const categories = stores[currentStoreKey].categories;
+  for (const key in categories) {
+    const category = categories[key];
+    const div = document.createElement("div");
+    div.className = "card";
+    div.textContent = category.name;
+    div.onclick = () => {
+      currentCategoryKey = key;
+      renderProducts();
+    };
+    categoryList.appendChild(div);
+  }
 }
 
-function openStoreCategory(storeKey, categoryName) {
-  currentStore = storeKey;
-  currentCategory = categoryName;
+/* ============================
+   🔹 РЕНДЕР ТОВАРОВ
+============================ */
+function renderProducts() {
+  document.getElementById("categoryList").innerHTML = "";
+  const productTitle = document.getElementById("productTitle");
+  productTitle.style.display = "block";
 
-  const container = document.getElementById('store-products');
-  container.innerHTML = '';
+  const productList = document.getElementById("productList");
+  productList.innerHTML = "";
 
-  const backBtn = document.createElement('button');
-  backBtn.className = 'back-btn';
-  backBtn.innerText = '← Назад к категориям';
-  backBtn.onclick = () => openStore(storeKey);
-  container.appendChild(backBtn);
-
-  const products = stores[storeKey].products.filter(p => p.category === categoryName);
+  const products = stores[currentStoreKey].categories[currentCategoryKey].products;
 
   products.forEach(product => {
-    const div = document.createElement('div');
-    div.className = 'product';
+    const div = document.createElement("div");
+    div.className = "card product";
 
-    div.innerHTML = `
-      <div style="display:flex; gap:12px; align-items:center;">
-        <img src="https://via.placeholder.com/60" alt="${product.name}">
-        <div>
-          <h4>${product.name}</h4>
-          <p>${product.price} AMD</p>
-        </div>
-      </div>
-      <div class="qty-controls">
-        <button onclick="changeQty('${storeKey}', '${product.name}', -1)">−</button>
-        <span class="qty-number" id="qty-${storeKey}-${product.name}">0</span>
-        <button onclick="changeQty('${storeKey}', '${product.name}', 1)">+</button>
-      </div>
-    `;
+    const info = document.createElement("div");
+    info.innerHTML = `<strong>${product.name}</strong><br>${product.price}֏`;
 
-    container.appendChild(div);
+    const controls = document.createElement("div");
+    controls.className = "qty-controls";
+
+    const minusBtn = document.createElement("button");
+    minusBtn.textContent = "-";
+    minusBtn.onclick = () => updateCart(product, -1);
+
+    const qtySpan = document.createElement("span");
+    qtySpan.textContent = getProductQuantity(product);
+
+    const plusBtn = document.createElement("button");
+    plusBtn.textContent = "+";
+    plusBtn.onclick = () => updateCart(product, 1);
+
+    controls.appendChild(minusBtn);
+    controls.appendChild(qtySpan);
+    controls.appendChild(plusBtn);
+
+    div.appendChild(info);
+    div.appendChild(controls);
+    productList.appendChild(div);
   });
-
-  document.getElementById('store-cart').classList.remove('hidden');
-  renderStoreCart(storeKey);
 }
 
-/* ---------------- КОРЗИНА ---------------- */
+/* ============================
+   🔹 КОРЗИНА
+============================ */
+function getProductQuantity(product) {
+  const item = cart.find(i => i.name === product.name && i.store === stores[currentStoreKey].name);
+  return item ? item.quantity : 0;
+}
 
-function changeQty(storeKey, productName, delta) {
-  if (!carts[storeKey]) carts[storeKey] = {};
+function updateCart(product, change) {
+  const storeName = stores[currentStoreKey].name;
+  const index = cart.findIndex(i => i.name === product.name && i.store === storeName);
 
-  if (!carts[storeKey][productName]) {
-    carts[storeKey][productName] = 0;
+  if (index !== -1) {
+    cart[index].quantity += change;
+    if (cart[index].quantity <= 0) {
+      cart.splice(index, 1);
+    }
+  } else if (change > 0) {
+    cart.push({ name: product.name, price: product.price, quantity: 1, store: storeName });
   }
 
-  carts[storeKey][productName] += delta;
-
-  if (carts[storeKey][productName] < 0) {
-    carts[storeKey][productName] = 0;
-  }
-
-  document.getElementById(`qty-${storeKey}-${productName}`).innerText = carts[storeKey][productName];
-
-  renderStoreCart(storeKey);
-  renderGlobalCart();
+  localStorage.setItem("cart", JSON.stringify(cart));
+  renderProducts();
+  renderCart();
 }
 
-function renderStoreCart(storeKey) {
-  const cartDiv = document.getElementById('store-cart-items');
-  const totalDiv = document.getElementById('store-cart-total');
-  cartDiv.innerHTML = '';
+function renderCart() {
+  const cartItems = document.getElementById("cartItems");
+  const cartTotal = document.getElementById("cartTotal");
+  cartItems.innerHTML = "";
 
-  let total = 0;
-
-  if (carts[storeKey]) {
-    Object.keys(carts[storeKey]).forEach(productName => {
-      const qty = carts[storeKey][productName];
-      if (qty > 0) {
-        const product = stores[storeKey].products.find(p => p.name === productName);
-        const price = product.price * qty;
-        total += price;
-
-        const item = document.createElement('div');
-        item.className = 'cart-item';
-        item.innerHTML = `
-          <div>${productName} × ${qty}</div>
-          <span>${price} AMD</span>
-          <button onclick="removeFromCart('${storeKey}', '${productName}')">✕</button>
-        `;
-        cartDiv.appendChild(item);
-      }
-    });
-  }
-
-  totalDiv.innerText = `Итого: ${total} AMD`;
-}
-
-function removeFromCart(storeKey, productName) {
-  if (carts[storeKey] && carts[storeKey][productName]) {
-    carts[storeKey][productName] = 0;
-    const qtyEl = document.getElementById(`qty-${storeKey}-${productName}`);
-    if (qtyEl) qtyEl.innerText = 0;
-    renderStoreCart(storeKey);
-    renderGlobalCart();
-  }
-}
-
-function renderGlobalCart() {
-  const cartDiv = document.getElementById('global-cart-items');
-  const totalDiv = document.getElementById('global-cart-total');
-  const deliveryDiv = document.getElementById('delivery-total');
-  const grandTotalDiv = document.getElementById('grand-total');
-  cartDiv.innerHTML = '';
-
-  let total = 0;
-
-  Object.keys(carts).forEach(storeKey => {
-    Object.keys(carts[storeKey]).forEach(productName => {
-      const qty = carts[storeKey][productName];
-      if (qty > 0) {
-        const product = stores[storeKey].products.find(p => p.name === productName);
-        const price = product.price * qty;
-        total += price;
-
-        const item = document.createElement('div');
-        item.className = 'cart-item';
-        item.innerHTML = `
-          <div>
-            ${productName} × ${qty}
-            <div style="font-size:12px; color: var(--text-muted);">${stores[storeKey].name}</div>
-          </div>
-          <span>${price} AMD</span>
-          <button onclick="removeFromCart('${storeKey}', '${productName}')">✕</button>
-        `;
-        cartDiv.appendChild(item);
-      }
-    });
-  });
-
-  totalDiv.innerText = `Товары: ${total} AMD`;
-
-  const district = document.getElementById('district').value;
-  let delivery = 0;
-
-  if (district === "Артик") delivery = 500;
-  else if (district === "Арич") delivery = 700;
-  else if (district === "Нор-Кянк") delivery = 1000;
-  else if (district === "Пемзашен") delivery = 1000;
-
-  deliveryDiv.innerText = `Доставка: ${delivery} AMD`;
-  grandTotalDiv.innerText = `Итого: ${total + delivery} AMD`;
-}
-
-/* ---------------- ПОИСК ---------------- */
-
-const searchInput = document.getElementById('searchInput');
-
-searchInput.addEventListener('input', () => {
-  const query = searchInput.value.toLowerCase().trim();
-  if (!query) {
-    goHome();
+  if (cart.length === 0) {
+    cartItems.innerHTML = `<p data-i18n="emptyCart">${translations[currentLang].emptyCart}</p>`;
+    cartTotal.textContent = "";
     return;
   }
 
-  hideAllPages();
-  document.getElementById('store-page').classList.remove('hidden');
-
-  const container = document.getElementById('store-products');
-  container.innerHTML = '';
-
-  const backBtn = document.createElement('button');
-  backBtn.className = 'back-btn';
-  backBtn.innerText = '← Назад';
-  backBtn.onclick = goHome;
-  container.appendChild(backBtn);
-
-  Object.keys(stores).forEach(storeKey => {
-    stores[storeKey].products.forEach(product => {
-      if (product.name.toLowerCase().includes(query)) {
-        const div = document.createElement('div');
-        div.className = 'product';
-
-        div.innerHTML = `
-          <div style="display:flex; gap:12px; align-items:center;">
-            <img src="https://via.placeholder.com/60" alt="${product.name}">
-            <div>
-              <h4>${product.name}</h4>
-              <p>${product.price} AMD</p>
-              <p style="font-size:12px; color: var(--text-muted);">${stores[storeKey].name}</p>
-            </div>
-          </div>
-          <div class="qty-controls">
-            <button onclick="changeQty('${storeKey}', '${product.name}', -1)">−</button>
-            <span class="qty-number" id="qty-${storeKey}-${product.name}">0</span>
-            <button onclick="changeQty('${storeKey}', '${product.name}', 1)">+</button>
-          </div>
-        `;
-        container.appendChild(div);
-      }
-    });
-  });
-});
-
-/* ---------------- WHATSAPP ---------------- */
-
-function sendFormToWhatsApp() {
-  const name = document.getElementById('name').value;
-  const phone = document.getElementById('phone').value;
-  const address = document.getElementById('address').value;
-  const district = document.getElementById('district').value;
-  const payment = document.getElementById('payment').value;
-  const comment = document.getElementById('comment').value;
-
-  let message = `🛒 *Новый заказ — Artik Food*%0A%0A`;
-  message += `👤 Имя: ${name}%0A`;
-  message += `📞 Телефон: ${phone}%0A`;
-  message += `📍 Адрес: ${address}%0A`;
-  message += `🏘 Район: ${district}%0A`;
-  message += `💳 Оплата: ${payment}%0A`;
-  if (comment) message += `📝 Комментарий: ${comment}%0A`;
-  message += `%0A📦 *Товары:*%0A`;
-
   let total = 0;
 
-  Object.keys(carts).forEach(storeKey => {
-    Object.keys(carts[storeKey]).forEach(productName => {
-      const qty = carts[storeKey][productName];
-      if (qty > 0) {
-        const product = stores[storeKey].products.find(p => p.name === productName);
-        const price = product.price * qty;
-        total += price;
-        message += `- ${productName} (${stores[storeKey].name}) × ${qty} = ${price} AMD%0A`;
-      }
-    });
+  cart.forEach((item, index) => {
+    total += item.price * item.quantity;
+
+    const div = document.createElement("div");
+    div.className = "cart-item";
+
+    div.innerHTML = `
+      <div class="cart-item-main">
+        <strong>${item.name}</strong>
+        <div class="cart-store">🛒 ${item.store}</div>
+      </div>
+      <div>
+        ${item.quantity} × ${item.price}֏
+        <button class="remove-btn" onclick="removeFromCart(${index})">✕</button>
+      </div>
+    `;
+
+    cartItems.appendChild(div);
   });
 
-  let delivery = 0;
-  if (district === "Артик") delivery = 500;
-  else if (district === "Арич") delivery = 700;
-  else if (district === "Нор-Кянк") delivery = 1000;
-  else if (district === "Пемзашен") delivery = 1000;
-
-  message += `%0A🚚 Доставка: ${delivery} AMD%0A`;
-  message += `💰 *Итого: ${total + delivery} AMD*`;
-
-  const whatsappNumber = "37443797727";
-  const url = `https://wa.me/${whatsappNumber}?text=${message}`;
-  window.open(url, "_blank");
+  cartTotal.textContent = `${translations[currentLang].total}: ${total}֏`;
 }
 
-/* ---------------- АДМИНКА ---------------- */
-
-function showAdminPanel() {
-  document.getElementById('admin-panel').classList.remove('hidden');
+function removeFromCart(index) {
+  cart.splice(index, 1);
+  localStorage.setItem("cart", JSON.stringify(cart));
+  renderCart();
+  renderProducts();
 }
 
-function hideAdminPanel() {
-  document.getElementById('admin-panel').classList.add('hidden');
+/* ============================
+   🔹 ЗАКАЗ
+============================ */
+function orderNow() {
+  if (cart.length === 0) {
+    alert(translations[currentLang].emptyCart);
+    return;
+  }
+
+  let message = "🛒 " + translations[currentLang].cart + ":\n\n";
+  cart.forEach(item => {
+    message += `${item.name} (${item.store}) — ${item.quantity} × ${item.price}֏\n`;
+  });
+
+  const total = cart.reduce((sum, item) => sum + item.price * item.quantity, 0);
+  message += `\n${translations[currentLang].total}: ${total}֏`;
+
+  const whatsappUrl = `https://wa.me/?text=${encodeURIComponent(message)}`;
+  window.open(whatsappUrl, "_blank");
 }
 
-/* ---------------- ИНИЦИАЛИЗАЦИЯ ---------------- */
-
-renderShops();
-renderGlobalCart();
+/* ============================
+   🔹 ЗАПУСК
+============================ */
+document.addEventListener("DOMContentLoaded", () => {
+  applyLanguage("hy"); // по умолчанию армянский
+  renderStores();
+  renderCart();
+});
 </script>
 
 </body>
