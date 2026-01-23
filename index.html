@@ -5,80 +5,101 @@
   <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
   <title>Artik Food — Premium Delivery</title>
 
-  <meta name="theme-color" content="#0b0b0b">
+  <!-- PWA -->
+  <link rel="manifest" href="manifest.json">
+  <meta name="theme-color" content="#0f1115">
+
+  <!-- Google Fonts -->
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&family=Playfair+Display:wght@500;600;700&display=swap" rel="stylesheet">
 
   <style>
     :root {
-      --bg-main: #0b0b0b;
-      --bg-card: #141414;
-      --text-main: #f5f5f5;
-      --text-muted: #9a9a9a;
+      --bg-main: #0f1115;
+      --bg-secondary: #151822;
+      --bg-card: rgba(255,255,255,0.06);
+      --bg-glass: rgba(255,255,255,0.08);
+      --border-glass: rgba(255,255,255,0.12);
       --accent-gold: #d4af37;
       --accent-green: #2ecc71;
-      --border-soft: rgba(255,255,255,0.08);
-      --glass: rgba(255,255,255,0.06);
-      --shadow-soft: 0 10px 30px rgba(0,0,0,0.4);
+      --text-main: #f4f4f4;
+      --text-muted: #b3b3b3;
+      --shadow-soft: 0 10px 30px rgba(0,0,0,0.35);
+      --shadow-hover: 0 16px 40px rgba(0,0,0,0.5);
+      --radius-xl: 20px;
+      --radius-lg: 16px;
+      --radius-md: 12px;
     }
 
     body.light-theme {
-      --bg-main: #f7f7f7;
-      --bg-card: #ffffff;
-      --text-main: #111;
-      --text-muted: #666;
-      --accent-gold: #b18c2c;
+      --bg-main: #f7f7f9;
+      --bg-secondary: #ffffff;
+      --bg-card: rgba(0,0,0,0.04);
+      --bg-glass: rgba(0,0,0,0.05);
+      --border-glass: rgba(0,0,0,0.12);
+      --accent-gold: #b08a1f;
       --accent-green: #27ae60;
-      --border-soft: rgba(0,0,0,0.08);
-      --glass: rgba(0,0,0,0.04);
+      --text-main: #1c1c1e;
+      --text-muted: #6e6e73;
       --shadow-soft: 0 8px 24px rgba(0,0,0,0.08);
+      --shadow-hover: 0 14px 34px rgba(0,0,0,0.12);
     }
 
     * { box-sizing: border-box; }
 
     body {
       margin: 0;
-      font-family: "Segoe UI", system-ui, -apple-system, BlinkMacSystemFont, sans-serif;
-      background: var(--bg-main);
+      font-family: "Inter", sans-serif;
+      background: radial-gradient(1200px 600px at 20% -10%, #1b1f2b 0%, #0f1115 50%, #0b0d12 100%);
       color: var(--text-main);
-      transition: background 0.4s, color 0.4s;
+      line-height: 1.5;
+      transition: background 0.3s ease, color 0.3s ease;
     }
 
-    a { color: inherit; text-decoration: none; }
+    body.light-theme {
+      background: radial-gradient(1200px 600px at 20% -10%, #ffffff 0%, #f2f2f6 50%, #ececf1 100%);
+    }
+
+    a { color: var(--accent-gold); text-decoration: none; }
+    a:hover { text-decoration: underline; }
 
     header {
       position: sticky;
       top: 0;
       z-index: 1000;
-      background: linear-gradient(180deg, rgba(0,0,0,0.85), rgba(0,0,0,0.6));
-      backdrop-filter: blur(14px);
-      border-bottom: 1px solid var(--border-soft);
-      padding: 12px 16px;
+      background: linear-gradient(180deg, rgba(15,17,21,0.95), rgba(15,17,21,0.85));
+      backdrop-filter: blur(10px);
+      border-bottom: 1px solid var(--border-glass);
+      padding: 14px 20px;
       display: flex;
-      align-items: center;
       justify-content: space-between;
-      gap: 12px;
+      align-items: center;
+      flex-wrap: wrap;
     }
 
     body.light-theme header {
-      background: rgba(255,255,255,0.9);
+      background: linear-gradient(180deg, rgba(255,255,255,0.95), rgba(255,255,255,0.85));
     }
 
-    .logo-box {
-      display: flex;
-      align-items: center;
-      gap: 10px;
-      cursor: pointer;
+    header .logo-box {
+      display:flex;
+      align-items:center;
+      gap:12px;
+      cursor:pointer;
+      user-select:none;
     }
 
-    .logo-box img {
-      height: 42px;
-      border-radius: 8px;
+    header img {
+      height: 40px;
+      filter: drop-shadow(0 0 6px rgba(212,175,55,0.35));
     }
 
-    .logo-box h1 {
+    header h1 {
       margin: 0;
-      font-size: 20px;
+      font-family: "Playfair Display", serif;
       font-weight: 600;
-      letter-spacing: 0.3px;
+      font-size: 22px;
+      letter-spacing: 0.5px;
+      color: var(--accent-gold);
     }
 
     nav {
@@ -88,138 +109,132 @@
     }
 
     nav a {
-      font-size: 14px;
+      color: var(--text-main);
       font-weight: 500;
-      opacity: 0.85;
-      transition: opacity 0.2s;
+      font-size: 14px;
+      padding: 6px 10px;
+      border-radius: 10px;
+      transition: background 0.2s, color 0.2s;
     }
 
-    nav a:hover { opacity: 1; }
+    nav a:hover {
+      background: var(--bg-glass);
+      color: var(--accent-gold);
+    }
 
     .theme-toggle {
       width: 42px;
       height: 42px;
       border-radius: 50%;
-      background: var(--glass);
-      border: 1px solid var(--border-soft);
-      color: var(--accent-gold);
+      border: 1px solid var(--border-glass);
+      background: var(--bg-glass);
+      color: var(--text-main);
       display: flex;
       align-items: center;
       justify-content: center;
-      cursor: pointer;
       font-size: 18px;
-      transition: transform 0.2s, background 0.3s;
+      cursor: pointer;
+      box-shadow: var(--shadow-soft);
+      transition: background 0.2s, box-shadow 0.2s, transform 0.15s;
     }
 
     .theme-toggle:hover {
-      transform: scale(1.05);
-      background: rgba(212,175,55,0.12);
+      transform: translateY(-1px);
+      box-shadow: var(--shadow-hover);
+      background: rgba(212,175,55,0.15);
+      color: var(--accent-gold);
     }
 
     .hero {
-      position: relative;
-      padding: 64px 16px 48px;
+      padding: 70px 20px 60px;
       text-align: center;
       background:
-        radial-gradient(800px 300px at top center, rgba(212,175,55,0.18), transparent 60%),
-        linear-gradient(180deg, rgba(0,0,0,0.85), rgba(0,0,0,0.95));
-    }
-
-    body.light-theme .hero {
-      background:
-        radial-gradient(800px 300px at top center, rgba(177,140,44,0.18), transparent 60%),
-        linear-gradient(180deg, #ffffff, #f2f2f2);
+        radial-gradient(600px 300px at 50% -10%, rgba(212,175,55,0.18), transparent 70%),
+        radial-gradient(800px 400px at 80% 0%, rgba(46,204,113,0.15), transparent 70%);
     }
 
     .hero h2 {
-      font-size: 34px;
+      font-family: "Playfair Display", serif;
+      font-size: 40px;
       margin-bottom: 12px;
-      font-weight: 600;
-      letter-spacing: 0.4px;
+      letter-spacing: 0.5px;
+      color: #ffffff;
+    }
+
+    body.light-theme .hero h2 {
+      color: #1c1c1e;
     }
 
     .hero p {
       font-size: 17px;
       color: var(--text-muted);
-      margin-bottom: 24px;
+      margin-bottom: 26px;
+      max-width: 600px;
+      margin-left: auto;
+      margin-right: auto;
     }
 
     .hero button {
-      background: linear-gradient(135deg, var(--accent-gold), #f2d675);
-      color: #111;
+      background: linear-gradient(135deg, #d4af37, #f1d67a);
+      color: #0f1115;
       border: none;
-      padding: 14px 26px;
-      font-size: 16px;
+      padding: 14px 28px;
+      font-size: 15px;
       border-radius: 999px;
-      font-weight: 600;
       cursor: pointer;
+      font-weight: 600;
       box-shadow: 0 8px 24px rgba(212,175,55,0.35);
       transition: transform 0.15s, box-shadow 0.15s;
     }
 
     .hero button:hover {
       transform: translateY(-1px);
-      box-shadow: 0 12px 30px rgba(212,175,55,0.45);
+      box-shadow: 0 12px 30px rgba(212,175,55,0.5);
     }
 
     .section {
-      padding: 36px 16px;
+      padding: 48px 20px;
       max-width: 1200px;
       margin: auto;
     }
 
     .section h3 {
       text-align: center;
-      margin-bottom: 24px;
+      margin-bottom: 30px;
+      font-family: "Playfair Display", serif;
       font-weight: 600;
-      letter-spacing: 0.3px;
+      font-size: 28px;
+      letter-spacing: 0.4px;
+      color: var(--accent-gold);
     }
 
-    .shops {
+    .shops, .categories {
       display: grid;
-      grid-template-columns: repeat(auto-fit, minmax(150px, 1fr));
-      gap: 16px;
+      grid-template-columns: repeat(auto-fit, minmax(180px, 1fr));
+      gap: 18px;
     }
 
     .products {
       display: flex;
       flex-direction: column;
-      gap: 12px;
+      gap: 14px;
     }
 
-    .card {
-      background: var(--bg-card);
-      border: 1px solid var(--border-soft);
-      border-radius: 18px;
-      padding: 16px;
+    .card, .product {
+      background: linear-gradient(180deg, var(--bg-glass), rgba(255,255,255,0.02));
+      border: 1px solid var(--border-glass);
+      border-radius: var(--radius-xl);
+      padding: 18px 16px;
       box-shadow: var(--shadow-soft);
       text-align: center;
       cursor: pointer;
-      transition: transform 0.2s, box-shadow 0.2s, border-color 0.2s;
-      position: relative;
-      overflow: hidden;
+      transition: transform 0.18s ease, box-shadow 0.18s ease, border-color 0.18s ease;
     }
 
-    .card::before {
-      content: "";
-      position: absolute;
-      inset: 0;
-      background: radial-gradient(600px 200px at top center, rgba(212,175,55,0.15), transparent 60%);
-      opacity: 0;
-      transition: opacity 0.3s;
-      pointer-events: none;
-    }
-
-    .card:hover::before { opacity: 1; }
-
-    .card:hover {
+    .card:hover, .product:hover {
       transform: translateY(-2px);
-      box-shadow: 0 14px 36px rgba(0,0,0,0.55);
+      box-shadow: var(--shadow-hover);
       border-color: rgba(212,175,55,0.4);
-    }
-
-    body.light-theme .card:hover {
-      box-shadow: 0 12px 28px rgba(0,0,0,0.12);
     }
 
     .card img {
@@ -227,152 +242,193 @@
       max-height: 70px;
       object-fit: contain;
       margin-bottom: 10px;
+      filter: drop-shadow(0 0 8px rgba(212,175,55,0.25));
     }
 
     .card .icon {
-      font-size: 36px;
-      margin-bottom: 6px;
+      font-size: 38px;
+      margin-bottom: 8px;
       display: block;
     }
 
-    .product {
-      background: var(--bg-card);
-      border: 1px solid var(--border-soft);
-      border-radius: 16px;
-      padding: 12px 14px;
-      box-shadow: var(--shadow-soft);
-      display: flex;
-      justify-content: space-between;
-      align-items: center;
-      gap: 12px;
-      transition: transform 0.15s, box-shadow 0.15s, border-color 0.15s;
-    }
-
-    .product:hover {
-      transform: translateY(-1px);
-      box-shadow: 0 12px 28px rgba(0,0,0,0.45);
-      border-color: rgba(212,175,55,0.35);
-    }
-
-    body.light-theme .product:hover {
-      box-shadow: 0 10px 24px rgba(0,0,0,0.1);
-    }
-
-    .product img {
-      width: 56px;
-      height: 56px;
-      object-fit: cover;
-      border-radius: 10px;
-      background: rgba(255,255,255,0.08);
-      border: 1px solid var(--border-soft);
-    }
-
-    .product h4 {
-      margin: 0;
-      font-size: 15px;
+    .card div {
       font-weight: 600;
       letter-spacing: 0.2px;
     }
 
+    .product {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      text-align: left;
+      gap: 14px;
+      padding: 16px 18px;
+    }
+
+    .product img {
+      width: 60px;
+      height: 60px;
+      object-fit: cover;
+      border-radius: 14px;
+      background: rgba(255,255,255,0.1);
+      box-shadow: inset 0 0 0 1px rgba(255,255,255,0.15);
+    }
+
+    .product h4 {
+      margin: 0;
+      font-size: 16px;
+      font-weight: 600;
+      color: var(--text-main);
+    }
+
     .product p {
-      margin: 4px 0 0;
-      font-size: 13px;
+      margin: 6px 0 0;
+      font-size: 14px;
       color: var(--text-muted);
     }
 
+    .product button {
+      background: linear-gradient(135deg, #2ecc71, #6df0a0);
+      color: #0f1115;
+      border: none;
+      padding: 8px 14px;
+      border-radius: 999px;
+      cursor: pointer;
+      font-size: 14px;
+      font-weight: 600;
+      box-shadow: 0 6px 18px rgba(46,204,113,0.35);
+      transition: transform 0.15s, box-shadow 0.15s;
+    }
+
+    .product button:hover {
+      transform: translateY(-1px);
+      box-shadow: 0 10px 26px rgba(46,204,113,0.5);
+    }
+
     .qty-controls {
-      display: flex;
-      align-items: center;
-      gap: 8px;
+      display:flex;
+      justify-content:center;
+      align-items:center;
+      gap:10px;
     }
 
     .qty-controls button {
-      width: 30px;
-      height: 30px;
-      border-radius: 50%;
-      border: 1px solid rgba(212,175,55,0.5);
-      background: transparent;
-      color: var(--accent-gold);
-      font-weight: 700;
-      cursor: pointer;
-      transition: background 0.2s, color 0.2s, transform 0.1s;
+      width:32px;
+      height:32px;
+      border-radius:50%;
+      border:none;
+      background: linear-gradient(135deg, #2ecc71, #6df0a0);
+      color:#0f1115;
+      font-weight:700;
+      cursor:pointer;
+      box-shadow: 0 4px 14px rgba(46,204,113,0.35);
+      transition: transform 0.15s, box-shadow 0.15s;
     }
 
     .qty-controls button:hover {
-      background: rgba(212,175,55,0.15);
       transform: scale(1.05);
+      box-shadow: 0 8px 22px rgba(46,204,113,0.55);
     }
 
     .qty-number {
-      min-width: 22px;
-      text-align: center;
-      font-weight: 600;
+      min-width:24px;
+      font-weight:600;
+      text-align:center;
+      color: var(--text-main);
     }
 
     .cart {
-      background: var(--bg-card);
-      border: 1px solid var(--border-soft);
-      border-radius: 18px;
-      padding: 18px;
-      max-width: 520px;
+      background: linear-gradient(180deg, var(--bg-glass), rgba(255,255,255,0.02));
+      border: 1px solid var(--border-glass);
+      padding: 18px 16px;
+      border-radius: var(--radius-xl);
+      max-width: 540px;
       margin: 20px auto;
       box-shadow: var(--shadow-soft);
     }
 
     .cart h4 {
-      margin-top: 0;
-      text-align: center;
+      margin-top:0;
+      text-align:center;
+      font-family: "Playfair Display", serif;
       font-weight: 600;
-      letter-spacing: 0.3px;
+      font-size: 20px;
+      color: var(--accent-gold);
+      margin-bottom: 14px;
     }
 
     .cart-item {
-      display: flex;
-      justify-content: space-between;
-      align-items: center;
-      margin-bottom: 8px;
-      font-size: 14px;
-      gap: 10px;
-      border-bottom: 1px dashed var(--border-soft);
-      padding-bottom: 6px;
+      display:flex;
+      justify-content:space-between;
+      align-items:center;
+      margin-bottom:10px;
+      font-size:14px;
+      gap:10px;
+      color: var(--text-main);
     }
 
-    .cart-item:last-child {
-      border-bottom: none;
-      padding-bottom: 0;
-    }
-
-    .cart-item button {
-      background: transparent;
-      border: none;
-      color: #e74c3c;
-      font-size: 14px;
-      cursor: pointer;
-      padding: 0 4px;
-      margin-left: auto;
-      line-height: 1;
-      opacity: 0.8;
-      transition: opacity 0.2s, transform 0.1s;
-    }
-
-    .cart-item button:hover {
-      opacity: 1;
-      transform: scale(1.1);
+    .cart-item span {
+      color: var(--text-muted);
     }
 
     .cart-total {
-      font-weight: 600;
-      margin-top: 10px;
-      text-align: center;
-      letter-spacing: 0.2px;
+      font-weight:600;
+      margin-top:10px;
+      text-align:center;
+      color: var(--text-main);
+    }
+
+    .cart-item button {
+      background: rgba(255,255,255,0.12) !important;
+      border: 1px solid rgba(255,255,255,0.25);
+      color: #ff6b6b;
+      width: 22px;
+      height: 22px;
+      border-radius: 50%;
+      font-size: 12px;
+      cursor: pointer;
+      padding: 0;
+      margin-left: auto;
+      line-height: 1;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      transition: background 0.15s, transform 0.15s, box-shadow 0.15s;
+      box-shadow: 0 4px 10px rgba(0,0,0,0.25);
+    }
+
+    .cart-item button:hover {
+      background: rgba(255,107,107,0.15) !important;
+      transform: scale(1.05);
+      box-shadow: 0 6px 14px rgba(255,107,107,0.35);
+    }
+
+    .cart button {
+      width:100%;
+      background: linear-gradient(135deg, #d4af37, #f1d67a);
+      color:#0f1115;
+      border:none;
+      padding:12px;
+      font-size:15px;
+      border-radius:999px;
+      cursor:pointer;
+      margin-top:14px;
+      font-weight:600;
+      box-shadow: 0 8px 24px rgba(212,175,55,0.35);
+      transition: transform 0.15s, box-shadow 0.15s;
+    }
+
+    .cart button:hover {
+      transform: translateY(-1px);
+      box-shadow: 0 12px 30px rgba(212,175,55,0.5);
     }
 
     .order-form {
-      background: var(--bg-card);
-      border: 1px solid var(--border-soft);
-      border-radius: 18px;
-      padding: 22px;
-      max-width: 520px;
+      background: linear-gradient(180deg, var(--bg-glass), rgba(255,255,255,0.02));
+      border: 1px solid var(--border-glass);
+      padding: 22px 20px;
+      border-radius: var(--radius-xl);
+      max-width: 540px;
       margin: auto;
       box-shadow: var(--shadow-soft);
     }
@@ -380,16 +436,28 @@
     .order-form input,
     .order-form textarea,
     .order-form select {
-      width: 100%;
-      padding: 12px 14px;
-      margin-bottom: 14px;
-      border-radius: 12px;
-      border: 1px solid var(--border-soft);
-      font-size: 14px;
-      background: transparent;
+      width:100%;
+      padding:12px 14px;
+      margin-bottom:14px;
+      border-radius:12px;
+      border: 1px solid rgba(255,255,255,0.15);
+      background: rgba(255,255,255,0.06);
       color: var(--text-main);
+      font-size:14px;
       outline: none;
-      transition: border-color 0.2s, box-shadow 0.2s;
+      transition: border-color 0.15s, box-shadow 0.15s;
+    }
+
+    body.light-theme .order-form input,
+    body.light-theme .order-form textarea,
+    body.light-theme .order-form select {
+      background: rgba(0,0,0,0.04);
+      border: 1px solid rgba(0,0,0,0.12);
+    }
+
+    .order-form input::placeholder,
+    .order-form textarea::placeholder {
+      color: var(--text-muted);
     }
 
     .order-form input:focus,
@@ -400,154 +468,116 @@
     }
 
     .order-form button {
-      width: 100%;
-      background: linear-gradient(135deg, var(--accent-gold), #f2d675);
-      color: #111;
-      border: none;
-      padding: 14px;
-      font-size: 16px;
-      border-radius: 999px;
-      font-weight: 600;
-      cursor: pointer;
-      box-shadow: 0 8px 24px rgba(212,175,55,0.35);
+      width:100%;
+      background: linear-gradient(135deg, #2ecc71, #6df0a0);
+      color:#0f1115;
+      border:none;
+      padding:14px;
+      font-size:16px;
+      border-radius:999px;
+      cursor:pointer;
+      font-weight:600;
+      box-shadow: 0 8px 24px rgba(46,204,113,0.35);
       transition: transform 0.15s, box-shadow 0.15s;
     }
 
     .order-form button:hover {
       transform: translateY(-1px);
-      box-shadow: 0 12px 30px rgba(212,175,55,0.45);
+      box-shadow: 0 12px 30px rgba(46,204,113,0.55);
     }
 
     footer {
-      background: transparent;
+      background: linear-gradient(180deg, rgba(15,17,21,0.9), rgba(15,17,21,1));
       color: var(--text-muted);
-      text-align: center;
-      padding: 24px 16px;
-      margin-top: 40px;
-      font-size: 13px;
+      text-align:center;
+      padding:20px;
+      margin-top:60px;
+      font-size:13px;
+      border-top: 1px solid var(--border-glass);
     }
 
-    .hidden { display: none; }
+    body.light-theme footer {
+      background: linear-gradient(180deg, rgba(255,255,255,0.9), rgba(255,255,255,1));
+    }
+
+    .hidden { display:none; }
 
     .back-btn {
-      display: inline-flex;
-      align-items: center;
-      gap: 6px;
+      display: inline-block;
       margin-bottom: 14px;
-      background: var(--glass);
+      background: var(--bg-glass);
       color: var(--text-main);
-      border: 1px solid var(--border-soft);
-      padding: 8px 14px;
+      border: 1px solid var(--border-glass);
+      padding: 8px 16px;
       border-radius: 999px;
       cursor: pointer;
-      font-size: 13px;
-      transition: background 0.2s, border-color 0.2s, transform 0.1s;
+      font-size: 14px;
+      font-weight: 500;
+      transition: background 0.15s, border-color 0.15s, color 0.15s;
     }
 
     .back-btn:hover {
-      background: rgba(212,175,55,0.12);
+      background: rgba(212,175,55,0.15);
       border-color: rgba(212,175,55,0.4);
-      transform: translateY(-1px);
+      color: var(--accent-gold);
     }
 
     .floating-buttons {
       position: fixed;
-      bottom: 140px;
-      right: 16px;
+      bottom: 160px;
+      right: 18px;
+      display: flex;
+      flex-direction: column;
+      gap: 12px;
+      z-index: 9999;
+    }
+
+    .floating-buttons button {
+      padding: 10px 16px;
+      border: none;
+      border-radius: 999px;
+      background: linear-gradient(135deg, #d4af37, #f1d67a);
+      color: #0f1115;
+      font-size: 14px;
+      font-weight: 600;
+      box-shadow: 0 8px 24px rgba(212,175,55,0.35);
+      cursor: pointer;
+      transition: transform 0.15s, box-shadow 0.15s;
+    }
+
+    .floating-buttons button:hover {
+      transform: translateY(-1px);
+      box-shadow: 0 12px 30px rgba(212,175,55,0.55);
+    }
+
+    .floating-icons {
+      position: fixed;
+      bottom: 20px;
+      right: 20px;
       display: flex;
       flex-direction: column;
       gap: 10px;
       z-index: 9999;
     }
 
-    .floating-buttons button {
-      padding: 10px 14px;
-      border: 1px solid rgba(212,175,55,0.5);
-      border-radius: 999px;
-      background: transparent;
-      color: var(--accent-gold);
-      font-size: 14px;
-      box-shadow: var(--shadow-soft);
-      cursor: pointer;
-      transition: background 0.2s, transform 0.1s;
-    }
-
-    .floating-buttons button:hover {
-      background: rgba(212,175,55,0.15);
-      transform: scale(1.05);
-    }
-
-    .floating-icons {
-      position: fixed;
-      bottom: 16px;
-      right: 16px;
-      display: flex;
-      flex-direction: column;
-      gap: 8px;
-      z-index: 9999;
-    }
-
     .floating-icons a {
-      width: 42px;
-      height: 42px;
+      width: 44px;
+      height: 44px;
       border-radius: 50%;
       display: flex;
       align-items: center;
       justify-content: center;
       text-decoration: none;
       font-size: 18px;
-      box-shadow: var(--shadow-soft);
-      background: linear-gradient(135deg, var(--accent-gold), #f2d675);
-      color: #111;
+      background: linear-gradient(135deg, #2ecc71, #6df0a0);
+      color: #0f1115;
+      box-shadow: 0 8px 24px rgba(46,204,113,0.35);
       transition: transform 0.15s, box-shadow 0.15s;
     }
 
     .floating-icons a:hover {
-      transform: scale(1.08);
-      box-shadow: 0 10px 28px rgba(212,175,55,0.45);
-    }
-
-    .search-box {
-      max-width: 480px;
-      margin: 20px auto 0;
-      padding: 0 16px;
-    }
-
-    .search-input {
-      width: 100%;
-      padding: 12px 16px;
-      border-radius: 999px;
-      border: 1px solid var(--border-soft);
-      background: var(--bg-card);
-      color: var(--text-main);
-      font-size: 15px;
-      outline: none;
-      box-shadow: var(--shadow-soft);
-      transition: border-color 0.2s, box-shadow 0.2s;
-    }
-
-    .search-input::placeholder {
-      color: var(--text-muted);
-    }
-
-    .search-input:focus {
-      border-color: rgba(212,175,55,0.6);
-      box-shadow: 0 0 0 3px rgba(212,175,55,0.15);
-    }
-
-    #admin-login-btn {
-      position: fixed;
-      top: 8px;
-      left: 8px;
-      background: transparent;
-      color: transparent;
-      border: none;
-      padding: 0;
-      width: 10px;
-      height: 10px;
-      opacity: 0;
-      z-index: 10000;
-      cursor: default;
+      transform: scale(1.05);
+      box-shadow: 0 12px 30px rgba(46,204,113,0.55);
     }
 
     #admin-panel {
@@ -556,204 +586,142 @@
       left: 0;
       width: 100%;
       height: 100%;
-      background: var(--bg-main);
+      background: radial-gradient(1200px 600px at 20% -10%, #1b1f2b 0%, #0f1115 50%, #0b0d12 100%);
       z-index: 10001;
       overflow-y: auto;
-      transition: background 0.3s;
+      color: #ffffff;
     }
 
-    .admin-header {
-      background: linear-gradient(135deg, #111, #000);
-      color: #fff;
-      padding: 14px 18px;
-      display: flex;
-      justify-content: space-between;
-      align-items: center;
-      border-bottom: 1px solid rgba(255,255,255,0.08);
-    }
-
-    body.light-theme .admin-header {
-      background: #f0f0f0;
-      color: #111;
-      border-bottom: 1px solid rgba(0,0,0,0.1);
-    }
-
-    .admin-header h3 {
-      margin: 0;
-      font-weight: 600;
-      letter-spacing: 0.3px;
-    }
-
-    .admin-close-btn {
-      background: transparent;
-      border: 1px solid rgba(255,255,255,0.3);
-      color: inherit;
-      padding: 4px 8px;
-      border-radius: 999px;
-      font-size: 12px;
-      cursor: pointer;
-      opacity: 0.7;
-      transition: opacity 0.2s, background 0.2s;
-    }
-
-    .admin-close-btn:hover {
-      opacity: 1;
-      background: rgba(255,255,255,0.1);
-    }
-
-    body.light-theme .admin-close-btn {
-      border-color: rgba(0,0,0,0.2);
-    }
-
-    .admin-container {
-      padding: 20px;
-      max-width: 900px;
-      margin: auto;
-    }
-
-    .admin-grid {
-      display: grid;
-      grid-template-columns: repeat(auto-fit, minmax(260px, 1fr));
-      gap: 20px;
-      margin-bottom: 30px;
+    body.light-theme #admin-panel {
+      background: radial-gradient(1200px 600px at 20% -10%, #ffffff 0%, #f2f2f6 50%, #ececf1 100%);
+      color: #1c1c1e;
     }
 
     .admin-card {
-      background: var(--bg-card);
+      background: linear-gradient(180deg, var(--bg-glass), rgba(255,255,255,0.02));
+      border: 1px solid var(--border-glass);
       padding: 16px;
-      border-radius: 14px;
-      border: 1px solid var(--border-soft);
+      border-radius: var(--radius-lg);
       box-shadow: var(--shadow-soft);
     }
 
     .admin-card h4 {
       margin-top: 0;
-      margin-bottom: 10px;
       color: var(--accent-gold);
-      border-bottom: 1px solid var(--border-soft);
-      padding-bottom: 6px;
+      border-bottom: 1px solid var(--border-glass);
+      padding-bottom: 8px;
+      font-family: "Playfair Display", serif;
       font-weight: 600;
-      letter-spacing: 0.2px;
     }
 
     .admin-card button {
-      background: linear-gradient(135deg, var(--accent-gold), #f2d675);
-      color: #111;
+      background: linear-gradient(135deg, #3498db, #6fbfff);
+      color: #0f1115;
       border: none;
       padding: 8px 12px;
       border-radius: 999px;
       cursor: pointer;
-      font-size: 13px;
       font-weight: 600;
-      box-shadow: 0 6px 18px rgba(212,175,55,0.35);
-      transition: transform 0.1s, box-shadow 0.1s;
+      box-shadow: 0 6px 18px rgba(52,152,219,0.35);
+      transition: transform 0.15s, box-shadow 0.15s;
     }
 
     .admin-card button:hover {
       transform: translateY(-1px);
-      box-shadow: 0 10px 24px rgba(212,175,55,0.45);
+      box-shadow: 0 10px 26px rgba(52,152,219,0.55);
     }
 
     .admin-table {
       width: 100%;
       border-collapse: collapse;
       margin-top: 10px;
-      font-size: 13px;
+      font-size: 14px;
     }
 
-    .admin-table th,
-    .admin-table td {
-      border: 1px solid var(--border-soft);
+    .admin-table th, .admin-table td {
+      border: 1px solid rgba(255,255,255,0.12);
       padding: 8px;
       text-align: left;
+      color: inherit;
     }
 
     .admin-table th {
-      background: rgba(212,175,55,0.15);
+      background: rgba(255,255,255,0.08);
       color: var(--accent-gold);
       font-weight: 600;
     }
 
     .admin-table tr:nth-child(even) {
-      background: rgba(255,255,255,0.02);
+      background: rgba(255,255,255,0.04);
     }
 
-    body.light-theme .admin-table tr:nth-child(even) {
-      background: rgba(0,0,0,0.03);
-    }
-
-    @media (max-width: 480px) {
-      .hero h2 { font-size: 28px; }
+    @media (max-width: 600px) {
+      .hero h2 { font-size: 32px; }
       .hero p { font-size: 15px; }
-      header { padding: 10px 12px; }
-      .logo-box h1 { font-size: 18px; }
-      nav a { display: none; }
-      .theme-toggle { width: 38px; height: 38px; font-size: 16px; }
+      header h1 { font-size: 20px; }
+      nav a { font-size: 13px; }
+      .floating-buttons { bottom: 150px; right: 14px; }
+      .floating-icons { bottom: 16px; right: 14px; }
     }
   </style>
 </head>
 <body>
 
 <header>
-  <div class="logo-box" onclick="goHome()">
+  <div class="logo-box" id="logoBox" onclick="goHome()">
     <img src="logo.png" alt="Artik Food">
     <h1>Artik Food</h1>
-  </div>
+    <div class="search-container">
+  <input type="text" id="searchInput" placeholder="🔍 Поиск товаров..." />
 
+  </div>
   <nav>
     <a href="#" onclick="goHome()">Главная</a>
     <a href="#order">Заказать</a>
     <a href="#contacts">Контакты</a>
+    <button class="theme-toggle" id="themeToggle" title="Сменить тему">🌙</button>
   </nav>
-
-  <button class="theme-toggle" onclick="toggleTheme()" title="Переключить тему">
-    🌙
-  </button>
 </header>
 
 <div id="home-page">
 
-  <section class="hero">
-    <h2>Premium Delivery</h2>
-    <p>Свежие продукты и цветы — премиум-сервис прямо к вашей двери</p>
-    <button onclick="document.getElementById('order').scrollIntoView({behavior:'smooth'});">Заказать сейчас</button>
-  </section>
+<section class="hero">
+  <h2>Premium доставка в Артике</h2>
+  <p>Свежие продукты и цветы из лучших магазинов — быстро, удобно и с заботой о деталях.</p>
+  <button onclick="document.getElementById('order').scrollIntoView({behavior:'smooth'});">Заказать сейчас</button>
+</section>
 
-  <div class="search-box">
-    <input type="text" id="searchInput" class="search-input" placeholder="🔍 Поиск товаров..." />
+<section class="section" id="shops">
+  <h3>Магазины-партнёры</h3>
+  <div class="shops" id="shops-list"></div>
+</section>
+
+<section class="section">
+  <div class="cart" id="global-cart">
+    <h4>Ваша корзина</h4>
+    <div id="global-cart-items"></div>
+    <div class="cart-total" id="global-cart-total">Товары: 0 AMD</div>
+    <div class="cart-total" id="delivery-total">Доставка: 0 AMD</div>
+    <div class="cart-total" id="grand-total">Итого: 0 AMD</div>
   </div>
-
-  <section class="section" id="shops">
-    <h3>Супермаркеты</h3>
-    <div class="shops" id="shops-list"></div>
-  </section>
-
-  <section class="section">
-    <div class="cart" id="global-cart">
-      <h4>Корзина (все магазины)</h4>
-      <div id="global-cart-items"></div>
-      <div class="cart-total" id="global-cart-total">Товары: 0 AMD</div>
-      <div class="cart-total" id="delivery-total">Доставка: 0 AMD</div>
-      <div class="cart-total" id="grand-total">Итого: 0 AMD</div>
-    </div>
-  </section>
+</section>
 
 </div>
 
 <section class="section">
-  <div id="store-page" class="hidden">
-    <section class="section">
-      <h3 id="store-title"></h3>
-      <div class="products" id="store-products"></div>
+<div id="store-page" class="hidden">
+  <section class="section">
+    <h3 id="store-"></h3>
+    <div class="products" id="store-products"></div>
 
-      <div class="cart hidden" id="store-cart">
-        <h4>Корзина этого магазина</h4>
-        <div id="store-cart-items"></div>
-        <div class="cart-total" id="store-cart-total">Итого: 0 AMD</div>
-      </div>
-    </section>
-  </div>
-</section>
+    <div class="cart hidden" id="store-cart">
+      <h4>Корзина магазина</h4>
+      <div id="store-cart-items"></div>
+      <div class="cart-total" id="store-cart-total">Итого: 0 AMD</div>
+      <div id="store-order-buttons" style="display:none;"></div>
+    </div>
+  </section>
+</div>
 
 <section class="section" id="order">
   <h3>Оформление заказа</h3>
@@ -778,13 +746,13 @@
     <button type="submit">Отправить заказ</button>
   </form>
 
-  <div style="margin-top: 30px; background: var(--bg-card); padding: 16px; border-radius: 14px; border-left: 4px solid var(--accent-gold); box-shadow: var(--shadow-soft);">
-    <p style="margin: 0; font-size: 14px; font-weight:600;"><strong>Как происходит оплата:</strong></p>
-    <ul style="margin: 10px 0; padding-left: 20px; font-size: 13px; color:var(--text-muted);">
+  <div style="margin-top: 30px; background: var(--bg-glass); padding: 16px; border-radius: 16px; border: 1px solid var(--border-glass); max-width: 540px; margin-left: auto; margin-right: auto;">
+    <p style="margin: 0 0 8px; font-size: 14px; color: var(--accent-gold); font-weight:600;">Как происходит оплата:</p>
+    <ul style="margin: 0; padding-left: 20px; font-size: 14px; color: var(--text-muted);">
       <li>Выбираете удобный способ оплаты при оформлении заказа</li>
       <li>При оплате наличными — передаете деньги курьеру при получении</li>
-      <li>При онлайн-оплате — получаете ссылку на оплату после подтверждения заказа оператором</li>
-      <li>После успешной оплаты получаете чек на email или в мессенджер</li>
+      <li>При онлайн-оплате — получаете ссылку после подтверждения заказа</li>
+      <li>После оплаты получаете чек на email или в мессенджер</li>
     </ul>
   </div>
 </section>
@@ -792,14 +760,14 @@
 <section class="section" id="contacts">
   <h3>Контакты</h3>
   <div class="card" style="max-width:420px; margin:auto;">
-    <p>📞 Телефон / WhatsApp: <a href="tel:+37443797727" style="color:var(--accent-gold); font-weight:600;">+374 43 79 77 27</a></p>
+    <p>📞 Телефон / WhatsApp: <a href="tel:+37443797727">+374 43 79 77 27</a></p>
     <p>✈️ Telegram: @artikfood</p>
     <p>📍 Артик, Ширак, Армения</p>
   </div>
 </section>
 
 <div class="floating-icons">
-  <a href="#order" title="Оформить заказ">🛒</a>
+  <a href="#order" class="cart-icon" title="Оформить заказ">🛒</a>
 </div>
 
 <div class="floating-buttons">
@@ -808,18 +776,17 @@
 </div>
 
 <footer>
-  <p>© 2026 Artik Food — Premium Delivery</p>
+  <p>© 2026 Artik Food — Premium доставка продуктов в Артике</p>
 </footer>
 
-<!-- Админ-панель -->
 <div id="admin-panel" class="hidden">
-  <div class="admin-header">
-    <h3>Панель администратора</h3>
-    <button class="admin-close-btn" onclick="hideAdminPanel()">✕</button>
+  <div style="background: linear-gradient(180deg, rgba(15,17,21,0.95), rgba(15,17,21,0.9)); color:inherit; padding:12px 16px; display:flex; justify-content:space-between; align-items:center; border-bottom: 1px solid var(--border-glass);">
+    <h3 style="margin:0; font-family:'Playfair Display', serif; font-weight:600; color: var(--accent-gold);">Панель администратора</h3>
+    <button onclick="hideAdminPanel()" style="background: rgba(255,107,107,0.15); color:#ff6b6b; border: 1px solid rgba(255,107,107,0.4); width:22px; height:22px; border-radius:50%; font-weight:700; cursor:pointer; display:flex; align-items:center; justify-content:center; font-size:12px;">✕</button>
   </div>
 
-  <div class="admin-container">
-    <div class="admin-grid">
+  <div style="padding:20px; max-width:900px; margin:auto;">
+    <div style="display:grid; grid-template-columns:1fr 1fr; gap:20px; margin-bottom:30px;">
       <div class="admin-card">
         <h4>📊 Статистика за сегодня</h4>
         <p>Заказов: <span id="today-orders">0</span></p>
@@ -837,24 +804,117 @@
 
     <div class="admin-card" style="margin-bottom:20px;">
       <h4>📦 Последние заказы</h4>
-      <div id="recent-orders" style="font-size:13px;">
-        <p style="text-align:center; color:var(--text-muted);">Загрузка...</p>
+      <div id="recent-orders" style="font-size:14px;">
+        <p style="text-align:center; color:#777;">Загрузка...</p>
       </div>
     </div>
 
     <div class="admin-card">
       <h4>🚴 Активные курьеры</h4>
-      <div id="couriers-list" style="font-size:13px;">
-        <p style="text-align:center; color:var(--text-muted);">Нет активных курьеров</p>
+      <div id="couriers-list" style="font-size:14px;">
+        <p style="text-align:center; color:#777;">Нет активных курьеров</p>
       </div>
-      <button onclick="addCourier()" style="margin-top:10px;">➕ Добавить курьера</button>
+      <button onclick="addCourier()" style="margin-top:12px;">➕ Добавить курьера</button>
     </div>
   </div>
 </div>
 
-<button id="admin-login-btn" onclick="showAdminLogin()">.</button>
+<button id="install-btn" style="
+  position: fixed;
+  top: 12px;
+  right: 12px;
+  background: linear-gradient(135deg, #22c55e, #16a34a);
+  color: white;
+  border: none;
+  padding: 10px 14px;
+  border-radius: 999px;
+  font-size: 14px;
+  font-weight: 600;
+  box-shadow: 0 10px 25px rgba(0,0,0,0.25);
+  z-index: 10000;
+  display: none;
+">
+  📲 Установить
+</button>
 
 <script>
+let deferredPrompt;
+const installBtn = document.getElementById("install-btn");
+
+// Android / Chrome / Edge
+window.addEventListener("beforeinstallprompt", (e) => {
+  e.preventDefault();
+  deferredPrompt = e;
+  installBtn.style.display = "block";
+});
+
+// Кнопка
+installBtn.addEventListener("click", async () => {
+  if (!deferredPrompt) return;
+  deferredPrompt.prompt();
+  const { outcome } = await deferredPrompt.userChoice;
+  deferredPrompt = null;
+  installBtn.style.display = "none";
+});
+
+// iOS (Safari) — показываем инструкцию
+const isIOS = /iphone|ipad|ipod/i.test(navigator.userAgent);
+const isInStandaloneMode = window.matchMedia("(display-mode: standalone)").matches;
+
+if (isIOS && !isInStandaloneMode) {
+  installBtn.style.display = "block";
+  installBtn.innerText = "➕ Установить приложение";
+  installBtn.onclick = () => {
+    alert("Нажми кнопку «Поделиться» в Safari → «На экран Домой»");
+  };
+}
+</script>
+
+
+<script>
+/* ---------------- ТЕМА ---------------- */
+
+const themeToggle = document.getElementById('themeToggle');
+
+function setTheme(theme) {
+  if (theme === 'light') {
+    document.body.classList.add('light-theme');
+    themeToggle.textContent = '🌞';
+  } else {
+    document.body.classList.remove('light-theme');
+    themeToggle.textContent = '🌙';
+  }
+  localStorage.setItem('artikTheme', theme);
+}
+
+themeToggle.addEventListener('click', () => {
+  const isLight = document.body.classList.contains('light-theme');
+  setTheme(isLight ? 'dark' : 'light');
+});
+
+(function initTheme() {
+  const savedTheme = localStorage.getItem('artikTheme');
+  if (savedTheme) {
+    setTheme(savedTheme);
+  } else {
+    setTheme('dark');
+  }
+})();
+
+/* ---------------- СКРЫТАЯ АДМИНКА (5 кликов по логотипу) ---------------- */
+
+let logoClickCount = 0;
+const logoBox = document.getElementById('logoBox');
+
+logoBox.addEventListener('click', () => {
+  logoClickCount++;
+  if (logoClickCount === 5) {
+    showAdminPanel();
+    logoClickCount = 0;
+  }
+  setTimeout(() => { logoClickCount = 0; }, 1200);
+});
+
 /* ---------------- ДАННЫЕ ---------------- */
 
 const stores = {
@@ -1027,7 +1087,7 @@ const stores = {
 
 let currentStore = null;
 let currentCategory = null;
-let carts = JSON.parse(localStorage.getItem('artikFoodCarts')) || {};
+let carts = {};
 
 /* ---------------- НАВИГАЦИЯ ---------------- */
 
@@ -1037,8 +1097,6 @@ function hideAllPages() {
 }
 
 function goHome() {
-  currentStore = null;
-  currentCategory = null;
   hideAllPages();
   document.getElementById('home-page').classList.remove('hidden');
   window.scrollTo({ top: 0, behavior: 'smooth' });
@@ -1085,7 +1143,7 @@ function openStore(storeKey) {
   hideAllPages();
   document.getElementById('store-page').classList.remove('hidden');
 
-  document.getElementById('store-title').innerText = stores[storeKey].name;
+  document.getElementById('store-').innerText = stores[storeKey].name;
 
   const container = document.getElementById('store-products');
   container.innerHTML = '';
@@ -1115,7 +1173,7 @@ function openStore(storeKey) {
     container.appendChild(div);
   });
 
-  updateStoreCart();
+  document.getElementById('store-cart').classList.add('hidden');
 }
 
 function openStoreCategory(storeKey, categoryName) {
@@ -1142,7 +1200,7 @@ function openStoreCategory(storeKey, categoryName) {
       const div = document.createElement('div');
       div.className = 'product';
       div.innerHTML = `
-        <img src="https://via.placeholder.com/60x60?text=🛍️" alt="${item.name}">
+        <img src="https://via.placeholder.com/60x60?text=🍪" alt="${item.name}">
         <div style="flex:1;">
           <h4>${item.name}</h4>
           <p>${item.price} AMD</p>
@@ -1158,14 +1216,10 @@ function openStoreCategory(storeKey, categoryName) {
   });
 
   container.appendChild(list);
-  updateStoreCart();
+  document.getElementById('store-cart').classList.remove('hidden');
 }
 
 /* ---------------- КОРЗИНА ---------------- */
-
-function saveCarts() {
-  localStorage.setItem('artikFoodCarts', JSON.stringify(carts));
-}
 
 function changeQty(storeKey, productName, price, delta) {
   if (!carts[storeKey]) carts[storeKey] = {};
@@ -1178,7 +1232,6 @@ function changeQty(storeKey, productName, price, delta) {
   const qtyEl = document.getElementById(`qty-${storeKey}-${safeId}`);
   if (qtyEl) qtyEl.innerText = carts[storeKey][productName].qty;
 
-  saveCarts();
   updateStoreCart();
   renderGlobalCart();
 }
@@ -1192,7 +1245,6 @@ function removeItemFromCart(storeKey, productName) {
     delete carts[storeKey];
   }
   
-  saveCarts();
   updateStoreCart();
   renderGlobalCart();
 }
@@ -1201,11 +1253,6 @@ function updateStoreCart() {
   const cartBox = document.getElementById('store-cart');
   const itemsBox = document.getElementById('store-cart-items');
   const totalBox = document.getElementById('store-cart-total');
-
-  if (!currentStore) {
-    cartBox.classList.add('hidden');
-    return;
-  }
 
   itemsBox.innerHTML = '';
   let total = 0;
@@ -1263,106 +1310,9 @@ function renderGlobalCart() {
   document.getElementById('grand-total').innerText = `Итого: ${goodsTotal + delivery} AMD`;
 }
 
-/* ---------------- ПОИСК ---------------- */
-
-const searchInput = document.getElementById("searchInput");
-
-if (searchInput) {
-  searchInput.addEventListener("input", function () {
-    const query = this.value.trim().toLowerCase();
-
-    if (query.length < 2) {
-      if (currentStore) {
-        if (currentCategory) {
-          openStoreCategory(currentStore, currentCategory);
-        } else {
-          openStore(currentStore);
-        }
-      } else {
-        goHome();
-      }
-      return;
-    }
-
-    hideAllPages();
-    document.getElementById('store-page').classList.remove('hidden');
-
-    const container = document.getElementById('store-products');
-    container.innerHTML = '';
-
-    const backBtn = document.createElement('button');
-    backBtn.className = 'back-btn';
-    backBtn.innerText = '← Назад';
-    backBtn.onclick = () => {
-      searchInput.value = '';
-      goHome();
-    };
-    container.appendChild(backBtn);
-
-    const resultsTitle = document.createElement('h3');
-    resultsTitle.innerText = `Результаты поиска: "${query}"`;
-    resultsTitle.style.textAlign = "center";
-    resultsTitle.style.color = "var(--accent-gold)";
-    container.appendChild(resultsTitle);
-
-    const resultsList = document.createElement('div');
-    resultsList.className = 'products';
-
-    let found = false;
-
-    Object.keys(stores).forEach(storeKey => {
-      stores[storeKey].products.forEach(item => {
-        if (item.name.toLowerCase().includes(query)) {
-          found = true;
-          const safeId = item.name.replace(/\s+/g, '');
-          const qty = carts[storeKey]?.[item.name]?.qty || 0;
-
-          const div = document.createElement('div');
-          div.className = 'product';
-          div.innerHTML = `
-            <img src="https://via.placeholder.com/60x60?text=🔍" alt="${item.name}">
-            <div style="flex:1;">
-              <h4>${item.name}</h4>
-              <p>${item.price} AMD — <span style="color:var(--text-muted); font-size:13px;">${stores[storeKey].name}</span></p>
-            </div>
-            <div class="qty-controls">
-              <button onclick="changeQty('${storeKey}', '${item.name}', ${item.price}, -1)">−</button>
-              <span class="qty-number" id="qty-${storeKey}-${safeId}">${qty}</span>
-              <button onclick="changeQty('${storeKey}', '${item.name}', ${item.price}, 1)">+</button>
-            </div>
-          `;
-          resultsList.appendChild(div);
-        }
-      });
-    });
-
-    if (!found) {
-      const empty = document.createElement('p');
-      empty.innerText = "Ничего не найдено 😔";
-      empty.style.textAlign = "center";
-      empty.style.color = "var(--text-muted)";
-      container.appendChild(empty);
-    } else {
-      container.appendChild(resultsList);
-    }
-  });
-}
-
-/* ---------------- ТЕМА ---------------- */
-
-function toggleTheme() {
-  document.body.classList.toggle('light-theme');
-  localStorage.setItem('artikFoodTheme', document.body.classList.contains('light-theme') ? 'light' : 'dark');
-}
-
-/* ---------------- ОФОРМЛЕНИЕ ЗАКАЗА ---------------- */
+/* ---------------- ЗАКАЗ ---------------- */
 
 function sendFormToWhatsApp() {
-  if (Object.keys(carts).length === 0) {
-    alert("Корзина пуста!");
-    return;
-  }
-
   const name = document.getElementById('name').value;
   const phone = document.getElementById('phone').value;
   const address = document.getElementById('address').value;
@@ -1370,189 +1320,145 @@ function sendFormToWhatsApp() {
   const payment = document.getElementById('payment').value;
   const comment = document.getElementById('comment').value;
 
-  let message = `🛒 Новый заказ%0A%0A`;
+  let message = `🛒 *Новый заказ Artik Food*%0A%0A`;
   message += `👤 Имя: ${name}%0A`;
   message += `📞 Телефон: ${phone}%0A`;
-  message += `📍 Адрес: ${address}%0A`;
-  message += `🏘 Район: ${district}%0A`;
-  message += `💳 Оплата: ${payment}%0A`;
-  if (comment) message += `💬 Комментарий: ${comment}%0A`;
-  message += `%0A📦 Товары:%0A`;
+  message += `📍 Адрес: ${address} (${district})%0A`;
+  message += `💳 Оплата: ${payment}%0A%0A`;
+  message += `🧾 Заказ:%0A`;
 
-  let goodsTotal = 0;
+  let total = 0;
 
   Object.keys(carts).forEach(storeKey => {
-    Object.entries(carts[storeKey]).forEach(([name, data]) => {
+    Object.entries(carts[storeKey]).forEach(([product, data]) => {
       if (data.qty > 0) {
-        message += `• ${stores[storeKey].name}: ${name} × ${data.qty} = ${data.qty * data.price} AMD%0A`;
-        goodsTotal += data.qty * data.price;
+        const sum = data.qty * data.price;
+        total += sum;
+        message += `• ${stores[storeKey].name}: ${product} × ${data.qty} = ${sum} AMD%0A`;
       }
     });
   });
 
-  let delivery = 0;
-  if (district === "Артик") delivery = 500;
-  if (district === "Арич") delivery = 700;
-  if (district === "Нор-Кянк") delivery = 1000;
-  if (district === "Пемзашен") delivery = 1000;
+  const districtFee = district === "Артик" ? 500 :
+                      district === "Арич" ? 700 :
+                      district === "Нор-Кянк" ? 1000 :
+                      district === "Пемзашен" ? 1000 : 0;
 
-  const grandTotal = goodsTotal + delivery;
+  message += `%0A🚚 Доставка: ${districtFee} AMD%0A`;
+  message += `💰 Итого: ${total + districtFee} AMD%0A%0A`;
 
-  message += `%0A💰 Товары: ${goodsTotal} AMD%0A`;
-  message += `🚚 Доставка: ${delivery} AMD%0A`;
-  message += `🧾 Итого: ${grandTotal} AMD%0A`;
+  if (comment) message += `💬 Комментарий: ${comment}%0A`;
 
-  const phoneNumber = "37443797727";
-  const url = `https://wa.me/${phoneNumber}?text=${message}`;
-
-  window.open(url, "_blank");
-
-  // Сохраняем заказ в историю
-  const order = {
-    date: new Date().toISOString(),
-    name,
-    phone,
-    address,
-    district,
-    payment,
-    comment,
-    carts,
-    total: grandTotal
-  };
-
-  orders.push(order);
-  localStorage.setItem('artikFoodOrders', JSON.stringify(orders));
-
-  // Очищаем корзину
-  carts = {};
-  saveCarts();
-  renderGlobalCart();
-  updateStoreCart();
-  alert("Заказ отправлен! Спасибо 🙏");
+  const whatsappUrl = `https://wa.me/37443797727?text=${message}`;
+  window.open(whatsappUrl, '_blank');
 }
 
-/* ---------------- АДМИН-ПАНЕЛЬ ---------------- */
-
-const ADMIN_PASSWORD = "artik123";
-
-let orders = JSON.parse(localStorage.getItem('artikFoodOrders')) || [];
-let couriers = JSON.parse(localStorage.getItem('artikFoodCouriers')) || [];
-
-function showAdminLogin() {
-  const password = prompt("Введите пароль администратора:");
-  if (password === ADMIN_PASSWORD) {
-    showAdminPanel();
-  } else if (password) {
-    alert("Неверный пароль");
-  }
-}
+/* ---------------- АДМИН ---------------- */
 
 function showAdminPanel() {
   document.getElementById('admin-panel').classList.remove('hidden');
-  document.getElementById('admin-login-btn').style.display = 'none';
-  updateAdminStats();
-  renderRecentOrders();
-  renderCouriers();
 }
 
 function hideAdminPanel() {
   document.getElementById('admin-panel').classList.add('hidden');
-  document.getElementById('admin-login-btn').style.display = 'block';
 }
 
-function updateAdminStats() {
-  const today = new Date().toDateString();
-  const todayOrders = orders.filter(o => new Date(o.date).toDateString() === today);
-
-  const totalAmount = todayOrders.reduce((sum, o) => sum + o.total, 0);
-
-  document.getElementById('today-orders').innerText = todayOrders.length;
-  document.getElementById('today-amount').innerText = totalAmount;
-  document.getElementById('active-couriers').innerText = couriers.length;
-}
-
-function renderRecentOrders() {
-  const container = document.getElementById('recent-orders');
-  container.innerHTML = '';
-
-  if (orders.length === 0) {
-    container.innerHTML = '<p style="text-align:center; color:var(--text-muted);">Нет заказов</p>';
-    return;
-  }
-
-  orders.slice(-10).reverse().forEach(order => {
-    const div = document.createElement('div');
-    div.style.borderBottom = "1px dashed var(--border-soft)";
-    div.style.padding = "6px 0";
-    div.innerHTML = `
-      <strong>${order.name}</strong> — ${order.total} AMD<br>
-      <span style="color:var(--text-muted); font-size:12px;">${new Date(order.date).toLocaleString()}</span>
-    `;
-    container.appendChild(div);
-  });
-}
-
-function renderCouriers() {
-  const container = document.getElementById('couriers-list');
-  container.innerHTML = '';
-
-  if (couriers.length === 0) {
-    container.innerHTML = '<p style="text-align:center; color:var(--text-muted);">Нет активных курьеров</p>';
-    return;
-  }
-
-  couriers.forEach((courier, index) => {
-    const div = document.createElement('div');
-    div.style.borderBottom = "1px dashed var(--border-soft)";
-    div.style.padding = "6px 0";
-    div.innerHTML = `
-      🚴 ${courier.name} (${courier.phone})
-      <button onclick="removeCourier(${index})" style="float:right; background:none; border:none; color:#e74c3c; cursor:pointer;">✕</button>
-    `;
-    container.appendChild(div);
-  });
-}
-
-function addCourier() {
-  const name = prompt("Имя курьера:");
-  if (!name) return;
-  const phone = prompt("Телефон курьера:");
-  if (!phone) return;
-
-  couriers.push({ name, phone });
-  localStorage.setItem('artikFoodCouriers', JSON.stringify(couriers));
-  renderCouriers();
-  updateAdminStats();
-}
-
-function removeCourier(index) {
-  couriers.splice(index, 1);
-  localStorage.setItem('artikFoodCouriers', JSON.stringify(couriers));
-  renderCouriers();
-  updateAdminStats();
-}
-
-function addNewProduct() {
-  alert("Функция добавления товаров будет добавлена в следующей версии 😊");
-}
-
-function viewAllOrders() {
-  alert("Список всех заказов будет добавлен в следующей версии 😊");
-}
-
-function manageCouriers() {
-  alert("Управление курьерами уже доступно ниже 👇");
-}
+/* Заглушки админ-функций */
+function addNewProduct() { alert("Добавление товара (заглушка)"); }
+function viewAllOrders() { alert("Все заказы (заглушка)"); }
+function manageCouriers() { alert("Управление курьерами (заглушка)"); }
+function addCourier() { alert("Добавить курьера (заглушка)"); }
 
 /* ---------------- ИНИЦИАЛИЗАЦИЯ ---------------- */
 
-document.addEventListener("DOMContentLoaded", () => {
-  renderShops();
-  renderGlobalCart();
+renderShops();
+renderGlobalCart();
+goHome();
+</script>
+<script>
+const searchInput = document.getElementById("searchInput");
 
-  const savedTheme = localStorage.getItem('artikFoodTheme');
-  if (savedTheme === 'light') {
-    document.body.classList.add('light-theme');
+if (searchInput) {
+  searchInput.addEventListener("input", function () {
+    const query = this.value.toLowerCase();
+    const products = document.querySelectorAll(".product-card, .product-item, .product");
+
+    products.forEach(product => {
+      const text = product.innerText.toLowerCase();
+      product.style.display = text.includes(query) ? "" : "none";
+    });
+  });
+}
+</script>
+<script>
+/* ---------------- ПОИСК ПО ТОВАРАМ ---------------- */
+
+const searchInput = document.getElementById("searchInput");
+
+searchInput.addEventListener("input", function () {
+  const query = this.value.trim().toLowerCase();
+
+  // Если пусто — возвращаемся домой
+  if (!query) {
+    goHome();
+    return;
+  }
+
+  hideAllPages();
+  document.getElementById("store-page").classList.remove("hidden");
+
+  const container = document.getElementById("store-products");
+  container.innerHTML = "";
+
+  const backBtn = document.createElement("button");
+  backBtn.className = "back-btn";
+  backBtn.innerText = "← Назад";
+  backBtn.onclick = goHome;
+  container.appendChild(backBtn);
+
+  const results = document.createElement("div");
+  results.className = "products";
+
+  let found = false;
+
+  Object.keys(stores).forEach(storeKey => {
+    const store = stores[storeKey];
+
+    store.products.forEach(item => {
+      if (item.name.toLowerCase().includes(query)) {
+        found = true;
+
+        const safeId = item.name.replace(/\s+/g, "");
+        const qty = carts[storeKey]?.[item.name]?.qty || 0;
+
+        const div = document.createElement("div");
+        div.className = "product";
+        div.innerHTML = `
+          <img src="https://via.placeholder.com/60x60?text=🍪" alt="${item.name}">
+          <div style="flex:1;">
+            <h4>${item.name}</h4>
+            <p>${item.price} AMD • <span style="color:var(--accent-gold);">${store.name}</span></p>
+          </div>
+          <div class="qty-controls">
+            <button onclick="changeQty('${storeKey}', '${item.name}', ${item.price}, -1)">−</button>
+            <span class="qty-number" id="qty-${storeKey}-${safeId}">${qty}</span>
+            <button onclick="changeQty('${storeKey}', '${item.name}', ${item.price}, 1)">+</button>
+          </div>
+        `;
+        results.appendChild(div);
+      }
+    });
+  });
+
+  if (!found) {
+    const empty = document.createElement("div");
+    empty.style.textAlign = "center";
+    empty.style.padding = "20px";
+    empty.style.color = "var(--text-muted)";
+    empty.innerText = "😕 Ничего не найдено";
+    container.appendChild(empty);
+  } else {
+    container.appendChild(results);
   }
 });
 </script>
