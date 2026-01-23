@@ -44,12 +44,26 @@
       cursor: pointer;
     }
 
+    .card img {
+      max-width: 90px;
+      max-height: 70px;
+      object-fit: contain;
+      margin-bottom: 8px;
+    }
+
     .product {
       display: flex;
       justify-content: space-between;
       align-items: center;
       text-align: left;
       gap: 10px;
+    }
+
+    .product img {
+      width: 60px;
+      height: 60px;
+      object-fit: cover;
+      border-radius: 6px;
     }
 
     .product h4 { margin: 0; font-size: 16px; }
@@ -286,7 +300,7 @@
       <option value="Пемзашен">Пемзашен — 1000 AMD</option>
     </select>
     
-    <!-- СПОСОБ ОПЛАТЫ (ДОБАВЛЕНО) -->
+    <!-- СПОСОБ ОПЛАТЫ -->
     <select id="payment" required style="margin-bottom:12px;">
       <option value="">Выберите способ оплаты</option>
       <option value="Наличными курьеру">💵 Наличными курьеру</option>
@@ -307,22 +321,6 @@
       <li>После успешной оплаты получаете чек на email или в мессенджер</li>
     </ul>
   </div>
-</section>
-  <h3>Оформление заказа</h3>
-  <form class="order-form" onsubmit="event.preventDefault(); sendFormToWhatsApp();">
-    <input type="text" id="name" placeholder="Ваше имя" required />
-    <input type="tel" id="phone" placeholder="Телефон" required />
-    <input type="text" id="address" placeholder="Адрес доставки" required />
-    <select id="district" required onchange="renderGlobalCart()">
-      <option value="">Выберите район доставки</option>
-      <option value="Артик">Артик — 500 AMD</option>
-      <option value="Арич">Арич — 700 AMD</option>
-      <option value="Нор-Кянк">Нор-Кянк — 1000 AMD</option>
-      <option value="Пемзашен">Пемзашен — 1000 AMD</option>
-    </select>
-    <textarea rows="3" id="comment" placeholder="Комментарий к заказу"></textarea>
-    <button type="submit">Отправить заказ</button>
-  </form>
 </section>
 
 <section class="section" id="contacts">
@@ -391,40 +389,133 @@
   </div>
 </div>
 
-<!-- Скрытая кнопка для входа в админку (только для вас) -->
+<!-- Скрытая кнопка для входа в админку -->
 <button id="admin-login-btn" onclick="showAdminLogin()" style="position:fixed; top:10px; left:10px; background:#34495e; color:white; border:none; padding:6px 10px; border-radius:4px; font-size:12px; z-index:10000;">🔧 Админ</button>
 
 <script>
 /* ---------------- ДАННЫЕ ---------------- */
 
+/* ВАЖНО: Tonoyan’s Sity стоит ПЕРВЫМ — логика не менялась, только порядок */
+
 const stores = {
+  tonoyans_sity: {
+    name: "Tonoyan’s Sity",
+    logo: "https://i.imgur.com/9Z3KQKx.png",
+    categories: {
+      "Печенье": {
+        icon: "https://i.imgur.com/h4Yz7Q5.png",
+        image: "https://i.imgur.com/F6U0PXT.jpg"
+      },
+      "Вафли": {
+        icon: "https://i.imgur.com/lp2gRdp.png",
+        image: "https://i.imgur.com/QbL6eEd.jpg"
+      },
+      "Крекеры": {
+        icon: "https://i.imgur.com/wcK3wQl.png",
+        image: "https://i.imgur.com/0x4M7HO.jpg"
+      },
+      "Батончики и снеки": {
+        icon: "https://i.imgur.com/0wKx9nl.png",
+        image: "https://i.imgur.com/UZy5EKu.jpg"
+      },
+      "Ореховые сладости": {
+        icon: "https://i.imgur.com/8K1K4g8.png",
+        image: "https://i.imgur.com/1cL7aJZ.jpg"
+      },
+      "Детские сладости": {
+        icon: "https://i.imgur.com/3LJb4hD.png",
+        image: "https://i.imgur.com/T0r6A0c.jpg"
+      }
+    },
+    products: [
+      { name: "Cookies с начинкой", price: 450, category: "Печенье", image: "https://i.imgur.com/Z0wV1i6.jpg" },
+      { name: "Cookies с карамелью", price: 500, category: "Печенье", image: "https://i.imgur.com/sqg2yTJ.jpg" },
+      { name: "Sandwich печенье", price: 420, category: "Печенье", image: "https://i.imgur.com/8b2xj9Y.jpg" },
+      { name: "Choco Bite", price: 540, category: "Печенье", image: "https://i.imgur.com/dPp6uK8.jpg" },
+      { name: "Пряники глазированные", price: 350, category: "Печенье", image: "https://i.imgur.com/5yFZ0u3.jpg" },
+      { name: "Песочное печенье", price: 400, category: "Печенье", image: "https://i.imgur.com/7J0wR4x.jpg" },
+      { name: "Овсяное печенье", price: 380, category: "Печенье", image: "https://i.imgur.com/jpXyqg2.jpg" },
+      { name: "Печенье с кремом", price: 460, category: "Печенье", image: "https://i.imgur.com/jy4W2TP.jpg" },
+      { name: "Детское печенье", price: 200, category: "Печенье", image: "https://i.imgur.com/0TtqYz5.jpg" },
+      { name: "Ассорти печенья", price: 600, category: "Печенье", image: "https://i.imgur.com/MqVxG5g.jpg" },
+
+      { name: "Вафли Daroini", price: 400, category: "Вафли", image: "https://i.imgur.com/Z6p8M1Q.jpg" },
+      { name: "Вафли Krispi", price: 420, category: "Вафли", image: "https://i.imgur.com/ZZ4q6kp.jpg" },
+      { name: "Вафли с шоколадом", price: 450, category: "Вафли", image: "https://i.imgur.com/YkCw0lf.jpg" },
+      { name: "Вафли с орехом", price: 480, category: "Вафли", image: "https://i.imgur.com/qF3y8tC.jpg" },
+      { name: "Вафли рулетики", price: 390, category: "Вафли", image: "https://i.imgur.com/XpH3vJQ.jpg" },
+      { name: "Вафли ванильные", price: 410, category: "Вафли", image: "https://i.imgur.com/4eRk4Ew.jpg" },
+      { name: "Вафли карамельные", price: 460, category: "Вафли", image: "https://i.imgur.com/4g1s8uC.jpg" },
+      { name: "Вафли клубничные", price: 440, category: "Вафли", image: "https://i.imgur.com/D5N9B5p.jpg" },
+      { name: "Мини-вафли", price: 300, category: "Вафли", image: "https://i.imgur.com/7jQYQpK.jpg" },
+      { name: "Вафли ассорти", price: 550, category: "Вафли", image: "https://i.imgur.com/m6x1L8L.jpg" },
+
+      { name: "Crackers Classic", price: 430, category: "Крекеры", image: "https://i.imgur.com/6B3cN5P.jpg" },
+      { name: "Crackers Cheese", price: 500, category: "Крекеры", image: "https://i.imgur.com/8K5HhXZ.jpg" },
+      { name: "Crackers Peanut", price: 300, category: "Крекеры", image: "https://i.imgur.com/jw3pNw6.jpg" },
+      { name: "Крекеры солёные", price: 350, category: "Крекеры", image: "https://i.imgur.com/XY1YtqP.jpg" },
+      { name: "Крекеры с кунжутом", price: 380, category: "Крекеры", image: "https://i.imgur.com/5xRk0EN.jpg" },
+      { name: "Крекеры с паприкой", price: 420, category: "Крекеры", image: "https://i.imgur.com/2xk6Y8u.jpg" },
+      { name: "Крекеры с зеленью", price: 410, category: "Крекеры", image: "https://i.imgur.com/SH2Pp6p.jpg" },
+      { name: "Крекеры с чесноком", price: 390, category: "Крекеры", image: "https://i.imgur.com/Y0eV4gJ.jpg" },
+      { name: "Крекеры ассорти", price: 550, category: "Крекеры", image: "https://i.imgur.com/wJc6nX8.jpg" },
+      { name: "Крекеры большие", price: 600, category: "Крекеры", image: "https://i.imgur.com/4tq6C0k.jpg" },
+
+      { name: "Шоколадный батончик", price: 200, category: "Батончики и снеки", image: "https://i.imgur.com/Wk0c9V0.jpg" },
+      { name: "Батончик с карамелью", price: 220, category: "Батончики и снеки", image: "https://i.imgur.com/9j2w8yP.jpg" },
+      { name: "Батончик с орехами", price: 250, category: "Батончики и снеки", image: "https://i.imgur.com/HDqz7qk.jpg" },
+      { name: "Сладкие палочки", price: 300, category: "Батончики и снеки", image: "https://i.imgur.com/Ks2wK9b.jpg" },
+      { name: "Кукурузные снеки", price: 380, category: "Батончики и снеки", image: "https://i.imgur.com/EM4h6rP.jpg" },
+      { name: "Снеки в шоколаде", price: 420, category: "Батончики и снеки", image: "https://i.imgur.com/yX3P7dC.jpg" },
+      { name: "Сладкие подушечки", price: 350, category: "Батончики и снеки", image: "https://i.imgur.com/Q1c0p3h.jpg" },
+      { name: "Мини-батончики", price: 180, category: "Батончики и снеки", image: "https://i.imgur.com/zpXKkYJ.jpg" },
+      { name: "Снеки с карамелью", price: 400, category: "Батончики и снеки", image: "https://i.imgur.com/0n3Z5W4.jpg" },
+      { name: "Ассорти батончиков", price: 600, category: "Батончики и снеки", image: "https://i.imgur.com/1s8x4KQ.jpg" },
+
+      { name: "Козинак классический", price: 300, category: "Ореховые сладости", image: "https://i.imgur.com/Nm5s5jX.jpg" },
+      { name: "Козинак арахисовый", price: 350, category: "Ореховые сладости", image: "https://i.imgur.com/vyM3qQb.jpg" },
+      { name: "Козинак кунжутный", price: 320, category: "Ореховые сладости", image: "https://i.imgur.com/3fVQ3wZ.jpg" },
+      { name: "Арахис в глазури", price: 450, category: "Ореховые сладости", image: "https://i.imgur.com/Y2TqgM4.jpg" },
+      { name: "Миндаль в шоколаде", price: 600, category: "Ореховые сладости", image: "https://i.imgur.com/jP4NQ4r.jpg" },
+      { name: "Фундук в шоколаде", price: 650, category: "Ореховые сладости", image: "https://i.imgur.com/2J8f1qM.jpg" },
+      { name: "Ореховое ассорти", price: 700, category: "Ореховые сладости", image: "https://i.imgur.com/5n8dZyR.jpg" },
+      { name: "Семечки в карамели", price: 380, category: "Ореховые сладости", image: "https://i.imgur.com/bhM6Y0Y.jpg" },
+      { name: "Кешью в глазури", price: 680, category: "Ореховые сладости", image: "https://i.imgur.com/J9k0N5P.jpg" },
+      { name: "Ореховый микс", price: 750, category: "Ореховые сладости", image: "https://i.imgur.com/JM5cF0x.jpg" },
+
+      { name: "Детское печенье", price: 110, category: "Детские сладости", image: "https://i.imgur.com/DK1P9kN.jpg" },
+      { name: "Мини-вафли", price: 170, category: "Детские сладости", image: "https://i.imgur.com/k5P1KxZ.jpg" },
+      { name: "Печенье с героями", price: 200, category: "Детские сладости", image: "https://i.imgur.com/3wQKJ7d.jpg" },
+      { name: "Шоколадные фигурки", price: 250, category: "Детские сладости", image: "https://i.imgur.com/L0Cq3zQ.jpg" },
+      { name: "Конфеты детские", price: 180, category: "Детские сладости", image: "https://i.imgur.com/Qs0h6r3.jpg" },
+      { name: "Печенье с молочной начинкой", price: 220, category: "Детские сладости", image: "https://i.imgur.com/3RZP1bJ.jpg" },
+      { name: "Сладкие трубочки", price: 190, category: "Детские сладости", image: "https://i.imgur.com/7K0qkQF.jpg" },
+      { name: "Мини-крекеры", price: 160, category: "Детские сладости", image: "https://i.imgur.com/v1sZrZq.jpg" },
+      { name: "Шоколадные шарики", price: 230, category: "Детские сладости", image: "https://i.imgur.com/6wH7L4X.jpg" },
+      { name: "Детское ассорти", price: 300, category: "Детские сладости", image: "https://i.imgur.com/W2b1K0J.jpg" }
+    ]
+  },
+
   million: {
     name: "Million",
     products: [
       { name: "Картофель 1кг", price: 300, category: "Овощи и фрукты" },
       { name: "Яблоки 1кг", price: 400, category: "Овощи и фрукты" },
       { name: "Бананы 1кг", price: 550, category: "Овощи и фрукты" },
-
       { name: "Говядина 1кг", price: 3200, category: "Мясо и рыба" },
       { name: "Курица 1кг", price: 1800, category: "Мясо и рыба" },
       { name: "Рыба свежая 1кг", price: 2600, category: "Мясо и рыба" },
-
       { name: "Молоко 1л", price: 350, category: "Молочные продукты" },
       { name: "Сыр 300г", price: 1200, category: "Молочные продукты" },
       { name: "Йогурт", price: 200, category: "Молочные продукты" },
-
       { name: "Хлеб белый", price: 200, category: "Хлеб и выпечка" },
       { name: "Лаваш", price: 150, category: "Хлеб и выпечка" },
-
       { name: "Рис 1кг", price: 600, category: "Бакалея" },
       { name: "Макароны", price: 400, category: "Бакалея" },
-
       { name: "Сок апельсиновый", price: 450, category: "Напитки" },
       { name: "Минеральная вода", price: 200, category: "Напитки" },
-
       { name: "Моющее средство", price: 900, category: "Бытовая химия" },
       { name: "Порошок стиральный", price: 1800, category: "Бытовая химия" },
-
       { name: "Шоколад", price: 350, category: "Сладости" },
       { name: "Печенье", price: 250, category: "Сладости" }
     ]
@@ -435,21 +526,14 @@ const stores = {
     products: [
       { name: "Картофель 1кг", price: 280, category: "Овощи и фрукты" },
       { name: "Помидоры 1кг", price: 500, category: "Овощи и фрукты" },
-
       { name: "Курица 1кг", price: 1750, category: "Мясо и рыба" },
       { name: "Рыба свежая 1кг", price: 2550, category: "Мясо и рыба" },
-
       { name: "Молоко 1л", price: 340, category: "Молочные продукты" },
       { name: "Сыр 300г", price: 1150, category: "Молочные продукты" },
-
       { name: "Хлеб", price: 190, category: "Хлеб и выпечка" },
-
       { name: "Рис 1кг", price: 590, category: "Бакалея" },
-
       { name: "Сок яблочный", price: 430, category: "Напитки" },
-
       { name: "Порошок стиральный", price: 1750, category: "Бытовая химия" },
-
       { name: "Шоколад", price: 330, category: "Сладости" }
     ]
   },
@@ -459,19 +543,12 @@ const stores = {
     products: [
       { name: "Картофель 1кг", price: 310, category: "Овощи и фрукты" },
       { name: "Яблоки 1кг", price: 420, category: "Овощи и фрукты" },
-
       { name: "Говядина 1кг", price: 3250, category: "Мясо и рыба" },
-
       { name: "Молоко 1л", price: 360, category: "Молочные продукты" },
-
       { name: "Хлеб", price: 210, category: "Хлеб и выпечка" },
-
       { name: "Макароны", price: 390, category: "Бакалея" },
-
       { name: "Вода минеральная", price: 190, category: "Напитки" },
-
       { name: "Моющее средство", price: 880, category: "Бытовая химия" },
-
       { name: "Печенье", price: 240, category: "Сладости" }
     ]
   },
@@ -481,19 +558,12 @@ const stores = {
     products: [
       { name: "Картофель 1кг", price: 295, category: "Овощи и фрукты" },
       { name: "Бананы 1кг", price: 560, category: "Овощи и фрукты" },
-
       { name: "Курица 1кг", price: 1780, category: "Мясо и рыба" },
-
       { name: "Молоко 1л", price: 345, category: "Молочные продукты" },
-
       { name: "Хлеб", price: 195, category: "Хлеб и выпечка" },
-
       { name: "Рис 1кг", price: 605, category: "Бакалея" },
-
       { name: "Сок", price: 440, category: "Напитки" },
-
       { name: "Порошок стиральный", price: 1770, category: "Бытовая химия" },
-
       { name: "Шоколад", price: 340, category: "Сладости" }
     ]
   },
@@ -507,77 +577,6 @@ const stores = {
       { name: "Букет тюльпанов", price: 4500, category: "Букеты" },
       { name: "Композиция в коробке", price: 7000, category: "Композиции" },
       { name: "Подарочная открытка", price: 300, category: "Дополнительно" }
-    ]
-  },
-
-  tonoyans_sity: {
-    name: "Tonoyan’s Sity",
-    products: [
-      { name: "Cookies с начинкой", price: 450, category: "Печенье" },
-      { name: "Cookies с карамелью", price: 500, category: "Печенье" },
-      { name: "Sandwich печенье", price: 420, category: "Печенье" },
-      { name: "Choco Bite", price: 540, category: "Печенье" },
-      { name: "Пряники глазированные", price: 350, category: "Печенье" },
-      { name: "Песочное печенье", price: 400, category: "Печенье" },
-      { name: "Овсяное печенье", price: 380, category: "Печенье" },
-      { name: "Печенье с кремом", price: 460, category: "Печенье" },
-      { name: "Детское печенье", price: 200, category: "Печенье" },
-      { name: "Ассорти печенья", price: 600, category: "Печенье" },
-
-      { name: "Вафли Daroini", price: 400, category: "Вафли" },
-      { name: "Вафли Krispi", price: 420, category: "Вафли" },
-      { name: "Вафли с шоколадом", price: 450, category: "Вафли" },
-      { name: "Вафли с орехом", price: 480, category: "Вафли" },
-      { name: "Вафли рулетики", price: 390, category: "Вафли" },
-      { name: "Вафли ванильные", price: 410, category: "Вафли" },
-      { name: "Вафли карамельные", price: 460, category: "Вафли" },
-      { name: "Вафли клубничные", price: 440, category: "Вафли" },
-      { name: "Мини-вафли", price: 300, category: "Вафли" },
-      { name: "Вафли ассорти", price: 550, category: "Вафли" },
-
-      { name: "Crackers Classic", price: 430, category: "Крекеры" },
-      { name: "Crackers Cheese", price: 500, category: "Крекеры" },
-      { name: "Crackers Peanut", price: 300, category: "Крекеры" },
-      { name: "Крекеры солёные", price: 350, category: "Крекеры" },
-      { name: "Крекеры с кунжутом", price: 380, category: "Крекеры" },
-      { name: "Крекеры с паприкой", price: 420, category: "Крекеры" },
-      { name: "Крекеры с зеленью", price: 410, category: "Крекеры" },
-      { name: "Крекеры с чесноком", price: 390, category: "Крекеры" },
-      { name: "Крекеры ассорти", price: 550, category: "Крекеры" },
-      { name: "Крекеры большие", price: 600, category: "Крекеры" },
-
-      { name: "Шоколадный батончик", price: 200, category: "Батончики и снеки" },
-      { name: "Батончик с карамелью", price: 220, category: "Батончики и снеки" },
-      { name: "Батончик с орехами", price: 250, category: "Батончики и снеки" },
-      { name: "Сладкие палочки", price: 300, category: "Батончики и снеки" },
-      { name: "Кукурузные снеки", price: 380, category: "Батончики и снеки" },
-      { name: "Снеки в шоколаде", price: 420, category: "Батончики и снеки" },
-      { name: "Сладкие подушечки", price: 350, category: "Батончики и снеки" },
-      { name: "Мини-батончики", price: 180, category: "Батончики и снеки" },
-      { name: "Снеки с карамелью", price: 400, category: "Батончики и снеки" },
-      { name: "Ассорти батончиков", price: 600, category: "Батончики и снеки" },
-
-      { name: "Козинак классический", price: 300, category: "Ореховые сладости" },
-      { name: "Козинак арахисовый", price: 350, category: "Ореховые сладости" },
-      { name: "Козинак кунжутный", price: 320, category: "Ореховые сладости" },
-      { name: "Арахис в глазури", price: 450, category: "Ореховые сладости" },
-      { name: "Миндаль в шоколаде", price: 600, category: "Ореховые сладости" },
-      { name: "Фундук в шоколаде", price: 650, category: "Ореховые сладости" },
-      { name: "Ореховое ассорти", price: 700, category: "Ореховые сладости" },
-      { name: "Семечки в карамели", price: 380, category: "Ореховые сладости" },
-      { name: "Кешью в глазури", price: 680, category: "Ореховые сладости" },
-      { name: "Ореховый микс", price: 750, category: "Ореховые сладости" },
-
-      { name: "Детское печенье", price: 110, category: "Детские сладости" },
-      { name: "Мини-вафли", price: 170, category: "Детские сладости" },
-      { name: "Печенье с героями", price: 200, category: "Детские сладости" },
-      { name: "Шоколадные фигурки", price: 250, category: "Детские сладости" },
-      { name: "Конфеты детские", price: 180, category: "Детские сладости" },
-      { name: "Печенье с молочной начинкой", price: 220, category: "Детские сладости" },
-      { name: "Сладкие трубочки", price: 190, category: "Детские сладости" },
-      { name: "Мини-крекеры", price: 160, category: "Детские сладости" },
-      { name: "Шоколадные шарики", price: 230, category: "Детские сладости" },
-      { name: "Детское ассорти", price: 300, category: "Детские сладости" }
     ]
   }
 };
@@ -620,7 +619,16 @@ function renderShops() {
   Object.keys(stores).forEach(key => {
     const div = document.createElement('div');
     div.className = 'card';
-    div.innerText = stores[key].name;
+
+    if (stores[key].logo) {
+      div.innerHTML = `
+        <img src="${stores[key].logo}" alt="${stores[key].name}">
+        <div>${stores[key].name}</div>
+      `;
+    } else {
+      div.innerText = stores[key].name;
+    }
+
     div.onclick = () => openStore(key);
     container.appendChild(div);
   });
@@ -649,7 +657,16 @@ function openStore(storeKey) {
   categories.forEach(category => {
     const div = document.createElement('div');
     div.className = 'card';
-    div.innerText = category;
+
+    if (stores[storeKey].categories && stores[storeKey].categories[category]) {
+      div.innerHTML = `
+        <img src="${stores[storeKey].categories[category].icon}" alt="${category}">
+        <div>${category}</div>
+      `;
+    } else {
+      div.innerText = category;
+    }
+
     div.onclick = () => openStoreCategory(storeKey, category);
     container.appendChild(div);
   });
@@ -681,7 +698,8 @@ function openStoreCategory(storeKey, categoryName) {
       const div = document.createElement('div');
       div.className = 'product';
       div.innerHTML = `
-        <div>
+        <img src="${item.image || 'https://i.imgur.com/0y0y0y0.png'}" alt="${item.name}">
+        <div style="flex:1;">
           <h4>${item.name}</h4>
           <p>${item.price} AMD</p>
         </div>
@@ -724,7 +742,6 @@ function removeItemFromCart(storeKey, productName) {
   if (confirm(`Удалить "${productName}" из корзины?`)) {
     delete carts[storeKey][productName];
     
-    // Если в магазине больше нет товаров, удаляем магазин из корзины
     if (Object.keys(carts[storeKey]).length === 0) {
       delete carts[storeKey];
     }
@@ -797,14 +814,11 @@ function renderGlobalCart() {
 
 /* ---------------- АДМИН-ПАНЕЛЬ ---------------- */
 
-// Пароль для входа (можете изменить)
 const ADMIN_PASSWORD = "artik123";
 
-// Хранилище заказов (в реальном приложении нужно на бэкенде)
 let orders = JSON.parse(localStorage.getItem('artikFoodOrders')) || [];
 let couriers = JSON.parse(localStorage.getItem('artikFoodCouriers')) || [];
 
-// Функции админки
 function showAdminLogin() {
   const password = prompt("Введите пароль администратора:");
   if (password === ADMIN_PASSWORD) {
@@ -826,7 +840,6 @@ function hideAdminPanel() {
 }
 
 function updateAdminStats() {
-  // Статистика за сегодня
   const today = new Date().toDateString();
   const todayOrders = orders.filter(order => 
     new Date(order.date).toDateString() === today
@@ -838,7 +851,6 @@ function updateAdminStats() {
   document.getElementById('active-couriers').textContent = 
     couriers.filter(c => c.status === 'active').length;
   
-  // Последние заказы
   const recentOrdersContainer = document.getElementById('recent-orders');
   recentOrdersContainer.innerHTML = '';
   
@@ -858,7 +870,6 @@ function updateAdminStats() {
     recentOrdersContainer.innerHTML = '<p style="text-align:center; color:#777;">Нет заказов</p>';
   }
   
-  // Список курьеров
   const couriersContainer = document.getElementById('couriers-list');
   couriersContainer.innerHTML = '';
   
@@ -881,7 +892,6 @@ function updateAdminStats() {
   });
 }
 
-// Сохранение заказа (добавьте в функцию sendFormToWhatsApp)
 function saveOrder(orderData) {
   const order = {
     id: Date.now(),
@@ -933,7 +943,6 @@ function sendFormToWhatsApp() {
   text += `💵 К оплате: ${total} AMD%0A%0A`;
   text += `_Заказ создан через сайт_`;
 
-  // Сохраняем заказ
   saveOrder({
     name, phone, address, district, comment,
     items: JSON.parse(JSON.stringify(carts)),
@@ -943,7 +952,6 @@ function sendFormToWhatsApp() {
 
   window.open(`https://wa.me/37443797727?text=${text}`, '_blank');
   
-  // Очищаем корзину после заказа
   carts = {};
   renderGlobalCart();
   if (currentStore) updateStoreCart();
@@ -1038,16 +1046,13 @@ function viewAllOrders() {
 
 /* ---------------- ИНИЦИАЛИЗАЦИЯ ---------------- */
 
-// При загрузке страницы
 document.addEventListener('DOMContentLoaded', function() {
-  // Загружаем данные
   const savedOrders = localStorage.getItem('artikFoodOrders');
   const savedCouriers = localStorage.getItem('artikFoodCouriers');
   
   if (savedOrders) orders = JSON.parse(savedOrders);
   if (savedCouriers) {
     couriers = JSON.parse(savedCouriers);
-    // Находим максимальный ID для nextCourierId
     if (couriers.length > 0) {
       nextCourierId = Math.max(...couriers.map(c => c.id)) + 1;
     }
