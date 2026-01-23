@@ -1,70 +1,348 @@
 <!DOCTYPE html>
 <html lang="ru">
 <head>
-  <meta charset="UTF-8" />
-  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <title>Artik Food — Доставка продуктов в Артике</title>
-  <meta name="theme-color" content="#2ecc71">
-  <link rel="apple-touch-icon" href="data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAAMgAAADICAMAAACahl6sAAAAA1BMVEUAAACnej3aAAAASElEQVR4nO3BMQEAAADCoPVPbQ0PoAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAALwKcKAAAQyTtWAAAAAElFTkSuQmCC">
   <style>
-    /* Стили остаются без изменений */
+    body {
+      font-family: Arial, sans-serif;
+      margin: 0;
+      padding: 0;
+      background: #f4f4f4;
+    }
+    header {
+      background: #2ecc71;
+      color: white;
+      padding: 15px;
+      text-align: center;
+      font-size: 24px;
+    }
+    .store-list {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 10px;
+      padding: 15px;
+    }
+    .store {
+      background: white;
+      border-radius: 8px;
+      padding: 15px;
+      text-align: center;
+      cursor: pointer;
+      flex: 1 1 calc(33.333% - 20px);
+      box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+    }
+    .store img {
+      width: 50px;
+      height: 50px;
+      margin-bottom: 10px;
+    }
+    .cart {
+      position: fixed;
+      bottom: 0;
+      right: 0;
+      background: white;
+      padding: 15px;
+      box-shadow: 0 -2px 4px rgba(0, 0, 0, 0.1);
+      width: 100%;
+      max-width: 300px;
+      z-index: 1000;
+    }
+    .cart.hidden {
+      display: none;
+    }
+    .cart-item {
+      display: flex;
+      justify-content: space-between;
+      margin-bottom: 10px;
+    }
+    .cart-total {
+      font-weight: bold;
+      margin-top: 10px;
+    }
+    .order-form {
+      display: flex;
+      flex-direction: column;
+      gap: 10px;
+      padding: 15px;
+      background: white;
+      margin-bottom: 100px;
+    }
+    .order-form input {
+      padding: 10px;
+      border: 1px solid #ddd;
+      border-radius: 4px;
+    }
+    .order-form button {
+      background: #2ecc71;
+      color: white;
+      border: none;
+      padding: 10px;
+      border-radius: 4px;
+      cursor: pointer;
+    }
+    .admin-panel {
+      display: none;
+      padding: 15px;
+      background: white;
+      margin-bottom: 100px;
+    }
+    .admin-panel.hidden {
+      display: none;
+    }
+    .admin-card {
+      background: #f9f9f9;
+      padding: 15px;
+      border-radius: 8px;
+      margin-bottom: 15px;
+    }
+    .admin-table {
+      width: 100%;
+      border-collapse: collapse;
+    }
+    .admin-table th, .admin-table td {
+      padding: 8px;
+      text-align: left;
+      border-bottom: 1px solid #ddd;
+    }
   </style>
 </head>
 <body>
 
-<!-- Основная структура страницы остается без изменений -->
+<header>
+  <h1>Artik Food</h1>
+</header>
+
+<!-- Магазины -->
+<div class="store-list" id="store-list"></div>
+
+<!-- Корзина -->
+<div class="cart hidden" id="global-cart">
+  <h3>Корзина</h3>
+  <div id="cart-items"></div>
+  <div class="cart-total">Итого: <span id="cart-total">0</span> AMD</div>
+  <button onclick="checkout()">Оформить заказ</button>
+</div>
+
+<!-- Форма заказа -->
+<form id="order-form" class="order-form hidden" onsubmit="event.preventDefault(); sendFormToWhatsApp();">
+  <h3>Оформление заказа</h3>
+  <input type="text" id="name" placeholder="Ваше имя" required>
+  <input type="tel" id="phone" placeholder="Ваш телефон" required>
+  <input type="text" id="address" placeholder="Адрес доставки" required>
+  <select id="district" required>
+    <option value="" disabled selected>Выберите район</option>
+    <option value="Центр">Центр</option>
+    <option value="Север">Север</option>
+    <option value="Юг">Юг</option>
+  </select>
+  <button type="submit">Отправить заказ</button>
+</form>
+
+<!-- Админ-панель -->
+<div id="admin-panel" class="admin-panel hidden">
+  <h2>Админ-панель</h2>
+  <div class="admin-card">
+    <h4>📊 Статистика за день</h4>
+    <p>Заказов: <span id="today-orders">0</span></p>
+    <p>Сумма: <span id="today-amount">0</span> AMD</p>
+    <p>Активных курьеров: <span id="active-couriers">0</span></p>
+  </div>
+  <div class="admin-card">
+    <h4>📦 Все заказы</h4>
+    <select id="order-filter" onchange="filterOrders()">
+      <option value="Все">Все</option>
+      <option value="Новый">Новые</option>
+      <option value="В обработке">В обработке</option>
+      <option value="Доставлен">Доставленные</option>
+    </select>
+    <div id="all-orders-list"></div>
+  </div>
+  <div class="admin-card">
+    <h4>📋 История курьеров</h4>
+    <table class="admin-table">
+      <tr>
+        <th>Курьер</th>
+        <th>Заказов</th>
+        <th>Последний заказ</th>
+      </tr>
+      <tbody id="couriers-history"></tbody>
+    </table>
+  </div>
+  <div class="admin-card">
+    <h4>🔧 Управление</h4>
+    <button onclick="addCourier()">Добавить курьера</button>
+    <button onclick="exportToCSV()">Экспорт заказов</button>
+    <button onclick="hideAdminPanel()">Закрыть админку</button>
+  </div>
+</div>
+
+<!-- Кнопка админа -->
+<button id="admin-login-btn" onclick="loginAdmin()">Войти в админку</button>
 
 <script>
-/* ---------------- ОСНОВНЫЕ ДАННЫЕ ---------------- */
+/* --------------- ОСНОВНЫЕ ДАННЫЕ --------------- */
 const ADMIN_PASSWORD = "artik123";
 let orders = JSON.parse(localStorage.getItem('artikFoodOrders')) || [];
 let couriers = JSON.parse(localStorage.getItem('artikFoodCouriers')) || [];
 let nextCourierId = couriers.length > 0 ? Math.max(...couriers.map(c => c.id)) + 1 : 1;
 
-/* ---------------- УПРАВЛЕНИЕ КУРЬЕРАМИ ---------------- */
+const stores = {
+  tonoyan: {
+    name: "Tonoyan City",
+    logo: "logo-tonoyan.png",
+    categories: {
+      bakery: {
+        name: "Выпечка",
+        products: {
+          bread: { name: "Хлеб", price: 300 },
+          cake: { name: "Торт", price: 1500 }
+        }
+      }
+      // Другие категории и товары
+    }
+  }
+  // Другие магазины
+};
 
-function addCourier() {
-  const name = prompt("Имя курьера:");
-  if (!name) return;
-  
-  const phone = prompt("Телефон курьера:");
-  if (!phone) return;
-  
-  const courier = {
-    id: nextCourierId++,
-    name: name,
-    phone: phone,
-    status: 'active',
-    completedOrders: 0,
-    rating: 5.0
-  };
-  
-  couriers.push(courier);
-  localStorage.setItem('artikFoodCouriers', JSON.stringify(couriers));
-  updateAdminStats();
-  alert(`Курьер ${name} добавлен!`);
-}
-
-function toggleCourierStatus(courierId) {
-  const courier = couriers.find(c => c.id === courierId);
-  if (courier) {
-    courier.status = courier.status === 'active' ? 'inactive' : 'active';
-    localStorage.setItem('artikFoodCouriers', JSON.stringify(couriers));
-    updateAdminStats();
+/* --------------- ОСНОВНЫЕ ФУНКЦИИ --------------- */
+function renderShops() {
+  const container = document.getElementById('store-list');
+  container.innerHTML = '';
+  for (const key in stores) {
+    const div = document.createElement('div');
+    div.className = 'store';
+    div.innerHTML = stores[key].logo ?
+      `<img src="${stores[key].logo}" alt="${stores[key].name}"><div>${stores[key].name}</div>` :
+      stores[key].name;
+    div.onclick = () => openStore(key);
+    container.appendChild(div);
   }
 }
 
-function assignCourier(orderId, courierId) {
-  const order = orders.find(o => o.id === orderId);
-  if (order) {
-    order.courier = courierId;
-    order.status = "Передан курьеру";
-    localStorage.setItem('artikFoodOrders', JSON.stringify(orders));
-    updateAdminStats();
+function openStore(storeKey) {
+  const store = stores[storeKey];
+  document.getElementById('store-list').innerHTML = `
+    <div class="store" onclick="renderShops()">← Назад</div>
+    <h2>${store.name}</h2>
+  `;
+  for (const categoryKey in store.categories) {
+    const category = store.categories[categoryKey];
+    const div = document.createElement('div');
+    div.className = 'store';
+    div.innerHTML = category.name;
+    div.onclick = () => openStoreCategory(storeKey, categoryKey);
+    document.getElementById('store-list').appendChild(div);
   }
 }
 
-/* ---------------- АДМИН-ПАНЕЛЬ ---------------- */
+function openStoreCategory(storeKey, categoryKey) {
+  const category = stores[storeKey].categories[categoryKey];
+  document.getElementById('store-list').innerHTML = `
+    <div class="store" onclick="openStore('${storeKey}')">← Назад</div>
+    <h2>${category.name}</h2>
+  `;
+  for (const productKey in category.products) {
+    const product = category.products[productKey];
+    const div = document.createElement('div');
+    div.className = 'store';
+    div.innerHTML = `
+      <div>${product.name}</div>
+      <div>${product.price} AMD</div>
+      <button onclick="changeQty('${storeKey}', '${categoryKey}', '${productKey}', 1)">+</button>
+      <button onclick="changeQty('${storeKey}', '${categoryKey}', '${productKey}', -1)">-</button>
+    `;
+    document.getElementById('store-list').appendChild(div);
+  }
+}
+
+function changeQty(storeKey, categoryKey, productKey, delta) {
+  const cart = JSON.parse(localStorage.getItem('cart')) || {};
+  if (!cart[storeKey]) cart[storeKey] = {};
+  if (!cart[storeKey][categoryKey]) cart[storeKey][categoryKey] = {};
+  if (!cart[storeKey][categoryKey][productKey]) cart[storeKey][categoryKey][productKey] = 0;
+  cart[storeKey][categoryKey][productKey] += delta;
+  if (cart[storeKey][categoryKey][productKey] <= 0) {
+    delete cart[storeKey][categoryKey][productKey];
+  }
+  localStorage.setItem('cart', JSON.stringify(cart));
+  renderGlobalCart();
+}
+
+function renderGlobalCart() {
+  const cart = JSON.parse(localStorage.getItem('cart')) || {};
+  const container = document.getElementById('cart-items');
+  let total = 0;
+  container.innerHTML = '';
+  for (const storeKey in cart) {
+    for (const categoryKey in cart[storeKey]) {
+      for (const productKey in cart[storeKey][categoryKey]) {
+        const product = stores[storeKey].categories[categoryKey].products[productKey];
+        const qty = cart[storeKey][categoryKey][productKey];
+        total += product.price * qty;
+        const div = document.createElement('div');
+        div.className = 'cart-item';
+        div.innerHTML = `
+          <div>${product.name}</div>
+          <div>${qty} x ${product.price} AMD</div>
+        `;
+        container.appendChild(div);
+      }
+    }
+  }
+  document.getElementById('cart-total').textContent = total;
+  document.getElementById('global-cart').classList.toggle('hidden', total === 0);
+}
+
+function checkout() {
+  document.getElementById('order-form').classList.remove('hidden');
+}
+
+function sendFormToWhatsApp() {
+  const name = document.getElementById('name').value;
+  const phone = document.getElementById('phone').value;
+  const address = document.getElementById('address').value;
+  const district = document.getElementById('district').value;
+  const cart = JSON.parse(localStorage.getItem('cart')) || {};
+  let message = `Новый заказ:
+Имя: ${name}
+Телефон: ${phone}
+Адрес: ${address}
+Район: ${district}
+
+Товары:
+`;
+  let total = 0;
+  for (const storeKey in cart) {
+    for (const categoryKey in cart[storeKey]) {
+      for (const productKey in cart[storeKey][categoryKey]) {
+        const product = stores[storeKey].categories[categoryKey].products[productKey];
+        const qty = cart[storeKey][categoryKey][productKey];
+        message += `${product.name} — ${qty} x ${product.price} AMD
+`;
+        total += product.price * qty;
+      }
+    }
+  }
+  message += `
+Итого: ${total} AMD`;
+  const whatsappUrl = `https://wa.me/37443797727?text=${encodeURIComponent(message)}`;
+  window.open(whatsappUrl, '_blank');
+  localStorage.removeItem('cart');
+  document.getElementById('order-form').classList.add('hidden');
+  renderGlobalCart();
+}
+
+/* --------------- АДМИН-ПАНЕЛЬ --------------- */
+function loginAdmin() {
+  const password = prompt("Введите пароль:");
+  if (password === ADMIN_PASSWORD) {
+    showAdminPanel();
+  } else {
+    alert("Неверный пароль!");
+  }
+}
 
 function showAdminPanel() {
   document.getElementById('admin-panel').classList.remove('hidden');
@@ -127,6 +405,16 @@ function renderCourierAssign(orderId) {
   return html;
 }
 
+function assignCourier(orderId, courierId) {
+  const order = orders.find(o => o.id === orderId);
+  if (order) {
+    order.courier = courierId;
+    order.status = "Передан курьеру";
+    localStorage.setItem('artikFoodOrders', JSON.stringify(orders));
+    updateAdminStats();
+  }
+}
+
 function updateCouriersHistory() {
   const history = couriers.map(c => {
     const courierOrders = orders.filter(o => o.courier === c.id);
@@ -160,7 +448,27 @@ function exportToCSV() {
   a.click();
 }
 
-/* ---------------- ИНИЦИАЛИЗАЦИЯ ---------------- */
+function addCourier() {
+  const name = prompt("Имя курьера:");
+  if (!name) return;
+  
+  const phone = prompt("Телефон курьера:");
+  if (!phone) return;
+  
+  const courier = {
+    id: nextCourierId++,
+    name: name,
+    phone: phone,
+    status: 'active',
+    completedOrders: 0,
+    rating: 5.0
+  };
+  
+  couriers.push(courier);
+  localStorage.setItem('artikFoodCouriers', JSON.stringify(couriers));
+  updateAdminStats();
+  alert(`Курьер ${name} добавлен!`);
+}
 
 document.addEventListener('DOMContentLoaded', function() {
   const savedOrders = localStorage.getItem('artikFoodOrders');
