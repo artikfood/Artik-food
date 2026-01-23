@@ -1614,6 +1614,25 @@ function sendFormToWhatsApp() {
 
   message += `%0A🚚 Доставка: ${delivery} AMD%0A`;
   message += `💰 *Итого: ${total + delivery} AMD*`;
+  // ====== SEND TO DISPATCHER (Cloudflare Worker) — НЕ ЛОМАЕТ WhatsApp ======
+  // Вставь сюда URL своего Worker после деплоя:
+  const WORKER_URL = "https://YOUR_WORKER_SUBDOMAIN.workers.dev/orders";
+  const API_KEY = "PUT_YOUR_API_KEY_HERE";
+
+  fetch(WORKER_URL, {
+    method: "POST",
+    headers: {
+      "Content-Type": "application/json",
+      "x-api-key": API_KEY
+    },
+    body: JSON.stringify({
+      name, phone, address, district, payment, comment,
+      carts,
+      // Чтобы суммы в Telegram были точные — отправляем каталог (твой stores) тоже:
+      storesCatalog: stores
+    })
+  }).catch(() => {});
+  // ====== END SEND TO DISPATCHER ======
 
   const whatsappNumber = "37443797727";
   const url = `https://wa.me/${whatsappNumber}?text=${message}`;
