@@ -1,19 +1,16 @@
 <!DOCTYPE html>
 <html lang="ru">
 <head>
-  ...
-  <link rel="manifest" href="manifest.json">
-  <meta name="theme-color" content="#0f172a">
-</head>
-
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
   <title>Artik Food — Premium Delivery</title>
 
+  <!-- PWA -->
+  <link rel="manifest" href="manifest.json">
+  <meta name="theme-color" content="#0f1115">
+
   <!-- Google Fonts -->
   <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&family=Playfair+Display:wght@500;600;700&display=swap" rel="stylesheet">
-
-  <meta name="theme-color" content="#0f1115">
 
   <style>
     :root {
@@ -824,6 +821,27 @@
 
 <button id="admin-login-btn" onclick="showAdminLogin()" style="position:fixed; top:12px; left:12px; background: linear-gradient(135deg, #34495e, #5f7c99); color:white; border:none; padding:8px 12px; border-radius:999px; font-size:12px; z-index:10000; font-weight:600; box-shadow: 0 6px 18px rgba(0,0,0,0.35); cursor:pointer;">🔧 Админ</button>
 
+<!-- 📲 КНОПКА УСТАНОВКИ ПРИЛОЖЕНИЯ -->
+<button id="install-btn" style="
+  position: fixed;
+  bottom: 100px;
+  left: 50%;
+  transform: translateX(-50%);
+  background: linear-gradient(135deg, #2ecc71, #6df0a0);
+  color: #0f1115;
+  border: none;
+  padding: 14px 22px;
+  border-radius: 999px;
+  font-size: 15px;
+  font-weight: 600;
+  box-shadow: 0 10px 30px rgba(46,204,113,0.35);
+  z-index: 10000;
+  display: none;
+  cursor: pointer;
+">
+  📲 Установить приложение
+</button>
+
 <script>
 /* ---------------- ТЕМА ---------------- */
 
@@ -1250,101 +1268,7 @@ function renderGlobalCart() {
   document.getElementById('grand-total').innerText = `Итого: ${goodsTotal + delivery} AMD`;
 }
 
-/* ---------------- АДМИН-ПАНЕЛЬ ---------------- */
-
-const ADMIN_PASSWORD = "artik123";
-
-let orders = JSON.parse(localStorage.getItem('artikFoodOrders')) || [];
-let couriers = JSON.parse(localStorage.getItem('artikFoodCouriers')) || [];
-
-function showAdminLogin() {
-  const password = prompt("Введите пароль администратора:");
-  if (password === ADMIN_PASSWORD) {
-    showAdminPanel();
-  } else if (password) {
-    alert("Неверный пароль");
-  }
-}
-
-function showAdminPanel() {
-  document.getElementById('admin-panel').classList.remove('hidden');
-  document.getElementById('admin-login-btn').style.display = 'none';
-  updateAdminStats();
-}
-
-function hideAdminPanel() {
-  document.getElementById('admin-panel').classList.add('hidden');
-  document.getElementById('admin-login-btn').style.display = 'block';
-}
-
-function updateAdminStats() {
-  const today = new Date().toDateString();
-  const todayOrders = orders.filter(order => 
-    new Date(order.date).toDateString() === today
-  );
-  
-  document.getElementById('today-orders').textContent = todayOrders.length;
-  document.getElementById('today-amount').textContent = 
-    todayOrders.reduce((sum, order) => sum + order.total, 0);
-  document.getElementById('active-couriers').textContent = 
-    couriers.filter(c => c.status === 'active').length;
-  
-  const recentOrdersContainer = document.getElementById('recent-orders');
-  recentOrdersContainer.innerHTML = '';
-  
-  const lastOrders = orders.slice(-5).reverse();
-  lastOrders.forEach(order => {
-    const div = document.createElement('div');
-    div.style.padding = '8px';
-    div.style.borderBottom = '1px solid var(--border-glass)';
-    div.innerHTML = `
-      <strong>${order.name}</strong> — ${order.total} AMD<br>
-      <small style="color:var(--text-muted);">${order.address} • ${order.date}</small>
-    `;
-    recentOrdersContainer.appendChild(div);
-  });
-  
-  if (lastOrders.length === 0) {
-    recentOrdersContainer.innerHTML = '<p style="text-align:center; color:var(--text-muted);">Нет заказов</p>';
-  }
-  
-  const couriersContainer = document.getElementById('couriers-list');
-  couriersContainer.innerHTML = '';
-  
-  couriers.forEach(courier => {
-    const div = document.createElement('div');
-    div.style.padding = '8px';
-    div.style.borderBottom = '1px solid var(--border-glass)';
-    div.style.display = 'flex';
-    div.style.justifyContent = 'space-between';
-    div.innerHTML = `
-      <div>
-        <strong>${courier.name}</strong><br>
-        <small style="color:var(--text-muted);">📱 ${courier.phone} • ${courier.status === 'active' ? '🟢 Активен' : '🔴 Неактивен'}</small>
-      </div>
-      <button onclick="toggleCourierStatus(${courier.id})" style="font-size:12px;">
-        ${courier.status === 'active' ? 'Деактивировать' : 'Активировать'}
-      </button>
-    `;
-    couriersContainer.appendChild(div);
-  });
-}
-
-function saveOrder(orderData) {
-  const order = {
-    id: Date.now(),
-    ...orderData,
-    date: new Date().toLocaleString(),
-    status: 'new',
-    courier: null
-  };
-  
-  orders.push(order);
-  localStorage.setItem('artikFoodOrders', JSON.stringify(orders));
-  updateAdminStats();
-}
-
-/* ---------------- ЗАКАЗЫ ---------------- */
+/* ---------------- ЗАКАЗ ---------------- */
 
 function sendFormToWhatsApp() {
   const name = document.getElementById('name').value;
@@ -1354,56 +1278,51 @@ function sendFormToWhatsApp() {
   const payment = document.getElementById('payment').value;
   const comment = document.getElementById('comment').value;
 
-  let orderText = `🛒 Новый заказ%0A`;
-  orderText += `👤 Имя: ${name}%0A`;
-  orderText += `📞 Телефон: ${phone}%0A`;
-  orderText += `📍 Адрес: ${address}%0A`;
-  orderText += `🏘 Район: ${district}%0A`;
-  orderText += `💳 Оплата: ${payment}%0A%0A`;
-  orderText += `📦 Товары:%0A`;
-
-  let total = 0;
+  let message = `🛒 *Новый заказ Artik Food*%0A%0A`;
+  message += `👤 Имя: ${name}%0A`;
+  message += `📞 Телефон: ${phone}%0A`;
+  message += `📍 Адрес: ${address}%0A`;
+  message += `🏘 Район: ${district}%0A`;
+  message += `💳 Оплата: ${payment}%0A`;
+  if (comment) message += `📝 Комментарий: ${comment}%0A%0A`;
 
   Object.keys(carts).forEach(storeKey => {
-    Object.entries(carts[storeKey]).forEach(([product, data]) => {
+    message += `🏬 ${stores[storeKey].name}:%0A`;
+    Object.entries(carts[storeKey]).forEach(([name, data]) => {
       if (data.qty > 0) {
-        const sum = data.qty * data.price;
-        orderText += `• ${stores[storeKey].name}: ${product} × ${data.qty} = ${sum} AMD%0A`;
-        total += sum;
+        message += `• ${name} × ${data.qty} = ${data.qty * data.price} AMD%0A`;
       }
     });
+    message += `%0A`;
   });
 
-  let delivery = 0;
-  if (district === "Артик") delivery = 500;
-  if (district === "Арич") delivery = 700;
-  if (district === "Нор-Кянк") delivery = 1000;
-  if (district === "Пемзашен") delivery = 1000;
-
-  const grandTotal = total + delivery;
-  orderText += `%0A🚚 Доставка: ${delivery} AMD%0A`;
-  orderText += `💰 Итого: ${grandTotal} AMD%0A`;
-  if (comment) orderText += `%0A📝 Комментарий: ${comment}`;
+  const total = document.getElementById('grand-total').innerText;
+  message += `💰 ${total}`;
 
   const phoneNumber = "37443797727";
-  const whatsappUrl = `https://wa.me/${phoneNumber}?text=${orderText}`;
-  window.open(whatsappUrl, "_blank");
+  window.open(`https://wa.me/${phoneNumber}?text=${message}`, "_blank");
+}
 
-  saveOrder({
-    name,
-    phone,
-    address,
-    district,
-    payment,
-    comment,
-    items: JSON.parse(JSON.stringify(carts)),
-    total: grandTotal
-  });
+/* ---------------- АДМИНКА (ЗАГЛУШКИ) ---------------- */
 
-  carts = {};
-  renderGlobalCart();
-  updateStoreCart();
-  alert("Ваш заказ отправлен! Спасибо 😊");
+function showAdminLogin() {
+  alert("Админ-панель в разработке 😎");
+}
+
+function hideAdminPanel() {
+  document.getElementById('admin-panel').classList.add('hidden');
+}
+
+function addNewProduct() {
+  alert("Добавление товара — скоро 😉");
+}
+
+function viewAllOrders() {
+  alert("Просмотр всех заказов — скоро 😉");
+}
+
+function manageCouriers() {
+  alert("Управление курьерами — скоро 😉");
 }
 
 /* ---------------- ИНИЦИАЛИЗАЦИЯ ---------------- */
@@ -1411,34 +1330,16 @@ function sendFormToWhatsApp() {
 renderShops();
 renderGlobalCart();
 
-</script>
-<script>
+/* ---------------- SERVICE WORKER ---------------- */
+
 if ("serviceWorker" in navigator) {
   navigator.serviceWorker.register("service-worker.js")
     .then(() => console.log("Service Worker зарегистрирован"))
     .catch(err => console.error("Ошибка Service Worker:", err));
 }
-</script>
-<button id="install-btn" style="
-  position: fixed;
-  bottom: 80px;
-  left: 50%;
-  transform: translateX(-50%);
-  background: #22c55e;
-  color: white;
-  border: none;
-  padding: 14px 20px;
-  border-radius: 999px;
-  font-size: 16px;
-  font-weight: bold;
-  box-shadow: 0 10px 30px rgba(0,0,0,0.25);
-  z-index: 10000;
-  display: none;
-">
-  📲 Установить приложение
-</button>
 
-<script>
+/* ---------------- УСТАНОВКА PWA ---------------- */
+
 let deferredPrompt;
 const installBtn = document.getElementById("install-btn");
 
