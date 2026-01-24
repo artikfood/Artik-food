@@ -1201,12 +1201,11 @@ searchInput.addEventListener('input', () => {
     // === DISPATCHER (Worker) ===
 const WORKER_URL = "https://artikfood-dispatcher.edulik844.workers.dev/orders"; // обязательно /orders
 const API_KEY = "artikfood_Secret_2026!"; // лучше потом убрать и хранить в Worker, но пока оставь
-
-
-sendOrderToWorker({
-  const itemsTotal = total;           // сумма товаров
+ const itemsTotal = total;           // сумма товаров
   const deliveryTotal = delivery;     // доставка
   const grandTotal = total + delivery;// итого
+
+sendOrderToWorker({
   createdAt: new Date().toISOString(),
   name, phone, address, district, payment, comment,
   carts,
