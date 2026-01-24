@@ -625,6 +625,7 @@
 
   <section class="section" id="order">
     <h3>Оформление заказа</h3>
+
     <form class="order-form" id="order-form" onsubmit="event.preventDefault(); sendFormToWhatsApp();">
       <input type="text" id="name" placeholder="Ваше имя" required />
       <input type="tel" id="phone" placeholder="Телефон" required />
@@ -1196,6 +1197,25 @@ searchInput.addEventListener('input', () => {
     });
   });
 });
+    
+    // === DISPATCHER (Worker) ===
+const WORKER_URL = "https://artikfood-dispatcher.edulik844.workers.dev/orders"; // обязательно /orders
+const API_KEY = "artikfood_Secret_2026!"; // лучше потом убрать и хранить в Worker, но пока оставь
+
+async function sendOrderToWorker(payload) {
+  try {
+    await fetch(WORKER_URL, {
+      method: "POST",
+      headers: {
+        "Content-Type": "application/json",
+        "x-api-key": API_KEY
+      },
+      body: JSON.stringify(payload)
+    });
+  } catch (e) {
+    console.log("Worker error:", e);
+  }
+}
 
 /* ---------------- WHATSAPP ---------------- */
 function sendFormToWhatsApp() {
@@ -1241,6 +1261,13 @@ function sendFormToWhatsApp() {
 
   const whatsappNumber = "37443797727";
   const url = `https://wa.me/${whatsappNumber}?text=${message}`;
+  // отправка в Telegram через Worker
+sendOrderToWorker({
+  createdAt: new Date().toISOString(),
+  name, phone, address, district, payment, comment,
+  carts
+});
+
   window.open(url, "_blank");
 }
 
