@@ -1189,7 +1189,6 @@ searchInput.addEventListener('input', () => {
         `;
         container.appendChild(div);
 
-        // показать актуальное кол-во если уже было в корзине
         const existing = carts?.[storeKey]?.[product.name] || 0;
         const el = document.getElementById(qtyId(storeKey, product.name));
         if (el) el.innerText = existing;
@@ -1197,34 +1196,93 @@ searchInput.addEventListener('input', () => {
     });
   });
 });
-    
-    // === DISPATCHER (Worker) ===
-const WORKER_URL = "https://artikfood-dispatcher.edulik844.workers.dev/orders"; // обязательно /orders
-const API_KEY = "artikfood_Secret_2026!"; // лучше потом убрать и хранить в Worker, но пока оставь
+
+/* ================== WORKER + TOTALS (ПОЧИНЕНО) ================== */
+const WORKER_ORIGIN = "https://artikfood-dispatcher.edulik844.workers.dev";
+const API_KEY = "artikfood_Secret_2026!";
+
+function getDeliveryByDistrict(district) {
+  if (district === "Артик") return 500;
+  if (district === "Арич") return 700;
+  if (district === "Нор-Кянк") return 1000;
+  if (district === "Пемзашен") return 1000;
+  return 0;
+}
+
+function calcItemsTotal() {
+  let total = 0;
+  Object.keys(carts || {}).forEach(storeKey => {
+    Object.keys(carts[storeKey] || {}).forEach(productName => {
+      const qty = Number(carts[storeKey][productName] || 0);
+      if (qty > 0) {
+        const product = stores?.[storeKey]?.products?.find(p => p.name === productName);
+        if (!product) return;
+        total += Number(product.price || 0) * qty;
+      }
+    });
+  });
+  return total;
+}
+
+function hasAnyItemsInCart() {
+  for (const storeKey of Object.keys(carts || {})) {
+    for (const productName of Object.keys(carts[storeKey] || {})) {
+      if (Number(carts[storeKey][productName] || 0) > 0) return true;
+    }
+  }
+  return false;
+}
 
 async function sendOrderToWorker(payload) {
+  const controller = new AbortController();
+  const t = setTimeout(() => controller.abort(), 15000);
+
   try {
-    await fetch(WORKER_URL, {
+    const res = await fetch(`${WORKER_ORIGIN}/orders`, {
       method: "POST",
       headers: {
         "Content-Type": "application/json",
         "x-api-key": API_KEY
       },
-      body: JSON.stringify(payload)
+      body: JSON.stringify(payload),
+      signal: controller.signal
     });
+
+    const data = await res.json().catch(() => ({}));
+    console.log("WORKER RESPONSE:", res.status, data);
+
+    if (!res.ok || !data.ok) {
+      alert("Ошибка отправки в Telegram. Открой консоль (F12) и посмотри WORKER RESPONSE.");
+      return { ok: false, status: res.status, data };
+    }
+
+    return { ok: true, status: res.status, data };
   } catch (e) {
     console.log("Worker error:", e);
+    alert("Не удалось отправить заказ в Telegram (ошибка сети/доступа). Проверь интернет и WORKER_ORIGIN.");
+    return { ok: false, error: String(e) };
+  } finally {
+    clearTimeout(t);
   }
 }
 
 /* ---------------- WHATSAPP ---------------- */
-function sendFormToWhatsApp() {
-  const name = document.getElementById('name').value;
-  const phone = document.getElementById('phone').value;
-  const address = document.getElementById('address').value;
+async function sendFormToWhatsApp() {
+  const name = document.getElementById('name').value.trim();
+  const phone = document.getElementById('phone').value.trim();
+  const address = document.getElementById('address').value.trim();
   const district = document.getElementById('district').value;
   const payment = document.getElementById('payment').value;
-  const comment = document.getElementById('comment').value;
+  const comment = document.getElementById('comment').value.trim();
+
+  if (!hasAnyItemsInCart()) {
+    alert("Корзина пустая. Добавь товары, потом отправляй заказ.");
+    return;
+  }
+  if (!district) {
+    alert("Выбери район доставки.");
+    return;
+  }
 
   let message = `🛒 *Новый заказ — Artik Food*%0A%0A`;
   message += `👤 Имя: ${encodeURIComponent(name)}%0A`;
@@ -1235,39 +1293,34 @@ function sendFormToWhatsApp() {
   if (comment) message += `📝 Комментарий: ${encodeURIComponent(comment)}%0A`;
   message += `%0A📦 *Товары:*%0A`;
 
-  let total = 0;
-
   Object.keys(carts).forEach(storeKey => {
     Object.keys(carts[storeKey]).forEach(productName => {
-      const qty = carts[storeKey][productName];
+      const qty = Number(carts[storeKey][productName] || 0);
       if (qty > 0) {
-        const product = stores[storeKey].products.find(p => p.name === productName);
+        const product = stores[storeKey]?.products?.find(p => p.name === productName);
         if (!product) return;
         const price = product.price * qty;
-        total += price;
         message += `- ${encodeURIComponent(productName)} (${encodeURIComponent(stores[storeKey].name)}) × ${qty} = ${price} AMD%0A`;
       }
     });
   });
 
-  let delivery = 0;
-  if (district === "Артик") delivery = 500;
-  else if (district === "Арич") delivery = 700;
-  else if (district === "Нор-Кянк") delivery = 1000;
-  else if (district === "Пемзашен") delivery = 1000;
+  const itemsTotal = calcItemsTotal();
+  const delivery = getDeliveryByDistrict(district);
+  const grandTotal = itemsTotal + delivery;
 
   message += `%0A🚚 Доставка: ${delivery} AMD%0A`;
-  message += `💰 *Итого: ${total + delivery} AMD*`;
+  message += `💰 *Итого: ${grandTotal} AMD*`;
+
+  await sendOrderToWorker({
+    createdAt: new Date().toISOString(),
+    name, phone, address, district, payment, comment,
+    carts,
+    totals: { itemsTotal, delivery, grandTotal }
+  });
 
   const whatsappNumber = "37443797727";
   const url = `https://wa.me/${whatsappNumber}?text=${message}`;
-  // отправка в Telegram через Worker
-sendOrderToWorker({
-  createdAt: new Date().toISOString(),
-  name, phone, address, district, payment, comment,
-  carts
-});
-
   window.open(url, "_blank");
 }
 
