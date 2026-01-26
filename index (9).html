@@ -3,179 +3,168 @@
 <head>
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
-  <title>Hay Grill — Premium Delivery</title>
-  <link rel="manifest" href="manifest.json">
-  <meta name="theme-color" content="#0f1115">
-  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&family=Playfair+Display:wght@500;600;700&display=swap" rel="stylesheet">
+  <title>Hay Grill — Арм Гриль</title>
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;600;700&display=swap" rel="stylesheet">
   <style>
-    /* Քո օրիգինալ դիզայնը մնում է նույնությամբ */
     :root {
-      --bg-main: #0f1115; --bg-secondary: #151822; --bg-card: rgba(255,255,255,0.06);
-      --bg-glass: rgba(255,255,255,0.08); --border-glass: rgba(255,255,255,0.12);
-      --accent-gold: #d4af37; --accent-green: #2ecc71; --text-main: #f4f4f4;
-      --text-muted: #b3b3b3; --shadow-soft: 0 10px 30px rgba(0,0,0,0.35);
+      --bg-body: #f8f9fa;
+      --bg-card: #ffffff;
+      --accent: #d4af37; /* Золотой акцент */
+      --text-main: #1a1a1a;
+      --text-muted: #6c757d;
+      --border: #e9ecef;
     }
+
     * { margin: 0; padding: 0; box-sizing: border-box; -webkit-tap-highlight-color: transparent; }
-    body { background-color: var(--bg-main); color: var(--text-main); font-family: 'Inter', sans-serif; overflow-x: hidden; }
-    .glass-effect { background: var(--bg-glass); backdrop-filter: blur(12px); border: 1px solid var(--border-glass); }
-    header { padding: 40px 20px 20px; text-align: center; background: linear-gradient(to bottom, #1a1d26 0%, var(--bg-main) 100%); }
-    .logo-container h1 { font-family: 'Playfair Display', serif; font-size: 2.5rem; color: var(--accent-gold); letter-spacing: 2px; }
-    .search-section { padding: 0 20px 20px; }
-    .search-bar { display: flex; align-items: center; padding: 14px 20px; border-radius: 16px; margin-top: 10px; }
-    .search-bar input { background: none; border: none; color: white; width: 100%; margin-left: 10px; outline: none; }
-    .stores-grid { display: grid; grid-template-columns: repeat(2, 1fr); gap: 15px; padding: 15px 20px; }
-    .store-card { border-radius: 20px; padding: 20px; text-align: center; transition: transform 0.3s; }
-    .modal { position: fixed; top: 0; left: 0; width: 100%; height: 100%; background: var(--bg-main); z-index: 1000; display: none; flex-direction: column; }
-    .modal-header { padding: 25px 20px; display: flex; align-items: center; gap: 15px; }
-    .cat-scroll { display: flex; overflow-x: auto; padding: 10px 20px; gap: 12px; }
-    .cat-item { padding: 10px 18px; border-radius: 12px; border: 1px solid var(--border-glass); white-space: nowrap; }
-    .cat-item.active { background: var(--accent-gold); color: black; }
-    .product-list { flex: 1; overflow-y: auto; padding: 20px; display: flex; flex-direction: column; gap: 15px; }
-    .product-card { display: flex; gap: 15px; padding: 15px; border-radius: 18px; align-items: center; }
-    .product-img { width: 80px; height: 80px; border-radius: 14px; object-fit: cover; background: #252833; }
-    .p-title { font-weight: 600; }
-    .p-price { color: var(--accent-gold); font-weight: 700; }
-    .cart-float { position: fixed; bottom: 30px; left: 20px; right: 20px; padding: 18px; border-radius: 18px; display: none; justify-content: space-between; align-items: center; }
+    body { background: var(--bg-body); color: var(--text-main); font-family: 'Inter', sans-serif; }
+
+    header { background: white; padding: 30px 20px; text-align: center; border-bottom: 1px solid var(--border); }
+    header h1 { font-size: 1.8rem; color: var(--accent); letter-spacing: 1px; }
+    header p { font-size: 0.9rem; color: var(--text-muted); margin-top: 5px; }
+
+    .container { max-width: 600px; margin: 0 auto; padding: 20px; }
+
+    /* Категории */
+    .cat-scroll { display: flex; overflow-x: auto; gap: 10px; padding-bottom: 15px; scrollbar-width: none; }
+    .cat-scroll::-webkit-scrollbar { display: none; }
+    .cat-item { 
+      padding: 10px 20px; background: white; border: 1px solid var(--border); 
+      border-radius: 25px; white-space: nowrap; cursor: pointer; transition: 0.3s;
+    }
+    .cat-item.active { background: var(--accent); color: white; border-color: var(--accent); }
+
+    /* Карточки товаров */
+    .product-card { 
+      background: var(--bg-card); border-radius: 15px; padding: 15px; margin-bottom: 15px;
+      display: flex; align-items: center; gap: 15px; box-shadow: 0 2px 10px rgba(0,0,0,0.03);
+    }
+    .product-img { width: 90px; height: 90px; border-radius: 12px; object-fit: cover; background: #eee; }
+    .product-info { flex: 1; }
+    .p-title { font-weight: 600; font-size: 1.05rem; margin-bottom: 4px; }
+    .p-desc { font-size: 0.85rem; color: var(--text-muted); line-height: 1.3; }
+    .p-price { font-weight: 700; color: var(--accent); margin-top: 8px; font-size: 1.1rem; }
+
+    .add-btn { 
+      background: var(--accent); color: white; border: none; width: 35px; height: 35px; 
+      border-radius: 10px; font-size: 1.2rem; cursor: pointer; 
+    }
+
+    /* Плавающая корзина */
+    .cart-float { 
+      position: fixed; bottom: 20px; left: 20px; right: 20px; background: #1a1a1a; 
+      color: white; padding: 15px 25px; border-radius: 15px; display: none; 
+      justify-content: space-between; align-items: center; box-shadow: 0 10px 25px rgba(0,0,0,0.2);
+    }
+    .cart-btn { background: var(--accent); color: white; border: none; padding: 8px 15px; border-radius: 8px; font-weight: 600; }
   </style>
-</head>
-<body>
-  <header>
-    <div class="logo-container">
-      <h1>HAY GRILL</h1>
-      <p style="color: var(--text-muted); font-size: 0.9rem; letter-spacing: 1px;">ՀԱՅ ԳՐԻԼ — ԱՐԹԻԿ</p>
-    </div>
-  </header>
-
-  <div class="search-section">
-    <div class="search-bar glass-effect">
-      <span>🔍</span>
-      <input type="text" id="storeSearch" placeholder="Որոնել ուտեստ..." oninput="searchItems()">
-    </div>
-  </div>
-
-  <div id="mainView">
-    <div class="stores-grid" id="storesGrid"></div>
-  </div>
-
-  <div id="storeModal" class="modal">
-    <div class="modal-header glass-effect">
-      <button onclick="closeStore()" style="background:none; border:none; color:var(--accent-gold); font-size:1.5rem;">←</button>
-      <h2 id="modalStoreName" style="font-family: 'Playfair Display', serif;">Hay Grill</h2>
-    </div>
-    <div class="cat-scroll" id="catScroll"></div>
-    <div class="product-list" id="productList"></div>
-  </div>
-
-  <div id="cartFloat" class="cart-float glass-effect">
-    <div><span id="cartCount">0</span> ապրանք</div>
-    <button onclick="openCheckout()" style="background:var(--accent-gold); border:none; padding:10px 20px; border-radius:12px; font-weight:700;">Զամբյուղ</button>
-  </div>
-
-  <script>
-    // ՍԱ ՔՈ ԱՂՅՈՒՍԱԿԻ CSV ՀՂՈՒՄՆ Է
-    const SHEET_CSV_URL = 'https://docs.google.com/spreadsheets/d/e/2PACX-1vRqzYgv30v3XeFa3EHgVAFE3dVS0qcohAQC3KbmuD7j8u2vDtz0w5QKBZQ198r7SCph8TPl4phwQF_9/pub?output=csv';
-
-    let stores = {
-      hay_grill: {
-        name: "Hay Grill (Հայ Գրիլ)",
-        icon: "🔥",
-        categories: { "Մանղալ": "🔥", "Շաուրմա": "🌯", "Քյաբաբ": "🍢", "Ըմպելիք": "🥤" },
-        products: []
-      }
-    };
-
-    async function loadMenuFromSheet() {
-      try {
-        const response = await fetch(SHEET_CSV_URL);
-        const data = await response.text();
-        const rows = data.split('\n').slice(1);
-
-        stores.hay_grill.products = rows.map(row => {
-          const cols = row.split(/,(?=(?:(?:[^"]*"){2})*[^"]*$)/);
-          if (cols.length < 5) return null;
-
-          // Լուսանկարի ID-ի ստացում
-          let imgUrl = "https://via.placeholder.com/80?text=Food";
-          const idMatch = cols[1].match(/id=([^"&]+)/);
-          if (idMatch) imgUrl = `https://drive.google.com/uc?export=download&id=${idMatch[1]}`;
-
-          return {
-            category: cols[0].replace(/"/g, '').trim(),
-            img: imgUrl,
-            name: cols[2].replace(/"/g, '').trim() || cols[3].replace(/"/g, '').trim(),
-            desc: cols[4].replace(/"/g, '').trim(),
-            price: parseInt(cols[5].replace(/[^0-9]/g, '')) || 0
-          };
-        }).filter(p => p !== null);
-
-        init(); 
-      } catch (err) { console.error("Error:", err); }
-    }
-    let carts = {};
-    let currentStore = 'hay_grill';
-
-    function init() {
-      const grid = document.getElementById('storesGrid');
-      grid.innerHTML = `
-        <div class="store-card glass-effect" onclick="openStore('hay_grill')">
-          <span style="font-size:2.5rem; display:block; margin-bottom:10px;">🔥</span>
-          <span style="font-weight:600;">HAY GRILL</span>
-          <span style="font-size:0.75rem; color:var(--accent-green); display:block;">● Բաց է</span>
-        </div>
-      `;
-    }
-
-    function openStore(key) {
-      document.getElementById('storeModal').style.display = 'flex';
-      const s = stores[key];
+</head>function renderCategories() {
+      const cats = [...new Set(allProducts.map(p => p.category))];
       const scroll = document.getElementById('catScroll');
-      scroll.innerHTML = '';
-      const uniqueCats = [...new Set(s.products.map(p => p.category))];
-      
-      uniqueCats.forEach((cat, idx) => {
-        scroll.innerHTML += `<div class="cat-item ${idx===0?'active':''}" onclick="filterCat('${cat}', this)">${cat}</div>`;
-      });
-      filterCat(uniqueCats[0], scroll.firstChild);
+      scroll.innerHTML = cats.map((c, i) => `
+        <div class="cat-item ${i === 0 ? 'active' : ''}" onclick="filter('${c}', this)">${c}</div>
+      `).join('');
+      filter(cats[0], scroll.querySelector('.cat-item'));
     }
 
-    function filterCat(cat, el) {
+    function filter(cat, el) {
       document.querySelectorAll('.cat-item').forEach(i => i.classList.remove('active'));
       el.classList.add('active');
-      const list = document.getElementById('productList');
-      list.innerHTML = '';
-      const filtered = stores.hay_grill.products.filter(p => p.category === cat);
       
-      filtered.forEach(p => {
-        list.innerHTML += `
-          <div class="product-card glass-effect">
-            <img class="product-img" src="${p.img}">
-            <div style="flex:1">
-              <div class="p-title">${p.name}</div>
-              <div style="font-size:0.8rem; color:var(--text-muted);">${p.desc}</div>
-              <div class="p-price">${p.price} AMD</div>
-            </div>
-            <button onclick="add('${p.name}', ${p.price})" style="background:var(--accent-gold); border:none; width:30px; height:30px; border-radius:8px;">+</button>
-          </div>`;
-      });
+      const list = document.getElementById('productList');
+      const filtered = allProducts.filter(p => p.category === cat);
+      
+      list.innerHTML = filtered.map(p => `
+        <div class="product-card">
+          <img class="product-img" src="${p.img}">
+          <div class="product-info">
+            <div class="p-title">${p.name}</div>
+            <div class="p-desc">${p.desc}</div>
+            <div class="p-price">${p.price} AMD</div>
+          </div>
+          <button class="add-btn" onclick="add('${p.name}')">+</button>
+        </div>
+      `).join('');
     }
 
-    function add(name, price) {
-      if(!carts[currentStore]) carts[currentStore] = {};
-      carts[currentStore][name] = (carts[currentStore][name] || 0) + 1;
+    function add(name) {
+      cart[name] = (cart[name] || 0) + 1;
       updateCart();
     }
 
     function updateCart() {
-      let count = 0;
-      Object.values(carts).forEach(s => Object.values(s).forEach(q => count += q));
+      let count = Object.values(cart).reduce((a, b) => a + b, 0);
       document.getElementById('cartFloat').style.display = count > 0 ? 'flex' : 'none';
       document.getElementById('cartCount').innerText = count;
     }
 
-    function closeStore() { document.getElementById('storeModal').style.display = 'none'; }
+    function sendToWA() {
+      let msg = "🆕 *ЗАКАЗ В HAY GRILL*%0A%0A";
+      let total = 0;
+      for (let name in cart) {
+        const p = allProducts.find(item => item.name === name);
+        msg += `- ${name} x${cart[name]} (${p.price * cart[name]} AMD)%0A`;
+        total += p.price * cart[name];
+      }
+      msg += `%0A💰 *ИТОГО: ${total} AMD*`;
+      window.open(`https://wa.me/37443797727?text=${msg}`, '_blank');
+    }
 
-    // Ավտոմատ բեռնում աղյուսակից
-    window.onload = loadMenuFromSheet;
+    window.onload = loadData;
+  </script>
+</body>
+</html>function renderCategories() {
+      const cats = [...new Set(allProducts.map(p => p.category))];
+      const scroll = document.getElementById('catScroll');
+      scroll.innerHTML = cats.map((c, i) => `
+        <div class="cat-item ${i === 0 ? 'active' : ''}" onclick="filter('${c}', this)">${c}</div>
+      `).join('');
+      filter(cats[0], scroll.querySelector('.cat-item'));
+    }
+
+    function filter(cat, el) {
+      document.querySelectorAll('.cat-item').forEach(i => i.classList.remove('active'));
+      el.classList.add('active');
+      
+      const list = document.getElementById('productList');
+      const filtered = allProducts.filter(p => p.category === cat);
+      
+      list.innerHTML = filtered.map(p => `
+        <div class="product-card">
+          <img class="product-img" src="${p.img}">
+          <div class="product-info">
+            <div class="p-title">${p.name}</div>
+            <div class="p-desc">${p.desc}</div>
+            <div class="p-price">${p.price} AMD</div>
+          </div>
+          <button class="add-btn" onclick="add('${p.name}')">+</button>
+        </div>
+      `).join('');
+    }
+
+    function add(name) {
+      cart[name] = (cart[name] || 0) + 1;
+      updateCart();
+    }
+
+    function updateCart() {
+      let count = Object.values(cart).reduce((a, b) => a + b, 0);
+      document.getElementById('cartFloat').style.display = count > 0 ? 'flex' : 'none';
+      document.getElementById('cartCount').innerText = count;
+    }
+
+    function sendToWA() {
+      let msg = "🆕 *ЗАКАЗ В HAY GRILL*%0A%0A";
+      let total = 0;
+      for (let name in cart) {
+        const p = allProducts.find(item => item.name === name);
+        msg += `- ${name} x${cart[name]} (${p.price * cart[name]} AMD)%0A`;
+        total += p.price * cart[name];
+      }
+      msg += `%0A💰 *ИТОГО: ${total} AMD*`;
+      window.open(`https://wa.me/37443797727?text=${msg}`, '_blank');
+    }
+
+    window.onload = loadData;
   </script>
 </body>
 </html>
