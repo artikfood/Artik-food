@@ -780,7 +780,7 @@ async function loadMarketplace() {
     init(); // Запуск твоего оригинального дизайна
   } catch (e) {
     console.error("Ошибка загрузки:", e);
-    init();
+    window.onload = loadMarketplace;
   }
 }
 
