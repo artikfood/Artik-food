@@ -450,204 +450,31 @@
       box-shadow: 0 8px 24px rgba(46,204,113,0.35);
       transition: transform 0.15s, box-shadow 0.15s;
     }
-
-    .order-form button:hover {
-      transform: translateY(-1px);
-      box-shadow: 0 12px 30px rgba(46,204,113,0.55);
-    }
-
-    footer {
-      background: linear-gradient(180deg, rgba(15,17,21,0.9), rgba(15,17,21,1));
-      color: var(--text-muted);
-      text-align:center;
-      padding:20px;
-      margin-top:60px;
-      font-size:13px;
-      border-top: 1px solid var(--border-glass);
-    }
-
-    body.light-theme footer {
-      background: linear-gradient(180deg, rgba(255,255,255,0.9), rgba(255,255,255,1));
-    }
-
-    .hidden { display:none; }
-
-    .back-btn {
-      display: inline-block;
-      margin-bottom: 14px;
-      background: var(--bg-glass);
-      color: var(--text-main);
-      border: 1px solid var(--border-glass);
-      padding: 8px 16px;
-      border-radius: 999px;
-      cursor: pointer;
-      font-size: 14px;
-      font-weight: 500;
-    }
-
-    .floating-buttons {
-      position: fixed;
-      bottom: 160px;
-      right: 18px;
-      display: flex;
-      flex-direction: column;
-      gap: 12px;
-      z-index: 9999;
-    }
-
-    .floating-buttons button {
-      padding: 10px 16px;
-      border: none;
-      border-radius: 999px;
-      background: linear-gradient(135deg, #d4af37, #f1d67a);
-      color: #0f1115;
-      font-size: 14px;
-      font-weight: 600;
-      box-shadow: 0 8px 24px rgba(212,175,55,0.35);
-      cursor: pointer;
-    }
-
-    .floating-icons {
-      position: fixed;
-      bottom: 20px;
-      right: 20px;
-      display: flex;
-      flex-direction: column;
-      gap: 10px;
-      z-index: 9999;
-    }
-
-    .floating-icons a {
-      width: 44px;
-      height: 44px;
-      border-radius: 50%;
-      display: flex;
-      align-items: center;
-      justify-content: center;
-      text-decoration: none;
-      font-size: 18px;
-      background: linear-gradient(135deg, #2ecc71, #6df0a0);
-      color: #0f1115;
-      box-shadow: 0 8px 24px rgba(46,204,113,0.35);
-    }
-
-    #admin-panel {
-      position: fixed;
-      top: 0;
-      left: 0;
-      width: 100%;
-      height: 100%;
-      background: radial-gradient(1200px 600px at 20% -10%, #1b1f2b 0%, #0f1115 50%, #0b0d12 100%);
-      z-index: 10001;
-      overflow-y: auto;
-      color: #ffffff;
-    }
-
-    body.light-theme #admin-panel {
-      background: radial-gradient(1200px 600px at 20% -10%, #ffffff 0%, #f2f2f6 50%, #ececf1 100%);
-      color: #1c1c1e;
-    }
-
-    .admin-card {
-      background: linear-gradient(180deg, var(--bg-glass), rgba(255,255,255,0.02));
-      border: 1px solid var(--border-glass);
-      padding: 16px;
-      border-radius: var(--radius-lg);
-      box-shadow: var(--shadow-soft);
-    }
-
-    @media (max-width: 600px) {
-      header { padding: 10px 14px; }
-      header h1 { font-size: 18px; }
-      header img { height: 34px; }
-      .hero h2 { font-size: 28px; }
-      .shops { grid-template-columns: repeat(2, 1fr); gap: 12px; }
-      .product { flex-direction: column; align-items: flex-start; }
-      .search-container input{ width: 70vw; }
-    }
-  </style>
-</head>
-<body>
-
-<header>
-  <div class="logo-box" id="logoBox" onclick="goHome()">
-    <img src="logo.png" alt="Artik Food">
-    <h1>Artik Food</h1>
-    <div class="search-container">
-      <input type="text" id="searchInput" placeholder="🔍 Поиск товаров..." />
-    </div>
-  </div>
-  <nav>
-    <a href="#" onclick="goHome()">Главная</a>
-    <a href="#order">Заказать</a>
-    <a href="#contacts">Контакты</a>
-    <button class="theme-toggle" id="themeToggle" title="Сменить тему">🌙</button>
-  </nav>
-</header>
-
-<div id="home-page">
-  <section class="hero">
-    <h2>Premium доставка в Артике</h2>
-    <p>Свежие продукты и цветы из лучших магазинов — быстро, удобно и с заботой о деталях.</p>
-    <button onclick="document.getElementById('order').scrollIntoView({behavior:'smooth'});">Заказать сейчас</button>
-  </section>
-
-  <section class="section" id="shops">
-    <h3>Магазины-партнёры</h3>
-    <div class="shops" id="shops-list"></div>
-  </section>
-
-  <section class="section">
-    <div class="cart" id="global-cart">
-      <h4>Ваша корзина</h4>
-      <div id="global-cart-items"></div>
-      <div class="cart-total" id="global-cart-total">Товары: 0 AMD</div>
-      <div class="cart-total" id="delivery-total">Доставка: 0 AMD</div>
-      <div class="cart-total" id="grand-total">Итого: 0 AMD</div>
-    </div>
-  </section>
-</div>
-
-<section class="section">
-  <div id="store-page" class="hidden">
-    <section class="section">
-      <h3 id="store-"></h3>
-      <div class="products" id="store-products"></div>
-
-      <div class="cart hidden" id="store-cart">
-        <h4>Корзина магазина</h4>
-        <div id="store-cart-items"></div>
-        <div class="cart-total" id="store-cart-total">Итого: 0 AMD</div>
-        <div id="store-order-buttons" style="display:none;"></div>
-      </div>
-    </section>
-  </div>
-
-  <section class="section" id="order">
-    <h3>Оформление заказа</h3>
-
-    <form class="order-form" id="order-form" onsubmit="event.preventDefault();">
-      <input type="text" id="name" placeholder="Ваше имя" required />
-      <input type="tel" id="phone" placeholder="Телефон" required />
-      <input type="text" id="address" placeholder="Адрес доставки" required />
-      <select id="district" required onchange="renderGlobalCart()">
-        <option value="">Выберите район доставки</option>
-        <option value="Артик">Артик — 500 AMD</option>
-        <option value="Арич">Арич — 700 AMD</option>
-        <option value="Нор-Кянк">Нор-Кянк — 1000 AMD</option>
-        <option value="Пемзашен">Пемзашен — 1000 AMD</option>
-      </select>
-      <select id="payment" required style="margin-bottom:12px;">
-        <option value="">Выберите способ оплаты</option>
-        <option value="Наличными курьеру">💵 Наличными курьеру</option>
-        <option value="IDram">🏦 IDram</option>
-        <option value="Картой онлайн">💳 Картой онлайн (скоро)</option>
-      </select>
-      <textarea rows="3" id="comment" placeholder="Комментарий к заказу"></textarea>
-      <button type="button" onclick="sendFormToWhatsApp()">Отправить заказ</button>
-    </form>
-  </section>
-
+const stores = {
+  hay_grill: {
+    name: "Hay Grill (Հայ Գրիլ)",
+    icon: "🔥",
+    categories: {
+      "Мангал": "🔥",
+      "Шаурма": "🌯",
+      "Кебаб": "🍢",
+      "Пицца": "🍕",
+      "Напитки": "🥤"
+    },
+    products: [
+      { name: "Խոզի չալաղաջ (Чалагадж)", price: 4200, category: "Мангал", desc: "1кг - свинина, сох, зелень, лаваш", img: "https://lh3.googleusercontent.com/d/1fyoI2bIXQzCguhF0Q3EYQbRq3qccswNH" },
+      { name: "Խոզի մատ (Ребрышки)", price: 3800, category: "Мангал", desc: "1кг - свиные ребрышки, сох, зелень, лаваш", img: "https://lh3.googleusercontent.com/d/1fyoI2bIXQzCguhF0Q3EYQbRq3qccswNH" },
+      { name: "խոզի շաուրմա (Шаурма)", price: 950, category: "Шаурма", desc: "свинина, салат, овощи, фри, 2 соуса", img: "https://lh3.googleusercontent.com/d/1fyoI2bIXQzCguhF0Q3EYQbRq3qccswNH" },
+      { name: "Տավարի քյաբաբ (Кебаб)", price: 750, category: "Кебаб", desc: "говядина, сох, зелень, лаваш", img: "https://lh3.googleusercontent.com/d/1fyoI2bIXQzCguhF0Q3EYQbRq3qccswNH" },
+      { name: "Պեպերոնի (Пепперони)", price: 3500, category: "Пицца", desc: "пепперони, моцарелла, 2 вида соуса", img: "https://lh3.googleusercontent.com/d/1fyoI2bIXQzCguhF0Q3EYQbRq3qccswNH" },
+      { name: "Հավի նագետս (Наггетсы)", price: 400, category: "Пицца", desc: "1 порция куриных наггетсов", img: "https://lh3.googleusercontent.com/d/1fyoI2bIXQzCguhF0Q3EYQbRq3qccswNH" },
+      { name: "Jermuk 330ml", price: 400, category: "Напитки", desc: "Минеральная вода", img: "https://lh3.googleusercontent.com/d/1fyoI2bIXQzCguhF0Q3EYQbRq3qccswNH" },
+      { name: "Boom Energy 450ml", price: 400, category: "Напитки", desc: "Энергетический напиток", img: "https://lh3.googleusercontent.com/d/1fyoI2bIXQzCguhF0Q3EYQbRq3qccswNH" },
+      { name: "Սպիտակ սոուս (Белый)", price: 200, category: "Напитки", desc: "Чесночный соус", img: "https://lh3.googleusercontent.com/d/1fyoI2bIXQzCguhF0Q3EYQbRq3qccswNH" },
+      { name: "Կարմիր սոուս (Красный)", price: 200, category: "Напитки", desc: "Томатный соус", img: "https://lh3.googleusercontent.com/d/1fyoI2bIXQzCguhF0Q3EYQbRq3qccswNH" }
+    ]
+  }
+};
   <section class="section" id="contacts">
     <h3>Контакты</h3>
     <div class="card" style="max-width:420px; margin:auto;">
