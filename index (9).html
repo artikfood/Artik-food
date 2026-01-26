@@ -744,71 +744,57 @@ function decodeSafe(str){
 }
 
 /* ---------------- ДАННЫЕ ---------------- */
-/* ---------------- АВТОМАТИЗАЦИЯ: ГЛАВНЫЙ ДИСПЕТЧЕР ---------------- */
-// Ссылка на твою таблицу STORES_CONTROL (обязательно опубликованную как CSV)
-const CONTROL_SHEET_CSV = "https://docs.google.com/spreadsheets/d/e/2PACX-1vR6x_J6v8pWv-T0oQ9K2C5Y0V7L_U0_q6m6v_R4kK6yQ_w/pub?output=csv"; 
-
-let stores = {}; 
-
-async function loadMarketplace() {
-  try {
-    const response = await fetch(CONTROL_SHEET_CSV);
-    const csvText = await response.text();
-    const rows = csvText.split('\n').slice(1); 
-
-    for (let row of rows) {
-      const cols = row.split(/,(?=(?:(?:[^"]*"){2})*[^"]*$)/);
-      if (cols.length < 3) continue;
-
-      const storeName = cols[0].replace(/"/g, '').trim(); 
-      const storeLogoId = cols[1].replace(/"/g, '').trim(); 
-      const storeCsvUrl = cols[2].replace(/"/g, '').trim(); 
-
-      const storeKey = storeName.toLowerCase().replace(/\s+/g, '_');
-
-      // Создаем структуру магазина для твоего дизайна
-      stores[storeKey] = {
-        name: storeName,
-        icon: "🏪", 
-        logo: `https://drive.google.com/uc?export=download&id=${storeLogoId}`,
-        categories: {},
-        products: []
-      };
-
-      await loadStoreData(storeKey, storeCsvUrl);
-    }
-    init(); // Запуск твоего оригинального дизайна
-  } catch (e) {
-    console.error("Ошибка загрузки:", e);
-    window.onload = loadMarketplace;
+/* --- ПОЛНОСТЬЮ ГОТОВЫЙ БЛОК ДЛЯ ВАШИХ МАГАЗИНОВ --- */
+const stores = {
+  hay_grill: {
+    name: "Hay Grill (Հայ Գրիլ)",
+    icon: "🔥",
+    // Ссылка на логотип из вашей папки Hay Grill
+    logo: "https://drive.google.com/uc?export=download&id=1fyoI2bIXQzCguhF0Q3EYQbRq3qccswNH", 
+    categories: { "Шаурма": "🌯", "Мангал": "🔥", "Кебаб": "🍢", "Фастфуд": "🍟", "Напитки": "🥤" },
+    products: [], // Будут загружены автоматически из таблицы ниже
+    csvUrl: "https://docs.google.com/spreadsheets/d/e/2PACX-1vR6x_J6v8pWv-T0oQ9K2C5Y0V7L_U0_q6m6v_R4kK6yQ_w/pub?gid=0&output=csv"
+  },
+  tonoyan_sity: {
+    name: "Tonoyan City",
+    icon: "🛒",
+    // Ссылка на логотип из вашей папки Tonoyan_Sity
+    logo: "https://drive.google.com/uc?export=download&id=11CdQu7IUJQTDSNgwCj6grFDtTMHK1jSZ",
+    categories: { "Продукты": "🍞", "Овощи": "🍎", "Напитки": "🍾" },
+    products: [], 
+    csvUrl: "https://docs.google.com/spreadsheets/d/e/2PACX-1vR6x_J6v8pWv-T0oQ9K2C5Y0V7L_U0_q6m6v_R4kK6yQ_w/pub?gid=123456789&output=csv" // Замените на CSV лист Тонояна
   }
-}
+};
 
-async function loadStoreData(key, url) {
-  try {
-    const res = await fetch(url);
-    const data = await res.text();
-    const rows = data.split('\n').slice(1);
-    rows.forEach(row => {
-      const cols = row.split(/,(?=(?:(?:[^"]*"){2})*[^"]*$)/);
-      if (cols.length < 5) return;
-      const cat = cols[0].replace(/"/g, '').trim();
-      if (!stores[key].categories[cat]) stores[key].categories[cat] = "🍴";
-      
-      let imgId = "";
-      const match = cols[1].match(/id=([^"&]+)/);
-      if (match) imgId = `https://drive.google.com/uc?export=download&id=${match[1]}`;
+// ЭТА ФУНКЦИЯ ЗАГРУЗИТ ВСЁ САМА
+async function loadAllData() {
+  for (let key in stores) {
+    try {
+      const response = await fetch(stores[key].csvUrl);
+      const data = await response.text();
+      const rows = data.split('\n').slice(1);
 
-      stores[key].products.push({
-        category: cat,
-        img: imgId || "https://via.placeholder.com/80",
-        name: cols[2].replace(/"/g, '').trim() || cols[3].replace(/"/g, '').trim(),
-        desc: cols[4].replace(/"/g, '').trim(),
-        price: parseInt(cols[5].replace(/[^0-9]/g, '')) || 0
-      });
-    });
-  } catch (e) { console.warn("Ошибка магазина " + key); }
-}
+      stores[key].products = rows.map(row => {
+        const cols = row.split(/,(?=(?:(?:[^"]*"){2})*[^"]*$)/);
+        if (cols.length < 5) return null;
+
+        let imgId = "";
+        const match = cols[1].match(/id=([^"&]+)/);
+        if (match) imgId = `https://drive.google.com/uc?export=download&id=${match[1]}`;
+
+        return {
+          category: cols[0].replace(/"/g, '').trim(),
+          img: imgId || "https://via.placeholder.com/80",
+          name: cols[2].replace(/"/g, '').trim() || cols[3].replace(/"/g, '').trim(),
+          desc: cols[4].replace(/"/g, '').trim(),
+          price: parseInt(cols[5].replace(/[^0-9]/g, '')) || 0
+        };
+      }).filter(p => p !== null);
+    } catch (e) {
+      console.error("Ошибка загрузки магазина " + key);
+    }
+  }
+
 
 /* ----------------------------------------------------------- */
 /* ---------------- СОСТОЯНИЕ ---------------- */
