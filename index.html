@@ -1175,10 +1175,11 @@ function hideAdminPanel() {
 
 /* ---------------- ИНИЦИАЛИЗАЦИЯ ---------------- */
 document.addEventListener("DOMContentLoaded", async () => {
-  try { await loadAllData(); } catch(e) { console.error(e); }
+  await loadAllData();     // <- важно
   renderShops();
   renderGlobalCart();
 });
+
 </script>
 
 </body>
