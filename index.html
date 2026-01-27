@@ -745,60 +745,68 @@ function decodeSafe(str){
 
 /* ---------------- ДАННЫЕ ---------------- */
 const stores = {
-  /* ---------------- ДИНАМИЧЕСКАЯ ЗАГРУЗКА ---------------- */
+/* ---------------- ДАННЫЕ (ГРУЗИМ ИЗ GOOGLE) ---------------- */
 
-// Ссылка на твой главный файл управления (опубликованный как CSV)
-const MASTER_SHEET_CSV = "https://docs.google.com/spreadsheets/d/1j8RP0WSFnDo2lB7Qyf2MWD2upEdLLq-ZpnpBNE_sQVY/edit?usp=sharing";
+// 1. ЗАМЕНИ ЭТУ ССЫЛКУ НА СВОЮ ИЗ ШАГА "Опубликовать в интернете" (CSV)
+const MASTER_SHEET_CSV = "https://docs.google.com/spreadsheets/d/e/2PACX-1v...17zJox_IUO_wlsS8nh9NTxSAhjWXFVECa.../pub?output=csv"; 
 
-let stores = {}; // Теперь это пустой объект, который заполнится сам
+let stores = {}; // Сюда скачаются магазины
 
-async function initDynamicData() {
+async function loadData() {
     try {
-        // 1. Загружаем список магазинов
         const response = await fetch(MASTER_SHEET_CSV);
         const csvText = await response.text();
-        const masterData = parseCSV(csvText);
+        const rows = parseCSV(csvText);
 
-        // 2. Для каждого активного магазина загружаем его товары
-        for (const row of masterData) {
+        for (const row of rows) {
             if (row['Статус'] === 'Включен') {
                 const storeId = row['ID'];
-                // Формируем ссылку на CSV конкретного магазина
-                const storeCsvUrl = `https://docs.google.com/spreadsheets/d/12Rmf7vVCxtQXkS4g3GCBL1xCgAfu4a23iTYuJfQLWSg/edit?usp=sharing`;
+                const storeName = row['Названия'];
                 
-                const storeRes = await fetch(storeCsvUrl);
+                // Качаем товары конкретного магазина
+                const storeRes = await fetch(`https://docs.google.com/spreadsheets/d/${1fyoI2bIXQzCguhF0Q3EYQbRq3qccswNH}/export?format=csv`);
                 const storeText = await storeRes.text();
-                const products = parseCSV(storeText);
+                const productRows = parseCSV(storeText);
 
-                stores[row['Названия']] = {
-                    name: row['Названия'],
-                    products: products.map(p => ({
+                stores[storeName] = {
+                    name: storeName,
+                    logo: row['Логотип'] || "logo.png",
+                    products: productRows.map(p => ({
                         name: p['Название'],
-                        price: parseInt(p['Цена']),
-                        category: p['Категория']
+                        price: parseInt(p['Цена']) || 0,
+                        category: p['Категория'] || "Общее"
                     }))
                 };
             }
         }
-        
-        // 3. После загрузки всех данных — отрисовываем магазины
-        renderShops();
+        renderShops(); // Рисуем магазины, когда всё скачалось
     } catch (e) {
         console.error("Ошибка загрузки данных:", e);
     }
 }
 
-// Вспомогательная функция для превращения текста CSV в массив объектов
 function parseCSV(text) {
-    const lines = text.split('\n');
-    const headers = lines[0].split(',');
+    const lines = text.trim().split('\n');
+    const headers = lines[0].split(',').map(h => h.trim());
     return lines.slice(1).map(line => {
-        const values = line.split(',');
+        const values = line.split(',').map(v => v.trim());
         return headers.reduce((obj, header, i) => {
-            obj[header.trim()] = values[i] ? values[i].trim() : '';
+            obj[header] = values[i] || '';
             return obj;
         }, {});
     });
+}
+
+/* ---------------- СОСТОЯНИЕ ---------------- */
+let currentStore = null;
+let currentCategory = null;
+let carts = {};
+
+// И в самом конце твоего кода, внутри блока initTheme или рядом, 
+// добавь вызов загрузки:
+document.addEventListener('DOMContentLoaded', () => {
+    loadData(); 
+});
 }
 
 // Запускаем инициализацию при старте
