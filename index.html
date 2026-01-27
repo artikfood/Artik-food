@@ -748,7 +748,7 @@ const stores = {
   /* ---------------- ДИНАМИЧЕСКАЯ ЗАГРУЗКА ---------------- */
 
 // Ссылка на твой главный файл управления (опубликованный как CSV)
-const MASTER_SHEET_CSV = "https://docs.google.com/spreadsheets/d/e/2PACX-1vT_XXX_ТВОЙ_ID_ИЗ_ПУБЛИКАЦИИ/pub?output=csv";
+const MASTER_SHEET_CSV = "https://docs.google.com/spreadsheets/d/1j8RP0WSFnDo2lB7Qyf2MWD2upEdLLq-ZpnpBNE_sQVY/edit?usp=sharing";
 
 let stores = {}; // Теперь это пустой объект, который заполнится сам
 
@@ -764,7 +764,7 @@ async function initDynamicData() {
             if (row['Статус'] === 'Включен') {
                 const storeId = row['ID'];
                 // Формируем ссылку на CSV конкретного магазина
-                const storeCsvUrl = `https://docs.google.com/spreadsheets/d/${storeId}/export?format=csv`;
+                const storeCsvUrl = `https://docs.google.com/spreadsheets/d/12Rmf7vVCxtQXkS4g3GCBL1xCgAfu4a23iTYuJfQLWSg/edit?usp=sharing`;
                 
                 const storeRes = await fetch(storeCsvUrl);
                 const storeText = await storeRes.text();
