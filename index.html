@@ -1071,9 +1071,14 @@ function renderShops() {
   });
 }
 
-async async function openStore(storeKey) {
+function openStore(storeKey) {
   currentStore = storeKey;
-  currentCategory = null;
+
+  ensureStoreProducts(storeKey).then(() => {
+    renderCategories(storeKey);
+    showPage('categories');
+  });
+}
 
   hideAllPages();
   document.getElementById('store-page').classList.remove('hidden');
@@ -1118,26 +1123,28 @@ async async function openStore(storeKey) {
   document.getElementById('store-cart').classList.add('hidden');
 }
 
-async function openStoreCategory(storeKey, categoryName) {
-  currentStore = storeKey;
-  currentCategory = categoryName;
+function ensureStoreProducts(storeKey) {
+  const store = stores[storeKey];
+  if (store.products && store.products.length) {
+    return Promise.resolve();
+  }
 
-  const container = document.getElementById('store-products');
-  container.innerHTML = '';
+  if (!store.csvUrl) {
+    store.products = [];
+    return Promise.resolve();
+  }
 
-  const backBtn = document.createElement('button');
-  backBtn.className = 'back-btn';
-  backBtn.innerText = '← Назад к категориям';
-  backBtn.onclick = () => openStore(storeKey);
-  container.appendChild(backBtn);
-
-  const products = stores[storeKey].products.filter(p => p.category === categoryName);
-
-  products.forEach(product => {
-    const div = document.createElement('div');
-    div.className = 'product';
-
-    const safeName = jsSafe(product.name);
+  return fetch(store.csvUrl)
+    .then(r => r.text())
+    .then(text => {
+      store.products = parseCSV(text);
+    })
+    .catch(err => {
+      console.error("CSV load error", err);
+      store.products = [];
+    });
+}
+;
 
     div.innerHTML = `
       <div style="display:flex; gap:12px; align-items:center;">
