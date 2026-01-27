@@ -745,6 +745,86 @@ function decodeSafe(str){
 
 /* ---------------- ДАННЫЕ ---------------- */
 const stores = {
+  Hay Grill: {
+    name: "Hay Grill",
+    logo: "https://drive.google.com/file/d/1o7yRSjBUVK4TkIWZSFl7174Iy7Wk5Gv5/view?usp=sharing",
+    categories: {
+      "Шаурма": { icon: "https://drive.google.com/file/d/1z73KssK5fZeUaIbeExy1319WMoHP4rqw/view?usp=sharing" },
+      "Шашлык (Мангал)": { icon: "https://drive.google.com/file/d/1U6Pro9LmCqpmWoI_6wbLEo3ZpVlZ70kQ/view?usp=sharing" },
+      "Кебаб": { icon: "https://drive.google.com/file/d/1zEDIZGbF3bYi2XIx8eaTROPDCb0F_2En/view?usp=sharing" },
+      "Закуски / Фастфуд": { icon: "https://drive.google.com/file/d/12-zUUPH-elEEUXIEPh4i-N2dOkxhFesC/view?usp=sharing" },
+      "Соусы": { icon: "https://drive.google.com/file/d/1IIeCVMEyawQQxtjroVURlsz9KglylHrH/view?usp=sharing" },
+      "Напитки": { icon: "https://drive.google.com/file/d/175cOL3ORzuVMTZxY10tUe0yzVMYrOURC/view?usp=sharing" }
+      "Полуфабрикаты" { icon = "https://drive.google.com/file/d/12gf4wFuBphDgTus5ineZTc5ochYjNitM/view?usp=sharing"}
+    },
+    products: [
+      { name: "из свинины, свинина, салат, помидоры, огурцы, лук, зелень, картофель фри, 2 вида соуса", price: 950/1250, category: "Шаурма" },
+      { name: "Жареная свиная грудинка. ", price: 4200, category: "Шашлык (Мангал)" },
+      { name: "Свиная рулька на гриле. ", price: 4200, category: "Шашлык (Мангал)" },
+      { name: "Свиная вырезка на гриле. ", price: 3700, category: "Шашлык (Мангал)" },
+      { name: "Пряники глазированные", price: 350, category: "Шашлык (Мангал)" },
+      { name: "Песочное печенье", price: 400, category: "Шашлык (Мангал)" },
+      { name: "Овсяное печенье", price: 380, category: "Шашлык (Мангал)" },
+      { name: "Печенье с кремом", price: 460, category: "Шашлык (Мангал)" },
+      { name: "Детское печенье", price: 200, category: "Шашлык (Мангал)" },
+      { name: "Ассорти печенья", price: 600, category: "Шашлык (Мангал)" },
+
+      { name: "Вафли Daroini", price: 400, category: "Вафли" },
+      { name: "Вафли Krispi", price: 420, category: "Вафли" },
+      { name: "Вафли с шоколадом", price: 450, category: "Вафли" },
+      { name: "Вафли с орехом", price: 480, category: "Вафли" },
+      { name: "Вафли рулетики", price: 390, category: "Вафли" },
+      { name: "Вафли ванильные", price: 410, category: "Вафли" },
+      { name: "Вафли карамельные", price: 460, category: "Вафли" },
+      { name: "Вафли клубничные", price: 440, category: "Вафли" },
+      { name: "Мини-вафли", price: 300, category: "Вафли" },
+      { name: "Вафли ассорти", price: 550, category: "Вафли" },
+
+      { name: "Crackers Classic", price: 430, category: "Крекеры" },
+      { name: "Crackers Cheese", price: 500, category: "Крекеры" },
+      { name: "Crackers Peanut", price: 300, category: "Крекеры" },
+      { name: "Крекеры солёные", price: 350, category: "Крекеры" },
+      { name: "Крекеры с кунжутом", price: 380, category: "Крекеры" },
+      { name: "Крекеры с паприкой", price: 420, category: "Крекеры" },
+      { name: "Крекеры с зеленью", price: 410, category: "Крекеры" },
+      { name: "Крекеры с чесноком", price: 390, category: "Крекеры" },
+      { name: "Крекеры ассорти", price: 550, category: "Крекеры" },
+      { name: "Крекеры большие", price: 600, category: "Крекеры" },
+
+      { name: "Шоколадный батончик", price: 200, category: "Батончики и снеки" },
+      { name: "Батончик с карамелью", price: 220, category: "Батончики и снеки" },
+      { name: "Батончик с орехами", price: 250, category: "Батончики и снеки" },
+      { name: "Сладкие палочки", price: 300, category: "Батончики и снеки" },
+      { name: "Кукурузные снеки", price: 380, category: "Батончики и снеки" },
+      { name: "Снеки в шоколаде", price: 420, category: "Батончики и снеки" },
+      { name: "Сладкие подушечки", price: 350, category: "Батончики и снеки" },
+      { name: "Мини-батончики", price: 180, category: "Батончики и снеки" },
+      { name: "Снеки с карамелью", price: 400, category: "Батончики и снеки" },
+      { name: "Ассорти батончиков", price: 600, category: "Батончики и снеки" },
+
+      { name: "Козинак классический", price: 300, category: "Ореховые сладости" },
+      { name: "Козинак арахисовый", price: 350, category: "Ореховые сладости" },
+      { name: "Козинак кунжутный", price: 320, category: "Ореховые сладости" },
+      { name: "Арахис в глазури", price: 450, category: "Ореховые сладости" },
+      { name: "Миндаль в шоколаде", price: 600, category: "Ореховые сладости" },
+      { name: "Фундук в шоколаде", price: 650, category: "Ореховые сладости" },
+      { name: "Ореховое ассорти", price: 700, category: "Ореховые сладости" },
+      { name: "Семечки в карамели", price: 380, category: "Ореховые сладости" },
+      { name: "Кешью в глазури", price: 680, category: "Ореховые сладости" },
+      { name: "Ореховый микс", price: 750, category: "Ореховые сладости" },
+
+      { name: "Детское печенье", price: 110, category: "Детские сладости" },
+      { name: "Мини-вафли", price: 170, category: "Детские сладости" },
+      { name: "Печенье с героями", price: 200, category: "Детские сладости" },
+      { name: "Шоколадные фигурки", price: 250, category: "Детские сладости" },
+      { name: "Конфеты детские", price: 180, category: "Детские сладости" },
+      { name: "Печенье с молочной начинкой", price: 220, category: "Детские сладости" },
+      { name: "Сладкие трубочки", price: 190, category: "Детские сладости" },
+      { name: "Мини-крекеры", price: 160, category: "Детские сладости" },
+      { name: "Шоколадные шарики", price: 230, category: "Детские сладости" },
+      { name: "Детское ассорти", price: 300, category: "Детские сладости" }
+    ]
+  },
   tonoyans_sity: {
     name: "Tonoyan City",
     logo: "tonoyan-city.png",
