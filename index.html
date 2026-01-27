@@ -1179,15 +1179,23 @@ function sendFormToWhatsApp() {
         hasItems = true;
         const product = stores[storeKey].products.find(p => p.name === productName);
         if (!product) return;
-        const price = product.price * qty;
-        total += price;
-        message += `- ${encodeURIComponent(productName)} (${encodeURIComponent(stores[storeKey].name)}) × ${qty} = ${price} AMD%0A`;
+        const unitPrice = product.price;
+        const totalPrice = unitPrice * qty;
+        total += totalPrice;
+        message += `- ${encodeURIComponent(productName)} (${encodeURIComponent(stores[storeKey].name)})%0A`;
+        message += `  ${qty} × ${unitPrice} AMD = ${totalPrice} AMD%0A`;
       }
     });
   });
 
   if (!hasItems) {
     alert('Корзина пуста! Добавьте товары перед оформлением заказа.');
+    return;
+  }
+
+  // Проверка минимальной суммы заказа
+  if (total < 3000) {
+    alert('Минимальная сумма заказа 3000 AMD.\nТекущая сумма товаров: ' + total + ' AMD');
     return;
   }
 
