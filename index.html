@@ -496,6 +496,29 @@
       box-shadow: 0 8px 24px rgba(46,204,113,0.7);
     }
 
+    @keyframes pulse {
+      0%, 100% { transform: scale(1); }
+      50% { transform: scale(1.1); }
+    }
+
+    .floating-cart.pulse {
+      animation: pulse 0.5s ease-in-out;
+    }
+
+    @keyframes confetti-fall {
+      to { transform: translateY(100vh) rotate(360deg); opacity: 0; }
+    }
+
+    .confetti {
+      position: fixed;
+      width: 10px;
+      height: 10px;
+      background: #f0f;
+      top: -10px;
+      z-index: 9999;
+      animation: confetti-fall 3s linear forwards;
+    }
+
     .loading {
       text-align: center;
       padding: 40px;
@@ -523,6 +546,7 @@
   </div>
   <nav>
     <a href="#shops">Магазины</a>
+    <a href="#" onclick="event.preventDefault(); showOrderHistory();">📱 История</a>
     <a href="#cart" onclick="event.preventDefault(); document.getElementById('cart-page').scrollIntoView({ behavior: 'smooth' });">Корзина</a>
     <div class="theme-toggle" onclick="toggleTheme()">🌙</div>
   </nav>
@@ -576,7 +600,14 @@
     <div class="cart-total" id="grand-total" style="font-size: 18px; color: var(--accent-gold);">Итого: 0 AMD</div>
   </div>
 
+  <div style="text-align: center; margin: 20px auto; padding: 12px; background: linear-gradient(135deg, rgba(46,204,113,0.1), rgba(46,204,113,0.05)); border-radius: 12px; max-width: 540px; border: 1px solid rgba(46,204,113,0.3);">
+    <span style="font-size: 16px; color: var(--accent-green); font-weight: 600;">⏱ Доставка: 30-45 минут</span>
+  </div>
+
   <div class="order-form">
+    <div style="display: flex; gap: 10px; margin-bottom: 14px;">
+      <button onclick="fillFromLastOrder()" style="flex: 1; padding: 10px; background: var(--bg-card); color: var(--text-main); border: 1px solid var(--border-glass); border-radius: 8px; cursor: pointer; font-size: 14px; font-weight: 500;">⚡ Данные из последнего заказа</button>
+    </div>
     <input type="text" id="name" placeholder="Ваше имя" required>
     <input type="tel" id="phone" placeholder="Телефон" required>
     <input type="text" id="address" placeholder="Адрес доставки" required>
@@ -620,11 +651,15 @@ const storesData = {
   hay_grill: {
     name: "Hay Grill",
     logo: "images/hay_grill_logo.png",
+    workingHours: {
+      open: "10:00",
+      close: "22:00"
+    },
     products: [
-      { category: "1. Шаурма", name: "Шаурма", description: "из свинины, свинина, салат, помидоры, огурцы, лук, зелень, картофель фри, 2 вида соуса", price: "950/1250", image: "shawarma.jpg" },
+      { category: "1. Шаурма", name: "Шаурма", description: "из свинины, свинина, салат, помидоры, огурцы, лук, зелень, картофель фри, 2 вида соуса", price: "950/1250", image: "shawarma.jpg", isPopular: true },
       { category: "2. Шашлык (Мангал)", name: "Жареная свиная грудинка", description: "Свиная грудинка, лук, зелень, лаваш. 1 кг.", price: "4200", image: "svinaya_grudinka.jpg" },
       { category: "2. Шашлык (Мангал)", name: "Свиная рулька на гриле", description: "Свиная рулька, лук, зелень, лаваш, 1 кг.", price: "4200", image: "rulka.jpg" },
-      { category: "2. Шашлык (Мангал)", name: "Свиная вырезка на гриле", description: "Свиная вырезка, лук, зелень, лаваш, 1 кг.", price: "3700", image: "vyrezka.jpg" },
+      { category: "2. Шашлык (Мангал)", name: "Свиная вырезка на гриле", description: "Свиная вырезка, лук, зелень, лаваш, 1 кг.", price: "3700", image: "vyrezka.jpg", isPopular: true },
       { category: "2. Шашлык (Мангал)", name: "Куриные шашлычки (крылышки)", description: "Куриные шашлычки, лук, зелень, лаваш, 1 кг.", price: "2700", image: "kurinye_krylyshki.jpg" },
       { category: "2. Шашлык (Мангал)", name: "Жареная куриная голень", description: "куриная голень, лук, зелень, лаваш 1 кг", price: "2700", image: "golen.jpg" },
       { category: "2. Шашлык (Мангал)", name: "Свиной икибир", description: "жареная свинина, зелень, лук, белый соус, красный соус", price: "850/950", image: "ikibir.jpg" },
@@ -698,7 +733,8 @@ function processStoresData() {
           price: cleanPrice,
           category: cleanCategory,
           description: item.description ? item.description.trim() : '',
-          photo: item.image || ''
+          photo: item.image || '',
+          isPopular: item.isPopular || false
         });
       }
     });
@@ -756,6 +792,22 @@ function qtyId(storeKey, productName) {
   return `qty-${storeKey}-${jsSafe(productName)}`;
 }
 
+// Проверка работает ли магазин сейчас
+function isStoreOpen(workingHours) {
+  if (!workingHours) return true;
+  
+  const now = new Date();
+  const currentTime = now.getHours() * 60 + now.getMinutes();
+  
+  const [openHour, openMin] = workingHours.open.split(':').map(Number);
+  const [closeHour, closeMin] = workingHours.close.split(':').map(Number);
+  
+  const openTime = openHour * 60 + openMin;
+  const closeTime = closeHour * 60 + closeMin;
+  
+  return currentTime >= openTime && currentTime < closeTime;
+}
+
 /* ============================================
    СОСТОЯНИЕ
 ============================================ */
@@ -802,6 +854,15 @@ function renderShops() {
   storesOrder.forEach(key => {
     if (!stores[key]) return;
     
+    const isOpen = isStoreOpen(stores[key].workingHours);
+    const statusBadge = isOpen 
+      ? '<span style="color: #2ecc71; font-size: 12px;">● Открыто</span>'
+      : '<span style="color: #ff6b6b; font-size: 12px;">● Закрыто</span>';
+    
+    const workingHoursText = stores[key].workingHours 
+      ? `<div style="font-size: 11px; color: var(--text-muted); margin-top: 4px;">${stores[key].workingHours.open} - ${stores[key].workingHours.close}</div>`
+      : '';
+    
     const div = document.createElement('div');
     div.className = 'card';
     
@@ -809,9 +870,15 @@ function renderShops() {
       div.innerHTML = `
         <img src="${stores[key].logo}" alt="${stores[key].name}" style="max-width: 120px; max-height: 80px; object-fit: contain; margin-bottom: 10px;" onerror="this.style.display='none'">
         <div>${stores[key].name}</div>
+        ${statusBadge}
+        ${workingHoursText}
       `;
     } else {
-      div.innerHTML = `<div>${stores[key].name}</div>`;
+      div.innerHTML = `
+        <div>${stores[key].name}</div>
+        ${statusBadge}
+        ${workingHoursText}
+      `;
     }
     
     div.onclick = () => openStore(key);
@@ -894,12 +961,13 @@ function renderProducts(storeKey, filterCategory = null) {
 
     const safeName = jsSafe(product.name);
     const imageSrc = getProductImage(product.photo);
+    const popularBadge = product.isPopular ? '<span style="background: linear-gradient(135deg, #ff6b6b, #ffa500); color: white; padding: 2px 8px; border-radius: 12px; font-size: 11px; font-weight: 600; margin-left: 8px;">🔥 Хит</span>' : '';
 
     div.innerHTML = `
       <div style="display:flex; gap:12px; align-items:center; flex:1;">
         <img src="${imageSrc}" alt="${product.name}" onerror="this.src='data:image/svg+xml,%3Csvg xmlns=\\'http://www.w3.org/2000/svg\\' width=\\'80\\' height=\\'80\\'%3E%3Crect width=\\'80\\' height=\\'80\\' fill=\\'%23333\\'/%3E%3Ctext x=\\'50%25\\' y=\\'50%25\\' dominant-baseline=\\'middle\\' text-anchor=\\'middle\\' font-size=\\'40\\'%3E📦%3C/text%3E%3C/svg%3E'">
         <div style="flex:1;">
-          <h4>${product.name}</h4>
+          <h4>${product.name}${popularBadge}</h4>
           <p style="color: var(--accent-gold); font-weight: 600;">${product.price} AMD</p>
           ${product.description ? `<p style="font-size:12px; color: var(--text-muted); margin-top: 4px;">${product.description}</p>` : ''}
         </div>
@@ -937,6 +1005,13 @@ function changeQty(storeKey, productNameSafe, delta) {
 
   const el = document.getElementById(qtyId(storeKey, productName));
   if (el) el.innerText = carts[storeKey][productName];
+
+  // Анимация пульсации корзины при добавлении
+  if (delta > 0) {
+    const cartBtn = document.querySelector('.floating-cart');
+    cartBtn.classList.add('pulse');
+    setTimeout(() => cartBtn.classList.remove('pulse'), 500);
+  }
 
   renderStoreCart(storeKey);
   renderGlobalCart();
@@ -1227,6 +1302,124 @@ function sendFormToWhatsApp() {
   });
 
   window.open(url, "_blank");
+  
+  // Конфетти при успешном заказе!
+  createConfetti();
+  
+  // Сохраняем заказ в историю
+  saveOrderToHistory({
+    date: new Date().toISOString(),
+    name,
+    phone,
+    address,
+    district,
+    carts: JSON.parse(JSON.stringify(carts)),
+    total: total + delivery
+  });
+}
+
+/* ============================================
+   ИСТОРИЯ ЗАКАЗОВ
+============================================ */
+
+function saveOrderToHistory(order) {
+  let history = JSON.parse(localStorage.getItem('orderHistory') || '[]');
+  history.unshift(order);
+  if (history.length > 10) history = history.slice(0, 10); // Храним только 10 последних
+  localStorage.setItem('orderHistory', JSON.stringify(history));
+}
+
+function getOrderHistory() {
+  return JSON.parse(localStorage.getItem('orderHistory') || '[]');
+}
+
+function repeatOrder(orderIndex) {
+  const history = getOrderHistory();
+  if (!history[orderIndex]) return;
+  
+  const order = history[orderIndex];
+  carts = JSON.parse(JSON.stringify(order.carts));
+  
+  // Заполняем форму
+  document.getElementById('name').value = order.name || '';
+  document.getElementById('phone').value = order.phone || '';
+  document.getElementById('address').value = order.address || '';
+  document.getElementById('district').value = order.district || '';
+  
+  renderGlobalCart();
+  
+  // Прокручиваем к корзине
+  document.getElementById('cart-page').scrollIntoView({ behavior: 'smooth' });
+  
+  alert('✅ Заказ восстановлен! Проверьте корзину.');
+}
+
+function showOrderHistory() {
+  const history = getOrderHistory();
+  
+  if (history.length === 0) {
+    alert('История заказов пуста');
+    return;
+  }
+  
+  let html = '<div style="max-width: 600px; margin: 20px auto; padding: 20px; background: var(--bg-glass); border-radius: 16px; border: 1px solid var(--border-glass);">';
+  html += '<h3 style="color: var(--accent-gold); margin-top: 0;">📱 История заказов</h3>';
+  
+  history.forEach((order, index) => {
+    const date = new Date(order.date);
+    const dateStr = date.toLocaleDateString('ru-RU') + ' ' + date.toLocaleTimeString('ru-RU', {hour: '2-digit', minute: '2-digit'});
+    
+    html += `<div style="padding: 12px; margin-bottom: 10px; background: var(--bg-card); border-radius: 12px; border: 1px solid var(--border-glass);">`;
+    html += `<div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 8px;">`;
+    html += `<div style="font-size: 12px; color: var(--text-muted);">${dateStr}</div>`;
+    html += `<div style="font-weight: 600; color: var(--accent-gold);">${order.total} AMD</div>`;
+    html += `</div>`;
+    html += `<div style="font-size: 13px; color: var(--text-muted); margin-bottom: 8px;">${order.address}</div>`;
+    html += `<button onclick="repeatOrder(${index}); document.getElementById('history-modal').remove();" style="width: 100%; padding: 8px; background: linear-gradient(135deg, #2ecc71, #6df0a0); color: #0f1115; border: none; border-radius: 8px; cursor: pointer; font-weight: 600;">⚡ Повторить заказ</button>`;
+    html += `</div>`;
+  });
+  
+  html += '<button onclick="document.getElementById(\'history-modal\').remove();" style="width: 100%; padding: 12px; background: var(--bg-card); color: var(--text-main); border: 1px solid var(--border-glass); border-radius: 8px; cursor: pointer; margin-top: 10px;">Закрыть</button>';
+  html += '</div>';
+  
+  const modal = document.createElement('div');
+  modal.id = 'history-modal';
+  modal.style.cssText = 'position: fixed; top: 0; left: 0; width: 100%; height: 100%; background: rgba(0,0,0,0.8); z-index: 10000; overflow-y: auto; padding: 20px;';
+  modal.innerHTML = html;
+  document.body.appendChild(modal);
+}
+
+// Конфетти анимация
+function createConfetti() {
+  const colors = ['#ff6b6b', '#4ecdc4', '#45b7d1', '#f9ca24', '#6c5ce7', '#a29bfe'];
+  for (let i = 0; i < 50; i++) {
+    setTimeout(() => {
+      const confetti = document.createElement('div');
+      confetti.className = 'confetti';
+      confetti.style.left = Math.random() * 100 + '%';
+      confetti.style.background = colors[Math.floor(Math.random() * colors.length)];
+      confetti.style.animationDuration = (Math.random() * 2 + 2) + 's';
+      document.body.appendChild(confetti);
+      setTimeout(() => confetti.remove(), 3000);
+    }, i * 30);
+  }
+}
+
+// Заполнить форму данными из последнего заказа
+function fillFromLastOrder() {
+  const history = getOrderHistory();
+  if (history.length === 0) {
+    alert('История заказов пуста');
+    return;
+  }
+  
+  const lastOrder = history[0];
+  document.getElementById('name').value = lastOrder.name || '';
+  document.getElementById('phone').value = lastOrder.phone || '';
+  document.getElementById('address').value = lastOrder.address || '';
+  document.getElementById('district').value = lastOrder.district || '';
+  
+  alert('✅ Данные заполнены из последнего заказа!');
 }
 
 /* ============================================
