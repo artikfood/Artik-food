@@ -714,7 +714,7 @@
 /* ---------------- КОНФИГУРАЦИЯ ---------------- */
 // ⚠️ ВАЖНО: Замените эту ссылку на ОПУБЛИКОВАННЫЙ CSV URL вашей главной таблицы
 // Файл → Поделиться → Опубликовать в интернете → Ссылка (выбрать CSV)
-const STORES_CONTROL_CSV_URL = "YOUR_STORES_CONTROL_CSV_URL_HERE";
+const STORES_CONTROL_CSV_URL = "https://docs.google.com/spreadsheets/d/e/2PACX-1vQKJ__WpYa8WaSisWWWT4N_NpURrENrWmM63WXkXGw0HrKalkhRQ6U6KZ3p_XLItgS-KYJvZ_TtXOjC/pub?output=csv";
 
 /* ---------------- ВСПОМОГАТЕЛЬНЫЕ ФУНКЦИИ ---------------- */
 function jsSafe(str) {
@@ -752,12 +752,12 @@ function parseCSV(text) {
     if (!line) continue;
     
     // Простой парсер CSV (работает для большинства случаев)
-    const values = [];
+   values = [];
     let currentValue = '';
     let inQuotes = false;
     
     for (let j = 0; j < line.length; j++) {
-      const char = line[j];
+     char = line[j];
       
       if (char === '"') {
         inQuotes = !inQuotes;
