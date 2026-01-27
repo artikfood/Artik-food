@@ -748,14 +748,14 @@ const stores = {
 /* ------------/* ---------------- ДАННЫЕ (ГРУЗИМ ИЗ GOOGLE) ---------------- */
 
 // Прямая ссылка на твой файл STORES_CONTROL в формате CSV
-const MASTER_SHEET_CSV = "https://docs.google.com/spreadsheets/d/e/2PACX-1vQp7yL05G8W8_vV9A7v7i8G_Y_Xn4S1-kL2S-Y8Y8Y8Y8Y8Y8Y8Y8Y8Y8Y8Y8Y/pub?output=csv"; 
+const MASTER_SHEET_CSV = "https://https://docs.google.com/spreadsheets/d/1j8RP0WSFnDo2lB7Qyf2MWD2upEdLLq-ZpnpBNE_sQVY/edit?usp=sharing/pub?output=csv"; 
 
 let stores = {}; // Сюда скачаются магазины
 
 async function loadData() {
     try {
         console.log("Подключение к базе данных...");
-        const response = await fetch("https://docs.google.com/spreadsheets/d/1j8RP0WSFnDo2lB7Qyf2MWD2upEdLLq-ZpnpBNE_sQVY/gviz/tq?tqx=out:csv");
+        const response = await fetch("https://docs.google.com/spreadsheets/d/12Rmf7vVCxtQXkS4g3GCBL1xCgAfu4a23iTYuJfQLWSg/edit?usp=sharing/tq?tqx=out:csv");
         const csvText = await response.text();
         const rows = parseCSV(csvText);
 
