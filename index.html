@@ -1312,7 +1312,7 @@ async function processIDramPayment(orderData) {
   if (!confirmPayment) return;
   
   // Используем универсальную ссылку (работает и на iOS и на Android)
-  const idramLink = `https://idram.am/send?recipient=${encodeURIComponent(IDRAM_PHONE)}&amount=${amount}`;
+  const idramLink = `https://idram.am/send?recipient=${encodeURIComponent(+37443797727)}&amount=${amount}`;
   
   // Открываем в новой вкладке/приложении
   window.open(idramLink, '_blank');
