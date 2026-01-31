@@ -14,4 +14,9 @@
       "head_sampling_rate": 1
     }
   }
+{
+  "name": "Artik-food",
+  "compatibility_date": "2026-01-31",
+  "main": "src/index.html" // Проверь, чтобы путь вел к твоему файлу (например, index.js или index.ts)
+}
 }
