@@ -15,3 +15,8 @@
     }
   }
 }
+{
+  "name": "artikfood-dispatcher",
+  "compatibility_date": "2026-01-31",
+  "main": "index.html" // https://github.com/artikfood/Artik-food/blob/main/index.html
+}
